@@ -19,7 +19,6 @@ const buttonVariants = cva(
         default: "py-4 px-8 text-xl",
         sm: "py-3 px-6",
         lg: "py-6 px-10 text-2xl",
-        icon: "",
       },
     },
     defaultVariants: {
@@ -32,7 +31,6 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
 }
 
 /**
