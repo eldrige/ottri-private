@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 
 export default function Navbar() {
   return (
-    <nav className='px-16 xl:px-36 py-5 flex justify-between items-center shadow-lg'>
+    <nav className='sticky top-0 z-50 bg-white px-16 xl:px-36 py-5 flex justify-between items-center shadow-lg'>
       <div className='w-64 flex items-center gap-2.5 text-heading-4'>
         <Image className='h-10 w-10' src={logo} alt='Ottri Logo' />
         <span>Ottri</span>
