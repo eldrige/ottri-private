@@ -11,13 +11,15 @@ const buttonVariants = cva(
         default: "bg-primary-700 hover:text-primary-700 hover:border-primary-700",
         secondary: "bg-secondary-700 hover:text-secondary-700 hover:border-secondary-700",
         destructive: "",
-        outline: "",
+        "default-outline": "text-primary-700 border-primary-700",
+        "secondary-outline": "text-secondary-700 border-secondary-700",
         ghost: "",
         link: ""
       },
       size: {
         default: "py-4 px-8 text-xl",
         sm: "py-3 px-6",
+        xs: "py-2 px-6",
         lg: "py-6 px-10 text-2xl",
       },
     },
