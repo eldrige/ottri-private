@@ -33,7 +33,7 @@
   --text-heading-1: 56px;               /* Hero headlines, landing pages */
   --text-heading-1--font-weight: 600;
   --text-heading-2: 48px;               /* Section headlines, major announcements */
-  --text-heading-2--font-weight: 700;
+  --text-heading-2--font-weight: 600;
   --text-heading-3: 36px;               /* Page titles, section headers */
   --text-heading-3--font-weight: 600;
   --text-heading-4: 24px;               /* Card titles, component headers */
@@ -67,7 +67,7 @@ body {
   font-family: var(--font-poppins);
 }
 
-h1 {
+h1, h2 {
   font-family: var(--font-nunito-sans);
   line-height: 1.375;
 }
