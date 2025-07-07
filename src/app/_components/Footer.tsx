@@ -32,11 +32,11 @@ const ContactInfo = () => (
             <p className='text-surface-300'>(555) 123-4567</p>
         </div>
         <div className='flex gap-0.75'>
-            <LocationIcon />
+            <EmailIcon />
             <p className='text-surface-300'>hello@ottri.com</p>
         </div>
         <div className='flex gap-0.75'>
-            <EmailIcon />
+            <LocationIcon />
             <p className='text-surface-300'>Serving 6 metro areas</p>
         </div>
     </>
