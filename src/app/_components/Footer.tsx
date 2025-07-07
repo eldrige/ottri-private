@@ -1,13 +1,13 @@
 import Image from 'next/image'
 import React from 'react'
 import logo from "@/assets/logo.png";
-import CallIcon from '../../components/icons/CallIcon';
-import EmailIcon from '../../components/icons/EmailIcon';
-import LocationIcon from '../../components/icons/LocationIcon';
-import { Button } from '../../components/ui/Button';
-import InstagramIcon from '../../components/icons/InstagramIcon';
-import XIcon from '../../components/icons/XIcon';
-import FacebookIcon from '../../components/icons/FacebookIcon';
+import CallIcon from '@/components/icons/CallIcon';
+import EmailIcon from '@/components/icons/EmailIcon';
+import LocationIcon from '@/components/icons/LocationIcon';
+import { Button } from '@/components/ui/Button';
+import InstagramIcon from '@/components/icons/InstagramIcon';
+import XIcon from '@/components/icons/XIcon';
+import FacebookIcon from '@/components/icons/FacebookIcon';
 import ChatIcon from '@/components/icons/ChatIcon';
 
 
