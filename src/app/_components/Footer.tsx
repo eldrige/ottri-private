@@ -9,6 +9,7 @@ import InstagramIcon from '@/components/icons/InstagramIcon';
 import XIcon from '@/components/icons/XIcon';
 import FacebookIcon from '@/components/icons/FacebookIcon';
 import ChatIcon from '@/components/icons/ChatIcon';
+import Link from 'next/link';
 
 
 const FooterBrand = () => (
@@ -45,13 +46,12 @@ const ContactInfo = () => (
 const ServicesSection = () => (
     <div className='flex-1 flex flex-col gap-4'>
         <h1 className='text-white text-heading-4'>Services</h1>
-        <ul className='text-surface-300 gap-4 flex flex-col'>
-            <li>One-Time Cleaning</li>
-            <li>Recurring Cleaning</li>
-            <li>Deep Cleaning</li>
-            <li>Move-in/Move-out Cleaning</li>
-            <li>Post-construction Cleaning</li>
-            <li>Office cleaning</li>
+        <ul className='text-surface-300 *:hover:text-primary-700 gap-4 flex flex-col'>
+            <Link href='/services'>One-Time Cleaning</Link>
+            <Link href='/services'>Recurring Cleaning</Link>
+            <Link href='/services'>Move-in/Move-out Cleaning</Link>
+            <Link href='/services'>Post-construction Cleaning</Link>
+            <Link href='/services'>Office cleaningr</Link>
         </ul>
     </div>
 );
@@ -59,22 +59,22 @@ const ServicesSection = () => (
 const CompanySection = () => (
     <div className='flex-1 flex flex-col gap-4'>
         <h1 className='text-white text-heading-4'>Company</h1>
-        <ul className='text-surface-300 gap-4 flex flex-col'>
-            <li>About Us</li>
-            <li>How it works</li>
-            <li>Careers</li>
-            <li>Blogs</li>
-            <li>Help center</li>
+        <ul className='text-surface-300 *:hover:text-primary-700 gap-4 flex flex-col'>
+            <Link href='/about'>About Us</Link>
+            <Link href='/how-we-work'>How it works</Link>
+            <Link href='/careers'>Careers</Link>
+            <Link href='/blog'>Blogs</Link>
+            <Link href='/help-center'>Help center</Link>
         </ul>
     </div>
 );
 
 const LiveChatButton = () => {
     return (
-        <button className='flex cursor-pointer items-center justify-center gap-2  text-primary-700 bg-white  px-4 py-2.5 rounded-lg  transition-colors'>
+        <Link href={'/'} className='flex items-center justify-center gap-2  text-primary-700 bg-white  px-4 py-2.5 rounded-lg  transition-colors'>
             <ChatIcon />
             <span className='text-primary-700 '>Live chat support</span>
-        </button>
+        </Link>
     )
 }
 
@@ -90,11 +90,11 @@ const CTASection = () => (
         </div>
         <div className='flex flex-col gap-1'>
             <p className='text-surface-300'>Follow us</p>
-            <div className='flex items-center gap-2'>
-                <InstagramIcon />
-                <XIcon />
-                <FacebookIcon />
-            </div>
+            <ul className='flex items-center gap-2.5'>
+                <li><a href="https://www.instagram.com/"><InstagramIcon /></a></li>
+                <li><a href="https://x.com/"><XIcon /></a></li>
+                <li><a href="https://www.facebook.com/"><FacebookIcon /></a></li>
+            </ul>
         </div>
     </div>
 );
@@ -104,10 +104,10 @@ const FooterBottom = () => (
         <p>
             © 2025 Ottri. All rights reserved. Licensed, bonded, and insured.
         </p>
-        <ul className='flex gap-4'>
-            <li>Privacy Policy</li>
-            <li>Terms of Services</li>
-            <li>Cookie Policy</li>
+        <ul className='flex gap-4 *:hover:text-primary-700 '>
+            <Link href='/privacy-policy'>Privacy Policy</Link>
+            <Link href='/terms-services'>Terms of Services</Link>
+            <Link href='/cookie-policy'>Cookie Policy</Link>
         </ul>
     </div>
 );
