@@ -8,25 +8,9 @@ import { Button } from '../../components/ui/Button';
 import InstagramIcon from '../../components/icons/InstagramIcon';
 import XIcon from '../../components/icons/XIcon';
 import FacebookIcon from '../../components/icons/FacebookIcon';
+import ChatIcon from '@/components/icons/ChatIcon';
 
-// Brand section with logo and description
 
-export default function Footer() {
-    return (
-        <div className="bg-secondary-700 py-32 xl:px-36 gap-16 flex flex-col">
-            <div className='flex gap-8'>
-                <FooterBrand />
-                <ServicesSection />
-                <CompanySection />
-                <CTASection />
-            </div>
-            <div>
-                <hr className='border-0.75 text-[#D9D9D9]' />
-            </div>
-            <FooterBottom />
-        </div>
-    )
-}
 const FooterBrand = () => (
     <div className='flex-1 gap-4 flex flex-col'>
         <div className='w-64 flex items-center gap-2.5 text-heading-4'>
@@ -40,7 +24,7 @@ const FooterBrand = () => (
     </div>
 );
 
-// Contact information section
+
 const ContactInfo = () => (
     <>
         <div className='*:*:fill-[#D9D9D9] flex gap-0.75'>
@@ -58,7 +42,6 @@ const ContactInfo = () => (
     </>
 );
 
-// Services section
 const ServicesSection = () => (
     <div className='flex-1 flex flex-col gap-4'>
         <h1 className='text-white text-heading-4'>Services</h1>
@@ -73,7 +56,6 @@ const ServicesSection = () => (
     </div>
 );
 
-// Company section
 const CompanySection = () => (
     <div className='flex-1 flex flex-col gap-4'>
         <h1 className='text-white text-heading-4'>Company</h1>
@@ -87,7 +69,15 @@ const CompanySection = () => (
     </div>
 );
 
-// CTA and social section
+const LiveChatButton = () => {
+    return (
+        <button className='flex cursor-pointer items-center justify-center gap-2  text-primary-700 bg-white  px-4 py-2.5 rounded-lg  transition-colors'>
+            <ChatIcon />
+            <span className='text-primary-700 '>Live chat support</span>
+        </button>
+    )
+}
+
 const CTASection = () => (
     <div className='flex-1 flex flex-col gap-4'>
         <h1 className='text-white text-heading-4'>Ready to book?</h1>
@@ -95,8 +85,8 @@ const CTASection = () => (
             Get your home professionally cleaned in just a few clicks.
         </p>
         <div className='flex flex-col gap-4'>
-            <Button className='whitespace-nowrap' size="xs">Book a cleaning now</Button>
-            <Button className='whitespace-nowrap' size="xs">Live chat support</Button>
+            <Button className='whitespace-nowrap border-primary-700' size="xs">Book a cleaning now</Button>
+            <LiveChatButton />
         </div>
         <div className='flex flex-col gap-1'>
             <p className='text-[#D9D9D9]'>Follow us</p>
@@ -109,7 +99,6 @@ const CTASection = () => (
     </div>
 );
 
-// Bottom section with copyright and links
 const FooterBottom = () => (
     <div className='flex text-[#D9D9D9] justify-between'>
         <p>
@@ -122,3 +111,21 @@ const FooterBottom = () => (
         </ul>
     </div>
 );
+
+
+export default function Footer() {
+    return (
+        <div className="py-32 xl:px-36 gap-16 flex flex-col">
+            <div className='flex gap-8'>
+                <FooterBrand />
+                <ServicesSection />
+                <CompanySection />
+                <CTASection />
+            </div>
+            <div>
+                <hr className='border-0.75 text-[#D9D9D9]' />
+            </div>
+            <FooterBottom />
+        </div>
+    )
+}
