@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
+import LandingSection4 from "./_components/LandingSection4";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
         <Input label="Input Field" placeholder="Enter your text...." />
         <Textarea label="Text area" placeholder="Enter your message...." />
       </form>
+      <LandingSection4 />
     </div>
   );
 }
