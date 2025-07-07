@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito_Sans, Poppins } from "next/font/google";
 import "./globals.css";
+import Navbar from "./_components/Navbar";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${nunitoSans.variable} antialiased font-poppins`}
       >
+        <Navbar />
         {children}
       </body>
     </html>
