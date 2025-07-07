@@ -17,7 +17,7 @@ const FooterBrand = () => (
             <Image className='h-8 w-8' src={logo} alt='Ottri Logo' />
             <span className='text-white'>Ottri</span>
         </div>
-        <p className='text-[#D9D9D9]'>
+        <p className='text-surface-300'>
             The most trusted cleaning service platform in the region. Professional, reliable, and affordable home cleaning solutions.
         </p>
         <ContactInfo />
@@ -27,17 +27,17 @@ const FooterBrand = () => (
 
 const ContactInfo = () => (
     <>
-        <div className='*:*:fill-[#D9D9D9] flex gap-0.75'>
+        <div className='*:*:fill-surface-300 flex gap-0.75'>
             <CallIcon />
-            <p className='text-[#D9D9D9]'>(555) 123-4567</p>
+            <p className='text-surface-300'>(555) 123-4567</p>
         </div>
         <div className='flex gap-0.75'>
             <LocationIcon />
-            <p className='text-[#D9D9D9]'>hello@ottri.com</p>
+            <p className='text-surface-300'>hello@ottri.com</p>
         </div>
         <div className='flex gap-0.75'>
             <EmailIcon />
-            <p className='text-[#D9D9D9]'>Serving 6 metro areas</p>
+            <p className='text-surface-300'>Serving 6 metro areas</p>
         </div>
     </>
 );
@@ -45,7 +45,7 @@ const ContactInfo = () => (
 const ServicesSection = () => (
     <div className='flex-1 flex flex-col gap-4'>
         <h1 className='text-white text-heading-4'>Services</h1>
-        <ul className='text-[#D9D9D9] gap-4 flex flex-col'>
+        <ul className='text-surface-300 gap-4 flex flex-col'>
             <li>One-Time Cleaning</li>
             <li>Recurring Cleaning</li>
             <li>Deep Cleaning</li>
@@ -59,7 +59,7 @@ const ServicesSection = () => (
 const CompanySection = () => (
     <div className='flex-1 flex flex-col gap-4'>
         <h1 className='text-white text-heading-4'>Company</h1>
-        <ul className='text-[#D9D9D9] gap-4 flex flex-col'>
+        <ul className='text-surface-300 gap-4 flex flex-col'>
             <li>About Us</li>
             <li>How it works</li>
             <li>Careers</li>
@@ -81,7 +81,7 @@ const LiveChatButton = () => {
 const CTASection = () => (
     <div className='flex-1 flex flex-col gap-4'>
         <h1 className='text-white text-heading-4'>Ready to book?</h1>
-        <p className='text-[#D9D9D9]'>
+        <p className='text-surface-300'>
             Get your home professionally cleaned in just a few clicks.
         </p>
         <div className='flex flex-col gap-4'>
@@ -89,7 +89,7 @@ const CTASection = () => (
             <LiveChatButton />
         </div>
         <div className='flex flex-col gap-1'>
-            <p className='text-[#D9D9D9]'>Follow us</p>
+            <p className='text-surface-300'>Follow us</p>
             <div className='flex items-center gap-2'>
                 <InstagramIcon />
                 <XIcon />
@@ -100,7 +100,7 @@ const CTASection = () => (
 );
 
 const FooterBottom = () => (
-    <div className='flex text-[#D9D9D9] justify-between'>
+    <div className='flex text-surface-300 justify-between'>
         <p>
             © 2025 Ottri. All rights reserved. Licensed, bonded, and insured.
         </p>
@@ -123,7 +123,7 @@ export default function Footer() {
                 <CTASection />
             </div>
             <div>
-                <hr className='border-0.75 text-[#D9D9D9]' />
+                <hr className='border-0.75 text-surface-300' />
             </div>
             <FooterBottom />
         </div>
