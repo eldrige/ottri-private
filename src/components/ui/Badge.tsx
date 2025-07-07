@@ -18,6 +18,10 @@ const badgeVariants = cva(
       },
       mode: {
         outline: "bg-[#FFF2E6]"
+      },
+      size: {
+        base: "text-base",
+        sm: "text-sm"
       }
     },
     compoundVariants: [
