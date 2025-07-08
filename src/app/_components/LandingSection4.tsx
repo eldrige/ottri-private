@@ -15,16 +15,10 @@ export default function LandingSection4() {
                 <p className="text-surface-500">
                     Join thousands of satisfied customers who trust Ottri with their homes
                 </p>
-                <div className="flex items-center gap-0.5">
-                    <StartIcon />
-                    <StartIcon />
-                    <StartIcon />
-                    <StartIcon />
-                    <StartIcon />
-                </div>
+                <StarRating rating={5} />
                 <p className="text-surface-500">
                     4.9 out of 5 stars{" "}
-                    <span className="text-primary-700 ml-2">2,45 + reviews</span>
+                    <span className="text-primary-700 ml-2">2,45+ reviews</span>
                 </p>
             </div>
             <ReviewSlider />
@@ -35,7 +29,8 @@ export default function LandingSection4() {
 type ReviewCardProps = {
     name: string;
     location: string;
-    review: string;
+    reviewMessage: string;
+    review: number;
     service: string;
     image: StaticImageData;
 };
@@ -43,20 +38,15 @@ type ReviewCardProps = {
 function ReviewCard({
     name,
     location,
+    reviewMessage,
     review,
     service,
     image,
 }: ReviewCardProps) {
     return (
         <div className="bg-white xl:min-w-100 ml-8 xl:min-h-76.25 p-6 justify-between flex flex-col gap-4 rounded-lg shadow-custom">
-            <div className="flex items-center gap-0.5">
-                <StartIcon />
-                <StartIcon />
-                <StartIcon />
-                <StartIcon />
-                <StartIcon />
-            </div>
-            <p className="text-surface-700">{review}</p>
+            <StarRating rating={review} />
+            <p className="text-surface-700">{reviewMessage}</p>
             <hr />
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -76,6 +66,23 @@ function ReviewCard({
         </div>
     );
 }
+type StarRatingProps = {
+    rating: number;
+};
+
+const StarRating = ({ rating }: StarRatingProps) => {
+    return (
+        <div className="flex items-center gap-0.5">
+            {Array.from({ length: 5 }, (_, index) => (
+                <StartIcon
+                    key={index}
+                    className={index < rating ? "text-yellow-400 fill-current" : "*:fill-white *:stroke-yellow-400"}
+                />
+            ))}
+        </div>
+    );
+};
+
 
 function ReviewSlider() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -86,74 +93,80 @@ function ReviewSlider() {
         {
             name: "Sara Johnson",
             location: "Downtown",
-            review: "“Ottri has transformed my home! The team was professional, thorough, and left my place sparkling clean. I highly recommend their services to anyone looking for a reliable cleaning service.”",
+            reviewMessage: "“Ottri has transformed my home! The team was professional, thorough, and left my place sparkling clean. I highly recommend their services to anyone looking for a reliable cleaning service.”",
             service: "Recurring Cleaning",
-            image: Sara
+            image: Sara,
+            review: 5
         },
         {
             name: "Sara Johnson",
             location: "Downtown",
-            review: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
+            reviewMessage: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
             service: "Move-out Cleaning",
-            image: Sara2
+            image: Sara2,
+            review: 5
+
         },
         {
             name: "Sara Johnson",
             location: "Downtown",
-            review: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
+            reviewMessage: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
             service: "One-Time Cleaning",
-            image: Sara2
+            image: Sara2,
+            review: 5
         },
-        {
-            name: "Sara Johnson",
-            location: "Downtown",
-            review: "“Ottri has transformed my home! The team was professional, thorough, and left my place sparkling clean. I highly recommend their services to anyone looking for a reliable cleaning service.”",
-            service: "Recurring Cleaning",
-            image: Sara
-        },
-        {
-            name: "Sara Johnson",
-            location: "Downtown",
-            review: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
-            service: "Move-out Cleaning",
-            image: Sara2
-        },
-        {
-            name: "Sara Johnson",
-            location: "Downtown",
-            review: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
-            service: "One-Time Cleaning",
-            image: Sara2
-        }
+        // {
+        //     name: "Sara Johnson",
+        //     location: "Downtown",
+        //     reviewMessage: "“Ottri has transformed my home! The team was professional, thorough, and left my place sparkling clean. I highly recommend their services to anyone looking for a reliable cleaning service.”",
+        //     service: "Recurring Cleaning",
+        //     image: Sara,
+        //     review: 5
+        // },
+        // {
+        //     name: "Sara Johnson",
+        //     location: "Downtown",
+        //     reviewMessage: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
+        //     service: "Move-out Cleaning",
+        //     image: Sara2,
+        //     review: 5
+        // },
+        // {
+        //     name: "Sara Johnson",
+        //     location: "Downtown",
+        //     reviewMessage: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
+        //     service: "One-Time Cleaning",
+        //     image: Sara2,
+        //     review: 5
+        // }
     ];
 
     const goToPrev = () => {
-        if (isTransitioning) return; // Prevent rapid clicks
+        if (isTransitioning) return;
         setIsTransitioning(true);
-        setCurrentIndex((prev) => (prev === 0 ? 0 : prev - 1)); // Stay at 0 if at start
+        setCurrentIndex((prev) => (prev === 0 ? 0 : prev - 1));
     };
 
     const goToNext = () => {
-        if (isTransitioning) return; // Prevent rapid clicks
-        setIsTransitioning(true);
-        setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1)); // Reset to 0 if at end
+        if (isTransitioning) return;
+        setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
     };
 
     useEffect(() => {
         if (sliderRef.current) {
             sliderRef.current.style.transition = 'transform 0.5s ease-in-out';
-            sliderRef.current.style.transform = `translateX(-${currentIndex * 450}px)`; // 450px is card width
+            sliderRef.current.style.transform = `translateX(-${currentIndex * 450}px)`;
         }
-        // Reset transition state after animation completes
+
         const timeout = setTimeout(() => {
             setIsTransitioning(false);
-        }, 500); // Match transition duration
+        }, 500);
 
         return () => clearTimeout(timeout);
     }, [currentIndex]);
 
     return (
-        <div className="w-full py-8 overflow-hidden">
+        <div className="w-full py-8 flex flex-col items-center overflow-x-hidden">
             <div
                 ref={sliderRef}
                 className="flex"
@@ -164,10 +177,9 @@ function ReviewSlider() {
                         <ReviewCard
                             name={review.name}
                             location={review.location}
-                            review={review.review}
+                            reviewMessage={review.reviewMessage}
                             service={review.service}
-                            image={review.image}
-                        />
+                            image={review.image} review={review.review} />
                     </div>
                 ))}
             </div>
