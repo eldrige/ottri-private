@@ -104,9 +104,12 @@ function ServiceCard({ coverSrc, Icon, mostPopular, title, subtitle, services, p
         </div>
         <h4 className='text-heading-4 text-secondary-700'>{title}</h4>
         <p className='text-base text-surface-700'>{subtitle}</p>
-        <ul className='list-disc text-surface-700 marker:text-primary-700 list-inside space-y-4'>
+        <ul className='text-surface-700 marker:text-primary-700 space-y-4'>
           {services.slice(0, 3).map(service => (
-            <li className='pl-0' key={service}>{service}</li>
+            <li className='flex items-center' key={service}>
+              <span className='block w-2 h-2 rounded-full bg-primary-700 mr-2' />
+              {service}
+            </li>
           ))}
           <span className='text-primary-700'>+{services.slice(3).length} more features</span>
         </ul>
