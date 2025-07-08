@@ -11,7 +11,8 @@ const buttonVariants = cva(
         default: "bg-primary-700 hover:text-primary-700 hover:border-primary-700",
         secondary: "bg-secondary-700 hover:text-secondary-700 hover:border-secondary-700",
         destructive: "",
-        outline: "",
+        "default-outline": "text-primary-700 border-primary-700",
+        "secondary-outline": "text-secondary-700 border-secondary-700",
         ghost: "",
         link: ""
       },
