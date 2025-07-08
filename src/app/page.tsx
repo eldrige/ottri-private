@@ -4,10 +4,11 @@ import LandingSection3 from "./_components/LandingSection3";
 
 export default function Home() {
   return (
-    <main className="px-36">
+    <main className="container mx-auto px-6">
       <HeroSection />
-      <LandingSection2 />
-      <LandingSection3 />
+      {/* <LandingSection2 />
+      <LandingSection3 /> 
+      */}
     </main>
   );
 }
