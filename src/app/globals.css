@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
 }
 
 @theme {
@@ -19,6 +19,7 @@
   /* Neutral Colors */
   --color-surface-50: #f8f9fa;
   --color-surface-200: #e2e3e5;
+  --color-surface-300: #d9d9d9;
   --color-surface-500: #6c757d;
   --color-surface-700: #495057;
 
@@ -29,15 +30,17 @@
   --color-info: #17a2b8;
 
   /* Typography */
-  --text-heading-1: 60px; /* Hero headlines, landing pages */
-  --text-heading-1--font-weight: 700;
-  --text-heading-2: 48px; /* Section headlines, major announcements */
-  --text-heading-2--font-weight: 700;
-  --text-heading-3: 36px; /* Page titles, section headers */
+  --text-heading-1: 56px;               /* Hero headlines, landing pages */
+  --text-heading-1--font-weight: 600;
+  --text-heading-2: 48px;               /* Section headlines, major announcements */
+  --text-heading-2--font-weight: 600;
+  --text-heading-3: 36px;               /* Page titles, section headers */
   --text-heading-3--font-weight: 600;
   --text-heading-4: 24px; /* Card titles, component headers */
   --text-heading-4--font-weight: 500;
-  --text-subtitle: 18px; /* Lead paragraphs, important descriptions */
+  --text-heading-5: 20px;               /* Slightly smaller */
+  --text-heading-5--font-weight: 500;
+  --text-subtitle: 18px;               /* Lead paragraphs, important descriptions */
   --text-subtitle--font-weight: 400;
   --text-body: 16px; /* General content, form fields */
   --text-body--font-weight: 400;
@@ -47,17 +50,23 @@
   --text-label--font-weight: 600;
 
   /* Custom shadow */
-  --shadow-custom: 0px 0px 23px 0px #0000001a;
+  --shadow-custom: 0px 0px 23px 0px #0000001A;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-poppins: var(--font-poppins);
+  --font-poppins: var(--font-poppins);  
+  --font-nunito-sans: var(--font-nunito-sans);  
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-poppins);
+}
+
+h1, h2 {
+  font-family: var(--font-nunito-sans);
+  line-height: 1.375;
 }

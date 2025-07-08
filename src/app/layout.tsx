@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Nunito_Sans, Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "./_components/Navbar";
+import Footer from "@/app/_components/Footer";
 
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"]
+})
+
+const nunitoSans = Nunito_Sans({
+  variable: "--font-nunito-sans",
+  subsets: ["latin"],
 })
 
 export const metadata: Metadata = {
@@ -22,10 +28,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} antialiased font-poppins`}
+        className={`${poppins.variable} ${nunitoSans.variable} antialiased font-poppins`}
       >
         <Navbar />
         {children}
+
+        <footer className="bg-secondary-700">
+          <Footer />
+        </footer>
       </body>
     </html>
   );

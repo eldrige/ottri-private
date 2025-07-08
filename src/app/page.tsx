@@ -1,15 +1,15 @@
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
+import HeroSection from "./_components/HeroSection";
+import LandingSection2 from "./_components/LandingSection2";
+import LandingSection3 from "./_components/LandingSection3";
 import LandingSection4 from "./_components/LandingSection4";
 
 export default function Home() {
   return (
-    <div className="font-poppins h-[150vh]">
-      <form className="max-w-2xl mx-auto mt-10 placeholder:text-surface-500">
-        <Input label="Input Field" placeholder="Enter your text...." />
-        <Textarea label="Text area" placeholder="Enter your message...." />
-      </form>
+    <main className="px-36">
+      <HeroSection />
+      <LandingSection2 />
+      <LandingSection3 />
       <LandingSection4 />
-    </div>
+    </main>
   );
 }
