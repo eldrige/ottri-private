@@ -11,7 +11,7 @@ export default function HeroSection() {
   return (
     <section className="py-16 grid lg:grid-cols-2 gap-x-2.5">
         <div className="space-y-6">
-          <h1 className="text-heading-3 md:text-heading-1">Cleanliness Is Our Commitment To Your Well-Being.</h1>
+          <h1 className="text-heading-3 md:text-heading-1 text-center lg:text-start">Cleanliness Is Our Commitment To Your Well-Being.</h1>
           <p className="text-surface-500 text-subtitle tracking-wide">Book your perfect cleaning service in under 3 minutes. Trusted by thousands of homeowners for reliable, thorough, and affordable cleaning solutions.</p>
           <div className="h-6 flex items-center gap-4">
             <span className="flex">

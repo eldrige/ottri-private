@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { ComponentProps, ReactNode } from 'react';
 
-export function Nav({ children }: { children: ReactNode; }) {
+export function Nav({ children, className }: { children: ReactNode; className?: string; }) {
   return (
-    <nav className="flex items-center whitespace-nowrap">{children}</nav>
+    <nav className={cn("flex lg:items-center flex-col lg:flex-row whitespace-nowrap", className)}>{children}</nav>
   );
 }
 

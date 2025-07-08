@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${nunitoSans.variable} antialiased font-poppins`}
       >
-        {/* <Navbar /> */}
+        <Navbar />
         {children}
 
         <footer className="bg-secondary-700">
