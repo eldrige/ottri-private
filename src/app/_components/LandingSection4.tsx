@@ -6,6 +6,7 @@ import Sara from "@/assets/sara1.png";
 import Sara2 from "@/assets/sara2.png";
 import LeftArrowIcon from "@/components/icons/LeftArrowIcon";
 import RightArrowIcon from "@/components/icons/RightArrowIcon";
+import CheckIcon from "@/components/icons/CheckIcon";
 
 export default function LandingSection4() {
     return (
@@ -22,6 +23,24 @@ export default function LandingSection4() {
                 </p>
             </div>
             <ReviewSlider />
+            <ul className="pt-16 text-surface-500 flex items-center *:flex *:gap-2 gap-10 *:items-center justify-center">
+                <li>
+                    <CheckIcon />
+                    <p>Insured & Bonded</p>
+                </li>
+                <li>
+                    <CheckIcon />
+                    <p>Background Checked</p>
+                </li>
+                <li>
+                    <CheckIcon />
+                    <p>Satisfaction Guaranteed</p>
+                </li>
+                <li>
+                    <CheckIcon />
+                    <p>Licensed Professionals</p>
+                </li>
+            </ul>
         </div>
     );
 }
@@ -44,10 +63,10 @@ function ReviewCard({
     image,
 }: ReviewCardProps) {
     return (
-        <div className="bg-white xl:min-w-100 ml-8 xl:min-h-76.25 p-6 justify-between flex flex-col gap-4 rounded-lg shadow-custom">
+        <div className="bg-white text-surface-500 xl:min-w-100 ml-8 xl:min-h-76.25 p-6 justify-between flex flex-col gap-4 rounded-lg shadow-custom">
             <StarRating rating={review} />
-            <p className="text-surface-700">{reviewMessage}</p>
-            <hr />
+            <p>{reviewMessage}</p>
+            <hr className="border-0.25 border-surface-500/40" />
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-2">
                     <Image
@@ -58,7 +77,7 @@ function ReviewCard({
                     />
                     <div className="">
                         <p className="text-lg ">{name}</p>
-                        <span className="text-surface-500 text-base ">{location}</span>
+                        <span>{location}</span>
                     </div>
                 </div>
                 <p className="text-primary-700">{service}</p>
@@ -115,30 +134,6 @@ function ReviewSlider() {
             image: Sara2,
             review: 5
         },
-        // {
-        //     name: "Sara Johnson",
-        //     location: "Downtown",
-        //     reviewMessage: "“Ottri has transformed my home! The team was professional, thorough, and left my place sparkling clean. I highly recommend their services to anyone looking for a reliable cleaning service.”",
-        //     service: "Recurring Cleaning",
-        //     image: Sara,
-        //     review: 5
-        // },
-        // {
-        //     name: "Sara Johnson",
-        //     location: "Downtown",
-        //     reviewMessage: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
-        //     service: "Move-out Cleaning",
-        //     image: Sara2,
-        //     review: 5
-        // },
-        // {
-        //     name: "Sara Johnson",
-        //     location: "Downtown",
-        //     reviewMessage: "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
-        //     service: "One-Time Cleaning",
-        //     image: Sara2,
-        //     review: 5
-        // }
     ];
 
     const goToPrev = () => {
