@@ -22,7 +22,7 @@ export default function LandingSection4() {
                 </p>
             </div>
             <ReviewSlider />
-            <ul className="pt-16 text-surface-500 flex items-center *:flex *:gap-2 gap-10 *:items-center justify-center">
+            <ul className="pt-8 sm:pt-24 w-full md:py-32 grid grid-cols-1 sm:grid-cols-2 text-lg lg:grid-cols-4 text-surface-500 *:items-center *:flex md:*:justify-center *:gap-2 gap-7">
                 <li>
                     <CheckIcon />
                     <p>Insured & Bonded</p>
@@ -62,9 +62,9 @@ function ReviewCard({
     image,
 }: ReviewCardProps) {
     return (
-        <div className="bg-white h-full text-surface-500 xl:min-w-98 xl:min-h-76.25 p-6 justify-between flex flex-col gap-4 rounded-lg shadow-custom">
+        <div className="bg-white h-full text-surface-500 xl:min-w-98 xl:min-h-76.25 p-6 justify-between flex flex-col gap-2 md:gap-4 rounded-lg shadow-custom">
             <StarRating rating={review} />
-            <p>{reviewMessage}</p>
+            <p className="text-left">{reviewMessage}</p>
             <hr className="border-0.25 border-surface-500/40" />
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -75,8 +75,8 @@ function ReviewCard({
                         height="48"
                         alt={`${name}'s Image`}
                     />
-                    <div className="flex justify-end items-start flex-col">
-                        <p className="text-base md:text-lg ">{name}</p>
+                    <div className="flex justify-end text-nowrap items-start flex-col">
+                        <p className="text-[0.9rem] md:text-lg ">{name}</p>
                         <p className="text-xs">{location}</p>
                     </div>
                 </div>
@@ -174,11 +174,11 @@ function ReviewSlider() {
             }}
             className="w-full mx-auto"
         >
-            <CarouselContent className="p-2">
+            <CarouselContent className="my-4 mr-2 ml-0.25 md:px-6  flex gap-2">
                 {reviews.map((review, index) => (
                     <CarouselItem
                         key={index}
-                        className="md:pl-6 basis-full md:basis-1/2 lg:basis-1/3"
+                        className=" basis-full md:basis-1/2 lg:basis-1/3"
                     >
                         <ReviewCard
                             {...review}
