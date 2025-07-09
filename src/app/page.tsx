@@ -5,7 +5,7 @@ import LandingSection4 from "./_components/LandingSection4";
 
 export default function Home() {
   return (
-    <main className="px-36">
+    <main className="px-2 md:px-36">
       <HeroSection />
       <LandingSection2 />
       <LandingSection3 />
