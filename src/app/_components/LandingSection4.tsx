@@ -1,11 +1,11 @@
 'use client';
 import StartIcon from "@/components/icons/StartIcon";
 import Image, { StaticImageData } from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sara from "@/assets/sara1.png";
 import Sara2 from "@/assets/sara2.png";
 import CheckIcon from "@/components/icons/CheckIcon";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/Carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi, } from "@/components/ui/Carousel";
 
 export default function LandingSection4() {
     return (
@@ -69,15 +69,15 @@ function ReviewCard({
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-2">
                     <Image
-                        className="flex-shrink-0 rounded-full w-12 h-12 object-cover"
+                        className="flex-shrink-0 rounded-full w-10 h-10 object-cover"
                         src={image}
                         width="48"
                         height="48"
                         alt={`${name}'s Image`}
                     />
-                    <div className="">
-                        <p className="text-lg ">{name}</p>
-                        <span>{location}</span>
+                    <div className="flex justify-end items-start flex-col">
+                        <p className="text-base md:text-lg ">{name}</p>
+                        <p className="text-xs">{location}</p>
                     </div>
                 </div>
                 <p className="text-primary-700 text-sm sm:text-base">{service}</p>
@@ -104,9 +104,8 @@ const StarRating = ({ rating }: StarRatingProps) => {
 
 
 function ReviewSlider() {
-    // const [currentIndex, setCurrentIndex] = useState(0);
-    // const [isTransitioning, setIsTransitioning] = useState(false);
-    // const sliderRef = useRef<HTMLDivElement>(null);
+    const [api, setApi] = useState<CarouselApi>()
+    const [current, setCurrent] = useState(0)
 
     const reviews = [
         {
@@ -161,8 +160,15 @@ function ReviewSlider() {
         },
     ];
 
+    useEffect(() => {
+        if (!api) return
+
+        api.on("select", () => {
+            setCurrent(api.selectedScrollSnap())
+        })
+    }, [api])
     return (
-        <Carousel
+        <Carousel setApi={setApi}
             opts={{
                 align: "start",
             }}
@@ -172,24 +178,31 @@ function ReviewSlider() {
                 {reviews.map((review, index) => (
                     <CarouselItem
                         key={index}
-                        className="pl-6 basis-full sm:basis-1/2 lg:basis-1/3"
+                        className="md:pl-6 basis-full md:basis-1/2 lg:basis-1/3"
                     >
                         <ReviewCard
-                            name={review.name}
-                            location={review.location}
-                            reviewMessage={review.reviewMessage}
-                            service={review.service}
-                            image={review.image}
-                            review={review.review}
+                            {...review}
                         />
                     </CarouselItem>
                 ))}
             </CarouselContent>
+            {/* Dots */}
+            <div className="flex flex-col items-center mt-6">
+                <div className="flex md:hidden gap-2  mb-3">
+                    {reviews.map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => api?.scrollTo(i)}
+                            className={`size-3 rounded-full ${current === i ? 'bg-primary-700' : 'bg-surface-300'}`}
+                        />
+                    ))}
+                </div>
 
-            {/* Navigation buttons - centered on mobile, right-aligned on desktop */}
-            <div className="flex gap-2 w-full justify-center sm:justify-end mt-6">
-                <CarouselPrevious />
-                <CarouselNext />
+                {/* Navigation buttons - centered on mobile, right-aligned on desktop */}
+                <div className="flex gap-2 w-full justify-center sm:justify-end">
+                    <CarouselPrevious />
+                    <CarouselNext />
+                </div>
             </div>
         </Carousel>
     );
