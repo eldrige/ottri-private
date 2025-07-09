@@ -6,11 +6,13 @@ import LandingSection4 from "./_components/LandingSection4";
 
 export default function Home() {
   return (
-    <main className="px-2 md:px-36">
-      <HeroSection />
-      <LandingSection2 />
-      <LandingSection3 />
-      <LandingSection4 />
+    <main>
+      <div className="flex flex-col px-2 md:px-36">
+        <HeroSection />
+        <LandingSection2 />
+        <LandingSection3 />
+        <LandingSection4 />
+      </div>
       <Newsletter />
     </main>
   );
