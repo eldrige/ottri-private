@@ -51,7 +51,7 @@ const ServicesSection = () => (
             <Link href='/services'>Recurring Cleaning</Link>
             <Link href='/services'>Move-in/Move-out Cleaning</Link>
             <Link href='/services'>Post-construction Cleaning</Link>
-            <Link href='/services'>Office cleaningr</Link>
+            <Link href='/services'>Office cleaning</Link>
         </ul>
     </div>
 );
@@ -88,9 +88,9 @@ const CTASection = () => (
             <Button className='whitespace-nowrap border-primary-700' size="xs">Book a cleaning now</Button>
             <LiveChatButton />
         </div>
-        <div className='flex flex-col gap-1'>
+        <div className='flex flex-col items-center md:items-start gap-1'>
             <p className='text-surface-300'>Follow us</p>
-            <ul className='flex items-center gap-2.5'>
+            <ul className='flex items-center gap-2.75'>
                 <li><a href="https://www.instagram.com/"><InstagramIcon /></a></li>
                 <li><a href="https://x.com/"><XIcon /></a></li>
                 <li><a href="https://www.facebook.com/"><FacebookIcon /></a></li>
@@ -100,11 +100,11 @@ const CTASection = () => (
 );
 
 const FooterBottom = () => (
-    <div className='flex text-surface-300 justify-between'>
+    <div className='flex flex-col-reverse md:flex-row gap-8 text-surface-300 justify-between'>
         <p>
             © 2025 Ottri. All rights reserved. Licensed, bonded, and insured.
         </p>
-        <ul className='flex gap-4 *:hover:text-primary-700 '>
+        <ul className='flex md:flex-row flex-col gap-4 *:hover:text-primary-700 '>
             <Link href='/privacy-policy'>Privacy Policy</Link>
             <Link href='/terms-services'>Terms of Services</Link>
             <Link href='/cookie-policy'>Cookie Policy</Link>
@@ -115,14 +115,14 @@ const FooterBottom = () => (
 
 export default function Footer() {
     return (
-        <div className="py-32 xl:px-36 gap-16 flex flex-col">
-            <div className='flex gap-8'>
+        <div className="pt-16 pb-8 md:py-24 px-6 xl:px-36 flex flex-col">
+            <div className='flex flex-col md:flex-row gap-8'>
                 <FooterBrand />
                 <ServicesSection />
                 <CompanySection />
                 <CTASection />
             </div>
-            <div>
+            <div className='md:py-16 py-8'>
                 <hr className='border-0.75 text-surface-300' />
             </div>
             <FooterBottom />
