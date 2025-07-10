@@ -6,7 +6,7 @@ import React, { ComponentProps, ReactNode } from 'react';
 
 export function Nav({ children, className }: { children: ReactNode; className?: string; }) {
   return (
-    <nav className={cn("flex lg:items-center flex-col lg:flex-row whitespace-nowrap", className)}>{children}</nav>
+    <nav className={cn("flex lg:items-center flex-col xl:flex-row whitespace-nowrap", className)}>{children}</nav>
   );
 }
 

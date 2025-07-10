@@ -34,7 +34,7 @@ export default function RootLayout({
         {children}
 
         <footer className="bg-secondary-700">
-          {/* <Footer /> */}
+          <Footer />
         </footer>
       </body>
     </html>

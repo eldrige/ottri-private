@@ -5,15 +5,15 @@ import Newsletter from "./_components/Newsletter";
 
 export default function Home() {
   return (
-    <main>
-      <div className="px-36">
+    <main className="">
+      <div className="container mx-auto px-6">
         <HeroSection />
-        <LandingSection2 />
-        <LandingSection3 />
+        
+        {/* <LandingSection2 /> */}
+        {/* <LandingSection3 /> */}
+
       </div>
       {/* <Newsletter /> */}
-
     </main>
-
   );
 }
