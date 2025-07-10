@@ -9,7 +9,7 @@ export default function Home() {
       <div className="container mx-auto px-6">
         <HeroSection />
         
-        {/* <LandingSection2 /> */}
+        <LandingSection2 />
         {/* <LandingSection3 /> */}
 
       </div>
