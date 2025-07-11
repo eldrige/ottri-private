@@ -89,13 +89,12 @@ export default function LandingSection6() {
 type ProjectCardProps = {
   image: string;
   type?: "multi-images" | "video";
-  height?: string;
 };
 
 function ProjectCard({ image, type }: ProjectCardProps) {
   return (
     <div
-      className={`relative w-full h-50 md:h-56 rounded-lg overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+      className={`relative w-full h-48 md:h-56 rounded-lg overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
     >
       <Image
         src={image}
