@@ -1,6 +1,5 @@
 import MultiImagesIcon from "@/components/icons/MultiImagesIcon";
 import VideoIcon from "@/components/icons/VideoIcon";
-import { link } from "fs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
