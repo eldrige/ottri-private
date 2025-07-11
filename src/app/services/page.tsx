@@ -9,10 +9,10 @@ export default function ServicePage() {
         <Badge className="w-fit" variant="default" mode="outline">
           About Ottri
         </Badge>
-        <h2 className="text-heading-1 font-semibold">
+        <h2 className="text-heading-3 md:text-heading-2 font-semibold">
           Professional Cleaning Services for Every Need
         </h2>
-        <p className="text-subtitle text-surface-500 max-w-6xl mx-auto">
+        <p className="text-subtitle text-surface-500 text-base max-w-6xl mx-auto">
           From regular maintenance to specialized deep cleans, we offer
           comprehensive cleaning solutions tailored to your specific
           requirements.
