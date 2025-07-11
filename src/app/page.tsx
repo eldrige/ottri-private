@@ -1,6 +1,7 @@
 import HeroSection from "./_components/HeroSection";
 import LandingSection2 from "./_components/LandingSection2";
 import LandingSection3 from "./_components/LandingSection3";
+import LandingSection6 from "./_components/LandingSection6";
 import Newsletter from "./_components/Newsletter";
 
 export default function Home() {
@@ -10,10 +11,9 @@ export default function Home() {
         <HeroSection />
         <LandingSection2 />
         <LandingSection3 />
+        <LandingSection6 />
       </div>
       <Newsletter />
-
     </main>
-
   );
 }
