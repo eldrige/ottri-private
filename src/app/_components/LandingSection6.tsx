@@ -59,7 +59,7 @@ export default function LandingSection6() {
         <h2 className="text-4xl font-semibold">
           Some Of Our Cleaning Projects
         </h2>
-        <p className="text-subtitle text-surface-500 max-w-[832px] mx-auto">
+        <p className="text-subtitle text-surface-500">
           At OTTRI LLC, we believe in delivering more than just janitorial and
           office supply services; we provide you with peace of mind and a clean,
           healthy environment.
