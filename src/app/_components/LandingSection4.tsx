@@ -29,7 +29,7 @@ export default function LandingSection4() {
         </p>
       </div>
       <ReviewSlider />
-      <ul className="pt-8 sm:pt-24 w-full md:py-24 grid grid-cols-1 sm:grid-cols-2 text-lg lg:grid-cols-4 text-surface-500 *:items-center *:flex md:*:justify-center *:gap-2">
+      <ul className="pt-8 sm:pt-24 w-full md:py-24 grid grid-cols-1 sm:grid-cols-2 text-lg lg:grid-cols-4 text-surface-500 *:items-center *:flex md:*:justify-center *:gap-2 gap-y-7">
         <li>
           <CheckIcon />
           <p>Insured & Bonded</p>
