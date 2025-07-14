@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ import BoxIcon from '@/components/icons/BoxIcon';
 export default function LandingSection3() {
   // Add state for the carousel
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   // Define service card data
   const serviceCards = [
     {
@@ -65,12 +65,12 @@ export default function LandingSection3() {
       mostPopular: false
     }
   ];
-  
+
   // Functions to handle next and previous slides
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % serviceCards.length);
   };
-  
+
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + serviceCards.length) % serviceCards.length);
   };
@@ -85,54 +85,17 @@ export default function LandingSection3() {
         </Link>
       </div>
       <div className='hidden lg:grid grid-cols-3 gap-x-8'>
-        <ServiceCard
-          coverSrc={figure1}
-          Icon={RewardStars}
-          title='Commercial Cleaning'
-          subtitle='Tailored cleaning solutions for businesses of all sizes.'
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...(Array.from({ length: 9 }, () => ""))
-          ]}
-          priceFrom={89}
-          duration='3-5'
-        />
-        <ServiceCard
-          mostPopular
-          coverSrc={figure2}
-          Icon={ReloadIcon}
-          title='Residential Cleaning'
-          subtitle='Making homes sparkle and shine with our top-tier services.'
-          services={[
-            "Move in / Move outs",
-            "Spring cleaning",
-            "Junk Removal",
-            ...(Array.from({ length: 10 }, () => ""))
-          ]}
-          priceFrom={89}
-          duration='3-5'
-        />
-        <ServiceCard
-          coverSrc={figure3}
-          Icon={BoxIcon}
-          title='Post Construction Cleaning'
-          subtitle='We excel in post-construction cleaning to make your space ready for use.'
-          services={[
-            "All rooms included",
-            "Inside appliances",
-            "Detailed cleaning",
-            ...(Array.from({ length: 4 }, () => ""))
-          ]}
-          priceFrom={89}
-          duration='3-5'
-        />
+        {serviceCards.map(card => (
+          <ServiceCard
+            key={card.title}
+            {...card}
+          />
+        ))}
       </div>
       {/* Mobile carousel  */}
       <div className='lg:hidden space-y-4'>
         <div className="overflow-hidden">
-          <div 
+          <div
             className="flex transition-transform duration-300 ease-in-out"
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
@@ -145,10 +108,10 @@ export default function LandingSection3() {
         </div>
         <div className='flex justify-center gap-1'>
           {serviceCards.map((_, index) => (
-            <span 
+            <span
               key={index}
               className={cn(
-                'w-3 h-3 rounded-full cursor-pointer', 
+                'w-3 h-3 rounded-full cursor-pointer',
                 currentSlide === index ? 'bg-primary-700' : 'bg-surface-200/60'
               )}
               onClick={() => setCurrentSlide(index)}
@@ -156,19 +119,19 @@ export default function LandingSection3() {
           ))}
         </div>
         <div className='flex justify-center gap-4'>
-          <button 
+          <button
             disabled={currentSlide === 0}
-            className={cn('*:h-6 *:w-6 transition-colors', 
-              currentSlide === 0 ? 'text-secondary-700/30' : 'text-primary-700'
+            className={cn('*:h-6 *:w-6 transition-colors',
+              currentSlide === 0 ? 'text-secondary-700/30' : 'text-primary-700 cursor-pointer'
             )}
             onClick={prevSlide}
           >
             <ArrowLeft />
           </button>
-          <button 
+          <button
             disabled={currentSlide === serviceCards.length - 1}
-            className={cn('*:h-6 *:w-6 transition-colors', 
-              currentSlide === serviceCards.length - 1 ? 'text-secondary-700/30' : 'text-primary-700'
+            className={cn('*:h-6 *:w-6 transition-colors',
+              currentSlide === serviceCards.length - 1 ? 'text-secondary-700/30' : 'text-primary-700 cursor-pointer'
             )}
             onClick={nextSlide}
           >
