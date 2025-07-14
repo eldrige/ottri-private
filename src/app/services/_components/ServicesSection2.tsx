@@ -7,11 +7,13 @@ import figure2 from "@/assets/landing-section3-figure2.jpg";
 import figure3 from "@/assets/landing-section3-figure3.jpg";
 import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
-import { BoxIcon } from "lucide-react";
+import BoxIcon from "@/components/icons/BoxIcon";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function ServicesSection2() {
   return (
-    <section className="pb-10 space-y-8">
+    <section className="px-26 pb-10 space-y-8">
       <div className="grid grid-cols-3 gap-x-8">
         <ServiceCard
           coverSrc={figure1}
@@ -47,6 +49,7 @@ type ServiceCardProps = {
   }: {
     className?: string | undefined;
   }) => React.JSX.Element;
+  link?: string;
 };
 
 function ServiceCard({
@@ -55,11 +58,12 @@ function ServiceCard({
   mostPopular,
   title,
   subtitle,
+  link,
 }: ServiceCardProps) {
   return (
     <div
       className={cn(
-        "relative rounded-lg border-2 border-black/10 space-y-4",
+        "relative flex flex-col justify-between pb-6 gap-4 rounded-lg border-2 border-black/10",
         mostPopular && "border-primary-700"
       )}
     >
@@ -86,6 +90,11 @@ function ServiceCard({
         </div>
         <h4 className="text-heading-4 text-secondary-700">{title}</h4>
         <p className="text-base text-surface-700">{subtitle}</p>
+      </div>
+      <div className="flex items-center justify-center w-full">
+        <Link className="text-primary-500 flex" href={link || "/services"}>
+          View more <ArrowRight />
+        </Link>
       </div>
     </div>
   );
