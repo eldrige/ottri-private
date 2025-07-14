@@ -44,7 +44,7 @@ export default function ServicesSection3() {
     },
   ];
   return (
-    <section className="py-24 md:px-26 gap-16 flex flex-col">
+    <section className="py-24 pb-36 md:px-26 gap-16 flex flex-col">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
         <h2 className="text-heading-3 md:text-heading-2 font-semibold">
           Popular Add-On Services
