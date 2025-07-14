@@ -14,7 +14,7 @@ import { ArrowRight } from "lucide-react";
 export default function ServicesSection2() {
   return (
     <section className="px-26 pb-10 space-y-8">
-      <div className="grid grid-cols-3 gap-x-8">
+      <div className="grid grid-cols-3 gap-8">
         <ServiceCard
           coverSrc={figure1}
           Icon={RewardStars}
@@ -23,6 +23,60 @@ export default function ServicesSection2() {
         />
         <ServiceCard
           mostPopular
+          coverSrc={figure2}
+          Icon={ReloadIcon}
+          title="Residential Cleaning"
+          subtitle="Making homes sparkle and shine with our top-tier services."
+        />
+        <ServiceCard
+          coverSrc={figure3}
+          Icon={BoxIcon}
+          title="Post Construction Cleaning"
+          subtitle="We excel in post-construction cleaning to make your space ready for use."
+        />
+        <ServiceCard
+          coverSrc={figure1}
+          Icon={RewardStars}
+          title="Commercial Cleaning"
+          subtitle="Tailored cleaning solutions for businesses of all sizes."
+        />
+        <ServiceCard
+          coverSrc={figure2}
+          Icon={ReloadIcon}
+          title="Residential Cleaning"
+          subtitle="Making homes sparkle and shine with our top-tier services."
+        />
+        <ServiceCard
+          coverSrc={figure3}
+          Icon={BoxIcon}
+          title="Post Construction Cleaning"
+          subtitle="We excel in post-construction cleaning to make your space ready for use."
+        />
+        <ServiceCard
+          coverSrc={figure1}
+          Icon={RewardStars}
+          title="Commercial Cleaning"
+          subtitle="Tailored cleaning solutions for businesses of all sizes."
+        />
+        <ServiceCard
+          coverSrc={figure2}
+          Icon={ReloadIcon}
+          title="Residential Cleaning"
+          subtitle="Making homes sparkle and shine with our top-tier services."
+        />
+        <ServiceCard
+          coverSrc={figure3}
+          Icon={BoxIcon}
+          title="Post Construction Cleaning"
+          subtitle="We excel in post-construction cleaning to make your space ready for use."
+        />
+        <ServiceCard
+          coverSrc={figure1}
+          Icon={RewardStars}
+          title="Commercial Cleaning"
+          subtitle="Tailored cleaning solutions for businesses of all sizes."
+        />
+        <ServiceCard
           coverSrc={figure2}
           Icon={ReloadIcon}
           title="Residential Cleaning"
@@ -92,7 +146,10 @@ function ServiceCard({
         <p className="text-base text-surface-700">{subtitle}</p>
       </div>
       <div className="flex items-center justify-center w-full">
-        <Link className="text-primary-500 flex" href={link || "/services"}>
+        <Link
+          className="text-primary-500 flex gap-4"
+          href={link || "/services"}
+        >
           View more <ArrowRight />
         </Link>
       </div>
