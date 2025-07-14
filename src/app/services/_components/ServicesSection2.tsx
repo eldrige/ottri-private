@@ -13,8 +13,8 @@ import { ArrowRight } from "lucide-react";
 
 export default function ServicesSection2() {
   return (
-    <section className="px-26 pb-10 space-y-8">
-      <div className="grid grid-cols-3 gap-8">
+    <section className="px-2 md:px-26 pb-10 space-y-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <ServiceCard
           coverSrc={figure1}
           Icon={RewardStars}
@@ -117,7 +117,7 @@ function ServiceCard({
   return (
     <div
       className={cn(
-        "relative flex flex-col justify-between pb-6 gap-4 rounded-lg border-2 border-black/10",
+        "relative flex flex-col justify-between gap-4 rounded-lg border-2 border-black/10",
         mostPopular && "border-primary-700"
       )}
     >
@@ -131,7 +131,7 @@ function ServiceCard({
         src={coverSrc}
         alt={`${title}'s cover`}
       />
-      <div className="space-y-4 px-6">
+      <div className="space-y-4 flex flex-col justify-between h-full px-6">
         <div
           className={cn(
             "w-10 aspect-square rounded-lg flex items-center justify-center",
@@ -147,7 +147,7 @@ function ServiceCard({
       </div>
       <div className="flex items-center justify-center w-full">
         <Link
-          className="text-primary-500 flex gap-4"
+          className="text-primary-500 pb-4 flex gap-4"
           href={link || "/services"}
         >
           View more <ArrowRight />
