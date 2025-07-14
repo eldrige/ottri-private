@@ -1,24 +1,16 @@
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import React from "react";
+import Newsletter from "../_components/Newsletter";
+import ServicesSection1 from "./_components/ServicesSection1";
+import ServicesSection2 from "./_components/ServicesSection2";
 
 export default function ServicePage() {
   return (
-    <section className="py-24 space-y-8">
-      <div className="text-center flex flex-col justify-center items-center space-y-4">
-        <Badge className="w-fit" variant="default" mode="outline">
-          About Ottri
-        </Badge>
-        <h2 className="text-heading-3 md:text-heading-2 font-semibold">
-          Professional Cleaning Services for Every Need
-        </h2>
-        <p className="text-subtitle text-surface-500 text-base max-w-6xl mx-auto">
-          From regular maintenance to specialized deep cleans, we offer
-          comprehensive cleaning solutions tailored to your specific
-          requirements.
-        </p>
-        <Button className="py-3 px-5 text-md">Book a cleaning now</Button>
+    <main>
+      <div className="container mx-auto px-6">
+        <ServicesSection1 />
+        <ServicesSection2 />
       </div>
-    </section>
+      <Newsletter />
+    </main>
   );
 }
