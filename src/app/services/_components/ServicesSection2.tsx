@@ -13,7 +13,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function ServicesSection2() {
   return (
-    <section className="px-2 md:px-26 pb-10 space-y-8">
+    <section className=" md:px-26 pb-10 space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <ServiceCard
           coverSrc={figure1}
