@@ -77,7 +77,7 @@ function PopularServiceCard({
   subtitle,
 }: PopularServiceCardProps) {
   return (
-    <div className="border border-black/20 text-center rounded-lg flex flex-col justify-between p-4 items-center gap-8">
+    <div className="border border-black/10 text-center rounded-lg flex flex-col justify-between p-4 items-center gap-8">
       <p className="text-surface-500 text-base">{title}</p>
       <span className="text-primary-700 text-2xl font-medium">+${price}</span>
       <p className="text-surface-500 text-base">{subtitle}</p>
