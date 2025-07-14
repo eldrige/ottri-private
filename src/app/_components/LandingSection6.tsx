@@ -85,7 +85,7 @@ export default function LandingSection6() {
           View all
         </Link>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 auto-rows-max">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 auto-rows-max">
         {projects.map((project, index) => (
           <Link key={index} href={project.link} className="block">
             <ProjectCard
@@ -106,7 +106,7 @@ type ProjectCardProps = {
 function ProjectCard({ image, type }: ProjectCardProps) {
   return (
     <div
-      className={`relative w-full h-48 md:h-56 rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+      className={`relative w-full h-39.25 md:h-50.25 rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
     >
       <Image
         src={image}
