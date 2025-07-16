@@ -1,6 +1,7 @@
 import ClockIcon from "@/components/icons/ClockIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
+import Map from "./Map";
 
 export default function LandingSection7() {
   const locations: { title: string, subtitle: string, popular?: boolean; }[] = [
@@ -10,15 +11,17 @@ export default function LandingSection7() {
     { title: "Westside", subtitle: "27 available this week" },
     { title: "North Valley", subtitle: "15 available this week" },
   ];
+
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY || '';
+
   return (
     <section className="py-24 grid lg:grid-cols-2 gap-y-16">
       <div className="lg:pr-8 flex items-center">
         <div className="w-full shadow-custom text-center p-6 md:p-9 rounded-2xl">
           <h3 className="text-surface-500 text-heading-5">Live Service Map</h3>
           <p className="text-surface-500 mt-2 tracking-wide">Real-time availability across all service areas</p>
-          {/* TODO: Implement map */}
-          <div className="w-full aspect-[9/16] sm:aspect-square mt-8 bg-gray-400 flex items-center justify-center">
-            Map Goes Here
+          <div className="w-full aspect-[9/16] sm:aspect-square mt-8 flex items-center justify-center outline-2 outline-primary-700 outline-dashed outline-offset-2 rounded-lg">
+            <Map apiKey={apiKey} />
           </div>
         </div>
       </div>
