@@ -29,13 +29,13 @@ export default function LandingSection7() {
 
         <ul className="space-y-4 mt-8">
           {locations.map(location => (
-            <li key={location.title} className="py-3.5 px-3 border border-surface-500/10 rounded-lg flex items-center gap-4">
+            <li key={location.title} className="py-3 md:py-3.5 px-3 border border-surface-500/10 rounded-lg flex items-center gap-4">
               <span className="text-primary-700 hidden md:block"><LocationIcon /></span>
               <div>
                 <p className="text-subtitle text-secondary-700 flex items-start gap-4">
                   {location.title}
                   {location.popular &&
-                    <span className="text-tiny text-primary-700 py-1 px-4 bg-primary-100 rounded-lg">Popular</span>
+                    <span className="text-tiny text-primary-700 py-0.5 px-3 bg-primary-100 rounded-lg">Popular</span>
                   }
                 </p>
                 <p className="mt-1 flex gap-2 text-caption text-surface-500">
@@ -43,7 +43,7 @@ export default function LandingSection7() {
                   {location.subtitle}
                 </p>
               </div>
-              <button className="ml-auto px-6 py-3 font-medium text-primary-700 min-w-fit">Book now</button>
+              <button className="ml-auto md:px-6 py-3 font-medium text-primary-700 min-w-fit">Book now</button>
             </li>
           ))}
         </ul>
