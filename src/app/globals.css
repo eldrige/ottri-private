@@ -7,6 +7,7 @@
 
 @theme {
   /* Primary Colors */
+  --color-primary-100: #FFF2E6;
   --color-primary-500: #f39c12;
   --color-primary-700: #e67e22;
   --color-primary-900: #d35400;
@@ -34,6 +35,8 @@
   --text-heading-1--font-weight: 600;
   --text-heading-2: 48px;               /* Section headlines, major announcements */
   --text-heading-2--font-weight: 600;
+  --text-heading-2.5: 40px;               /* Ad hoc between */
+  --text-heading-2.5--font-weight: 600;
   --text-heading-3: 32px;               /* Page titles, section headers */
   --text-heading-3--font-weight: 600;
   --text-heading-4: 24px; /* Card titles, component headers */
@@ -48,6 +51,8 @@
   --text-caption--font-weight: 400;
   --text-label: 12px; /* Metadata, helper text */
   --text-label--font-weight: 600;
+  --text-tiny: 10px; /* super tiny */
+  --text-tiny--font-weight: 400;
 
   /* Custom shadow */
   --shadow-custom: 0px 0px 23px 0px #0000001A;

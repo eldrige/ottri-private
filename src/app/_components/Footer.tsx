@@ -37,7 +37,7 @@ const ContactInfo = () => (
             <p className='text-surface-300'>hello@ottri.com</p>
         </div>
         <div className='flex gap-0.75'>
-            <LocationIcon />
+            <LocationIcon className='text-surface-300' />
             <p className='text-surface-300'>Serving 6 metro areas</p>
         </div>
     </>
