@@ -11,6 +11,7 @@ const buttonVariants = cva(
         default: "bg-primary-700 hover:text-primary-700 hover:border-primary-700",
         secondary: "bg-secondary-700 hover:text-secondary-700 hover:border-secondary-700",
         destructive: "",
+        outline: "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900",
         "default-outline": "text-primary-700 border-primary-700",
         "secondary-outline": "text-secondary-700 border-secondary-700",
         ghost: "",
@@ -21,6 +22,7 @@ const buttonVariants = cva(
         sm: "py-3 px-6",
         xs: "py-2 px-6",
         lg: "py-6 px-10 text-2xl",
+        icon: "p-2 w-10 h-10",
       },
     },
     defaultVariants: {
@@ -32,7 +34,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
 }
 
 /**

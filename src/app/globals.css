@@ -3,7 +3,6 @@
 :root {
   --background: #ffffff;
   --foreground: #000000;
-  
 }
 
 @theme {
@@ -57,7 +56,6 @@
 
   /* Custom shadow */
   --shadow-custom: 0px 0px 23px 0px #0000001A;
-
 }
 
 @theme inline {
