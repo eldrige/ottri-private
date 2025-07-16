@@ -13,178 +13,107 @@ import { ArrowRight } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
 
 export default function ServicesSection2() {
+  const serviceData = [
+    {
+      coverSrc: figure1,
+      Icon: RewardStars,
+      title: "Commercial Cleaning",
+      subtitle: "Tailored cleaning solutions for businesses of all sizes.",
+    },
+    {
+      mostPopular: true,
+      coverSrc: figure2,
+      Icon: ReloadIcon,
+      title: "Residential Cleaning",
+      subtitle: "Making homes sparkle and shine with our top-tier services.",
+    },
+    {
+      coverSrc: figure3,
+      Icon: BoxIcon,
+      title: "Post Construction Cleaning",
+      subtitle:
+        "We excel in post-construction cleaning to make your space ready for use.",
+    },
+    {
+      coverSrc: figure1,
+      Icon: RewardStars,
+      title: "Commercial Cleaning",
+      subtitle: "Tailored cleaning solutions for businesses of all sizes.",
+    },
+    {
+      coverSrc: figure2,
+      Icon: ReloadIcon,
+      title: "Residential Cleaning",
+      subtitle: "Making homes sparkle and shine with our top-tier services.",
+    },
+    {
+      coverSrc: figure3,
+      Icon: BoxIcon,
+      title: "Post Construction Cleaning",
+      subtitle:
+        "We excel in post-construction cleaning to make your space ready for use.",
+    },
+    {
+      coverSrc: figure1,
+      Icon: RewardStars,
+      title: "Commercial Cleaning",
+      subtitle: "Tailored cleaning solutions for businesses of all sizes.",
+    },
+    {
+      coverSrc: figure2,
+      Icon: ReloadIcon,
+      title: "Residential Cleaning",
+      subtitle: "Making homes sparkle and shine with our top-tier services.",
+    },
+    {
+      coverSrc: figure3,
+      Icon: BoxIcon,
+      title: "Post Construction Cleaning",
+      subtitle:
+        "We excel in post-construction cleaning to make your space ready for use.",
+    },
+    {
+      coverSrc: figure1,
+      Icon: RewardStars,
+      title: "Commercial Cleaning",
+      subtitle: "Tailored cleaning solutions for businesses of all sizes.",
+    },
+    {
+      coverSrc: figure2,
+      Icon: ReloadIcon,
+      title: "Residential Cleaning",
+      subtitle: "Making homes sparkle and shine with our top-tier services.",
+    },
+    {
+      coverSrc: figure3,
+      Icon: BoxIcon,
+      title: "Post Construction Cleaning",
+      subtitle:
+        "We excel in post-construction cleaning to make your space ready for use.",
+    },
+  ];
+  const defaultServices = [
+    "Office Cleaning",
+    "Club House and Halls",
+    "Eateries and Kitchens",
+    ...Array.from({ length: 9 }, () => ""),
+  ];
   return (
     <section className=" md:px-26 pb-10 space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <ServiceCard
-          coverSrc={figure1}
-          Icon={RewardStars}
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          title="Commercial Cleaning"
-          subtitle="Tailored cleaning solutions for businesses of all sizes."
-        />
-        <ServiceCard
-          mostPopular
-          coverSrc={figure2}
-          Icon={ReloadIcon}
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          title="Residential Cleaning"
-          subtitle="Making homes sparkle and shine with our top-tier services."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure3}
-          Icon={BoxIcon}
-          title="Post Construction Cleaning"
-          subtitle="We excel in post-construction cleaning to make your space ready for use."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure1}
-          Icon={RewardStars}
-          title="Commercial Cleaning"
-          subtitle="Tailored cleaning solutions for businesses of all sizes."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure2}
-          Icon={ReloadIcon}
-          title="Residential Cleaning"
-          subtitle="Making homes sparkle and shine with our top-tier services."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure3}
-          Icon={BoxIcon}
-          title="Post Construction Cleaning"
-          subtitle="We excel in post-construction cleaning to make your space ready for use."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure1}
-          Icon={RewardStars}
-          title="Commercial Cleaning"
-          subtitle="Tailored cleaning solutions for businesses of all sizes."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure2}
-          Icon={ReloadIcon}
-          title="Residential Cleaning"
-          subtitle="Making homes sparkle and shine with our top-tier services."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure3}
-          Icon={BoxIcon}
-          title="Post Construction Cleaning"
-          subtitle="We excel in post-construction cleaning to make your space ready for use."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure1}
-          Icon={RewardStars}
-          title="Commercial Cleaning"
-          subtitle="Tailored cleaning solutions for businesses of all sizes."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure2}
-          Icon={ReloadIcon}
-          title="Residential Cleaning"
-          subtitle="Making homes sparkle and shine with our top-tier services."
-        />
-        <ServiceCard
-          services={[
-            "Office Cleaning",
-            "Club House and Halls",
-            "Eateries and Kitchens",
-            ...Array.from({ length: 9 }, () => ""),
-          ]}
-          priceFrom={89}
-          duration="3-5"
-          coverSrc={figure3}
-          Icon={BoxIcon}
-          title="Post Construction Cleaning"
-          subtitle="We excel in post-construction cleaning to make your space ready for use."
-        />
+        {serviceData.map((data, idx) => (
+          <ServiceCard
+            key={idx}
+            coverSrc={data.coverSrc}
+            Icon={data.Icon}
+            services={defaultServices}
+            priceFrom={89}
+            duration="3-5"
+            title={data.title}
+            subtitle={data.subtitle}
+            {...(data.mostPopular ? { mostPopular: true } : {})}
+          />
+        ))}
       </div>
     </section>
   );
