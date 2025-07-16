@@ -10,6 +10,7 @@ import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import ClockIcon from "@/components/icons/ClockIcon";
 
 export default function ServicesSection2() {
   return (
@@ -18,6 +19,14 @@ export default function ServicesSection2() {
         <ServiceCard
           coverSrc={figure1}
           Icon={RewardStars}
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           title="Commercial Cleaning"
           subtitle="Tailored cleaning solutions for businesses of all sizes."
         />
@@ -25,64 +34,152 @@ export default function ServicesSection2() {
           mostPopular
           coverSrc={figure2}
           Icon={ReloadIcon}
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           title="Residential Cleaning"
           subtitle="Making homes sparkle and shine with our top-tier services."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure3}
           Icon={BoxIcon}
           title="Post Construction Cleaning"
           subtitle="We excel in post-construction cleaning to make your space ready for use."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure1}
           Icon={RewardStars}
           title="Commercial Cleaning"
           subtitle="Tailored cleaning solutions for businesses of all sizes."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure2}
           Icon={ReloadIcon}
           title="Residential Cleaning"
           subtitle="Making homes sparkle and shine with our top-tier services."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure3}
           Icon={BoxIcon}
           title="Post Construction Cleaning"
           subtitle="We excel in post-construction cleaning to make your space ready for use."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure1}
           Icon={RewardStars}
           title="Commercial Cleaning"
           subtitle="Tailored cleaning solutions for businesses of all sizes."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure2}
           Icon={ReloadIcon}
           title="Residential Cleaning"
           subtitle="Making homes sparkle and shine with our top-tier services."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure3}
           Icon={BoxIcon}
           title="Post Construction Cleaning"
           subtitle="We excel in post-construction cleaning to make your space ready for use."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure1}
           Icon={RewardStars}
           title="Commercial Cleaning"
           subtitle="Tailored cleaning solutions for businesses of all sizes."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure2}
           Icon={ReloadIcon}
           title="Residential Cleaning"
           subtitle="Making homes sparkle and shine with our top-tier services."
         />
         <ServiceCard
+          services={[
+            "Office Cleaning",
+            "Club House and Halls",
+            "Eateries and Kitchens",
+            ...Array.from({ length: 9 }, () => ""),
+          ]}
+          priceFrom={89}
+          duration="3-5"
           coverSrc={figure3}
           Icon={BoxIcon}
           title="Post Construction Cleaning"
@@ -96,6 +193,9 @@ export default function ServicesSection2() {
 type ServiceCardProps = {
   title: string;
   subtitle: string;
+  services: string[];
+  priceFrom: number;
+  duration: string;
   coverSrc: StaticImageData;
   mostPopular?: boolean;
   Icon: ({
@@ -112,6 +212,9 @@ function ServiceCard({
   mostPopular,
   title,
   subtitle,
+  services,
+  priceFrom,
+  duration,
   link,
 }: ServiceCardProps) {
   return (
@@ -144,8 +247,36 @@ function ServiceCard({
         </div>
         <h4 className="text-heading-4 text-secondary-700">{title}</h4>
         <p className="text-base text-surface-700">{subtitle}</p>
+        <div className="lg:hidden space-y-4">
+          <ul className="text-surface-700 marker:text-primary-700 space-y-4">
+            {services.slice(0, 3).map((service) => (
+              <li className="flex items-center" key={service}>
+                <span className="block w-2 h-2 rounded-full bg-primary-700 mr-2" />
+                {service}
+              </li>
+            ))}
+            <span className="text-primary-700">
+              +{services.slice(3).length} more features
+            </span>
+          </ul>
+
+          <hr className="text-black/10" />
+
+          <div className="flex items-center pb-10.5">
+            <div className="space-y-4">
+              <h5 className="text-heading-5 text-secondary-700">
+                <span className="text-primary-700">$</span> From ${priceFrom}
+              </h5>
+              <p className="text-surface-500 flex items-center gap-3">
+                <ClockIcon />
+                {duration} Hours
+              </p>
+            </div>
+            <ArrowRight className="text-primary-700 ml-auto" />
+          </div>
+        </div>
       </div>
-      <div className="flex items-center justify-center w-full">
+      <div className="hidden lg:flex items-center justify-center w-full">
         <Link
           className="text-primary-500 pb-4 flex gap-4"
           href={link || "/services"}
