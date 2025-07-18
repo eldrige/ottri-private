@@ -15,7 +15,7 @@ export default function LandingSection7() {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY || '';
 
   return (
-    <section className="py-24 grid lg:grid-cols-2 gap-y-16">
+    <section className="pt-24 pb-8 lg:py-24 grid lg:grid-cols-2 gap-y-16">
       <div className="lg:pr-8 flex items-center">
         <div className="w-full shadow-custom text-center p-6 md:p-9 rounded-2xl">
           <h3 className="text-surface-500 text-heading-5">Live Service Map</h3>

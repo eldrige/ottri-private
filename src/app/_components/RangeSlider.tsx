@@ -42,7 +42,6 @@ export default function RangeSlider({
   // Calculate progress percentage directly in render
   const progressPercentage = ((value - min) / (max - min)) * 100;
   const progressWidthValue = `${progressPercentage}%`;
-  console.log(value);
   return (
     <div className={`relative w-full ${className}`}>
       <div
