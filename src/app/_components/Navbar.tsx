@@ -58,8 +58,8 @@ function MobileNav({ show, setShow }: {
   return (
     <>
       <div className={cn(
-        'xl:hidden fixed top-0 w-full z-40 bg-white px-6 py-8 space-y-6 shadow-custom transition translate-x-full opacity-0',
-        show && "translate-x-0 opacity-100"
+        'xl:hidden fixed top-0 w-full z-40 bg-white px-6 py-8 space-y-6 shadow-custom transition duration-300 -translate-y-full opacity-0',
+        show && "translate-y-0 opacity-100"
       )}>
         <div className='flex justify-between'>
           <div className='w-64 flex items-center gap-2.5 text-heading-5'>
@@ -87,7 +87,7 @@ function MobileNav({ show, setShow }: {
           <Button className='whitespace-nowrap w-full mt-2.5' size="xs">Book Now</Button>
         </div>
       </div>
-      <div className={cn('xl:hidden fixed inset-0 z-30 transition bg-transparent sr-only', show && "bg-black/70 not-sr-only")}
+      <div className={cn('xl:hidden fixed inset-0 z-30 transition ', show ? "bg-black/70 visible" : "invisible ")}
         onClick={e => {
           e.preventDefault();
           e.stopPropagation();
