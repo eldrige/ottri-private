@@ -15,6 +15,7 @@ export interface Service {
   coverSrc: StaticImageData;
   pricingDetails: PricingDetail[];
   mostPopular?: boolean;
+  process: string[];
   Icon: ({
     className,
   }: {

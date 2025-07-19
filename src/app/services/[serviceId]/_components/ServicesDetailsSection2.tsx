@@ -14,7 +14,7 @@ export default function ServicesDetailsSection2({
           Transparent pricing based on your home size
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:px-32 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-32 gap-4">
         {pricingDetails.map((elem, _index) => (
           <PricingDetailCard
             key={_index}

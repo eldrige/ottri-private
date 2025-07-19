@@ -37,6 +37,13 @@ export const servicesData: Service[] = [
     ],
     duration: "3-5",
     mostPopular: false,
+    process: [
+      "Pre-cleaning walkthrough and assessment",
+      "Room-by-room systematic deep cleaning",
+      "Quality check with detailed checklist",
+      "Final walkthrough with customer",
+      "Photo documentation of completed work",
+    ],
   },
   {
     coverSrc: figure2,
@@ -64,6 +71,13 @@ export const servicesData: Service[] = [
     ],
     duration: "3-5",
     mostPopular: true,
+    process: [
+      "Pre-cleaning walkthrough and assessment",
+      "Room-by-room systematic deep cleaning",
+      "Quality check with detailed checklist",
+      "Final walkthrough with customer",
+      "Photo documentation of completed work",
+    ],
   },
   {
     coverSrc: figure3,
@@ -102,5 +116,12 @@ export const servicesData: Service[] = [
     ],
     duration: "3-5",
     mostPopular: false,
+    process: [
+      "Pre-cleaning walkthrough and assessment",
+      "Room-by-room systematic deep cleaning",
+      "Quality check with detailed checklist",
+      "Final walkthrough with customer",
+      "Photo documentation of completed work",
+    ],
   },
 ];

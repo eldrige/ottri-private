@@ -3,6 +3,7 @@ import ServicesDetailsHero from "./_components/ServicesDetailsHero";
 import { servicesData } from "@/lib/sampleData";
 import ServicesDetailsSection1 from "./_components/ServicesDetailsSection1";
 import ServicesDetailsSection2 from "./_components/ServicesDetailsSection2";
+import ServicesDetailsSection3 from "./_components/ServicesDetailsSection3";
 
 async function ServicesDetailsPage({
   params,
@@ -22,6 +23,7 @@ async function ServicesDetailsPage({
         />
         <ServicesDetailsSection1 includedServices={service.services} />
         <ServicesDetailsSection2 pricingDetails={service.pricingDetails} />
+        <ServicesDetailsSection3 process={service.process} />
       </div>
       {/* <Newsletter /> */}
     </main>
