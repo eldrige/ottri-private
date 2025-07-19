@@ -20,7 +20,7 @@ export default function ServicesDetailsHero({
 }: ServicesDetailsHeroProps) {
   return (
     <section className="pt-16 pb-8">
-      <div className="pt-8 flex flex-col gap-12">
+      <div className="pt-8 flex flex-col gap-8">
         <Link
           href="/services"
           className="text-primary-500 text-lg mr-auto items-center gap-4 flex"
@@ -31,7 +31,7 @@ export default function ServicesDetailsHero({
           {title}
         </h1>
         <div className="flex gap-8">
-          <div className="flex-1 pb-16 flex flex-col gap-6">
+          <div className="flex-1 py-15.5 flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <h1 className="text-heading-4 text-secondary-700 md:text-heading-2 text-start">
                 Book in Minutes
