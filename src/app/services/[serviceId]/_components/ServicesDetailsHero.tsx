@@ -20,7 +20,7 @@ export default function ServicesDetailsHero({
 }: ServicesDetailsHeroProps) {
   return (
     <section className="pt-16 pb-8">
-      <div className="pt-8 flex flex-col gap-8">
+      <div className="pt-8 flex flex-col gap-12">
         <Link
           href="/services"
           className="text-primary-500 text-lg mr-auto items-center gap-4 flex"
@@ -107,8 +107,8 @@ function HeroRightSide({
 }: Pick<ServicesDetailsHeroProps, "coverSrc" | "title">) {
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-3" />
-      <div className="flex *:flex-1 w-full flex-1 gap-x-2 self-end ">
+      <div className="flex-7" />
+      <div className="flex *:flex-1 w-full flex-2 gap-x-2 self-end ">
         <Image
           className="rounded-lg aspect-[2/1] w-full object-cover"
           src={coverSrc}
