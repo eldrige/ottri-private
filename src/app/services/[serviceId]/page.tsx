@@ -5,6 +5,7 @@ import ServicesDetailsSection1 from "./_components/ServicesDetailsSection1";
 import ServicesDetailsSection2 from "./_components/ServicesDetailsSection2";
 import ServicesDetailsSection3 from "./_components/ServicesDetailsSection3";
 import ServicesDetailsSection4 from "./_components/ServicesDetailsSection4";
+import ServicesDetailsSection5 from "./_components/ServicesDetailsSection5";
 
 async function ServicesDetailsPage({
   params,
@@ -27,6 +28,9 @@ async function ServicesDetailsPage({
         <ServicesDetailsSection3 process={service.process} />
       </div>
       <ServicesDetailsSection4 />
+      <div className="container mx-auto px-6">
+        <ServicesDetailsSection5 />
+      </div>
     </main>
   );
 }
