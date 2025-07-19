@@ -4,6 +4,7 @@ import { servicesData } from "@/lib/sampleData";
 import ServicesDetailsSection1 from "./_components/ServicesDetailsSection1";
 import ServicesDetailsSection2 from "./_components/ServicesDetailsSection2";
 import ServicesDetailsSection3 from "./_components/ServicesDetailsSection3";
+import ServicesDetailsSection4 from "./_components/ServicesDetailsSection4";
 
 async function ServicesDetailsPage({
   params,
@@ -25,7 +26,7 @@ async function ServicesDetailsPage({
         <ServicesDetailsSection2 pricingDetails={service.pricingDetails} />
         <ServicesDetailsSection3 process={service.process} />
       </div>
-      {/* <Newsletter /> */}
+      <ServicesDetailsSection4 />
     </main>
   );
 }
