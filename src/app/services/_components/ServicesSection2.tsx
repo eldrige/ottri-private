@@ -2,96 +2,91 @@ import { Badge } from "@/components/ui/Badge";
 import React from "react";
 import Image, { StaticImageData } from "next/image";
 import { cn } from "@/lib/utils";
-import figure1 from "@/assets/landing-section3-figure1.jpg";
-import figure2 from "@/assets/landing-section3-figure2.jpg";
-import figure3 from "@/assets/landing-section3-figure3.jpg";
-import RewardStars from "@/components/icons/RewardStars";
-import ReloadIcon from "@/components/icons/ReloadIcon";
-import BoxIcon from "@/components/icons/BoxIcon";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
+import { servicesData } from "@/lib/sampleData";
 
 export default function ServicesSection2() {
-  const serviceData = [
-    {
-      coverSrc: figure1,
-      Icon: RewardStars,
-      title: "Commercial Cleaning",
-      subtitle: "Tailored cleaning solutions for businesses of all sizes.",
-    },
-    {
-      mostPopular: true,
-      coverSrc: figure2,
-      Icon: ReloadIcon,
-      title: "Residential Cleaning",
-      subtitle: "Making homes sparkle and shine with our top-tier services.",
-    },
-    {
-      coverSrc: figure3,
-      Icon: BoxIcon,
-      title: "Post Construction Cleaning",
-      subtitle:
-        "We excel in post-construction cleaning to make your space ready for use.",
-    },
-    {
-      coverSrc: figure1,
-      Icon: RewardStars,
-      title: "Commercial Cleaning",
-      subtitle: "Tailored cleaning solutions for businesses of all sizes.",
-    },
-    {
-      coverSrc: figure2,
-      Icon: ReloadIcon,
-      title: "Residential Cleaning",
-      subtitle: "Making homes sparkle and shine with our top-tier services.",
-    },
-    {
-      coverSrc: figure3,
-      Icon: BoxIcon,
-      title: "Post Construction Cleaning",
-      subtitle:
-        "We excel in post-construction cleaning to make your space ready for use.",
-    },
-    {
-      coverSrc: figure1,
-      Icon: RewardStars,
-      title: "Commercial Cleaning",
-      subtitle: "Tailored cleaning solutions for businesses of all sizes.",
-    },
-    {
-      coverSrc: figure2,
-      Icon: ReloadIcon,
-      title: "Residential Cleaning",
-      subtitle: "Making homes sparkle and shine with our top-tier services.",
-    },
-    {
-      coverSrc: figure3,
-      Icon: BoxIcon,
-      title: "Post Construction Cleaning",
-      subtitle:
-        "We excel in post-construction cleaning to make your space ready for use.",
-    },
-    {
-      coverSrc: figure1,
-      Icon: RewardStars,
-      title: "Commercial Cleaning",
-      subtitle: "Tailored cleaning solutions for businesses of all sizes.",
-    },
-    {
-      coverSrc: figure2,
-      Icon: ReloadIcon,
-      title: "Residential Cleaning",
-      subtitle: "Making homes sparkle and shine with our top-tier services.",
-    },
-    {
-      coverSrc: figure3,
-      Icon: BoxIcon,
-      title: "Post Construction Cleaning",
-      subtitle:
-        "We excel in post-construction cleaning to make your space ready for use.",
-    },
-  ];
+  // const servicesData = [
+  //   {
+  //     coverSrc: figure1,
+  //     Icon: RewardStars,
+  //     title: "Commercial Cleaning",
+  //     subtitle: "Tailored cleaning solutions for businesses of all sizes.",
+  //   },
+  //   {
+  //     mostPopular: true,
+  //     coverSrc: figure2,
+  //     Icon: ReloadIcon,
+  //     title: "Residential Cleaning",
+  //     subtitle: "Making homes sparkle and shine with our top-tier services.",
+  //   },
+  //   {
+  //     coverSrc: figure3,
+  //     Icon: BoxIcon,
+  //     title: "Post Construction Cleaning",
+  //     subtitle:
+  //       "We excel in post-construction cleaning to make your space ready for use.",
+  //   },
+  //   {
+  //     coverSrc: figure1,
+  //     Icon: RewardStars,
+  //     title: "Commercial Cleaning",
+  //     subtitle: "Tailored cleaning solutions for businesses of all sizes.",
+  //   },
+  //   {
+  //     coverSrc: figure2,
+  //     Icon: ReloadIcon,
+  //     title: "Residential Cleaning",
+  //     subtitle: "Making homes sparkle and shine with our top-tier services.",
+  //   },
+  //   {
+  //     coverSrc: figure3,
+  //     Icon: BoxIcon,
+  //     title: "Post Construction Cleaning",
+  //     subtitle:
+  //       "We excel in post-construction cleaning to make your space ready for use.",
+  //   },
+  //   {
+  //     coverSrc: figure1,
+  //     Icon: RewardStars,
+  //     title: "Commercial Cleaning",
+  //     subtitle: "Tailored cleaning solutions for businesses of all sizes.",
+  //   },
+  //   {
+  //     coverSrc: figure2,
+  //     Icon: ReloadIcon,
+  //     title: "Residential Cleaning",
+  //     subtitle: "Making homes sparkle and shine with our top-tier services.",
+  //   },
+  //   {
+  //     coverSrc: figure3,
+  //     Icon: BoxIcon,
+  //     title: "Post Construction Cleaning",
+  //     subtitle:
+  //       "We excel in post-construction cleaning to make your space ready for use.",
+  //   },
+  //   {
+  //     coverSrc: figure1,
+  //     Icon: RewardStars,
+  //     title: "Commercial Cleaning",
+  //     subtitle: "Tailored cleaning solutions for businesses of all sizes.",
+  //   },
+  //   {
+  //     coverSrc: figure2,
+  //     Icon: ReloadIcon,
+  //     title: "Residential Cleaning",
+  //     subtitle: "Making homes sparkle and shine with our top-tier services.",
+  //   },
+  //   {
+  //     coverSrc: figure3,
+  //     Icon: BoxIcon,
+  //     title: "Post Construction Cleaning",
+  //     subtitle:
+  //       "We excel in post-construction cleaning to make your space ready for use.",
+  //   },
+  // ];
   const defaultServices = [
     "Office Cleaning",
     "Club House and Halls",
@@ -101,7 +96,7 @@ export default function ServicesSection2() {
   return (
     <section className=" md:px-26 pb-10 space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {serviceData.map((data, idx) => (
+        {servicesData.map((data, idx) => (
           <ServiceCard
             key={idx}
             id={idx}
