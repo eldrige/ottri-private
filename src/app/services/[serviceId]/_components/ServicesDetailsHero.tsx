@@ -7,7 +7,7 @@ import React from "react";
 
 export default function ServicesDetailsHero() {
   return (
-    <section className="pt-16">
+    <section className="pt-16 pb-8">
       <div className="pt-8 flex flex-col gap-12">
         <Link
           href="/services"
@@ -18,10 +18,10 @@ export default function ServicesDetailsHero() {
         <h1 className="text-heading-3 text-primary-700 md:text-heading-1 text-start">
           Residential Cleaning
         </h1>
-        <div className="flex pb-16">
-          <div className="flex-1 flex flex-col gap-6">
+        <div className="flex gap-8">
+          <div className="flex-1 pb-16 flex flex-col gap-6">
             <div className="flex flex-col gap-4">
-              <h1 className="text-heading-4 text-secondary-700 md:text-heading-1 text-start">
+              <h1 className="text-heading-4 text-secondary-700 md:text-heading-2 text-start">
                 Book in Minutes
               </h1>
               <p className="text-surface-500 text-subtitle tracking-wide">
@@ -61,7 +61,9 @@ export default function ServicesDetailsHero() {
               </Button>
             </div>
           </div>
-          <div className="flex-1"></div>
+          <div className="flex-1">
+            <HeroRightSide />
+          </div>
         </div>
       </div>
     </section>
@@ -83,6 +85,19 @@ function InfoCard({ Icon, value, title }: InfoCardProps) {
       <p className="text-surface-500 text-subtitle/relaxed tracking-wide">
         {title}
       </p>
+    </div>
+  );
+}
+
+function HeroRightSide() {
+  return (
+    <div className="h-full flex flex-col gap-4">
+      <div className="flex-3 border-2"></div>
+      <div className="flex *:flex-1 w-full flex-1 gap-2 self-end ">
+        <div className="border-2 w-full h-full"></div>
+        <div className="border-2 w-full h-full"></div>
+        <div className="border-2 w-full h-full"></div>
+      </div>
     </div>
   );
 }
