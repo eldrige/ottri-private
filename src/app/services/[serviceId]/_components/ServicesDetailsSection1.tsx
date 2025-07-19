@@ -36,7 +36,7 @@ type PopularService = {
 };
 function PopularServiceCard({ content }: PopularService) {
   return (
-    <div className="border border-black/10 text-center rounded-lg flex  justify-start gap-2 p-4 items-center">
+    <div className="border border-black/15 text-center rounded-lg flex  justify-start gap-2 p-4 items-center">
       <CustomCheckIcon />
       <p className="text-surface-500 text-base">{content}</p>
     </div>
