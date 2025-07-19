@@ -1,0 +1,88 @@
+import ClockIcon from "@/components/icons/ClockIcon";
+import DollarIcon from "@/components/icons/DollarIcon";
+import { Button } from "@/components/ui/Button";
+import { ArrowLeft, Users } from "lucide-react";
+import Link from "next/link";
+import React from "react";
+
+export default function ServicesDetailsHero() {
+  return (
+    <section className="pt-16">
+      <div className="pt-8 flex flex-col gap-12">
+        <Link
+          href="/services"
+          className="text-primary-500 text-lg mr-auto items-center gap-4 flex"
+        >
+          <ArrowLeft size={24} /> Back to all services
+        </Link>
+        <h1 className="text-heading-3 text-primary-700 md:text-heading-1 text-start">
+          Residential Cleaning
+        </h1>
+        <div className="flex py-16">
+          <div className="flex-1 flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-heading-4 text-secondary-700 md:text-heading-1 text-start">
+                Book in Minutes
+              </h1>
+              <p className="text-surface-500 text-subtitle tracking-wide">
+                Perfect for special occasions or seasonal cleaning
+              </p>
+              <p className="text-surface-500 text-subtitle tracking-wide">
+                Our most comprehensive cleaning service that tackles every
+                corner of your home with meticulous attention to detail. Ideal
+                for spring cleaning, before hosting events, or when you want
+                that extra level of sparkle.
+              </p>
+            </div>
+            <hr className="text-black/20" />
+            <div className="flex justify-between px-2">
+              <InfoCard
+                Icon={<DollarIcon />}
+                title="Starting price"
+                value="From $89"
+              />
+              <InfoCard
+                Icon={<ClockIcon className="text-primary-700" />}
+                value={"3-5 Hours"}
+                title={"Duration"}
+              />
+
+              <InfoCard
+                Icon={<Users className="text-primary-700" />}
+                value={"2-3 Cleaners"}
+                title={"Team size"}
+              />
+            </div>
+            <hr className="text-black/20" />
+            <div className="flex flex-col sm:flex-row gap-x-8 gap-y-6">
+              <Button size="xs">Book this service</Button>
+              <Button size="xs" variant="secondary-outline">
+                Get custom quote
+              </Button>
+            </div>
+          </div>
+          <div className="flex-1"></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+type InfoCardProps = {
+  Icon: React.JSX.Element;
+  value: string;
+  title: string;
+};
+
+function InfoCard({ Icon, value, title }: InfoCardProps) {
+  return (
+    <div className="flex items-center px-0 w-fit flex-col">
+      {/* <DollarIcon /> */}
+      {Icon}
+      <h5 className="text-heading-5 text-secondary-700">{value}</h5>
+      <p className="text-surface-500 text-subtitle/relaxed tracking-wide">
+        {title}
+      </p>
+    </div>
+  );
+}

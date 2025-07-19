@@ -104,6 +104,7 @@ export default function ServicesSection2() {
         {serviceData.map((data, idx) => (
           <ServiceCard
             key={idx}
+            id={idx}
             coverSrc={data.coverSrc}
             Icon={data.Icon}
             services={defaultServices}
@@ -120,6 +121,7 @@ export default function ServicesSection2() {
 }
 
 type ServiceCardProps = {
+  id: number;
   title: string;
   subtitle: string;
   services: string[];
@@ -136,6 +138,7 @@ type ServiceCardProps = {
 };
 
 function ServiceCard({
+  id,
   coverSrc,
   Icon,
   mostPopular,
@@ -208,7 +211,7 @@ function ServiceCard({
       <div className="hidden lg:flex items-center justify-center w-full">
         <Link
           className="text-primary-500 pb-4 flex gap-4"
-          href={link || "/services"}
+          href={link || `/services/${id}`}
         >
           View more <ArrowRight />
         </Link>
