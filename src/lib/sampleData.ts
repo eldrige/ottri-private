@@ -47,7 +47,7 @@ export const servicesData: Service[] = [
     ],
   },
   {
-    id: 3,
+    id: 2,
     coverSrc: figure2,
     Icon: ReloadIcon,
     title: "Residential Cleaning",

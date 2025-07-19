@@ -13,7 +13,12 @@ async function ServicesDetailsPage({
   params: Promise<{ serviceId: string }>;
 }) {
   const { serviceId } = await params;
-  const service = servicesData[Number(serviceId) - 1];
+  const service = servicesData.findLast(
+    (service) => service.id === Number(serviceId)
+  );
+  if (!service) {
+    return <></>;
+  }
   return (
     <main>
       <div className="container mx-auto px-6">
