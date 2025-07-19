@@ -11,7 +11,7 @@ async function ServicesDetailsPage({
   params: Promise<{ serviceId: string }>;
 }) {
   const { serviceId } = await params;
-  const service = servicesData[Number(serviceId)];
+  const service = servicesData[Number(serviceId) - 1];
   return (
     <main>
       <div className="container mx-auto px-6">

@@ -7,6 +7,7 @@ export type PricingDetail = {
 };
 
 export interface Service {
+  id: number;
   title: string;
   subtitle: string;
   services: string[];

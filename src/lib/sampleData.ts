@@ -8,6 +8,7 @@ import { Service } from "./types";
 
 export const servicesData: Service[] = [
   {
+    id: 1,
     coverSrc: figure1,
     Icon: RewardStars,
     title: "Commercial Cleaning",
@@ -46,6 +47,7 @@ export const servicesData: Service[] = [
     ],
   },
   {
+    id: 3,
     coverSrc: figure2,
     Icon: ReloadIcon,
     title: "Residential Cleaning",
@@ -80,6 +82,7 @@ export const servicesData: Service[] = [
     ],
   },
   {
+    id: 3,
     coverSrc: figure3,
     Icon: BoxIcon,
     title: "Post Construction Cleaning",
