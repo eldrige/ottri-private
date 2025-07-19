@@ -18,7 +18,7 @@ export default function ServicesDetailsHero() {
         <h1 className="text-heading-3 text-primary-700 md:text-heading-1 text-start">
           Residential Cleaning
         </h1>
-        <div className="flex py-16">
+        <div className="flex pb-16">
           <div className="flex-1 flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <h1 className="text-heading-4 text-secondary-700 md:text-heading-1 text-start">
