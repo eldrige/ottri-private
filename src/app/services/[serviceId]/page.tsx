@@ -19,7 +19,7 @@ async function ServicesDetailsPage({
           priceFrom={service.priceFrom}
           duration={service.duration}
         />
-        <ServicesDetailsSection1 />
+        <ServicesDetailsSection1 includedServices={service.services} />
       </div>
       {/* <Newsletter /> */}
     </main>
