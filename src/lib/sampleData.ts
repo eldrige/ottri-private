@@ -18,6 +18,23 @@ export const servicesData: Service[] = [
       "Eateries and Kitchens",
     ],
     priceFrom: 89,
+    pricingDetails: [
+      {
+        size: "1-2 Bedrooms",
+        priceRange: "89-109",
+        timeRange: "3-4",
+      },
+      {
+        size: "3-4 bedrooms",
+        priceRange: "129-169",
+        timeRange: "4-5",
+      },
+      {
+        size: "1-2 Bedrooms",
+        priceRange: "169-229",
+        timeRange: "5-6",
+      },
+    ],
     duration: "3-5",
     mostPopular: false,
   },
@@ -28,6 +45,23 @@ export const servicesData: Service[] = [
     subtitle: "Making homes sparkle and shine with our top-tier services.",
     services: ["Move in / Move outs", "Spring cleaning", "Junk Removal"],
     priceFrom: 89,
+    pricingDetails: [
+      {
+        size: "1-2 Bedrooms",
+        priceRange: "89-109",
+        timeRange: "3-4",
+      },
+      {
+        size: "3-4 bedrooms",
+        priceRange: "129-169",
+        timeRange: "4-5",
+      },
+      {
+        size: "1-2 Bedrooms",
+        priceRange: "169-229",
+        timeRange: "5-6",
+      },
+    ],
     duration: "3-5",
     mostPopular: true,
   },
@@ -49,6 +83,23 @@ export const servicesData: Service[] = [
       "Make beds and tidy rooms",
     ],
     priceFrom: 89,
+    pricingDetails: [
+      {
+        size: "1-2 Bedrooms",
+        priceRange: "89-109",
+        timeRange: "3-4",
+      },
+      {
+        size: "3-4 bedrooms",
+        priceRange: "129-169",
+        timeRange: "4-5",
+      },
+      {
+        size: "1-2 Bedrooms",
+        priceRange: "89-109",
+        timeRange: "3-4",
+      },
+    ],
     duration: "3-5",
     mostPopular: false,
   },

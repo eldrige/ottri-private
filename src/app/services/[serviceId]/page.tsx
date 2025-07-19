@@ -2,6 +2,7 @@ import React from "react";
 import ServicesDetailsHero from "./_components/ServicesDetailsHero";
 import { servicesData } from "@/lib/sampleData";
 import ServicesDetailsSection1 from "./_components/ServicesDetailsSection1";
+import ServicesDetailsSection2 from "./_components/ServicesDetailsSection2";
 
 async function ServicesDetailsPage({
   params,
@@ -20,6 +21,7 @@ async function ServicesDetailsPage({
           duration={service.duration}
         />
         <ServicesDetailsSection1 includedServices={service.services} />
+        <ServicesDetailsSection2 pricingDetails={service.pricingDetails} />
       </div>
       {/* <Newsletter /> */}
     </main>
