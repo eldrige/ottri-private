@@ -4,8 +4,20 @@ import { Button } from "@/components/ui/Button";
 import { ArrowLeft, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
+import { Service } from "@/lib/types";
 
-export default function ServicesDetailsHero() {
+type ServicesDetailsHeroProps = Pick<
+  Service,
+  "title" | "priceFrom" | "duration" | "coverSrc"
+>;
+
+export default function ServicesDetailsHero({
+  title,
+  priceFrom,
+  duration,
+  coverSrc,
+}: ServicesDetailsHeroProps) {
   return (
     <section className="pt-16 pb-8">
       <div className="pt-8 flex flex-col gap-12">
@@ -16,7 +28,7 @@ export default function ServicesDetailsHero() {
           <ArrowLeft size={24} /> Back to all services
         </Link>
         <h1 className="text-heading-3 text-primary-700 md:text-heading-1 text-start">
-          Residential Cleaning
+          {title}
         </h1>
         <div className="flex gap-8">
           <div className="flex-1 pb-16 flex flex-col gap-6">
@@ -39,11 +51,11 @@ export default function ServicesDetailsHero() {
               <InfoCard
                 Icon={<DollarIcon />}
                 title="Starting price"
-                value="From $89"
+                value={`From $${priceFrom}`}
               />
               <InfoCard
                 Icon={<ClockIcon className="text-primary-700" />}
-                value={"3-5 Hours"}
+                value={`${duration} Hours`}
                 title={"Duration"}
               />
 
@@ -62,7 +74,7 @@ export default function ServicesDetailsHero() {
             </div>
           </div>
           <div className="flex-1">
-            <HeroRightSide />
+            <HeroRightSide coverSrc={coverSrc} title={title} />
           </div>
         </div>
       </div>
@@ -89,14 +101,29 @@ function InfoCard({ Icon, value, title }: InfoCardProps) {
   );
 }
 
-function HeroRightSide() {
+function HeroRightSide({
+  coverSrc,
+  title,
+}: Pick<ServicesDetailsHeroProps, "coverSrc" | "title">) {
   return (
     <div className="h-full flex flex-col gap-4">
-      <div className="flex-3 border-2"></div>
+      <div className="flex-3" />
       <div className="flex *:flex-1 w-full flex-1 gap-2 self-end ">
-        <div className="border-2 w-full h-full"></div>
-        <div className="border-2 w-full h-full"></div>
-        <div className="border-2 w-full h-full"></div>
+        <Image
+          className="rounded-lg aspect-[2/1] w-full object-cover"
+          src={coverSrc}
+          alt={`${title}'s cover`}
+        />
+        <Image
+          className="rounded-lg aspect-[2/1] w-full object-cover"
+          src={coverSrc}
+          alt={`${title}'s cover`}
+        />
+        <Image
+          className="rounded-lg aspect-[2/1] w-full object-cover"
+          src={coverSrc}
+          alt={`${title}'s cover`}
+        />
       </div>
     </div>
   );
