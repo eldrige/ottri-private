@@ -12,7 +12,7 @@ export default function Navbar() {
   const [showMobile, setShowMobile] = useState(false);
   return (
     <>
-      <nav className='sticky top-0 z-20 bg-white px-6 py-5 shadow-lg'>
+      <nav className='sticky top-0 z-50 bg-white px-6 py-5 shadow-lg'>
         <div className='flex justify-between items-center container mx-auto'>
 
           <div className='w-64 flex items-center gap-2.5 text-heading-5 lg:text-heading-4'>
@@ -58,7 +58,7 @@ function MobileNav({ show, setShow }: {
   return (
     <>
       <div className={cn(
-        'xl:hidden fixed top-0 w-full z-40 bg-white px-6 py-8 space-y-6 shadow-custom transition duration-300 -translate-y-full opacity-0',
+        'xl:hidden fixed top-0 w-full z-50 bg-white px-6 py-8 space-y-6 shadow-custom transition duration-300 -translate-y-full opacity-0',
         show && "translate-y-0 opacity-100"
       )}>
         <div className='flex justify-between'>

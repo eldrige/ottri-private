@@ -6,6 +6,7 @@ import LandingSection5 from "./_components/LandingSection5";
 import LandingSection6 from "./_components/LandingSection6";
 import LandingSection7 from "./_components/LandingSection7";
 import LandingSection8 from "./_components/LandingSection8";
+import LandingSection9 from "./_components/LandingSection9";
 import Newsletter from "./_components/Newsletter";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
         <LandingSection6 />
         <LandingSection7 />
         <LandingSection8 />
+        <LandingSection9 />
       </div>
       <Newsletter />
     </main>
