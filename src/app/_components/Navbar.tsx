@@ -7,6 +7,7 @@ import CallIcon from '@/components/icons/CallIcon';
 import { Button } from '@/components/ui/Button';
 import { Menu, XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 export default function Navbar() {
   const [showMobile, setShowMobile] = useState(false);
@@ -15,10 +16,10 @@ export default function Navbar() {
       <nav className='sticky top-0 z-50 bg-white px-6 py-5 shadow-lg'>
         <div className='flex justify-between items-center container mx-auto'>
 
-          <div className='w-64 flex items-center gap-2.5 text-heading-5 lg:text-heading-4'>
+          <Link href="/" className='w-64 flex items-center gap-2.5 text-heading-5 lg:text-heading-4'>
             <Image className='h-8 lg:h-10 w-8 lg:w-10' src={logo} alt='Ottri Logo' />
             <span>Ottri</span>
-          </div>
+          </Link>
           <Nav className='hidden xl:flex'>
             <NavLink href="/">Home</NavLink>
             <NavLink href="/about">About</NavLink>
