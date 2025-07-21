@@ -73,12 +73,12 @@ function MobileNav({ show, setShow }: {
         </div>
         <hr className='text-surface-200' />
         <Nav>
-          <NavLink href="/">Home</NavLink>
-          <NavLink href="/about">About</NavLink>
-          <NavLink href="/services">Services</NavLink>
-          <NavLink href="/how-we-work">How we work</NavLink>
-          <NavLink href="/our-team">Our Team</NavLink>
-          <NavLink href="/blog">Blog</NavLink>
+          <NavLink onNavigate={() => setShow(false)} href="/">Home</NavLink>
+          <NavLink onNavigate={() => setShow(false)} href="/about">About</NavLink>
+          <NavLink onNavigate={() => setShow(false)} href="/services">Services</NavLink>
+          <NavLink onNavigate={() => setShow(false)} href="/how-we-work">How we work</NavLink>
+          <NavLink onNavigate={() => setShow(false)} href="/our-team">Our Team</NavLink>
+          <NavLink onNavigate={() => setShow(false)} href="/blog">Blog</NavLink>
         </Nav>
         <div className='space-y-2.5'>
           <p className='whitespace-nowrap flex justify-center text-surface-500 px-6'>
