@@ -26,9 +26,10 @@ function HowWeWorkCard({
   return (
     <div
       className={`
+        flex flex-col
         ${
-          id % 2 !== 0 ? "flex-row-reverse" : "flex-row"
-        }  flex *:flex-1 gap-8 justify-center items-center"
+          id % 2 !== 0 ? "lg:flex-row-reverse" : "lg:flex-row"
+        }  lg:*:flex-1 gap-8 justify-center items-center"
       `}
     >
       <div className="flex justify-center flex-col gap-5">
@@ -49,9 +50,9 @@ function HowWeWorkCard({
           ))}
         </ul>
       </div>
-      <div className="w-full flex h-[526px]">
+      <div className="w-full h-86 md:h-[526px]">
         <Image
-          className="w-full object-cover rounded-2xl"
+          className="w-full h-full object-cover rounded-2xl"
           src={img}
           alt="Landing Section2 Figure"
         />
