@@ -1,5 +1,5 @@
 import React from "react";
-import QAndA from "../app/_components/QAndA";
+import QAndA from "./QAndA";
 
 export default function CommonQuestionsSection() {
   return (
