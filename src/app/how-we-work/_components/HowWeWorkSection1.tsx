@@ -5,8 +5,8 @@ import React from "react";
 
 export default function HowWeWorkSection1() {
   return (
-    <section>
-      <div>
+    <section className="pb-10 md:pb-20">
+      <div className="flex flex-col gap-5 md:gap-20">
         {howWeWorkData.map((elem) => (
           <HowWeWorkCard key={elem.id} {...elem} />
         ))}
@@ -16,33 +16,33 @@ export default function HowWeWorkSection1() {
 }
 
 function HowWeWorkCard({
-  index,
+  id,
   title,
   img,
   Icon,
   content,
   steps,
-}: Pick<HowWeWork, "Icon" | "index" | "img" | "title" | "content" | "steps">) {
+}: Pick<HowWeWork, "Icon" | "id" | "img" | "title" | "content" | "steps">) {
   return (
     <div
       className={`
         ${
-          index % 2 !== 0 ? "flex-row-reverse" : "flex-row"
-        }  flex *:flex-1 gap-6 items-center"
+          id % 2 !== 0 ? "flex-row-reverse" : "flex-row"
+        }  flex *:flex-1 gap-8 justify-center items-center"
       `}
     >
-      <div className="flex border-0 flex-col gap-5">
+      <div className="flex justify-center flex-col gap-5">
         <div className="flex gap-4 items-center">
           <button className="bg-primary-700 text-white font-semibold px-4.25 py-2 rounded-full">
-            {index}
+            {id}
           </button>
           <Icon className="size-8 text-primary-700" />
         </div>
         <h2 className="text-heading-3">{title}</h2>
-        <p>{content}</p>
+        <p className="">{content}</p>
         <ul className="text-surface-700 marker:text-primary-700 space-y-4">
-          {steps.map((step, index) => (
-            <li className="flex items-center" key={index}>
+          {steps.map((step, id) => (
+            <li className="flex items-center" key={id}>
               <span className="block w-2 h-2 rounded-full bg-primary-700 mr-2" />
               {step}
             </li>

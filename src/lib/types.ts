@@ -28,12 +28,13 @@ export interface Service {
 
 export interface HowWeWork {
   id: number;
-  index: number;
   title: string;
   img: StaticImageData;
-  Icon: React.ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-  >;
+  Icon:
+    | React.ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+      >
+    | (() => React.JSX.Element);
   content: string;
   steps: string[];
 }

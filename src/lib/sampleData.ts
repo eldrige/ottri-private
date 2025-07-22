@@ -5,7 +5,9 @@ import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
 import { HowWeWork, Service } from "./types";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, MessageSquareIcon, UserCheck } from "lucide-react";
+import ChatIcon from "@/components/icons/ChatIcon";
+import BroomSparkleIcon from "@/components/icons/BroomSparkleIcon";
 
 export const servicesData: Service[] = [
   {
@@ -136,7 +138,76 @@ export const howWeWorkData: HowWeWork[] = [
     title: "Book in Minutes",
     content:
       "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
-    index: 1,
+    img: figure1,
+    Icon: CalendarIcon,
+    steps: [
+      "Select service type and frequency",
+      "Specify home size and special requests",
+      "Choose convenient time slots",
+      "Add any special instructions",
+    ],
+  },
+  {
+    id: 2,
+    title: "Book in Minutes",
+    content:
+      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
+    img: figure1,
+    Icon: UserCheck,
+    steps: [
+      "Select service type and frequency",
+      "Specify home size and special requests",
+      "Choose convenient time slots",
+      "Add any special instructions",
+    ],
+  },
+  {
+    id: 3,
+    title: "Book in Minutes",
+    content:
+      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
+    img: figure1,
+    Icon: MessageSquareIcon,
+    steps: [
+      "Select service type and frequency",
+      "Specify home size and special requests",
+      "Choose convenient time slots",
+      "Add any special instructions",
+    ],
+  },
+  {
+    id: 4,
+    title: "Book in Minutes",
+    content:
+      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
+    img: figure1,
+    Icon: BroomSparkleIcon,
+    steps: [
+      "Select service type and frequency",
+      "Specify home size and special requests",
+      "Choose convenient time slots",
+      "Add any special instructions",
+    ],
+  },
+  {
+    id: 5,
+    title: "Book in Minutes",
+    content:
+      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
+    img: figure1,
+    Icon: CalendarIcon,
+    steps: [
+      "Select service type and frequency",
+      "Specify home size and special requests",
+      "Choose convenient time slots",
+      "Add any special instructions",
+    ],
+  },
+  {
+    id: 6,
+    title: "Book in Minutes",
+    content:
+      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
     img: figure1,
     Icon: CalendarIcon,
     steps: [
