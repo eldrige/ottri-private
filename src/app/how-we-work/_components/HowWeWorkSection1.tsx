@@ -54,7 +54,7 @@ function HowWeWorkCard({
           ))}
         </ul>
       </div>
-      <div className="w-full max-h-53.25 md:max-h-[526px]">
+      <div className="w-full h-53.25 md:h-100 lg:h-131.5">
         <Image
           className="w-full h-full object-cover rounded-lg md:rounded-4xl"
           src={img}
