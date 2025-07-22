@@ -3,7 +3,7 @@ import React from "react";
 
 export default function HowWeWorkSection2() {
   return (
-    <section className="py-24 md:mt-16">
+    <section className="pt-16 flex items-center flex-col justify-center ">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
         <h2 className="text-heading-3 md:text-heading-2 font-semibold">
           Our Promises to You
