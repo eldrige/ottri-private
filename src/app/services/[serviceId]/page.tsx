@@ -6,6 +6,7 @@ import ServicesDetailsSection2 from "./_components/ServicesDetailsSection2";
 import ServicesDetailsSection3 from "./_components/ServicesDetailsSection3";
 import ServicesDetailsSection4 from "./_components/ServicesDetailsSection4";
 import ServicesDetailsSection5 from "./_components/ServicesDetailsSection5";
+import CommonQuestionsSection from "@/components/CommonQuestionsSection";
 
 async function ServicesDetailsPage({
   params,
@@ -31,6 +32,7 @@ async function ServicesDetailsPage({
         <ServicesDetailsSection1 includedServices={service.services} />
         <ServicesDetailsSection2 pricingDetails={service.pricingDetails} />
         <ServicesDetailsSection3 process={service.process} />
+        <CommonQuestionsSection />
       </div>
       <ServicesDetailsSection4 />
       <div className="container mx-auto px-6">
