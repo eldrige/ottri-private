@@ -4,7 +4,7 @@ import React from "react";
 
 export default function HowWeWorkHero() {
   return (
-    <section className="py-24 space-y-8">
+    <section className="py-8 lg:py-24 space-y-8">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
         <Badge className="w-fit" variant="default" mode="outline">
           How We Work

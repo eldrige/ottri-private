@@ -3,7 +3,7 @@ import React from "react";
 
 export default function HowWeWorkSection2() {
   return (
-    <section className="pt-16 flex items-center flex-col justify-center ">
+    <section className="py-8 lg:py-24 flex flex-col gap-8">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
         <h2 className="text-heading-3 md:text-heading-2 font-semibold">
           Our Promises to You
@@ -12,7 +12,7 @@ export default function HowWeWorkSection2() {
           We stand behind our service with these guarantees
         </p>
       </div>
-      <div className="py-8 md:py-24 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="container px-6 gap-16 grid grid-cols-1 md:grid-cols-3">
           <QualityCard
             Icon={<LucideShield size={30} className="text-primary-700" />}

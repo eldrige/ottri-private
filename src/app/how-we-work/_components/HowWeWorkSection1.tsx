@@ -5,7 +5,7 @@ import React from "react";
 
 export default function HowWeWorkSection1() {
   return (
-    <section className="pb-10 md:pb-20">
+    <section className="py-8 lg:py-24">
       <div className="flex flex-col gap-10 md:gap-20">
         {howWeWorkData.map((elem) => (
           <HowWeWorkCard key={elem.id} {...elem} />
