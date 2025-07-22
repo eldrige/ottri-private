@@ -24,7 +24,13 @@ function HowWeWorkCard({
   steps,
 }: Pick<HowWeWork, "Icon" | "index" | "img" | "title" | "content" | "steps">) {
   return (
-    <div className={" flex *:flex-1 gap-6 items-center"}>
+    <div
+      className={`
+        ${
+          index % 2 !== 0 ? "flex-row-reverse" : "flex-row"
+        }  flex *:flex-1 gap-6 items-center"
+      `}
+    >
       <div className="flex border-0 flex-col gap-5">
         <div className="flex gap-4 items-center">
           <button className="bg-primary-700 text-white font-semibold px-4.25 py-2 rounded-full">
