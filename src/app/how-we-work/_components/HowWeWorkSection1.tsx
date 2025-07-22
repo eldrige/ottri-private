@@ -56,7 +56,7 @@ function HowWeWorkCard({
       </div>
       <div className="w-full h-53.25 md:h-[526px]">
         <Image
-          className="w-full h-full object-cover rounded-2xl"
+          className="w-full h-full object-cover rounded-lg md:rounded-4xl"
           src={img}
           alt="Landing Section2 Figure"
         />
