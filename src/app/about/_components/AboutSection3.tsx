@@ -27,7 +27,7 @@ export default function AboutSection3() {
       <h2 className="text-heading-2.5">Our Values</h2>
       <p className="max-w-4xl mx-auto space-y-8 tracking-wider text-surface-500 text-subtitle">These core principles guide everything we do, from hiring and training to customer service and community engagement.</p>
 
-      <div className="grid lg:grid-cols-4 gap-4 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-8">
         {VALUES.map((value, index) => (
           <div key={index} className="flex flex-col items-center py-8">
             <div className="p-2">

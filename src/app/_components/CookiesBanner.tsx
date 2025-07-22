@@ -23,7 +23,7 @@ export default function CookiesBanner() {
           <p className="text-subtitle text-surface-500 mt-3 md:mt-6">We use cookies to enhance your browsing experience, provide personalized content, and analyze our traffic. By clicking &quot;Accept All&quot;, you consent to our use of cookies. You can customize your preferences or learn more in our</p>
           <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-8">
             <Button onClick={() => setShow(!show)} size="xs">Accept All</Button>
-            <Button onClick={() => setShow(!show)} size="xs" variant="ghost">Decline All</Button>
+            <Button onClick={() => setShow(!show)} size="xs" variant="ghost-secondary">Decline All</Button>
             <Button size="xs" variant="secondary" className="-order-1 md:order-none">Customize</Button>
           </div>
         </div>

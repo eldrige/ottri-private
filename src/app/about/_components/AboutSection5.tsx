@@ -7,7 +7,7 @@ import UsersIcon from "@/components/icons/UsersIcon";
 
 export default function AboutSection5() {
   return (
-    <section className="grid lg:grid-cols-2 items-center py-8 lg:py-24 gap-y-8">
+    <section className="grid grid-cols-1 lg:grid-cols-2 items-center py-8 lg:py-24 gap-y-8">
       <div>
         <h2 className="text-heading-3 lg:text-heading-2 text-center lg:text-start text-secondary-700">Our Mission</h2>
         <p className="lg:text-subtitle text-surface-500 mt-4 tracking-wide">To transform the way people experience home cleaning services by creating a platform that prioritizes trust, convenience, and community impact.</p>

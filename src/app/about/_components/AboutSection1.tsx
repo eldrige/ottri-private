@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default function AboutSection1() {
   return (
-    <section className="pt-12 pb-8 lg:py-24 grid lg:grid-cols-2 gap-x-2.5 gap-y-8">
+    <section className="pt-12 pb-8 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-x-2.5 gap-y-8">
       <div className="space-y-6 self-center">
         <Badge className="w-fit mx-auto lg:mx-0" variant="default" mode="outline">
           About Ottri
