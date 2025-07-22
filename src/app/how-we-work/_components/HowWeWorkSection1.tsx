@@ -34,8 +34,8 @@ function HowWeWorkCard({
     >
       <div className="flex justify-center flex-col gap-6">
         <div className="flex gap-4 items-center">
-          <button className="relative bg-primary-700 text-white font-semibold text-center flex items-center justify-center p-6 rounded-full">
-            <p className="absolute top-[20.5%] text-center w-full text-xl">
+          <button className="relative bg-primary-700 text-white font-semibold text-center flex items-center justify-center p-5 rounded-full">
+            <p className="absolute top-[16%] text-center w-full text-xl">
               {id}
             </p>
           </button>
