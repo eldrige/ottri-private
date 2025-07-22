@@ -5,8 +5,13 @@ import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
 import { HowWeWork, Service } from "./types";
-import { CalendarIcon, MessageSquareIcon, UserCheck } from "lucide-react";
-import ChatIcon from "@/components/icons/ChatIcon";
+import {
+  CalendarIcon,
+  CreditCardIcon,
+  MessageSquareIcon,
+  ShieldCheck,
+  UserCheck,
+} from "lucide-react";
 import BroomSparkleIcon from "@/components/icons/BroomSparkleIcon";
 
 export const servicesData: Service[] = [
@@ -195,7 +200,7 @@ export const howWeWorkData: HowWeWork[] = [
     content:
       "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
     img: figure1,
-    Icon: CalendarIcon,
+    Icon: ShieldCheck,
     steps: [
       "Select service type and frequency",
       "Specify home size and special requests",
@@ -209,7 +214,7 @@ export const howWeWorkData: HowWeWork[] = [
     content:
       "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
     img: figure1,
-    Icon: CalendarIcon,
+    Icon: CreditCardIcon,
     steps: [
       "Select service type and frequency",
       "Specify home size and special requests",

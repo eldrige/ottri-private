@@ -28,14 +28,16 @@ function HowWeWorkCard({
       className={`
         flex flex-col
         ${
-          id % 2 !== 0 ? "lg:flex-row-reverse" : "lg:flex-row"
+          id % 2 == 0 ? "lg:flex-row-reverse" : "lg:flex-row"
         }  lg:*:flex-1 gap-8 justify-center items-center"
       `}
     >
       <div className="flex justify-center flex-col gap-6">
         <div className="flex gap-4 items-center">
-          <button className="bg-primary-700 text-white font-semibold px-3.75 text-center flex items-center justify-center py-2 rounded-full">
-            {id}
+          <button className="relative bg-primary-700 text-white font-semibold text-center flex items-center justify-center p-6 rounded-full">
+            <p className="absolute top-[20.5%] text-center w-full text-xl">
+              {id}
+            </p>
           </button>
           <Icon className="size-8 text-primary-700" />
         </div>
