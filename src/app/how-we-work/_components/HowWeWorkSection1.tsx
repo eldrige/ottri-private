@@ -40,7 +40,7 @@ function HowWeWorkCard({
           <Icon className="size-8 text-primary-700" />
         </div>
         <h2 className="text-heading-3">{title}</h2>
-        <p className="">{content}</p>
+        <p className="text-surface-700">{content}</p>
         <ul className="text-surface-700 marker:text-primary-700 space-y-4">
           {steps.map((step, id) => (
             <li className="flex items-center" key={id}>
@@ -50,7 +50,7 @@ function HowWeWorkCard({
           ))}
         </ul>
       </div>
-      <div className="w-full h-86 md:h-[526px]">
+      <div className="w-full h-53.25 md:h-[526px]">
         <Image
           className="w-full h-full object-cover rounded-2xl"
           src={img}
