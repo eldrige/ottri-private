@@ -4,7 +4,8 @@ import figure3 from "@/assets/landing-section3-figure3.jpg";
 import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
-import { Service } from "./types";
+import { HowWeWork, Service } from "./types";
+import { CalendarIcon } from "lucide-react";
 
 export const servicesData: Service[] = [
   {
@@ -125,6 +126,24 @@ export const servicesData: Service[] = [
       "Quality check with detailed checklist",
       "Final walkthrough with customer",
       "Photo documentation of completed work",
+    ],
+  },
+];
+
+export const howWeWorkData: HowWeWork[] = [
+  {
+    id: 1,
+    title: "Book in Minutes",
+    content:
+      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
+    index: 1,
+    img: figure1,
+    Icon: CalendarIcon,
+    steps: [
+      "Select service type and frequency",
+      "Specify home size and special requests",
+      "Choose convenient time slots",
+      "Add any special instructions",
     ],
   },
 ];

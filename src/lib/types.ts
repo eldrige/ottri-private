@@ -1,4 +1,6 @@
+import { LucideProps } from "lucide-react";
 import { StaticImageData } from "next/image";
+import { RefAttributes } from "react";
 
 export type PricingDetail = {
   size: string;
@@ -22,4 +24,16 @@ export interface Service {
   }: {
     className?: string | undefined;
   }) => React.JSX.Element;
+}
+
+export interface HowWeWork {
+  id: number;
+  index: number;
+  title: string;
+  img: StaticImageData;
+  Icon: React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+  content: string;
+  steps: string[];
 }
