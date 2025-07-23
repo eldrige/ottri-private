@@ -1,6 +1,11 @@
-import figure1 from "@/assets/landing-section3-figure1.jpg";
 import figure2 from "@/assets/landing-section3-figure2.jpg";
 import figure3 from "@/assets/landing-section3-figure3.jpg";
+import howweworkFigure1 from "@/assets/howwework-figure1.jpg";
+import howweworkFigure2 from "@/assets/howwework-figure2.jpg";
+import howweworkFigure3 from "@/assets/howwework-figure3.jpg";
+import howweworkFigure4 from "@/assets/howwework-figure4.jpg";
+import howweworkFigure5 from "@/assets/howwework-figure5.jpg";
+import howweworkFigure6 from "@/assets/howwework-figure6.jpg";
 import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
@@ -17,7 +22,7 @@ import BroomSparkleIcon from "@/components/icons/BroomSparkleIcon";
 export const servicesData: Service[] = [
   {
     id: 1,
-    coverSrc: figure1,
+    coverSrc: howweworkFigure1,
     Icon: RewardStars,
     title: "Commercial Cleaning",
     subtitle: "Tailored cleaning solutions for businesses of all sizes.",
@@ -143,7 +148,7 @@ export const howWeWorkData: HowWeWork[] = [
     title: "Book in Minutes",
     content:
       "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
-    img: figure1,
+    img: howweworkFigure2,
     Icon: CalendarIcon,
     steps: [
       "Select service type and frequency",
@@ -154,72 +159,72 @@ export const howWeWorkData: HowWeWork[] = [
   },
   {
     id: 2,
-    title: "Book in Minutes",
+    title: "We Match You",
     content:
-      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
-    img: figure1,
+      "We assigns the best available cleaner(s) based on your location, preferences, and service requirements.",
+    img: howweworkFigure1,
     Icon: UserCheck,
     steps: [
-      "Select service type and frequency",
-      "Specify home size and special requests",
-      "Choose convenient time slots",
-      "Add any special instructions",
+      "Background-checked professionals only",
+      "Skill-matched to your specific needs",
+      "Local cleaners for faster service",
+      "Consistent team for recurring bookings",
     ],
   },
   {
     id: 3,
-    title: "Book in Minutes",
+    title: "Stay Connected",
     content:
-      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
-    img: figure1,
+      "Receive confirmation, cleaner details, and real-time updates. Communicate directly through our platform.",
+    img: howweworkFigure3,
     Icon: MessageSquareIcon,
     steps: [
-      "Select service type and frequency",
-      "Specify home size and special requests",
-      "Choose convenient time slots",
-      "Add any special instructions",
+      "Booking confirmation within 2 hours",
+      "Cleaner profile and arrival time",
+      "Live tracking on cleaning day",
+      "Direct messaging capability",
     ],
   },
   {
     id: 4,
-    title: "Book in Minutes",
+    title: "Professional Cleaning",
     content:
-      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
-    img: figure1,
+      "Your cleaner arrives with supplies and equipment, following our comprehensive checklist for consistent quality.",
+    img: howweworkFigure4,
     Icon: BroomSparkleIcon,
     steps: [
-      "Select service type and frequency",
-      "Specify home size and special requests",
-      "Choose convenient time slots",
-      "Add any special instructions",
+      "Eco-friendly supplies included",
+      "Detailed room-by-room cleaning",
+      "Quality assurance checklist",
+      "Respectful of your home and time",
     ],
   },
   {
     id: 5,
-    title: "Book in Minutes",
+    title: "Quality Check",
     content:
-      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
-    img: figure1,
+      "Post-cleaning quality review, photos for verification, and immediate feedback collection to ensure satisfaction.",
+    img: howweworkFigure5,
     Icon: ShieldCheck,
     steps: [
-      "Select service type and frequency",
-      "Specify home size and special requests",
-      "Choose convenient time slots",
-      "Add any special instructions",
+      "Before/after documentation",
+      "Quality checklist completion",
+      "Customer satisfaction survey",
+      "Issues resolved immediately",
     ],
   },
   {
     id: 6,
-    title: "Book in Minutes",
+    title: "Easy Payment",
     content:
-      "Choose your service, select date & time, and provide home details through our simple 8-step booking process.",
-    img: figure1,
+      "Automatic secure payment processing with transparent pricing. Tips can be added digitally for your cleaner.",
+    img: howweworkFigure6,
     Icon: CreditCardIcon,
     steps: [
-      "Select service type and frequency",
-      "Specify home size and special requests",
-      "Choose convenient time slots",
-      "Add any special instructions",
+      "Contactless payment processing",
+      "Transparent pricing breakdown",
+      "Optional tipping feature",
+      "Receipts and invoices provided",
     ],
   },
 ];

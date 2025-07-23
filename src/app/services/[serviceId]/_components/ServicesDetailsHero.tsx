@@ -107,7 +107,7 @@ function HeroRightSide({
 }: Pick<ServicesDetailsHeroProps, "coverSrc" | "title">) {
   return (
     <div className="h-full flex flex-col gap-4">
-      <div className="flex-7 flex ">
+      <div className="flex-7 flex">
         <Image
           className="rounded-lg aspect-[2/1] w-full object-cover"
           src={coverSrc}

@@ -6,7 +6,7 @@ import React from "react";
 export default function HowWeWorkSection1() {
   return (
     <section className="py-8 lg:py-24">
-      <div className="flex flex-col gap-10 md:gap-20">
+      <div className="flex flex-col gap-24">
         {howWeWorkData.map((elem) => (
           <HowWeWorkCard key={elem.id} {...elem} />
         ))}
@@ -32,7 +32,7 @@ function HowWeWorkCard({
         }  lg:*:flex-1 gap-8 justify-center items-center"
       `}
     >
-      <div className="flex justify-center flex-col gap-6">
+      <div className="flex justify-center lg:py-19.5 flex-col gap-6">
         <div className="flex gap-4 items-center">
           <button className="relative bg-primary-700 text-white font-semibold text-center flex items-center justify-center p-5 rounded-full">
             <p className="absolute top-[16%] text-center w-full text-xl">
@@ -43,7 +43,7 @@ function HowWeWorkCard({
         </div>
         <div className="flex flex-col gap-4">
           <h2 className="text-heading-3">{title}</h2>
-          <p className="text-surface-700">{content}</p>
+          <p className="text-surface-700 text-left pr-5">{content}</p>
         </div>
         <ul className="text-surface-700 marker:text-primary-700 space-y-4">
           {steps.map((step, id) => (
@@ -54,9 +54,9 @@ function HowWeWorkCard({
           ))}
         </ul>
       </div>
-      <div className="w-full h-53.25 md:h-100 lg:h-131.5">
+      <div className="flex">
         <Image
-          className="w-full h-full object-cover rounded-lg md:rounded-4xl"
+          className="w-full h-full aspect-[2/1] object-cover rounded-lg md:rounded-4xl"
           src={img}
           alt="Landing Section2 Figure"
         />
