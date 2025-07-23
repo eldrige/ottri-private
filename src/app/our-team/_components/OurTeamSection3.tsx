@@ -19,7 +19,7 @@ export default function OurTeamSection3() {
         </Button>
         <Button
           size="xs"
-          className="text-primary-700 bg-white"
+          className="text-secondary-700 border-secondary-700"
           variant="secondary-outline"
         >
           Explore our services

@@ -23,7 +23,7 @@ export default function OurTeamHero() {
           </Button>
           <Button
             size="xs"
-            className="text-black bg-white"
+            className="text-secondary-700 border-secondary-700"
             variant="secondary-outline"
           >
             How we hire
