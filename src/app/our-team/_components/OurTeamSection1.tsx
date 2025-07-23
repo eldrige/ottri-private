@@ -18,37 +18,62 @@ export default function OurTeamSection1() {
           Our most experienced and highly-rated cleaning professionals
         </p>
       </div>
+
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        <Image
-          className="rounded-lg aspect-[2/2.5] w-full object-cover"
-          src={ourTeamFigure1}
-          alt={` cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/2.5] w-full object-cover"
-          src={ourTeamFigure2}
-          alt={` cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/2.5] w-full object-cover"
-          src={ourTeamFigure3}
-          alt={` cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/2.5] w-full object-cover"
-          src={ourTeamFigure4}
-          alt={` cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/2.5] w-full object-cover"
-          src={ourTeamFigure5}
-          alt={` cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/2.5] w-full object-cover"
-          src={ourTeamFigure6}
-          alt={` cover`}
-        />
+        <div
+          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+        >
+          <Image
+            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
+            src={ourTeamFigure1}
+            alt={` cover`}
+          />
+        </div>
+        <div
+          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+        >
+          <Image
+            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
+            src={ourTeamFigure2}
+            alt={` cover`}
+          />
+        </div>
+        <div
+          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+        >
+          <Image
+            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
+            src={ourTeamFigure3}
+            alt={` cover`}
+          />
+        </div>
+        <div
+          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+        >
+          <Image
+            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
+            src={ourTeamFigure4}
+            alt={` cover`}
+          />
+        </div>
+        <div
+          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+        >
+          <Image
+            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
+            src={ourTeamFigure5}
+            alt={` cover`}
+          />
+        </div>
+        <div
+          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+        >
+          <Image
+            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
+            src={ourTeamFigure6}
+            alt={` cover`}
+          />
+        </div>
       </div>
     </section>
   );
