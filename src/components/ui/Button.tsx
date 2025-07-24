@@ -4,17 +4,18 @@ import { cn } from "@/lib/utils";
 
 // Define button variants using class-variance-authority
 const buttonVariants = cva(
-  "text-white rounded-lg font-normal hover:bg-transparent transition border disabled:border-transparent not-disabled:cursor-pointer disabled:bg-surface-500/20 disabled:text-white",
+  "text-white rounded-lg font-normal hover:bg-transparent transition border border-transparent disabled:border-transparent cursor-pointer disabled:cursor-default disabled:bg-surface-500/20 disabled:text-white",
   {
     variants: {
       variant: {
         default: "bg-primary-700 hover:text-primary-700 hover:border-primary-700",
-        secondary: "bg-secondary-700 hover:text-secondary-700 hover:border-secondary-700",
+        secondary: "bg-secondary-700 hover:text-secondary-700 hover:border-secondary-700 hover:bg-white",
         destructive: "",
         outline: "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900",
         "default-outline": "text-primary-700 border-primary-700",
         "secondary-outline": "text-secondary-700 border-secondary-700",
-        ghost: "",
+        ghost: "bg-white text-primary-700 border-transparent hover:bg-surface-200",
+        "ghost-secondary": "bg-white text-secondary-700 border-transparent hover:bg-surface-200",
         link: ""
       },
       size: {
