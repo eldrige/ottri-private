@@ -33,7 +33,7 @@ export default function HeroSection() {
               Same Day Booking
             </span>
           </div>
-          <div className="flex flex-col sm:flex-row gap-x-8 gap-y-6">
+          <div className="flex flex-col sm:flex-row gap-x-8 gap-y-4">
             <Button size="xs">Book a cleaning now</Button>
             <Button size="xs" variant="secondary-outline">Get a free quote</Button>
           </div>
