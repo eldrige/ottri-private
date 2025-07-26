@@ -1,6 +1,11 @@
 import React from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { teamMembers } from "@/lib/sampleData";
+import { TeamMember } from "@/lib/types";
+import { Button } from "@/components/ui/Button";
+import StarIcon from "@/components/icons/StarIcon";
+import ClockIcon from "@/components/icons/ClockIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 
 export default function OurTeamSection1() {
   return (
@@ -15,24 +20,93 @@ export default function OurTeamSection1() {
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {teamMembers.map((teamMember) => (
-          <TeamMemberCard key={teamMember.id} src={teamMember.coverSrc} />
+        {teamMembers.map((member) => (
+          <TeamMemberCard key={member.id} member={member} />
         ))}
       </div>
     </section>
   );
 }
 
-function TeamMemberCard({ src }: { src: StaticImageData }) {
+interface TeamMemberCardProps {
+  member: TeamMember;
+}
+
+export function TeamMemberCard({ member }: TeamMemberCardProps) {
   return (
-    <div
-      className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
-    >
+    <div className="relative rounded-xl overflow-hidden shadow-md group">
+      {/* Background Image */}
       <Image
-        className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
-        src={src}
-        alt={` cover`}
+        src={member.coverSrc}
+        alt={member.name}
+        className="w-full aspect-[2/2.5] object-cover transition-transform duration-300 group-hover:scale-105"
       />
+
+      {/* Overlay */}
+      <div
+        className="
+          absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 
+          opacity-0 group-hover:opacity-100
+          md:transition-opacity duration-300
+          flex flex-col justify-end p-4
+          md:pointer-events-none
+          md:group-hover:pointer-events-auto
+          md:group-hover:opacity-100
+          md:group-hover:translate-y-0
+          md:hidden sm:hidden
+        "
+      />
+
+      {/* Mobile: always show overlay */}
+      <div
+        className="
+          absolute inset-0 bg-gradient-to-t gap-3 from-black via-black/70 to-transparent
+          flex flex-col justify-end p-6
+          opacity-100
+          md:opacity-0 md:group-hover:opacity-100
+        "
+      >
+        <h3 className="text-white text-heading-2 font-normal">{member.name}</h3>
+        <p className="text-white text-subtitle">{member.role}</p>
+
+        <div className="flex *:flex *:gap-1.25 *:items-center items-center gap-4 mt-2 text-white text-[16px]">
+          <div>
+            <StarIcon />
+            <span>{`${member.averageRatings} (${member.numberOfRantings})`}</span>
+          </div>
+          <div>
+            <ClockIcon />
+            <span>{member.experience} Years</span>
+          </div>
+        </div>
+
+        <div className="flex gap-1.25 items-center">
+          <LocationIcon className="text-primary-700" />
+          <p className="text-white text-[16px]">{member.location}</p>
+        </div>
+
+        {/* Specialties */}
+        <div className="flex gap-2 my-2 flex-wrap">
+          {member.specialities.slice(0, 2).map((spec, i) => (
+            <span
+              key={i}
+              className="bg-white/30 text-white px-2 py-1 rounded-lg text-xs"
+            >
+              {spec}
+            </span>
+          ))}
+          {member.specialities.length > 2 && (
+            <span className="bg-white/30 text-white px-2 py-1 rounded-lg text-xs">
+              +{member.specialities.length - 2}
+            </span>
+          )}
+        </div>
+
+        {/* Button */}
+        <Button size={"sm"} className=" cursor-pointer border-primary-700">
+          View Profile
+        </Button>
+      </div>
     </div>
   );
 }
