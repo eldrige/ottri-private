@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import { teamMembers } from "@/lib/sampleData";
 import { TeamMember } from "@/lib/types";
@@ -6,8 +7,21 @@ import { Button } from "@/components/ui/Button";
 import StarIcon from "@/components/icons/StarIcon";
 import ClockIcon from "@/components/icons/ClockIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
+import { cn } from "@/lib/utils";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function OurTeamSection1() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % teamMembers.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide(
+      (prev) => (prev - 1 + teamMembers.length) % teamMembers.length
+    );
+  };
   return (
     <section className="py-8 lg:py-24 flex flex-col gap-8">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
@@ -19,10 +33,63 @@ export default function OurTeamSection1() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="hidden lg:grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         {teamMembers.map((member) => (
           <TeamMemberCard key={member.id} member={member} />
         ))}
+      </div>
+      {/* Mobile carousel  */}
+      <div className="lg:hidden space-y-4">
+        <div className="overflow-hidden">
+          <div
+            className="flex transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          >
+            {teamMembers.map((member, index) => (
+              <div key={index} className="w-full flex-shrink-0">
+                <TeamMemberCard key={member.id} member={member} />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex justify-center gap-1">
+          {teamMembers.map((_, index) => (
+            <span
+              key={index}
+              className={cn(
+                "w-3 h-3 rounded-full cursor-pointer",
+                currentSlide === index ? "bg-primary-700" : "bg-surface-200/60"
+              )}
+              onClick={() => setCurrentSlide(index)}
+            />
+          ))}
+        </div>
+        <div className="flex justify-center gap-4">
+          <button
+            disabled={currentSlide === 0}
+            className={cn(
+              "*:h-6 *:w-6 transition-colors",
+              currentSlide === 0
+                ? "text-secondary-700/30"
+                : "text-primary-700 cursor-pointer"
+            )}
+            onClick={prevSlide}
+          >
+            <ArrowLeft />
+          </button>
+          <button
+            disabled={currentSlide === teamMembers.length - 1}
+            className={cn(
+              "*:h-6 *:w-6 transition-colors",
+              currentSlide === teamMembers.length - 1
+                ? "text-secondary-700/30"
+                : "text-primary-700 cursor-pointer"
+            )}
+            onClick={nextSlide}
+          >
+            <ArrowRight />
+          </button>
+        </div>
       </div>
     </section>
   );
