@@ -1,11 +1,6 @@
 import React from "react";
-import ourTeamFigure1 from "@/assets/ourteam-figure1.jpg";
-import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
-import ourTeamFigure3 from "@/assets/ourteam-figure3.jpg";
-import ourTeamFigure4 from "@/assets/ourteam-figure4.jpg";
-import ourTeamFigure5 from "@/assets/ourteam-figure5.jpg";
-import ourTeamFigure6 from "@/assets/ourteam-figure6.jpg";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
+import { teamMembers } from "@/lib/sampleData";
 
 export default function OurTeamSection1() {
   return (
@@ -20,61 +15,24 @@ export default function OurTeamSection1() {
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        <div
-          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
-        >
-          <Image
-            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
-            src={ourTeamFigure1}
-            alt={` cover`}
-          />
-        </div>
-        <div
-          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
-        >
-          <Image
-            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
-            src={ourTeamFigure2}
-            alt={` cover`}
-          />
-        </div>
-        <div
-          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
-        >
-          <Image
-            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
-            src={ourTeamFigure3}
-            alt={` cover`}
-          />
-        </div>
-        <div
-          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
-        >
-          <Image
-            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
-            src={ourTeamFigure4}
-            alt={` cover`}
-          />
-        </div>
-        <div
-          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
-        >
-          <Image
-            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
-            src={ourTeamFigure5}
-            alt={` cover`}
-          />
-        </div>
-        <div
-          className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
-        >
-          <Image
-            className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
-            src={ourTeamFigure6}
-            alt={` cover`}
-          />
-        </div>
+        {teamMembers.map((teamMember) => (
+          <TeamMemberCard key={teamMember.id} src={teamMember.coverSrc} />
+        ))}
       </div>
     </section>
+  );
+}
+
+function TeamMemberCard({ src }: { src: StaticImageData }) {
+  return (
+    <div
+      className={`relative h-fit cursor-pointer rounded-md overflow-hidden shadow-md group hover:shadow-lg transition-shadow`}
+    >
+      <Image
+        className="rounded-lg aspect-[2/2.5] object-cover hover:scale-105 transition-transform duration-300 w-full"
+        src={src}
+        alt={` cover`}
+      />
+    </div>
   );
 }

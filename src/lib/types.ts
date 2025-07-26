@@ -23,3 +23,15 @@ export interface Service {
     className?: string | undefined;
   }) => React.JSX.Element;
 }
+
+export interface TeamMember {
+  id: number;
+  name: string;
+  role: string;
+  numberOfRantings: number;
+  averageRatings: number;
+  experience: number;
+  location: string;
+  specialities: string[];
+  coverSrc: StaticImageData;
+}

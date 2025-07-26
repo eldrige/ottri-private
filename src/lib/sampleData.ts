@@ -1,10 +1,16 @@
 import figure1 from "@/assets/landing-section3-figure1.jpg";
 import figure2 from "@/assets/landing-section3-figure2.jpg";
 import figure3 from "@/assets/landing-section3-figure3.jpg";
+import ourTeamFigure1 from "@/assets/ourteam-figure1.jpg";
+import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
+import ourTeamFigure3 from "@/assets/ourteam-figure3.jpg";
+import ourTeamFigure4 from "@/assets/ourteam-figure4.jpg";
+import ourTeamFigure5 from "@/assets/ourteam-figure5.jpg";
+import ourTeamFigure6 from "@/assets/ourteam-figure6.jpg";
 import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
-import { Service } from "./types";
+import { Service, TeamMember } from "./types";
 
 export const servicesData: Service[] = [
   {
@@ -126,5 +132,107 @@ export const servicesData: Service[] = [
       "Final walkthrough with customer",
       "Photo documentation of completed work",
     ],
+  },
+];
+
+export const teamMembers: TeamMember[] = [
+  {
+    id: 1,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out",
+    ],
+    coverSrc: ourTeamFigure1,
+  },
+  {
+    id: 2,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out",
+    ],
+    coverSrc: ourTeamFigure2,
+  },
+  {
+    id: 3,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out",
+    ],
+    coverSrc: ourTeamFigure3,
+  },
+
+  {
+    id: 4,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out",
+    ],
+    coverSrc: ourTeamFigure4,
+  },
+
+  {
+    id: 5,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out",
+    ],
+    coverSrc: ourTeamFigure5,
+  },
+
+  {
+    id: 6,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out",
+    ],
+    coverSrc: ourTeamFigure6,
   },
 ];
