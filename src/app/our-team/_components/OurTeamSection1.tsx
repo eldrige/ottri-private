@@ -127,7 +127,7 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
       {/* Mobile: always show overlay */}
       <div
         className="
-          absolute inset-0 bg-gradient-to-t gap-4 from-black via-black/70 to-black/50
+          absolute inset-0 bg-gradient-to-t gap-4 from-black via-black/70 to-black/30
           flex flex-col justify-end p-6 md:p-8
           opacity-100
           md:opacity-0 md:group-hover:opacity-100
