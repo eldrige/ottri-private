@@ -60,50 +60,58 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
       {/* Mobile: always show overlay */}
       <div
         className="
-          absolute inset-0 bg-gradient-to-t gap-3 from-black via-black/70 to-transparent
-          flex flex-col justify-end p-6
+          absolute inset-0 bg-gradient-to-t gap-4 from-black via-black/70 to-black/50
+          flex flex-col justify-end p-6 md:p-8
           opacity-100
           md:opacity-0 md:group-hover:opacity-100
         "
       >
-        <h3 className="text-white text-heading-2 font-normal">{member.name}</h3>
-        <p className="text-white text-subtitle">{member.role}</p>
+        <div className="flex flex-col gap-3">
+          <h3 className="text-white text-heading-3 md:text-heading-2 font-normal">
+            {member.name}
+          </h3>
+          <p className="text-white text-subtitle">{member.role}</p>
 
-        <div className="flex *:flex *:gap-1.25 *:items-center items-center gap-4 mt-2 text-white text-[16px]">
-          <div>
-            <StarIcon />
-            <span>{`${member.averageRatings} (${member.numberOfRantings})`}</span>
+          <div className="flex *:flex *:gap-1.25 *:items-center items-center gap-4 mt-2 text-white text-[16px]">
+            <div>
+              <StarIcon />
+              <span>{`${member.averageRatings} (${member.numberOfRantings})`}</span>
+            </div>
+            <div>
+              <ClockIcon className="text-primary-700" />
+              <span>{member.experience} Years</span>
+            </div>
           </div>
-          <div>
-            <ClockIcon />
-            <span>{member.experience} Years</span>
+
+          <div className="flex gap-1.25 items-center">
+            <LocationIcon className="text-primary-700" />
+            <p className="text-white text-[16px]">{member.location}</p>
           </div>
         </div>
 
-        <div className="flex gap-1.25 items-center">
-          <LocationIcon className="text-primary-700" />
-          <p className="text-white text-[16px]">{member.location}</p>
+        <div className="flex flex-col gap-2">
+          {/* Specialties */}
+          <h1 className="text-[17.8px] text-white">Specialities</h1>
+          <div className="flex gap-2 *:text-nowrap flex-nowrap">
+            {member.specialities.slice(0, 2).map((spec, i) => (
+              <span
+                key={i}
+                className="bg-white/30 text-white px-2 py-1 rounded-lg text-xs"
+              >
+                {spec}
+              </span>
+            ))}
+            {member.specialities.length > 2 && (
+              <span className="bg-white/30 text-white px-1.25 py-1 rounded-lg text-xs">
+                +{member.specialities.length - 2}
+              </span>
+            )}
+          </div>
         </div>
-
-        {/* Specialties */}
-        <div className="flex gap-2 my-2 flex-wrap">
-          {member.specialities.slice(0, 2).map((spec, i) => (
-            <span
-              key={i}
-              className="bg-white/30 text-white px-2 py-1 rounded-lg text-xs"
-            >
-              {spec}
-            </span>
-          ))}
-          {member.specialities.length > 2 && (
-            <span className="bg-white/30 text-white px-2 py-1 rounded-lg text-xs">
-              +{member.specialities.length - 2}
-            </span>
-          )}
-        </div>
-
-        {/* Button */}
-        <Button size={"sm"} className=" cursor-pointer border-primary-700">
+        <Button
+          size={"sm"}
+          className="w-full text-[16px] font-medium cursor-pointer border-primary-700"
+        >
           View Profile
         </Button>
       </div>
