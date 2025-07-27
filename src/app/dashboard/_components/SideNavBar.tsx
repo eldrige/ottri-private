@@ -67,12 +67,15 @@ export default function SideNavBar() {
             src={userImage}
             alt={"user profile"}
           />
-          <div className="flex flex-col">
+          <Link
+            href={"/dashboard/profile"}
+            className="flex cursor-pointer flex-col"
+          >
             <h1 className="font-medium text-lg text-black">Jenny Murphy</h1>
             <p className="text-surface-500 text-[14px]">
               jennymurphy@gmail.com
             </p>
-          </div>
+          </Link>
         </div>
       </div>
     </nav>
