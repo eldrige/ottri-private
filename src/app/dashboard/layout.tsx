@@ -11,7 +11,7 @@ export default function RootLayout({
       <section className="flex-15/100 h-full">
         <SideNavBar />
       </section>
-      <section className="flex-85/100">{children}</section>
+      <section className="flex-85/100 ">{children}</section>
     </main>
   );
 }
