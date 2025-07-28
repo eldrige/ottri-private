@@ -85,3 +85,11 @@ export const addOnOptions = [
   { id: 'under-carpet', name: 'Under Carpet', price: 20 },
   { id: 'others', name: 'Others', price: 20 }
 ]
+
+// Step 4 - Pet Info
+export const petTypeOptions = [
+  { id: 'no-pets', name: 'No Pets' },
+  { id: 'dogs', name: 'Dog(s)' },
+  { id: 'cats', name: 'Cat(s)' },
+  { id: 'both', name: 'Both dogs and cats' },
+];

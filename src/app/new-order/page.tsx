@@ -14,9 +14,10 @@ import { orderFormSchema, OrderFormValues } from "./schema";
 import { addOnOptions, specificTypes, squareFootageOptions } from "./formData";
 import PropertyDetailsStep from "./_components/steps/PropertyDetailsStep";
 import AddOnsStep from "./_components/steps/AddOnsStep";
+import PetInfoStep from "./_components/steps/PetInfoStep";
 
 export default function NewOrderPage() {
-  const [currStep, setCurrStep] = useState(2);
+  const [currStep, setCurrStep] = useState(3);
 
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
@@ -31,6 +32,8 @@ export default function NewOrderPage() {
       squareFootage: "",
       addOns: [],
       otherService: "",
+      petType: "no-pets",
+      petInstructions: "",
     }
   });
 
@@ -47,6 +50,13 @@ export default function NewOrderPage() {
         return !!errors.serviceType || !!errors.specificType;
       case 1:
         return !!errors.serviceAddress || !!errors.bedrooms || !!errors.bathrooms || !!errors.squareFootage;
+      case 2:
+        // Add-ons step has no required fields
+        return false;
+      case 3:
+        // Pet info step has no required fields
+        return false;
+      // Add more cases for additional steps
       default:
         return false;
     }
@@ -150,6 +160,8 @@ export default function NewOrderPage() {
         return <PropertyDetailsStep />;
       case 2:
         return <AddOnsStep />;
+      case 3:
+        return <PetInfoStep />;
       default:
         return <ServiceTypeStep />;
     }

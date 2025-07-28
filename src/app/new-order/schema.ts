@@ -10,6 +10,8 @@ export const orderFormSchema = z.object({
   squareFootage: z.string().min(1, "Square footage is required"),
   addOns: z.array(z.string()).optional(),
   otherService: z.string().optional(),
+  petType: z.string(),
+  petInstructions: z.string().optional(),
 });
 
 export type OrderFormValues = z.infer<typeof orderFormSchema>;
