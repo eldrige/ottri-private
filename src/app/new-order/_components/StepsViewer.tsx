@@ -8,7 +8,7 @@ import PawPrintIcon from "@/components/icons/PawPrintIcon";
 import RewardStars from "@/components/icons/RewardStars";
 import { cn } from "@/lib/utils";
 import { HomeIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 
 const STEPS = [
   { text: "Service Type", Icon: RewardStars },
@@ -22,8 +22,14 @@ const STEPS = [
 ];
 
 
-export default function StepsViewer({currStep}: {currStep: number}) {
+export default function StepsViewer({currStep, setCurrStep}: {currStep: number, setCurrStep: Dispatch<SetStateAction<number>>}) {
   const stepsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  const navStep = (stepNum: number) => {
+    if (stepNum >= currStep) return
+
+    setCurrStep(stepNum)
+  }
 
   useEffect(() => {
     stepsRef.current[currStep]?.scrollIntoView({
@@ -41,7 +47,7 @@ export default function StepsViewer({currStep}: {currStep: number}) {
             STEPS.map((step, idx) => {
               const selected = currStep >= idx;
               return (
-                <div key={idx} ref={el => { stepsRef.current[idx] = el; }} className="flex flex-col items-center">
+                <div key={idx} onClick={() => navStep(idx)} ref={el => { stepsRef.current[idx] = el; }} className="flex flex-col items-center">
                   <span className={cn("p-2 rounded-full border transition-colors duration-300", selected ? "bg-primary-700 border-bg-primary-700 text-white" : "text-black/25 border-black/25")}>
                     <step.Icon size={16} className="*:size-4" />
                   </span>

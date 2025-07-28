@@ -23,20 +23,21 @@ export interface InputProps
   label?: string;
   helperText?: string;
   error?: string;
+  labelClassName?: string;
 }
 
 /**
  * Input component with multiple variants
  */
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, label, error, ...props }, ref) => {
+  ({ className, variant, label, error, labelClassName, ...props }, ref) => {
     // If there's an error, force the variant to error
     const inputVariant = error ? "error" : variant;
 
     return (
       <div className="flex flex-col w-full space-y-2">
         {label && (
-          <label className="text-caption" htmlFor={props.id}>
+          <label className={cn("text-sm", labelClassName)} htmlFor={props.id}>
             {label}
           </label>
         )}

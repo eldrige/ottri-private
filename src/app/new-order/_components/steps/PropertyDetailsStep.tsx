@@ -64,7 +64,7 @@ export default function PropertyDetailsStep() {
         Use this address for billing address
       </label>
 
-      <div className='grid grid-cols-2 gap-x-8'>
+      <div className='grid lg:grid-cols-2 gap-8'>
         <div>
           <Select
             label='Bedrooms'

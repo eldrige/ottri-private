@@ -8,6 +8,8 @@ export const orderFormSchema = z.object({
   bedrooms: z.string().min(1, "Number of bedrooms is required"),
   bathrooms: z.string().min(1, "Number of bathrooms is required"),
   squareFootage: z.string().min(1, "Square footage is required"),
+  addOns: z.array(z.string()).optional(),
+  otherService: z.string().optional(),
 });
 
 export type OrderFormValues = z.infer<typeof orderFormSchema>;

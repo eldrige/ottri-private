@@ -11,11 +11,12 @@ import StepsViewer from "./_components/StepsViewer";
 import ServiceTypeStep from "./_components/steps/ServiceTypeStep";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { orderFormSchema, OrderFormValues } from "./schema";
-import { specificTypes, squareFootageOptions } from "./formData";
+import { addOnOptions, specificTypes, squareFootageOptions } from "./formData";
 import PropertyDetailsStep from "./_components/steps/PropertyDetailsStep";
+import AddOnsStep from "./_components/steps/AddOnsStep";
 
 export default function NewOrderPage() {
-  const [currStep, setCurrStep] = useState(0);
+  const [currStep, setCurrStep] = useState(2);
 
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
@@ -28,11 +29,13 @@ export default function NewOrderPage() {
       bedrooms: "",
       bathrooms: "",
       squareFootage: "",
+      addOns: [],
+      otherService: "",
     }
   });
 
   const { watch, handleSubmit, trigger, formState: { errors } } = methods;
-  const initRender = useRef(true)
+  const initRender = useRef(true);
 
   // Watch form values for summary display
   const formValues = watch();
@@ -52,7 +55,7 @@ export default function NewOrderPage() {
   // Validate the current step and update stepValidation state
   const validateCurrentStep = useCallback(async () => {
     let isValid = false;
-    
+
     switch (currStep) {
       case 0:
         isValid = await trigger(['serviceType', 'specificType']);
@@ -64,18 +67,20 @@ export default function NewOrderPage() {
       default:
         isValid = true;
     }
-    
+
     return isValid;
   }, [trigger, currStep]);
 
   // Run validation when form values change
   useEffect(() => {
     if (initRender) {
-      initRender.current = false
-      return
+      initRender.current = false;
+      return;
     }
     validateCurrentStep();
-  }, [formValues.serviceType, formValues.specificType, formValues.serviceAddress, formValues.bedrooms, formValues.bathrooms, formValues.squareFootage, validateCurrentStep]);
+  }, [formValues.serviceType, formValues.specificType, formValues.serviceAddress, 
+    formValues.bedrooms, formValues.bathrooms, formValues.squareFootage, 
+    validateCurrentStep]);
 
   // Calculate price based on form values
   const calculatePrice = () => {
@@ -102,6 +107,15 @@ export default function NewOrderPage() {
       }
     }
 
+    // Add prices for selected add-ons
+    if (formValues.addOns && formValues.addOns.length > 0) {
+      formValues.addOns.forEach(addonId => {
+        const addon = addOnOptions.find(a => a.id === addonId);
+        if (addon) {
+          basePrice += addon.price;
+        }
+      });
+    }
     return basePrice;
   };
 
@@ -110,7 +124,7 @@ export default function NewOrderPage() {
   // Navigation functions
   const goToNextStep = async () => {
     const isValid = await validateCurrentStep();
-    
+
     if (isValid && currStep < 7) {
       setCurrStep(prev => prev + 1);
     }
@@ -134,6 +148,8 @@ export default function NewOrderPage() {
         return <ServiceTypeStep />;
       case 1:
         return <PropertyDetailsStep />;
+      case 2:
+        return <AddOnsStep />;
       default:
         return <ServiceTypeStep />;
     }
@@ -147,9 +163,9 @@ export default function NewOrderPage() {
       </Link>
 
       <div className="mt-8 space-y-8">
-        <h1 className="text-heading-2.5">Book Your Cleaning Service</h1>
+        <h1 className="text-heading-3 lg:text-heading-2.5 text-center lg:text-start">Book Your Cleaning Service</h1>
 
-        <StepsViewer currStep={currStep} />
+        <StepsViewer currStep={currStep} setCurrStep={setCurrStep} />
 
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-8 grid lg:grid-cols-3 gap-x-8 items-start">
@@ -164,6 +180,7 @@ export default function NewOrderPage() {
                 <Button
                   type="button"
                   size="xs"
+                  variant="default-outline"
                   disabled={currStep <= 0}
                   onClick={goToPreviousStep}
                   className="disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25"
@@ -175,9 +192,8 @@ export default function NewOrderPage() {
                   size="xs"
                   disabled={currStep >= 7}
                   onClick={goToNextStep}
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
-                    currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
-                  }`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
+                    }`}
                 >
                   Next
                 </Button>
@@ -186,34 +202,52 @@ export default function NewOrderPage() {
 
             <div className='lg:bg-white rounded-2xl lg:shadow-custom-light p-4 space-y-8'>
               <h4 className="text-heading-5">Booking Summary</h4>
-              <p className="text-caption flex justify-between">
-                Service Type:
-                <span>{(formValues.serviceType ? formValues.serviceType[0].toUpperCase() + formValues.serviceType.slice(1) : null) || "Not selected"}</span>
-              </p>
-              {formValues.specificType &&
+
+              <div className="space-y-4 text-caption">
                 <p className="text-caption flex justify-between">
-                  Specific Type:
-                  <span>{(formValues.specificType ? formValues.specificType[0].toUpperCase() + formValues.specificType.slice(1) : null) || "Not selected"}</span>
+                  Service Type:
+                  <span>{(formValues.serviceType ? formValues.serviceType[0].toUpperCase() + formValues.serviceType.slice(1) : null) || "Not selected"}</span>
                 </p>
-              }
-              {formValues.bedrooms &&
-                <p className="text-caption flex justify-between">
-                  Bedrooms:
-                  <span>{formValues.bedrooms === "4+" ? "4+" : `${formValues.bedrooms}`}</span>
-                </p>
-              }
-              {formValues.bathrooms &&
-                <p className="text-caption flex justify-between">
-                  Bathrooms:
-                  <span>{formValues.bathrooms === "4+" ? "4+" : `${formValues.bathrooms}`}</span>
-                </p>
-              }
-              {formValues.squareFootage &&
-                <p className="text-caption flex justify-between">
-                  Square Footage:
-                  <span>{squareFootageOptions.find(opt => opt.value === formValues.squareFootage)?.label || formValues.squareFootage}</span>
-                </p>
-              }
+                {formValues.specificType &&
+                  <p className="text-caption flex justify-between">
+                    Specific Type:
+                    <span>{(formValues.specificType ? formValues.specificType[0].toUpperCase() + formValues.specificType.slice(1) : null) || "Not selected"}</span>
+                  </p>
+                }
+                {formValues.bedrooms &&
+                  <p className="text-caption flex justify-between">
+                    Bedrooms:
+                    <span>{formValues.bedrooms === "4+" ? "4+" : `${formValues.bedrooms}`}</span>
+                  </p>
+                }
+                {formValues.bathrooms &&
+                  <p className="text-caption flex justify-between">
+                    Bathrooms:
+                    <span>{formValues.bathrooms === "4+" ? "4+" : `${formValues.bathrooms}`}</span>
+                  </p>
+                }
+                {formValues.squareFootage &&
+                  <p className="text-caption flex justify-between">
+                    Square Footage:
+                    <span>{squareFootageOptions.find(opt => opt.value === formValues.squareFootage)?.label || formValues.squareFootage}</span>
+                  </p>
+                }
+                {formValues.addOns && formValues.addOns.length > 0 && (
+                  <div className="text-caption space-y-2">
+                    <p className="mb-2">Add-Ons:</p>
+                    {formValues.addOns.map((addonId) => {
+                      const addon = addOnOptions.find(a => a.id === addonId);
+                      return (
+                        <p key={addonId} className="flex justify-between pl-4">
+                          {addon?.name}
+                          <span>${addon?.price}</span>
+                        </p>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
               <hr className="text-surface-500/10" />
               <p className="text-caption flex justify-between">
                 Subtotal: <span>${estimatedPrice.toString().padStart(2, "0")}</span>
@@ -243,6 +277,7 @@ export default function NewOrderPage() {
                 <Button
                   type="button"
                   size="xs"
+                  variant="default-outline"
                   disabled={currStep <= 0}
                   onClick={goToPreviousStep}
                   className="disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25"
@@ -254,9 +289,8 @@ export default function NewOrderPage() {
                   size="xs"
                   disabled={currStep >= 7}
                   onClick={goToNextStep}
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
-                    currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
-                  }`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
+                    }`}
                 >
                   Next
                 </Button>

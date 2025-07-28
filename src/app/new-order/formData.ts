@@ -73,3 +73,15 @@ export const squareFootageOptions = [
   { value: "2000", label: "1500-2000 sq ft" },
   { value: "2500+", label: "2500+ sq ft" },
 ];
+
+
+// Step 3
+
+export const addOnOptions = [
+  { id: 'inside-oven', name: 'Inside Oven', price: 25 },
+  { id: 'inside-refrigerator', name: 'Inside Refrigerator', price: 10 },
+  { id: 'basement-cleaning', name: 'Basement Cleaning', price: 20 },
+  { id: 'interior-windows', name: 'Interior Windows', price: 15 },
+  { id: 'under-carpet', name: 'Under Carpet', price: 20 },
+  { id: 'others', name: 'Others', price: 20 }
+]
