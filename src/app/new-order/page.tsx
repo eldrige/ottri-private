@@ -3,7 +3,7 @@ import CheckCircleBroken from "@/components/icons/CheckCircleBroken";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import StepsViewer from "./_components/StepsViewer";
 
@@ -11,7 +11,8 @@ import StepsViewer from "./_components/StepsViewer";
 import ServiceTypeStep from "./_components/steps/ServiceTypeStep";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { orderFormSchema, OrderFormValues } from "./schema";
-import { specificTypes } from "./formData";
+import { specificTypes, squareFootageOptions } from "./formData";
+import PropertyDetailsStep from "./_components/steps/PropertyDetailsStep";
 
 export default function NewOrderPage() {
   const [currStep, setCurrStep] = useState(0);
@@ -22,13 +23,59 @@ export default function NewOrderPage() {
     defaultValues: {
       serviceType: "",
       specificType: "",
+      serviceAddress: "",
+      useSameForBilling: false,
+      bedrooms: "",
+      bathrooms: "",
+      squareFootage: "",
     }
   });
 
-  const { watch, handleSubmit } = methods;
+  const { watch, handleSubmit, trigger, formState: { errors } } = methods;
+  const initRender = useRef(true)
 
   // Watch form values for summary display
   const formValues = watch();
+
+  // Check if current step has validation errors
+  const currentStepHasErrors = () => {
+    switch (currStep) {
+      case 0:
+        return !!errors.serviceType || !!errors.specificType;
+      case 1:
+        return !!errors.serviceAddress || !!errors.bedrooms || !!errors.bathrooms || !!errors.squareFootage;
+      default:
+        return false;
+    }
+  };
+
+  // Validate the current step and update stepValidation state
+  const validateCurrentStep = useCallback(async () => {
+    let isValid = false;
+    
+    switch (currStep) {
+      case 0:
+        isValid = await trigger(['serviceType', 'specificType']);
+        break;
+      case 1:
+        isValid = await trigger(['serviceAddress', 'bedrooms', 'bathrooms', 'squareFootage']);
+        break;
+      // Add more cases for additional steps
+      default:
+        isValid = true;
+    }
+    
+    return isValid;
+  }, [trigger, currStep]);
+
+  // Run validation when form values change
+  useEffect(() => {
+    if (initRender) {
+      initRender.current = false
+      return
+    }
+    validateCurrentStep();
+  }, [formValues.serviceType, formValues.specificType, formValues.serviceAddress, formValues.bedrooms, formValues.bathrooms, formValues.squareFootage, validateCurrentStep]);
 
   // Calculate price based on form values
   const calculatePrice = () => {
@@ -38,7 +85,22 @@ export default function NewOrderPage() {
     // Set base price based on specific type
     basePrice += specificTypes.find(s => s.id === specificType)?.priceFrom || 0;
 
-    // You can add additional logic based on service type or other factors
+    // Add price adjustments based on property details
+    if (formValues.bedrooms) {
+      // Add $20 per bedroom after the first
+      const bedroomCount = formValues.bedrooms === "4+" ? 4 : parseInt(formValues.bedrooms);
+      if (bedroomCount > 1) {
+        basePrice += (bedroomCount - 1) * 20;
+      }
+    }
+
+    if (formValues.bathrooms) {
+      // Add $25 per bathroom after the first
+      const bathroomCount = formValues.bathrooms === "4+" ? 4 : parseInt(formValues.bathrooms);
+      if (bathroomCount > 1) {
+        basePrice += (bathroomCount - 1) * 25;
+      }
+    }
 
     return basePrice;
   };
@@ -46,8 +108,10 @@ export default function NewOrderPage() {
   const estimatedPrice = calculatePrice();
 
   // Navigation functions
-  const goToNextStep = () => {
-    if (currStep < 7) {
+  const goToNextStep = async () => {
+    const isValid = await validateCurrentStep();
+    
+    if (isValid && currStep < 7) {
       setCurrStep(prev => prev + 1);
     }
   };
@@ -61,7 +125,6 @@ export default function NewOrderPage() {
   // Form submission
   const onSubmit = (data: OrderFormValues) => {
     console.log("Form submitted:", data);
-    // Handle form submission, e.g. API call
   };
 
   // Render the current step
@@ -69,7 +132,8 @@ export default function NewOrderPage() {
     switch (currStep) {
       case 0:
         return <ServiceTypeStep />;
-      // Add cases for other steps
+      case 1:
+        return <PropertyDetailsStep />;
       default:
         return <ServiceTypeStep />;
     }
@@ -111,7 +175,9 @@ export default function NewOrderPage() {
                   size="xs"
                   disabled={currStep >= 7}
                   onClick={goToNextStep}
-                  className="disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25"
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
+                    currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
+                  }`}
                 >
                   Next
                 </Button>
@@ -128,6 +194,24 @@ export default function NewOrderPage() {
                 <p className="text-caption flex justify-between">
                   Specific Type:
                   <span>{(formValues.specificType ? formValues.specificType[0].toUpperCase() + formValues.specificType.slice(1) : null) || "Not selected"}</span>
+                </p>
+              }
+              {formValues.bedrooms &&
+                <p className="text-caption flex justify-between">
+                  Bedrooms:
+                  <span>{formValues.bedrooms === "4+" ? "4+" : `${formValues.bedrooms}`}</span>
+                </p>
+              }
+              {formValues.bathrooms &&
+                <p className="text-caption flex justify-between">
+                  Bathrooms:
+                  <span>{formValues.bathrooms === "4+" ? "4+" : `${formValues.bathrooms}`}</span>
+                </p>
+              }
+              {formValues.squareFootage &&
+                <p className="text-caption flex justify-between">
+                  Square Footage:
+                  <span>{squareFootageOptions.find(opt => opt.value === formValues.squareFootage)?.label || formValues.squareFootage}</span>
                 </p>
               }
               <hr className="text-surface-500/10" />
@@ -170,7 +254,9 @@ export default function NewOrderPage() {
                   size="xs"
                   disabled={currStep >= 7}
                   onClick={goToNextStep}
-                  className="disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25"
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
+                    currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
+                  }`}
                 >
                   Next
                 </Button>

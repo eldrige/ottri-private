@@ -2,7 +2,6 @@
 import { useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
-
 import { serviceTypes, specificTypes } from "../../formData";
 
 export default function ServiceTypeStep() {
@@ -24,7 +23,9 @@ export default function ServiceTypeStep() {
           <button
             key={service.id}
             type="button"
-            onClick={() => setValue("serviceType", service.id)}
+            onClick={() => {
+              setValue("serviceType", service.id, { shouldValidate: true });
+            }}
             className={cn(
               "flex items-center gap-4  px-4 border rounded-lg cursor-pointer transition-all",
               selectedService ? "py-6" : "py-3",
@@ -62,7 +63,7 @@ export default function ServiceTypeStep() {
             {specificTypes.map((type) => (
               <button
                 type="button"
-                onClick={() => setValue("specificType", type.id)}
+                onClick={() => setValue("specificType", type.id, { shouldValidate: true })}
                 className={cn(
                   "flex items-center gap-4 py-3 px-4 border rounded-lg cursor-pointer transition-colors",
                   selectedSpecificType === type.id
