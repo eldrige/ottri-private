@@ -6,7 +6,7 @@ import DashboardSection4 from "./_components/DashboardSection4";
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-6 mx-6">
+    <div className="flex flex-col gap-6 lg:mx-6">
       <DashboardSection1 />
       <DashboardSection2 />
       <DashboardSection3 />
