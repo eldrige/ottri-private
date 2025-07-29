@@ -68,6 +68,10 @@
   --font-nunito-sans: var(--font-nunito-sans);  
 }
 
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

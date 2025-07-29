@@ -17,8 +17,7 @@ export default function PetInfoStep() {
   
   return (
     <>
-      <h3 className="text-heading-4">Pet Information</h3>
-      <p className="text-surface-500 mb-4">Let us know if you have pets so our cleaners can be prepared.</p>
+      <h3 className="text-heading-4">Do you have Pets?</h3>
 
       <div className='flex flex-col gap-2 text-caption'>
         {petTypeOptions.map((option) => (

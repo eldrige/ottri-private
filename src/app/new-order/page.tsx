@@ -17,6 +17,7 @@ import AddOnsStep from "./_components/steps/AddOnsStep";
 import PetInfoStep from "./_components/steps/PetInfoStep";
 import AccessStep from "./_components/steps/AccessStep";
 import ScheduleStep from "./_components/steps/ScheduleStep";
+import TipStep from "./_components/steps/TipStep";
 
 export default function NewOrderPage() {
   const [currStep, setCurrStep] = useState(5);
@@ -40,6 +41,8 @@ export default function NewOrderPage() {
       accessInstructions: "",
       preferredDate: undefined,
       timeWindow: "",
+      tipAmount: 0,
+      tipPercentage: 0,
     }
   });
 
@@ -140,8 +143,17 @@ export default function NewOrderPage() {
     }
     return basePrice;
   };
+  
+  // Calculate the total with tip included
+  const calculateTotal = () => {
+    const basePrice = calculatePrice();
+    const tipAmount = formValues.tipAmount || 0;
+    
+    return basePrice + tipAmount;
+  };
 
   const estimatedPrice = calculatePrice();
+  const totalWithTip = calculateTotal();
 
   // Navigation functions
   const goToNextStep = async () => {
@@ -178,6 +190,8 @@ export default function NewOrderPage() {
         return <AccessStep />;
       case 5:
         return <ScheduleStep />;
+      case 6:
+        return <TipStep totalPrice={estimatedPrice} />;
       default:
         return <ServiceTypeStep />;
     }
@@ -190,14 +204,14 @@ export default function NewOrderPage() {
         Back to all services
       </Link>
 
-      <div className="mt-8 space-y-8">
+      <div className="mt-8 space-y-8 w-full">
         <h1 className="text-heading-3 lg:text-heading-2.5 text-center lg:text-start">Book Your Cleaning Service</h1>
 
         <StepsViewer currStep={currStep} setCurrStep={setCurrStep} />
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-8 grid lg:grid-cols-3 gap-x-8 items-start">
-            <div className="lg:col-span-2 lg:bg-white rounded-2xl lg:shadow-custom-light space-y-6 lg:px-8 py-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-x-8 items-start w-full">
+            <div className="w-full max-w-full lg:col-span-2 lg:bg-white rounded-2xl lg:shadow-custom-light space-y-6 lg:px-8 py-8">
               {/* Current step content */}
               {renderCurrentStep()}
 
@@ -287,6 +301,12 @@ export default function NewOrderPage() {
                     })}
                   </div>
                 )}
+                {/* {formValues.tipAmount !== undefined && formValues.tipAmount > 0 && (
+                  <p className="text-caption flex justify-between">
+                    Tip:
+                    <span>${formValues.tipAmount.toFixed(2)}</span>
+                  </p>
+                )} */}
               </div>
 
               <hr className="text-surface-500/10" />
@@ -295,7 +315,7 @@ export default function NewOrderPage() {
               </p>
               <hr className="text-surface-500/10" />
               <p className="text-caption font-medium flex justify-between">
-                Total: <span className="text-primary-700">${estimatedPrice.toString().padStart(2, "0")}</span>
+                Total: <span className="text-primary-700">${totalWithTip.toFixed(2)}</span>
               </p>
 
               <ul className="p-4 space-y-3">

@@ -16,6 +16,8 @@ export const orderFormSchema = z.object({
   accessInstructions: z.string().optional(),
   preferredDate: z.date().optional(),
   timeWindow: z.string().optional(),
+  tipAmount: z.number().min(0, "Tip amount cannot be negative").optional(),
+  tipPercentage: z.number().min(0).optional(),
 });
 
 export type OrderFormValues = z.infer<typeof orderFormSchema>;
