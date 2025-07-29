@@ -11,14 +11,15 @@ import StepsViewer from "./_components/StepsViewer";
 import ServiceTypeStep from "./_components/steps/ServiceTypeStep";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { orderFormSchema, OrderFormValues } from "./schema";
-import { addOnOptions, specificTypes, squareFootageOptions } from "./formData";
+import { addOnOptions, specificTypes } from "./formData";
 import PropertyDetailsStep from "./_components/steps/PropertyDetailsStep";
 import AddOnsStep from "./_components/steps/AddOnsStep";
 import PetInfoStep from "./_components/steps/PetInfoStep";
 import AccessStep from "./_components/steps/AccessStep";
+import ScheduleStep from "./_components/steps/ScheduleStep";
 
 export default function NewOrderPage() {
-  const [currStep, setCurrStep] = useState(3);
+  const [currStep, setCurrStep] = useState(5);
 
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
@@ -36,7 +37,9 @@ export default function NewOrderPage() {
       petType: "no-pets",
       petInstructions: "",
       accessMethod: "home",
-      accessInstructions: ""
+      accessInstructions: "",
+      preferredDate: undefined,
+      timeWindow: "",
     }
   });
 
@@ -58,6 +61,12 @@ export default function NewOrderPage() {
         return false;
       case 3:
         // Pet info step has no required fields
+        return false;
+      case 4:
+        // Access step has no required fields by default
+        return false;
+      case 5:
+        // Schedule step - no required fields by default
         return false;
       // Add more cases for additional steps
       default:
@@ -167,6 +176,8 @@ export default function NewOrderPage() {
         return <PetInfoStep />;
       case 4:
         return <AccessStep />;
+      case 5:
+        return <ScheduleStep />;
       default:
         return <ServiceTypeStep />;
     }
@@ -256,12 +267,12 @@ export default function NewOrderPage() {
                     <span>{formValues.bathrooms === "4+" ? "4+" : `${formValues.bathrooms}`}</span>
                   </p>
                 }
-                {formValues.squareFootage &&
+                {/* {formValues.squareFootage &&
                   <p className="text-caption flex justify-between">
                     Square Footage:
                     <span>{squareFootageOptions.find(opt => opt.value === formValues.squareFootage)?.label || formValues.squareFootage}</span>
                   </p>
-                }
+                } */}
                 {formValues.addOns && formValues.addOns.length > 0 && (
                   <div className="text-caption space-y-2">
                     <p className="mb-2">Add-Ons:</p>

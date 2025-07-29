@@ -14,6 +14,8 @@ export const orderFormSchema = z.object({
   petInstructions: z.string().optional(),
   accessMethod: z.string(),
   accessInstructions: z.string().optional(),
+  preferredDate: z.date().optional(),
+  timeWindow: z.string().optional(),
 });
 
 export type OrderFormValues = z.infer<typeof orderFormSchema>;

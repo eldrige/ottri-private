@@ -55,7 +55,7 @@ const Select: React.FC<SelectProps> = ({
   return (
     <div className={`flex flex-col ${className}`} ref={selectRef}>
       {label && (
-        <div className="text-gray-800 text-lg font-medium mb-3">{label}</div>
+        <div className="text-gray-800 text-sm font-normal mb-2">{label}</div>
       )}
       
       <div className="relative">

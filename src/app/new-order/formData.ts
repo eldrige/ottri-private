@@ -94,9 +94,19 @@ export const petTypeOptions = [
   { id: 'both', name: 'Both dogs and cats' },
 ];
 
+// Step 5 - Access
 export const accessOptions = [
   { id: 'home', name: "I'll be home" },
   { id: 'hidden-key', name: 'Key under mat/hidden' },
   { id: 'door-code', name: 'Door code' },
   { id: 'other', name: 'Other' },
+];
+
+// Step 6 - Schedule
+export const scheduleOptions = [
+  { value: '8-10', label: "8:00 AM - 10:00 AM" },
+  { value: '10-12', label: "10:00 AM - 12:00 PM" },
+  { value: '12-14', label: "12:00 PM - 2:00 PM" },
+  { value: '14-16', label: "2:00 PM - 4:00 PM" },
+  { value: '16-18', label: "4:00 PM - 6:00 PM" },
 ];
