@@ -27,8 +27,7 @@ export default function ServiceTypeStep() {
               setValue("serviceType", service.id, { shouldValidate: true });
             }}
             className={cn(
-              "flex items-center gap-4  px-4 border rounded-lg cursor-pointer transition-all",
-              selectedService ? "py-6" : "py-3",
+              "flex items-center gap-4  px-4 border rounded-lg cursor-pointer transition-all py-3",
               selectedService === service.id
                 ? "border-primary-700 bg-primary-700/5"
                 : "border-black/10 hover:border-primary-700/50",

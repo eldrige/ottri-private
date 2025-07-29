@@ -93,3 +93,10 @@ export const petTypeOptions = [
   { id: 'cats', name: 'Cat(s)' },
   { id: 'both', name: 'Both dogs and cats' },
 ];
+
+export const accessOptions = [
+  { id: 'home', name: "I'll be home" },
+  { id: 'hidden-key', name: 'Key under mat/hidden' },
+  { id: 'door-code', name: 'Door code' },
+  { id: 'other', name: 'Other' },
+];

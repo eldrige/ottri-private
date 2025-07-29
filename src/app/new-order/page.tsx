@@ -15,6 +15,7 @@ import { addOnOptions, specificTypes, squareFootageOptions } from "./formData";
 import PropertyDetailsStep from "./_components/steps/PropertyDetailsStep";
 import AddOnsStep from "./_components/steps/AddOnsStep";
 import PetInfoStep from "./_components/steps/PetInfoStep";
+import AccessStep from "./_components/steps/AccessStep";
 
 export default function NewOrderPage() {
   const [currStep, setCurrStep] = useState(3);
@@ -34,6 +35,8 @@ export default function NewOrderPage() {
       otherService: "",
       petType: "no-pets",
       petInstructions: "",
+      accessMethod: "home",
+      accessInstructions: ""
     }
   });
 
@@ -88,8 +91,8 @@ export default function NewOrderPage() {
       return;
     }
     validateCurrentStep();
-  }, [formValues.serviceType, formValues.specificType, formValues.serviceAddress, 
-    formValues.bedrooms, formValues.bathrooms, formValues.squareFootage, 
+  }, [formValues.serviceType, formValues.specificType, formValues.serviceAddress,
+  formValues.bedrooms, formValues.bathrooms, formValues.squareFootage,
     validateCurrentStep]);
 
   // Calculate price based on form values
@@ -162,6 +165,8 @@ export default function NewOrderPage() {
         return <AddOnsStep />;
       case 3:
         return <PetInfoStep />;
+      case 4:
+        return <AccessStep />;
       default:
         return <ServiceTypeStep />;
     }
@@ -199,16 +204,29 @@ export default function NewOrderPage() {
                 >
                   Previous
                 </Button>
-                <Button
-                  type="button"
-                  size="xs"
-                  disabled={currStep >= 7}
-                  onClick={goToNextStep}
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
-                    }`}
-                >
-                  Next
-                </Button>
+
+                {currStep !== 7 ? (
+                  <Button
+                    type="button"
+                    size="xs"
+                    disabled={currStep >= 7}
+                    onClick={goToNextStep}
+                    className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
+                      }`}
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  <Button
+                    type="button" // Changed from "submit" to "button"
+                    size="xs"
+                    onClick={handleSubmit(onSubmit)} // Explicitly handle submission
+                    className={`${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
+                      }`}
+                  >
+                    Complete Booking
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -296,16 +314,28 @@ export default function NewOrderPage() {
                 >
                   Previous
                 </Button>
-                <Button
-                  type="button"
-                  size="xs"
-                  disabled={currStep >= 7}
-                  onClick={goToNextStep}
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
-                    }`}
-                >
-                  Next
-                </Button>
+                {currStep !== 7 ? (
+                  <Button
+                    type="button"
+                    size="xs"
+                    disabled={currStep >= 7}
+                    onClick={goToNextStep}
+                    className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
+                      }`}
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  <Button
+                    type="button" // Changed from "submit" to "button"
+                    size="xs"
+                    onClick={handleSubmit(onSubmit)} // Explicitly handle submission
+                    className={`${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
+                      }`}
+                  >
+                    Complete Booking
+                  </Button>
+                )}
               </div>
             </div>
           </form>
