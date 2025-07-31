@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CheckCircleBroken from "@/components/icons/CheckCircleBroken";
 import { Button } from "@/components/ui/Button";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -16,6 +16,7 @@ import PetInfoStep from "./steps/PetInfoStep";
 import AccessStep from "./steps/AccessStep";
 import ScheduleStep from "./steps/ScheduleStep";
 import TipStep from "./steps/TipStep";
+import PaymentStep from "./steps/PaymentStep";
 
 export default function ClientForm() {
   const [currStep, setCurrStep] = useState(5);
@@ -169,8 +170,36 @@ export default function ClientForm() {
   };
 
   // Form submission
-  const onSubmit = (data: OrderFormValues) => {
-    console.log("Form submitted:", data);
+  const onSubmit = async (data: OrderFormValues) => {
+    try {
+      console.log("Form submitted:", data);
+
+      // At this point, Stripe has already processed the payment in the PaymentStep component
+
+      // Submit order data to your backend
+      const response = await fetch('/api/submit-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit order');
+      }
+
+      const result = await response.json();
+
+      // Handle successful order
+      console.log("Order created:", result);
+
+      // Redirect to confirmation page
+      // router.push('/order-confirmation');
+    } catch (error) {
+      console.error("Order submission error:", error);
+      // Handle error
+    }
   };
 
   // Render the current step
@@ -190,6 +219,8 @@ export default function ClientForm() {
         return <ScheduleStep />;
       case 6:
         return <TipStep totalPrice={estimatedPrice} />;
+      case 7:
+        return <PaymentStep />;
       default:
         return <ServiceTypeStep />;
     }

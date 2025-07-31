@@ -10,7 +10,8 @@ export default function NewOrderPage() {
         <ArrowLeft />
         Back to all services
       </Link>
-
+{/* TODO: Change route to new-booking or booking/new */}
+{/* TODO: Make FAQ close when other open */}
       <ClientForm />
     </main>
   );
