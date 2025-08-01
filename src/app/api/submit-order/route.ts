@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { OrderFormValues } from '@/app/new-order/schema';
+import { OrderFormValues } from '@/app/bookings/new/schema';
 import Stripe from 'stripe';
 
 // Initialize Stripe with your SECRET key.

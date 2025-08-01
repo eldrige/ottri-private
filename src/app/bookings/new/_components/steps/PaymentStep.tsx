@@ -6,7 +6,7 @@ import paypalLogo from "@/assets/order-paypal-logo.png";
 import googleLogo from "@/assets/order-google-logo.png";
 import appleLogo from "@/assets/order-apple-logo.png";
 import { useFormContext } from 'react-hook-form';
-import { OrderFormValues } from '@/app/new-order/schema';
+import { OrderFormValues } from '@/app/bookings/new/schema';
 import { loadStripe } from '@stripe/stripe-js';
 import { CardElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js';
 
