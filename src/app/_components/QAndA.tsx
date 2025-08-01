@@ -1,12 +1,11 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Minus, Plus } from "lucide-react";
-import { useState } from "react";
 
-export default function QAndA({ question, answer }: { question: string, answer: string; }) {
-  const [show, setShow] = useState(false);
+export default function QAndA({ question, answer, show, onClick }: { question: string, answer: string; show: boolean; onClick: () => void }) {
+  // const [show, setShow] = useState(false);
   return (
-    <div tabIndex={0} className={cn('flex justify-between items-start p-3 rounded-lg max-w-3xl mx-auto border transition duration-200 border-surface-500/10', !show ? "bg-white text-secondary-700" : "bg-secondary-700 text-white")} onClick={() => setShow(!show)}>
+    <div tabIndex={0} onClick={onClick} className={cn('flex justify-between items-start p-3 rounded-lg max-w-3xl mx-auto border transition duration-200 border-surface-500/10', !show ? "bg-white text-secondary-700" : "bg-secondary-700 text-white")}>
       <div className='' >
         <p className="font-medium">{question}</p>
         <div className={cn(
