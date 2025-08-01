@@ -1,8 +1,7 @@
 "use client";
-
 import { Input } from '@/components/ui/Input';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import paypalLogo from "@/assets/order-paypal-logo.png";
 import googleLogo from "@/assets/order-google-logo.png";
 import appleLogo from "@/assets/order-apple-logo.png";
@@ -14,73 +13,62 @@ import { CardElement, Elements, useElements, useStripe } from '@stripe/react-str
 // Load Stripe outside of component to avoid recreating on re-renders
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
+interface PaymentStepProps {
+  processPaymentRef: React.MutableRefObject<() => Promise<boolean | string>>;
+}
+
 // This is the inner component that will be wrapped with Elements
-function CheckoutForm({ totalAmount }: { totalAmount: number }) {
+function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
   const stripe = useStripe();
   const elements = useElements();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { register, formState: { errors } } = useFormContext<OrderFormValues>();
+  const { register } = useFormContext<OrderFormValues>();
   const [paymentError, setPaymentError] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [processing, setProcessing] = useState(false);
-  const [succeeded, setSucceeded] = useState(false);
 
-  // Handle form submission
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handlePaymentSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    
-    if (!stripe || !elements) {
-      // Stripe.js has not loaded yet
-      return;
-    }
-    
-    setProcessing(true);
-    
-    try {
-      // Create a payment method using the card element
-      const cardElement = elements.getElement(CardElement);
-      if (!cardElement) return;
-      
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-      });
-      
-      if (error) {
-        setPaymentError(error.message || 'An error occurred with your payment');
+
+  useEffect(() => {
+    processPaymentRef.current = async () => {
+      if (!stripe || !elements) {
+        setPaymentError('Stripe has not initialized. Please try again.');
+        return false;
+      }
+
+      setProcessing(true);
+      setPaymentError(null);
+
+      try {
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) {
+          setPaymentError('Card information not found.');
+          setProcessing(false);
+          return false;
+        }
+
+        // Create a payment method
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+        });
+
+        if (error) {
+          setPaymentError(error.message || 'An error occurred processing your card.');
+          setProcessing(false);
+          return false;
+        }
+
+        // Add the payment method ID to the form data
+        // We're not calling the API here, just saving the ID for the parent component
         setProcessing(false);
-        return;
+        return paymentMethod.id
+      } catch (err) {
+        console.error('Payment processing error:', err);
+        setPaymentError('An unexpected error occurred. Please try again.');
+        setProcessing(false);
+        return false;
       }
-      
-      // Send payment method ID to your server
-      const response = await fetch('/api/create-payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          paymentMethodId: paymentMethod.id,
-          amount: Math.round(totalAmount * 100), // Convert to cents for Stripe
-        }),
-      });
-      
-      const paymentResult = await response.json();
-      
-      if (paymentResult.error) {
-        setPaymentError(paymentResult.error.message);
-      } else {
-        setPaymentError(null);
-        setSucceeded(true);
-        // Continue with form submission or show confirmation
-      }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      setPaymentError('An unexpected error occurred');
-    }
-    
-    setProcessing(false);
-  };
+    };
+  }, [stripe, elements, processPaymentRef]);
+
 
   return (
     <>
@@ -111,15 +99,16 @@ function CheckoutForm({ totalAmount }: { totalAmount: number }) {
           />
         </div>
       </div>
-      
+
       <div>
         <h4 className='text-subtitle font-medium text-primary-700'>Payment Information</h4>
         <div className='grid grid-cols-1 gap-4 mt-4'>
           {/* Replace credit card fields with Stripe Card Element */}
           <div className="rounded bg-white">
             <label className="block mb-3 text-sm">Card Details</label>
-            <CardElement 
+            <CardElement
               options={{
+                hidePostalCode: true,
                 style: {
                   base: {
                     fontSize: '16px',
@@ -166,8 +155,8 @@ function CheckoutForm({ totalAmount }: { totalAmount: number }) {
         <div className="text-red-500 mt-2">{paymentError}</div>
       )}
 
-      {succeeded && (
-        <div className="text-green-500 mt-2">Payment successful!</div>
+      {processing && (
+        <div className="text-blue-500 mt-2">Processing payment...</div>
       )}
 
       <div className='flex items-center justify-center gap-8 h-7 *:h-full *:object-contain'>
@@ -185,13 +174,12 @@ function CheckoutForm({ totalAmount }: { totalAmount: number }) {
 }
 
 // Wrapper component that provides Stripe Elements
-export default function PaymentStep() {
-  const { watch } = useFormContext<OrderFormValues>();
-  const totalAmount = watch('totalAmount') || 0;
-
+export default function PaymentStep(props: PaymentStepProps) {
+  // const { watch } = useFormContext<OrderFormValues>();
+  // const totalAmount = watch('totalAmount') || 0;
   return (
     <Elements stripe={stripePromise}>
-      <CheckoutForm totalAmount={totalAmount} />
+      <CheckoutForm {...props} />
     </Elements>
   );
 }

@@ -19,7 +19,8 @@ import TipStep from "./steps/TipStep";
 import PaymentStep from "./steps/PaymentStep";
 
 export default function ClientForm() {
-  const [currStep, setCurrStep] = useState(5);
+  const [currStep, setCurrStep] = useState(7);
+  const [processing, setProcessing] = useState(false)
 
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
@@ -42,10 +43,13 @@ export default function ClientForm() {
       timeWindow: "",
       tipAmount: 0,
       tipPercentage: 0,
+      paymentMethodId: ""
     }
   });
 
   const { watch, handleSubmit, trigger, formState: { errors } } = methods;
+  const processPaymentRef = useRef(() => Promise.resolve(""));
+
   const initRender = useRef(true);
 
   // Watch form values for summary display
@@ -171,35 +175,44 @@ export default function ClientForm() {
 
   // Form submission
   const onSubmit = async (data: OrderFormValues) => {
+    setProcessing(true)
+    // For the payment step, we need to process the payment first
+    let paymentMethodId = formValues.paymentMethodId || ""
+    if (currStep === 7 && !paymentMethodId) { // Assuming payment is the last step (index 7)
+      paymentMethodId = await processPaymentRef.current();
+
+      if (!paymentMethodId) {
+        // Payment failed, don't proceed
+        return;
+      }
+
+      // If payment succeeded, continue with form submission
+    }
+
+    // Process the final form submission
     try {
-      console.log("Form submitted:", data);
-
-      // At this point, Stripe has already processed the payment in the PaymentStep component
-
-      // Submit order data to your backend
       const response = await fetch('/api/submit-order', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({...data, paymentMethodId}),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit order');
-      }
 
       const result = await response.json();
 
-      // Handle successful order
-      console.log("Order created:", result);
-
-      // Redirect to confirmation page
-      // router.push('/order-confirmation');
+      if (result.success) {
+        // Handle successful submission
+        // e.g., redirect to confirmation page
+        window.location.href = `/order-confirmation?orderId=${result.orderId}`;
+      } else {
+        // Handle error
+        alert(result.error?.message || 'An error occurred');
+      }
     } catch (error) {
-      console.error("Order submission error:", error);
-      // Handle error
+      console.error('Error submitting form:', error);
+      alert('Failed to submit form. Please try again.');
     }
+
+    setProcessing(false)
   };
 
   // Render the current step
@@ -220,7 +233,7 @@ export default function ClientForm() {
       case 6:
         return <TipStep totalPrice={estimatedPrice} />;
       case 7:
-        return <PaymentStep />;
+        return <PaymentStep processPaymentRef={processPaymentRef} />;
       default:
         return <ServiceTypeStep />;
     }
@@ -266,11 +279,11 @@ export default function ClientForm() {
                 </Button>
               ) : (
                 <Button
+                  disabled={processing}
                   type="button" // Changed from "submit" to "button"
                   size="xs"
                   onClick={handleSubmit(onSubmit)} // Explicitly handle submission
-                  className={`${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
-                    }`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""}`}
                 >
                   Complete Booking
                 </Button>
@@ -381,11 +394,11 @@ export default function ClientForm() {
                 </Button>
               ) : (
                 <Button
+                  disabled={processing}
                   type="button" // Changed from "submit" to "button"
                   size="xs"
                   onClick={handleSubmit(onSubmit)} // Explicitly handle submission
-                  className={`${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
-                    }`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""}`}
                 >
                   Complete Booking
                 </Button>

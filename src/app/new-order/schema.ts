@@ -31,11 +31,7 @@ export const orderFormSchema = z.object({
     city: z.string().min(1, "City is required"),
     zipCode: z.string().min(1, "Zip code is required"),
   }).optional(),
-  // Track payment info and total amount
-  paymentMethod: z.string().optional(),
-  paymentStatus: z.string().optional(),
-  totalAmount: z.number().min(0).optional(),
-
+  paymentMethodId: z.string().optional(),
 });
 
 export type OrderFormValues = z.infer<typeof orderFormSchema>;
