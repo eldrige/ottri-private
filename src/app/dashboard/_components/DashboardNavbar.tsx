@@ -19,7 +19,7 @@ export default function Navbar() {
   const [showMobile, setShowMobile] = useState(false);
   return (
     <>
-      <nav className="lg:hidden fixed px-2 w-full mx-auto top-1.25 z-50">
+      <nav className="md:hidden fixed px-2 w-full mx-auto top-1.25 z-50">
         <div className="flex rounded-2xl px-6 py-2 shadow-lg bg-primary-700  text-white justify-between items-center container mx-auto">
           <button
             onClick={() => setShowMobile((prev) => !prev)}
@@ -109,9 +109,9 @@ function MobileNav({
                 </div>
               </div>
               <div className="h-full flex items-end ">
-                <div className="flex border-t border-secondary-800/25 pt-8 pb-2 gap-2 md:gap-4">
+                <div className="flex border-t border-secondary-800/25 pt-4 pb-2 gap-2 md:gap-4">
                   <Image
-                    className="rounded-full size-12"
+                    className="rounded-full size-10"
                     src={userImage}
                     alt={"user profile"}
                   />
