@@ -15,11 +15,14 @@ interface OrderRequest extends OrderFormValues {
 
 export async function POST(request: Request) {
   try {
-    const { paymentMethodId, ...orderData }: OrderRequest = await request.json();
-    const totalAmount = 100/* Recalculate the total amount on the server for security */
+    const {
+      paymentMethodId,
+      // ...orderData
+    }: OrderRequest = await request.json();
+    const totalAmount = 100;/* Recalculate the total amount on the server for security */
 
     // 1. Process the payment with Stripe
-    const paymentIntent = await stripe.paymentIntents.create({
+    /*const paymentIntent = */ await stripe.paymentIntents.create({
       amount: Math.round(totalAmount * 100), // Amount in cents
       currency: 'usd',
       payment_method: paymentMethodId,
@@ -52,7 +55,7 @@ export async function POST(request: Request) {
       console.error('Error submitting order:', error);
       errorMessage = 'Order submission failed due to a server error.';
     }
-    
+
     return NextResponse.json({
       error: { message: errorMessage }
     }, { status: 400 }); // Use 400 for client-side errors like card
