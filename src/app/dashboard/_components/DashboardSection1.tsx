@@ -13,7 +13,10 @@ export default function DashboardSection1() {
           Here&apos;s what is happening with your cleaning schedule
         </h3>
       </div>
-      <Button className="flex gap-2 px-3 items-center h-fit" size={"xs"}>
+      <Button
+        className="md:flex hidden gap-2 px-3 items-center h-fit"
+        size={"xs"}
+      >
         <PlusIcon />
         Add Booking
       </Button>

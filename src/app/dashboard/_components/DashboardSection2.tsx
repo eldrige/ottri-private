@@ -2,7 +2,8 @@ import React from "react";
 import StatCard from "./StatCard";
 import BroomSparkleIcon from "@/components/icons/BroomSparkleIcon";
 import MoneyIcon from "@/components/icons/MoneyIcon";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 export default function DashboardSection2() {
   return (
@@ -25,6 +26,13 @@ export default function DashboardSection2() {
         content="+24.67 this month"
         Icon={MoneyIcon}
       />
+      <Button
+        className="md:hidden flex justify-center py-2.25 gap-2 px-3 items-center h-fit"
+        size={"xs"}
+      >
+        <PlusIcon />
+        Add Booking
+      </Button>
     </div>
   );
 }
