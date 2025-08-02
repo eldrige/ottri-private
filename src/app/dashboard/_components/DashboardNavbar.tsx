@@ -1,10 +1,6 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import logo from "@/assets/logo.png";
-import { Nav, NavLink } from "@/components/Nav";
-import CallIcon from "@/components/icons/CallIcon";
-import { Button } from "@/components/ui/Button";
 import {
   Calendar,
   CreditCard,
@@ -15,7 +11,6 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import userImage from "@/assets/user-profile-figure.png";
 import Link from "next/link";
 import { SideNavLink } from "./SideNavBar";
@@ -114,7 +109,7 @@ function MobileNav({
                 </div>
               </div>
               <div className="h-full flex items-end ">
-                <div className="flex border-t border-secondary-800/25 pt-8 pb-2 gap-4">
+                <div className="flex border-t border-secondary-800/25 pt-8 pb-2 gap-2 md:gap-4">
                   <Image
                     className="rounded-full size-12"
                     src={userImage}
@@ -124,7 +119,7 @@ function MobileNav({
                     href={"/dashboard/profile"}
                     className="flex cursor-pointer flex-col"
                   >
-                    <h1 className="font-medium text-lg text-black">
+                    <h1 className="font-medium text-[16px] text-black">
                       Jenny Murphy
                     </h1>
                     <p className="text-surface-500 text-[14px]">
