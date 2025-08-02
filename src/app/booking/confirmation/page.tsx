@@ -82,19 +82,19 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
                 <CalendarIcon className='text-primary-700 size-6' />
                 <p className='text-caption text-surface-500'>A confirmation email with all details has been sent to your email address.</p>
               </div>
-              <div className='flex gap-4'>
-                <Button className='flex gap-3' size={"xs"}>
+              <div className='flex gap-4 flex-col sm:flex-row'>
+                <Button className='flex gap-3 justify-center' size={"xs"}>
                   <FileIcon className='size-6' />
                   Preview Email
                 </Button>
-                <Button className='flex gap-3' size={"xs"} variant={"default-outline"}>
+                <Button className='flex gap-3 justify-center' size={"xs"} variant={"default-outline"}>
                   <DownloadIcon className='size-6' />
                   Download PDF
                 </Button>
               </div>
             </div>
 
-            <div className='p-4 space-y-3 bg-surface-50 rounded-lg text-surface-500 text-xs'>
+            <div className='mx-6 sm:mx-0 p-4 space-y-3 bg-surface-50 rounded-lg text-surface-500 text-xs'>
               <p>
                 <span className='font-bold'>Estimated Arrival: </span>
                 9:50 AM - 10:10 AM
@@ -154,7 +154,7 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
         </div>
       </div>
 
-      <div className='container mx-auto pt-8 pb-26 space-y-14'>
+      <div className='container mx-auto pt-8 pb-26 space-y-14 hidden sm:block'>
         <h3 className='text-heading-5'>What&apos;s Next?</h3>
         <ul className='space-y-6'>
           <li className='flex gap-4'>
@@ -187,7 +187,7 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
         </ul>
       </div>
 
-      <div className='container mx-auto py-16 space-y-6'>
+      <div className='container mx-auto py-16 space-y-6 hidden sm:block'>
         <div className='flex gap-6 justify-center'>
           <Button size={"xs"} variant={"default-outline"}>Back To Home</Button>
           <Button size={"xs"} variant={"secondary"}>Explore Services</Button>
