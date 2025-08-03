@@ -40,7 +40,7 @@ function DesktopServiceCard({
             href={"/dashboard/profile"}
             className="flex cursor-pointer gap-1 flex-col"
           >
-            <h1 className="font-medium text-lg text-black">
+            <h1 className="font-medium text-body text-secondary-700">
               Standard Cleaning
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-[14px]">
@@ -51,16 +51,16 @@ function DesktopServiceCard({
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-[14px]">
                 <ClockIcon className="text-surface-500/50 *:size-5" />
-                <p>2:00 PM - 4:00 PM</p>
+                <p className="text-nowrap">2:00 PM - 4:00 PM</p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-[14px]">
                 <LocationIcon className="text-surface-500/50 *:size-5" />
-                <p>123 Main st, Apt 4B</p>
+                <p className="text-nowrap">123 Main st, Apt 4B</p>
               </div>
             </div>
           </Link>
         </div>
-        <div className="flex items-center gap-2">{children}</div>
+        <div className="flex gap-2">{children}</div>
       </div>
     </div>
   );
@@ -76,7 +76,7 @@ function MobileServiceCard({
       <div className="flex gap-4 w-full items-center">
         <div className="flex cursor-pointer gap-2 w-full flex-col">
           <div className="flex items-center justify-between w-full">
-            <h1 className="font-medium text-lg text-black">
+            <h1 className="font-medium text-body text-secondary-700">
               Standard Cleaning
             </h1>
             <div className="flex flex-row-reverse md:flex-row items-center gap-2">
@@ -93,11 +93,11 @@ function MobileServiceCard({
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-[14px]">
               <ClockIcon className="text-surface-500/50 *:size-5" />
-              <p>2:00 PM - 4:00 PM</p>
+              <p className="text-nowrap">2:00 PM - 4:00 PM</p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-[14px]">
               <LocationIcon className="text-surface-500/50 *:size-5" />
-              <p>123 Main st, Apt 4B</p>
+              <p className="text-nowrap">123 Main st, Apt 4B</p>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ function AppointmentcardMobile({
               src={userImage}
               alt={"user profile"}
             />
-            <h1 className="font-medium text-lg text-black">
+            <h1 className="font-medium text-body text-secondary-700">
               Standard Cleaning
             </h1>
           </div>
@@ -152,11 +152,11 @@ function AppointmentcardMobile({
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-[14px]">
               <ClockIcon className="text-surface-500/50 *:size-5" />
-              <p>2:00 PM - 4:00 PM</p>
+              <p className="text-nowrap">2:00 PM - 4:00 PM</p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-[14px]">
               <LocationIcon className="text-surface-500/50 *:size-5" />
-              <p>123 Main st, Apt 4B</p>
+              <p className="text-nowrap">123 Main st, Apt 4B</p>
             </div>
           </div>
           <div className="flex flex-row-reverse md:flex-row items-center gap-2">

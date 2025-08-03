@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 
 export default function SideNavBar() {
   return (
-    <nav className="flex flex-col gap-8 h-full px-4 py-5">
+    <nav className="flex h-screen flex-col gap-8 px-4 py-5">
       <div className="flex border-b border-secondary-800/25 py-5 justify-between items-center container mx-auto">
         <Link
           href="/"
@@ -31,31 +31,31 @@ export default function SideNavBar() {
           <span>Ottri</span>
         </Link>
       </div>
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col text-caption gap-2.5">
         <h3 className="text-secondary-800">Navigation </h3>
         <div className="flex flex-col gap-2.5">
           <SideNavLink href={"/dashboard"}>
-            <HomeIcon />
+            <HomeIcon className="size-5" />
             Dashboard
           </SideNavLink>
           <SideNavLink href={"/dashboard/my-booking"}>
-            <Calendar />
+            <Calendar className="size-5" />
             My Bookings
           </SideNavLink>
           <SideNavLink href={"/dashboard/service-history"}>
-            <FileText />
+            <FileText className="size-5" />
             Service History
           </SideNavLink>
           <SideNavLink href={"/dashboard/billing"}>
-            <CreditCard className="rounded-full" />
+            <CreditCard className="rounded-full size-5" />
             Billing
           </SideNavLink>
           <SideNavLink href={"/dashboard/profile"}>
-            <UserIcon className="rounded-full" />
+            <UserIcon className="rounded-full size-5" />
             Profile
           </SideNavLink>
           <SideNavLink href={"/dashboard/settings"}>
-            <Settings className="rounded-full" />
+            <Settings className="rounded-full size-5" />
             Settings
           </SideNavLink>
         </div>

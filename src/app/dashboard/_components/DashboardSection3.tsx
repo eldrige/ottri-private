@@ -15,13 +15,13 @@ export default function DashboardSection3() {
               <h1 className="flex items-center gap-2.5 font-semibold text-lg">
                 Recent Bookings
               </h1>
-              <h3 className="text-[14px] text-secondary-800">
+              <h3 className="text-caption text-secondary-800">
                 Your latest cleaning appointments
               </h3>
             </div>
             <div className="flex justify-end items-center">
               <Button
-                className="flex bg-transparent text-primary-700 lg:bg-primary-700 lg:text-white gap-2 px-3 py-1.5 items-center h-fit"
+                className="flex bg-transparent text-caption px-4 py-1 text-primary-700 lg:bg-primary-700 lg:text-white gap-2  items-center h-fit"
                 size={"xs"}
               >
                 View All
@@ -63,13 +63,13 @@ export default function DashboardSection3() {
               <h1 className="flex items-center gap-2.5 font-semibold text-lg">
                 Upcoming Appointments
               </h1>
-              <h3 className="text-[14px] text-secondary-800">
+              <h3 className="text-caption text-secondary-800">
                 Your scheduled cleaning sessions
               </h3>
             </div>
             <div className="flex justify-end items-center">
               <Button
-                className="flex bg-transparent text-primary-700 lg:bg-primary-700 lg:text-white gap-2 px-3 py-1.5 items-center h-fit"
+                className="flex bg-transparent text-caption px-4 py-1 text-primary-700 lg:bg-primary-700 lg:text-white gap-2  items-center h-fit"
                 size={"xs"}
               >
                 View All
@@ -80,19 +80,19 @@ export default function DashboardSection3() {
             <AppointmentCard>
               <Button
                 size={"xs"}
-                className="w-full flex justify-center gap-3 "
+                className="w-full text-caption flex justify-center gap-3 "
                 variant={"outline"}
               >
-                <p>Cancel</p>
+                Cancel
               </Button>
             </AppointmentCard>
             <AppointmentCard>
               <Button
                 size={"xs"}
-                className="w-full flex justify-center gap-3 "
+                className="w-full text-caption flex justify-center gap-3 "
                 variant={"outline"}
               >
-                <p>Cancel</p>
+                Cancel
               </Button>
             </AppointmentCard>
           </div>

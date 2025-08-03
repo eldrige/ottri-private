@@ -11,7 +11,7 @@ export default function DashboardSection4() {
             <h1 className="flex items-center gap-2.5 font-semibold text-lg">
               Quick Actions
             </h1>
-            <h3 className="text-[14px] text-secondary-800">
+            <h3 className="text-caption text-secondary-800">
               Common tasks you might want to do
             </h3>
           </div>
@@ -42,7 +42,7 @@ function QuickActionCard({ title, Icon }: QuickActionCardProps) {
       className="p-4 border hover:bg-secondary-700 hover:text-white border-surface-500/30 rounded-lg flex flex-col justify-center items-center gap-8"
     >
       <Icon />
-      <h3>{title}</h3>
+      <h3 className="text-body font-semibold">{title}</h3>
     </Button>
   );
 }

@@ -18,13 +18,13 @@ export default function StatCard({
 }: StatCardProps) {
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col justify-between gap-8">
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center text-caption justify-between w-full">
         <h3 className="text-secondary-700">{title}</h3>
-        <Icon className="text-primary-700" />
+        <Icon className="text-primary-700 w-6" />
       </div>
       <div className="flex flex-col gap-2">
-        <h1 className="text-heading-4">{value}</h1>
-        <p className="text-base text-surface-500">{content}</p>
+        <h1 className="text-2xl font-medium">{value}</h1>
+        <p className="text-caption text-surface-500">{content}</p>
       </div>
     </div>
   );
