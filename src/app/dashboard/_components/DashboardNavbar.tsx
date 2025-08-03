@@ -61,49 +61,31 @@ function MobileNav({
         <div className="fixed px-2 top-0 left-0 w-full h-full bg-black/50 z-40">
           <div className="flex h-screen pt-18">
             <div className="flex h-98/100 flex-col w-5/7 pl-3 pr-12 py-5 bg-white rounded-xl">
-              <div className="flex  flex-col  gap-2.5">
+              <div className="flex text-caption flex-col  gap-2.5">
                 <h3 className="text-secondary-800">Navigation</h3>
                 <div className="flex flex-col gap-2.5">
-                  <SideNavLink
-                    onNavigate={() => setShow(false)}
-                    href={"/dashboard"}
-                  >
-                    <HomeIcon />
+                  <SideNavLink href={"/dashboard"}>
+                    <HomeIcon className="size-5" />
                     Dashboard
                   </SideNavLink>
-                  <SideNavLink
-                    onNavigate={() => setShow(false)}
-                    href={"/dashboard/my-booking"}
-                  >
-                    <Calendar />
+                  <SideNavLink href={"/dashboard/my-booking"}>
+                    <Calendar className="size-5" />
                     My Bookings
                   </SideNavLink>
-                  <SideNavLink
-                    onNavigate={() => setShow(false)}
-                    href={"/dashboard/service-history"}
-                  >
-                    <FileText />
+                  <SideNavLink href={"/dashboard/service-history"}>
+                    <FileText className="size-5" />
                     Service History
                   </SideNavLink>
-                  <SideNavLink
-                    onNavigate={() => setShow(false)}
-                    href={"/dashboard/billing"}
-                  >
-                    <CreditCard className="rounded-full" />
+                  <SideNavLink href={"/dashboard/billing"}>
+                    <CreditCard className="rounded-full size-5" />
                     Billing
                   </SideNavLink>
-                  <SideNavLink
-                    onNavigate={() => setShow(false)}
-                    href={"/dashboard/profile"}
-                  >
-                    <UserIcon className="rounded-full" />
+                  <SideNavLink href={"/dashboard/profile"}>
+                    <UserIcon className="rounded-full size-5" />
                     Profile
                   </SideNavLink>
-                  <SideNavLink
-                    onNavigate={() => setShow(false)}
-                    href={"/dashboard/settings"}
-                  >
-                    <Settings className="rounded-full" />
+                  <SideNavLink href={"/dashboard/settings"}>
+                    <Settings className="rounded-full size-5" />
                     Settings
                   </SideNavLink>
                 </div>
