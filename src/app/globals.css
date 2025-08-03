@@ -32,6 +32,14 @@
   --color-error: #dc3545;
   --color-info: #17a2b8;
 
+  /* Badge Colors */
+  --color-badge-green: #28a745;
+  --color-badge-blue: #12889b;
+  --color-badge-blue-opac: #17a2b833;
+  --color-badge-orange: #7e6008;
+  --color-badge-orange-opac: #ffc10733;
+  --color-badge-red: #dc3545;
+  --color-badge-red-opac: #dc35451a;
   /* Typography */
   --text-heading-1: 56px; /* Hero headlines, landing pages */
   --text-heading-1--font-weight: 600;
