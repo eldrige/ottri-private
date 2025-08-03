@@ -33,7 +33,8 @@
   --color-info: #17a2b8;
 
   /* Badge Colors */
-  --color-badge-green: #28a745;
+  --color-badge-green: #34a853;
+  --color-badge-green-opac: #28a74533;
   --color-badge-blue: #12889b;
   --color-badge-blue-opac: #17a2b833;
   --color-badge-orange: #7e6008;
