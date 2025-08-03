@@ -30,7 +30,7 @@ export default function DashboardSection3() {
           </div>
           <div className="flex flex-col gap-3">
             <ServiceCard>
-              <Badge className="bg-[#28A74533] text-[14px] items-center px-3 text-[#34A853] rounded-xl flex border-0 gap-2">
+              <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
                 <CircleAlert className="w-4.25" />
                 Complete
               </Badge>
@@ -40,7 +40,7 @@ export default function DashboardSection3() {
               </div>
             </ServiceCard>
             <ServiceCard>
-              <Badge className="bg-[#28A74533] text-[14px] items-center px-3 text-[#34A853] rounded-xl flex border-0 gap-2">
+              <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
                 <CircleAlert className="w-4.25" />
                 Complete
               </Badge>
@@ -50,7 +50,7 @@ export default function DashboardSection3() {
               </div>
             </ServiceCard>
             <ServiceCard>
-              <Badge className="bg-surface-500/15 text-[14px] items-center px-3 text-secondary-700 rounded-xl flex border-0 gap-2">
+              <Badge className="bg-surface-500/15 text-caption items-center px-3 text-secondary-700 rounded-xl flex border-0 gap-2">
                 <CircleAlert className="w-4.25" />
                 Scheduled
               </Badge>

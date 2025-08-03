@@ -101,10 +101,10 @@ function MobileNav({
                     href={"/dashboard/profile"}
                     className="flex cursor-pointer flex-col"
                   >
-                    <h1 className="font-medium text-[16px] text-black">
+                    <h1 className="font-medium text-caption text-black">
                       Jenny Murphy
                     </h1>
-                    <p className="text-surface-500 text-[14px]">
+                    <p className="text-surface-500 text-xs">
                       jennymurphy@gmail.com
                     </p>
                   </Link>
