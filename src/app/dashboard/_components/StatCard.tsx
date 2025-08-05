@@ -5,7 +5,7 @@ type StatCardProps = {
   title: string;
   value: string;
   content: string;
-  Icon: ForwardRefExoticComponent<
+  Icon?: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
 };
@@ -20,7 +20,7 @@ export default function StatCard({
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col justify-between gap-8">
       <div className="flex items-center text-caption justify-between w-full">
         <h3 className="text-secondary-700">{title}</h3>
-        <Icon className="text-primary-700 w-6" />
+        {Icon && <Icon className="text-primary-700 w-6" />}
       </div>
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-medium">{value}</h1>
