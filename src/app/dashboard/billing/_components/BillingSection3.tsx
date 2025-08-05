@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { CreditCard, PlusIcon } from "lucide-react";
 import React from "react";
@@ -42,12 +43,9 @@ export default function BillingSection3() {
             </div>
             <p className="text-caption text-surface-500">Expires 12/25</p>
           </div>
-          <Button
-            size={"xs"}
-            className="hover:border-secondary-700 hover:text-secondary-700 w-fit rounded-lg py-1.5 h-fit items-center text-caption flex justify-center gap-3 bg-secondary-700 text-white"
-          >
+          <Badge className="border-0 w-fit rounded-xl py-1 px-5 h-fit items-center text-[14px] flex justify-center gap-3 bg-secondary-700 text-white">
             Primary
-          </Button>
+          </Badge>
         </div>
         <Button
           size={"xs"}

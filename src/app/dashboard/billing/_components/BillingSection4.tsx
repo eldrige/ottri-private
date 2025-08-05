@@ -54,7 +54,7 @@ function TransactionCard({
   return (
     <div className="flex lg:border items-center border-surface-500/30 rounded-lg p-2 justify-between">
       <div className="flex flex-col gap-1 h-full justify-between">
-        <h2 className=" gap-2.5 font-semibold text-lg">
+        <h2 className="text-secondary-700 gap-2.5 font-semibold text-lg">
           {service} - {cleaner}
         </h2>
         <p className="text-caption text-secondary-800">{date}</p>
