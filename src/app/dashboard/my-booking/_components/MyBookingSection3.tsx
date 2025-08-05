@@ -22,12 +22,6 @@ export default function MyBookingSection3() {
               </h3>
             </div>
             <div className=" justify-end">
-              {/* <Button
-                className="flex bg-transparent text-caption px-4 py-1 text-primary-700 lg:bg-primary-700 lg:text-white gap-2  items-center h-fit"
-                size={"xs"}
-              >
-                View All
-              </Button> */}
               <div className="flex  text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
                 <FilterIcon size={16} />
                 <select className="" name="filter" id="">
