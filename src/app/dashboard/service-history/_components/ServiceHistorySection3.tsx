@@ -54,8 +54,8 @@ export function DesktopServiceCard({
 }>) {
   return (
     <div className="w-full">
-      <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
-        <div className="flex gap-4 items-center">
+      <div className="flex p-4 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
+        <div className="flex gap-4 ">
           <Image
             className="rounded-full size-12"
             src={userImage}

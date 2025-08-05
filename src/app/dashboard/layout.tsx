@@ -8,7 +8,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="h-svw">
+    <main className="h-svw relative">
       <DashboardNavbar />
       <div className="flex px-4">
         <section className="hidden md:block flex-15/100 h-full">

@@ -19,7 +19,7 @@ export default function Navbar() {
   const [showMobile, setShowMobile] = useState(false);
   return (
     <>
-      <nav className="md:hidden fixed px-2 w-full mx-auto top-1.25 z-50">
+      <nav className="md:hidden fixed px-2 w-full top-1 z-50">
         <div className="flex rounded-2xl px-6 py-2 shadow-lg bg-primary-700  text-white justify-between items-center container mx-auto">
           <button
             onClick={() => setShowMobile((prev) => !prev)}
@@ -40,9 +40,6 @@ export default function Navbar() {
           />
         </div>
       </nav>
-
-      {/* Mobile menu */}
-
       <MobileNav show={showMobile} setShow={setShowMobile} />
     </>
   );
@@ -64,27 +61,45 @@ function MobileNav({
               <div className="flex text-caption flex-col  gap-2.5">
                 <h3 className="text-secondary-800">Navigation</h3>
                 <div className="flex flex-col gap-2.5">
-                  <SideNavLink href={"/dashboard"}>
+                  <SideNavLink
+                    onNavigate={() => setShow(false)}
+                    href={"/dashboard"}
+                  >
                     <HomeIcon className="size-5" />
                     Dashboard
                   </SideNavLink>
-                  <SideNavLink href={"/dashboard/my-booking"}>
+                  <SideNavLink
+                    onNavigate={() => setShow(false)}
+                    href={"/dashboard/my-booking"}
+                  >
                     <Calendar className="size-5" />
                     My Bookings
                   </SideNavLink>
-                  <SideNavLink href={"/dashboard/service-history"}>
+                  <SideNavLink
+                    onNavigate={() => setShow(false)}
+                    href={"/dashboard/service-history"}
+                  >
                     <FileText className="size-5" />
                     Service History
                   </SideNavLink>
-                  <SideNavLink href={"/dashboard/billing"}>
+                  <SideNavLink
+                    onNavigate={() => setShow(false)}
+                    href={"/dashboard/billing"}
+                  >
                     <CreditCard className="rounded-full size-5" />
                     Billing
                   </SideNavLink>
-                  <SideNavLink href={"/dashboard/profile"}>
+                  <SideNavLink
+                    onNavigate={() => setShow(false)}
+                    href={"/dashboard/profile"}
+                  >
                     <UserIcon className="rounded-full size-5" />
                     Profile
                   </SideNavLink>
-                  <SideNavLink href={"/dashboard/settings"}>
+                  <SideNavLink
+                    onNavigate={() => setShow(false)}
+                    href={"/dashboard/settings"}
+                  >
                     <Settings className="rounded-full size-5" />
                     Settings
                   </SideNavLink>
