@@ -21,7 +21,7 @@ export default function ScheduleStep() {
   const handleTimeWindowChange = (option: { value: string; label: string }) => {
     setValue("timeWindow", option.value, { shouldValidate: true });
   };
-  console.log(!!selectedTimeWindow);
+
   return (
     <>
       <h3 className="text-heading-4">Choose Date And Time</h3>

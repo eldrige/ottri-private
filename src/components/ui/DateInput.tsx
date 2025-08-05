@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from "react";
-import { format } from "date-fns";
+import { addMonths, format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import CalendarIcon from "@/components/icons/CalendarIcon";
 import "react-day-picker/dist/style.css";
@@ -83,6 +83,11 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
           {isOpen && (
             <div className="absolute z-50 mt-1 bg-white shadow-lg rounded-lg border border-gray-200">
               <DayPicker
+                disabled={[
+                  { before: new Date() },
+                  { after: addMonths(new Date(), 2) },
+                  { from: new Date(), to: new Date() }
+                ]}
                 mode="single"
                 selected={selectedDate}
                 onSelect={handleDateSelect}

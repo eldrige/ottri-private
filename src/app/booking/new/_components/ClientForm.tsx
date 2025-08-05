@@ -82,14 +82,20 @@ export default function ClientForm() {
         // Access step has no required fields by default
         return false;
       case 5:
-        console.log(formValues, errors);
         return !!errors.preferredDate || !!errors.timeWindow;
       case 6:
         // Tip step - no required fields by default
         return false;
       case 7:
-        return false;
-      // Add more cases for additional steps
+        return (
+          !!errors.personalInfo?.fullName ||
+          !!errors.personalInfo?.phoneNumber ||
+          !!errors.personalInfo?.email ||
+          !!errors.billingInfo?.country ||
+          !!errors.billingInfo?.state ||
+          !!errors.billingInfo?.city ||
+          !!errors.billingInfo?.zipCode
+        );
       default:
         return false;
     }
@@ -113,6 +119,17 @@ export default function ClientForm() {
         break;
       case 5:
         isValid = await trigger(["timeWindow", "preferredDate"]);
+        break;
+      case 7:
+        isValid = await trigger([
+          "personalInfo.fullName",
+          "personalInfo.phoneNumber",
+          "personalInfo.email",
+          "billingInfo.country",
+          "billingInfo.state",
+          "billingInfo.city",
+          "billingInfo.zipCode"
+        ]);
         break;
       // Add more cases for additional steps
       default:
@@ -208,18 +225,29 @@ export default function ClientForm() {
   // Form submission
   const onSubmit = async (data: OrderFormValues) => {
     setProcessing(true);
+
+    // First validate all payment fields
+    const isPaymentStepValid = await validateCurrentStep();
+
+    if (!isPaymentStepValid) {
+      setProcessing(false);
+      return;
+    }
+
     // For the payment step, we need to process the payment first
     let paymentMethodId = formValues.paymentMethodId || "";
-    if (currStep === 7 && !paymentMethodId) {
-      // Assuming payment is the last step (index 7)
-      paymentMethodId = await processPaymentRef.current();
 
-      if (!paymentMethodId) {
+    if (currStep === 7 && !paymentMethodId) {
+      // Process the payment
+      const result = await processPaymentRef.current();
+
+      if (!result) {
         // Payment failed, don't proceed
+        setProcessing(false);
         return;
       }
 
-      // If payment succeeded, continue with form submission
+      paymentMethodId = result.toString();
     }
 
     // Process the final form submission
@@ -235,7 +263,7 @@ export default function ClientForm() {
       if (result.success) {
         // Handle successful submission
         // e.g., redirect to confirmation page
-        window.location.href = `/order-confirmation?orderId=${result.orderId}`;
+        window.location.href = `/booking/confirmation?orderId=${result.orderId}`;
       } else {
         // Handle error
         alert(result.error?.message || "An error occurred");
