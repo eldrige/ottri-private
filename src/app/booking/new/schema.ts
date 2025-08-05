@@ -14,24 +14,31 @@ export const orderFormSchema = z.object({
   petInstructions: z.string().optional(),
   accessMethod: z.string(),
   accessInstructions: z.string().optional(),
-  preferredDate: z.date().optional(),
-  timeWindow: z.string().optional(),
+  preferredDate: z.date(),
+  timeWindow: z.string(),
   tipAmount: z.number().min(0, "Tip amount cannot be negative").optional(),
   tipPercentage: z.number().min(0).optional(),
 
   // Add personal and billing info
-  personalInfo: z.object({
-    fullName: z.string().min(1, "Full name is required"),
-    phoneNumber: z.string().min(1, "Phone number is required"),
-    email: z.string().email("Invalid email format").min(1, "Email is required"),
-  }).optional(),
-  billingInfo: z.object({
-    country: z.string().min(1, "Country is required"),
-    state: z.string().min(1, "State is required"),
-    city: z.string().min(1, "City is required"),
-    zipCode: z.string().min(1, "Zip code is required"),
-  }).optional(),
-  paymentMethodId: z.string().optional(),
+  personalInfo: z
+    .object({
+      fullName: z.string().min(1, "Full name is required"),
+      phoneNumber: z.string().min(1, "Phone number is required"),
+      email: z
+        .string()
+        .email("Invalid email format")
+        .min(1, "Email is required")
+    })
+    .optional(),
+  billingInfo: z
+    .object({
+      country: z.string().min(1, "Country is required"),
+      state: z.string().min(1, "State is required"),
+      city: z.string().min(1, "City is required"),
+      zipCode: z.string().min(1, "Zip code is required")
+    })
+    .optional(),
+  paymentMethodId: z.string().optional()
 });
 
 export type OrderFormValues = z.infer<typeof orderFormSchema>;

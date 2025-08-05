@@ -7,7 +7,7 @@ import "react-day-picker/dist/style.css";
 interface DateInputProps {
   label?: string;
   value?: Date;
-  onChange?: (date: Date | undefined) => void;
+  onChange?: (date: Date) => void;
   labelClassName?: string;
   containerClassName?: string;
   placeholder?: string;
@@ -35,21 +35,25 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
 
     const handleDateSelect = (date: Date | undefined) => {
       setSelectedDate(date);
-      if (onChange) {
+      if (onChange && date) {
         onChange(date);
       }
       setIsOpen(false);
     };
 
     // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      // Handle manual input if needed
-      // This is a simplified implementation
-      // In a real component, you would validate and parse the input
+    // Handle manual input if needed
+    // This is a simplified implementation
+    // In a real component, you would validate and parse the input
     // };
 
     return (
       <div className={`${containerClassName}`}>
-        {label && <label className={`block mb-2 text-sm font-normal ${labelClassName}`}>{label}</label>}
+        {label && (
+          <label className={`block mb-2 text-sm font-normal ${labelClassName}`}>
+            {label}
+          </label>
+        )}
         <div className="relative">
           <div className="flex relative items-center">
             <input
@@ -84,7 +88,6 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
                 onSelect={handleDateSelect}
                 autoFocus
                 className="p-3"
-                
                 classNames={{
                   today: "text-secondary-700 font-bold",
                   selected: `bg-primary-700 text-white rounded-lg`,

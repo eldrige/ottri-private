@@ -20,7 +20,7 @@ import PaymentStep from "./steps/PaymentStep";
 
 export default function ClientForm() {
   const [currStep, setCurrStep] = useState(7);
-  const [processing, setProcessing] = useState(false)
+  const [processing, setProcessing] = useState(false);
 
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
@@ -40,14 +40,19 @@ export default function ClientForm() {
       accessMethod: "home",
       accessInstructions: "",
       preferredDate: undefined,
-      timeWindow: "",
+      timeWindow: undefined,
       tipAmount: 0,
       tipPercentage: 0,
       paymentMethodId: ""
     }
   });
 
-  const { watch, handleSubmit, trigger, formState: { errors } } = methods;
+  const {
+    watch,
+    handleSubmit,
+    trigger,
+    formState: { errors }
+  } = methods;
   const processPaymentRef = useRef(() => Promise.resolve(""));
 
   const initRender = useRef(true);
@@ -61,7 +66,12 @@ export default function ClientForm() {
       case 0:
         return !!errors.serviceType || !!errors.specificType;
       case 1:
-        return !!errors.serviceAddress || !!errors.bedrooms || !!errors.bathrooms || !!errors.squareFootage;
+        return (
+          !!errors.serviceAddress ||
+          !!errors.bedrooms ||
+          !!errors.bathrooms ||
+          !!errors.squareFootage
+        );
       case 2:
         // Add-ons step has no required fields
         return false;
@@ -72,7 +82,12 @@ export default function ClientForm() {
         // Access step has no required fields by default
         return false;
       case 5:
-        // Schedule step - no required fields by default
+        console.log(formValues, errors);
+        return !!errors.preferredDate || !!errors.timeWindow;
+      case 6:
+        // Tip step - no required fields by default
+        return false;
+      case 7:
         return false;
       // Add more cases for additional steps
       default:
@@ -86,10 +101,18 @@ export default function ClientForm() {
 
     switch (currStep) {
       case 0:
-        isValid = await trigger(['serviceType', 'specificType']);
+        isValid = await trigger(["serviceType", "specificType"]);
         break;
       case 1:
-        isValid = await trigger(['serviceAddress', 'bedrooms', 'bathrooms', 'squareFootage']);
+        isValid = await trigger([
+          "serviceAddress",
+          "bedrooms",
+          "bathrooms",
+          "squareFootage"
+        ]);
+        break;
+      case 5:
+        isValid = await trigger(["timeWindow", "preferredDate"]);
         break;
       // Add more cases for additional steps
       default:
@@ -106,9 +129,15 @@ export default function ClientForm() {
       return;
     }
     validateCurrentStep();
-  }, [formValues.serviceType, formValues.specificType, formValues.serviceAddress,
-  formValues.bedrooms, formValues.bathrooms, formValues.squareFootage,
-    validateCurrentStep]);
+  }, [
+    formValues.serviceType,
+    formValues.specificType,
+    formValues.serviceAddress,
+    formValues.bedrooms,
+    formValues.bathrooms,
+    formValues.squareFootage,
+    validateCurrentStep
+  ]);
 
   // Calculate price based on form values
   const calculatePrice = () => {
@@ -116,12 +145,14 @@ export default function ClientForm() {
     const specificType = formValues.specificType;
 
     // Set base price based on specific type
-    basePrice += specificTypes.find(s => s.id === specificType)?.priceFrom || 0;
+    basePrice +=
+      specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
 
     // Add price adjustments based on property details
     if (formValues.bedrooms) {
       // Add $20 per bedroom after the first
-      const bedroomCount = formValues.bedrooms === "4+" ? 4 : parseInt(formValues.bedrooms);
+      const bedroomCount =
+        formValues.bedrooms === "4+" ? 4 : parseInt(formValues.bedrooms);
       if (bedroomCount > 1) {
         basePrice += (bedroomCount - 1) * 20;
       }
@@ -129,7 +160,8 @@ export default function ClientForm() {
 
     if (formValues.bathrooms) {
       // Add $25 per bathroom after the first
-      const bathroomCount = formValues.bathrooms === "4+" ? 4 : parseInt(formValues.bathrooms);
+      const bathroomCount =
+        formValues.bathrooms === "4+" ? 4 : parseInt(formValues.bathrooms);
       if (bathroomCount > 1) {
         basePrice += (bathroomCount - 1) * 25;
       }
@@ -137,8 +169,8 @@ export default function ClientForm() {
 
     // Add prices for selected add-ons
     if (formValues.addOns && formValues.addOns.length > 0) {
-      formValues.addOns.forEach(addonId => {
-        const addon = addOnOptions.find(a => a.id === addonId);
+      formValues.addOns.forEach((addonId) => {
+        const addon = addOnOptions.find((a) => a.id === addonId);
         if (addon) {
           basePrice += addon.price;
         }
@@ -163,22 +195,23 @@ export default function ClientForm() {
     const isValid = await validateCurrentStep();
 
     if (isValid && currStep < 7) {
-      setCurrStep(prev => prev + 1);
+      setCurrStep((prev) => prev + 1);
     }
   };
 
   const goToPreviousStep = () => {
     if (currStep > 0) {
-      setCurrStep(prev => prev - 1);
+      setCurrStep((prev) => prev - 1);
     }
   };
 
   // Form submission
   const onSubmit = async (data: OrderFormValues) => {
-    setProcessing(true)
+    setProcessing(true);
     // For the payment step, we need to process the payment first
-    let paymentMethodId = formValues.paymentMethodId || ""
-    if (currStep === 7 && !paymentMethodId) { // Assuming payment is the last step (index 7)
+    let paymentMethodId = formValues.paymentMethodId || "";
+    if (currStep === 7 && !paymentMethodId) {
+      // Assuming payment is the last step (index 7)
       paymentMethodId = await processPaymentRef.current();
 
       if (!paymentMethodId) {
@@ -191,10 +224,10 @@ export default function ClientForm() {
 
     // Process the final form submission
     try {
-      const response = await fetch('/api/submit-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({...data, paymentMethodId}),
+      const response = await fetch("/api/submit-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, paymentMethodId })
       });
 
       const result = await response.json();
@@ -205,14 +238,14 @@ export default function ClientForm() {
         window.location.href = `/order-confirmation?orderId=${result.orderId}`;
       } else {
         // Handle error
-        alert(result.error?.message || 'An error occurred');
+        alert(result.error?.message || "An error occurred");
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Failed to submit form. Please try again.');
+      console.error("Error submitting form:", error);
+      alert("Failed to submit form. Please try again.");
     }
 
-    setProcessing(false)
+    setProcessing(false);
   };
 
   // Render the current step
@@ -241,12 +274,17 @@ export default function ClientForm() {
 
   return (
     <div className="mt-8 space-y-8 w-full">
-      <h1 className="text-heading-3 lg:text-heading-2.5 text-center lg:text-start">Book Your Cleaning Service</h1>
+      <h1 className="text-heading-3 lg:text-heading-2.5 text-center lg:text-start">
+        Book Your Cleaning Service
+      </h1>
 
       <StepsViewer currStep={currStep} setCurrStep={setCurrStep} />
 
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-x-8 items-start w-full">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-x-8 items-start w-full"
+        >
           <div className="w-full max-w-full lg:col-span-2 lg:bg-white rounded-2xl lg:shadow-custom-light space-y-6 lg:px-8 py-8">
             {/* Current step content */}
             {renderCurrentStep()}
@@ -272,8 +310,11 @@ export default function ClientForm() {
                   size="xs"
                   disabled={currStep >= 7}
                   onClick={goToNextStep}
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
-                    }`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
+                    currentStepHasErrors()
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : ""
+                  }`}
                 >
                   Next
                 </Button>
@@ -291,32 +332,50 @@ export default function ClientForm() {
             </div>
           </div>
 
-          <div className='lg:bg-white rounded-2xl lg:shadow-custom-light p-4 space-y-8'>
+          <div className="lg:bg-white rounded-2xl lg:shadow-custom-light p-4 space-y-8">
             <h4 className="text-heading-5">Booking Summary</h4>
 
             <div className="space-y-4 text-caption">
               <p className="text-caption flex justify-between">
                 Service Type:
-                <span>{(formValues.serviceType ? formValues.serviceType[0].toUpperCase() + formValues.serviceType.slice(1) : null) || "Not selected"}</span>
+                <span>
+                  {(formValues.serviceType
+                    ? formValues.serviceType[0].toUpperCase() +
+                      formValues.serviceType.slice(1)
+                    : null) || "Not selected"}
+                </span>
               </p>
-              {formValues.specificType &&
+              {formValues.specificType && (
                 <p className="text-caption flex justify-between">
                   Specific Type:
-                  <span>{(formValues.specificType ? formValues.specificType[0].toUpperCase() + formValues.specificType.slice(1) : null) || "Not selected"}</span>
+                  <span>
+                    {(formValues.specificType
+                      ? formValues.specificType[0].toUpperCase() +
+                        formValues.specificType.slice(1)
+                      : null) || "Not selected"}
+                  </span>
                 </p>
-              }
-              {formValues.bedrooms &&
+              )}
+              {formValues.bedrooms && (
                 <p className="text-caption flex justify-between">
                   Bedrooms:
-                  <span>{formValues.bedrooms === "4+" ? "4+" : `${formValues.bedrooms}`}</span>
+                  <span>
+                    {formValues.bedrooms === "4+"
+                      ? "4+"
+                      : `${formValues.bedrooms}`}
+                  </span>
                 </p>
-              }
-              {formValues.bathrooms &&
+              )}
+              {formValues.bathrooms && (
                 <p className="text-caption flex justify-between">
                   Bathrooms:
-                  <span>{formValues.bathrooms === "4+" ? "4+" : `${formValues.bathrooms}`}</span>
+                  <span>
+                    {formValues.bathrooms === "4+"
+                      ? "4+"
+                      : `${formValues.bathrooms}`}
+                  </span>
                 </p>
-              }
+              )}
               {/* {formValues.squareFootage &&
                   <p className="text-caption flex justify-between">
                     Square Footage:
@@ -327,7 +386,7 @@ export default function ClientForm() {
                 <div className="text-caption space-y-2">
                   <p className="mb-2">Add-Ons:</p>
                   {formValues.addOns.map((addonId) => {
-                    const addon = addOnOptions.find(a => a.id === addonId);
+                    const addon = addOnOptions.find((a) => a.id === addonId);
                     return (
                       <p key={addonId} className="flex justify-between pl-4">
                         {addon?.name}
@@ -347,11 +406,15 @@ export default function ClientForm() {
 
             <hr className="text-surface-500/10" />
             <p className="text-caption flex justify-between">
-              Subtotal: <span>${estimatedPrice.toString().padStart(2, "0")}</span>
+              Subtotal:{" "}
+              <span>${estimatedPrice.toString().padStart(2, "0")}</span>
             </p>
             <hr className="text-surface-500/10" />
             <p className="text-caption font-medium flex justify-between">
-              Total: <span className="text-primary-700">${totalWithTip.toFixed(2)}</span>
+              Total:{" "}
+              <span className="text-primary-700">
+                ${totalWithTip.toFixed(2)}
+              </span>
             </p>
 
             <ul className="p-4 space-y-3">
@@ -387,8 +450,11 @@ export default function ClientForm() {
                   size="xs"
                   disabled={currStep >= 7}
                   onClick={goToNextStep}
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""
-                    }`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
+                    currentStepHasErrors()
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : ""
+                  }`}
                 >
                   Next
                 </Button>

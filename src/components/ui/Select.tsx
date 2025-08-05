@@ -1,5 +1,6 @@
-import { ChevronDown } from 'lucide-react';
-import React, { useState, useRef, useEffect } from 'react';
+import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface SelectOption {
   value: string;
@@ -13,6 +14,7 @@ interface SelectProps {
   onChange?: (option: SelectOption) => void;
   className?: string;
   placeholder?: string;
+  error?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -20,11 +22,14 @@ const Select: React.FC<SelectProps> = ({
   options,
   value,
   onChange,
-  className = '',
-  placeholder = 'Select option',
+  className = "",
+  placeholder = "Select option",
+  error
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<SelectOption | undefined>(value);
+  const [selectedOption, setSelectedOption] = useState<
+    SelectOption | undefined
+  >(value);
   const selectRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,14 +38,17 @@ const Select: React.FC<SelectProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -57,12 +65,15 @@ const Select: React.FC<SelectProps> = ({
       {label && (
         <div className="text-gray-800 text-sm font-normal mb-2">{label}</div>
       )}
-      
+
       <div className="relative">
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full rounded-lg bg-gray-50 px-4 py-3 text-left flex justify-between items-center border border-gray-200"
+          className={cn(
+            "w-full rounded-lg bg-gray-50 px-4 py-3 text-left flex justify-between items-center border",
+            error ? "border-error" : "border-gray-200"
+          )}
         >
           {selectedOption ? (
             <span>{selectedOption.label}</span>
@@ -70,7 +81,7 @@ const Select: React.FC<SelectProps> = ({
             <span className="text-gray-400">{placeholder}</span>
           )}
           <ChevronDown
-            className={`w-5 h-5 transition-transform text-secondary-700/50 ${isOpen ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 transition-transform text-secondary-700/50 ${isOpen ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -82,7 +93,7 @@ const Select: React.FC<SelectProps> = ({
                 onClick={() => handleSelect(option)}
                 className={`
                   px-2 py-1.5 cursor-pointer rounded
-                  ${selectedOption?.value === option.value ? 'bg-primary-700 text-white' : 'hover:bg-gray-100'}
+                  ${selectedOption?.value === option.value ? "bg-primary-700 text-white" : "hover:bg-gray-100"}
                 `}
               >
                 {option.label}
@@ -91,6 +102,7 @@ const Select: React.FC<SelectProps> = ({
           </div>
         )}
       </div>
+      {error && <p className="text-xs text-error mt-1">{error}</p>}
     </div>
   );
 };
