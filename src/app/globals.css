@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #FBFCFC;
   --foreground: #000000;
 }
 
 @theme {
   /* Primary Colors */
   --color-primary-100: #FFF2E6;
+  --color-primary-200: #FEE5CF;
   --color-primary-500: #f39c12;
   --color-primary-700: #e67e22;
   --color-primary-900: #d35400;
@@ -18,9 +19,7 @@
   --color-secondary-900: #1a252f;
 
   /* Neutral Colors */
-  --color-surface-25: #FBFBFB;
   --color-surface-50: #f8f9fa;
-  --color-surface-75: #f4f4f4;
   --color-surface-100: #E3E0E0;
   --color-surface-200: #e2e3e5;
   --color-surface-300: #d9d9d9;
@@ -29,6 +28,7 @@
 
   /* Semantic Colors */
   --color-success: #28a745;
+  --color-success-background: #E7F6EB;
   --color-warning: #ffc107;
   --color-error: #dc3545;
   --color-info: #17a2b8;
@@ -59,6 +59,9 @@
 
   /* Custom shadow */
   --shadow-custom: 0px 0px 23px 0px #0000001A;
+  --shadow-custom-light: 0px 4px 16px 0px #0000000D;
+  --shadow-custom-strong: 0px 4px 8px 0px #051E1314;
+
 }
 
 @theme inline {
@@ -66,6 +69,10 @@
   --color-foreground: var(--foreground);
   --font-poppins: var(--font-poppins);  
   --font-nunito-sans: var(--font-nunito-sans);  
+}
+
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }
 
 body {
