@@ -27,7 +27,7 @@ export default function ClientForm() {
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
       serviceType: "",
-      specificType: "",
+      specificServiceType: "",
       serviceAddress: "",
       useSameForBilling: false,
       bedrooms: "",
@@ -64,7 +64,7 @@ export default function ClientForm() {
   const currentStepHasErrors = () => {
     switch (currStep) {
       case 0:
-        return !!errors.serviceType || !!errors.specificType;
+        return !!errors.serviceType || !!errors.specificServiceType;
       case 1:
         return (
           !!errors.serviceAddress ||
@@ -107,7 +107,7 @@ export default function ClientForm() {
 
     switch (currStep) {
       case 0:
-        isValid = await trigger(["serviceType", "specificType"]);
+        isValid = await trigger(["serviceType", "specificServiceType"]);
         break;
       case 1:
         isValid = await trigger([
@@ -148,7 +148,7 @@ export default function ClientForm() {
     validateCurrentStep();
   }, [
     formValues.serviceType,
-    formValues.specificType,
+    formValues.specificServiceType,
     formValues.serviceAddress,
     formValues.bedrooms,
     formValues.bathrooms,
@@ -159,7 +159,7 @@ export default function ClientForm() {
   // Calculate price based on form values
   const calculatePrice = () => {
     let basePrice = 0;
-    const specificType = formValues.specificType;
+    const specificType = formValues.specificServiceType;
 
     // Set base price based on specific type
     basePrice +=
@@ -373,13 +373,13 @@ export default function ClientForm() {
                     : null) || "Not selected"}
                 </span>
               </p>
-              {formValues.specificType && (
+              {formValues.specificServiceType && (
                 <p className="text-caption flex justify-between">
                   Specific Type:
                   <span>
-                    {(formValues.specificType
-                      ? formValues.specificType[0].toUpperCase() +
-                        formValues.specificType.slice(1)
+                    {(formValues.specificServiceType
+                      ? formValues.specificServiceType[0].toUpperCase() +
+                        formValues.specificServiceType.slice(1)
                       : null) || "Not selected"}
                   </span>
                 </p>

@@ -21,13 +21,18 @@ export async function POST(request: Request) {
 
     console.log({ ...orderData, paymentMethodId });
     // 1. Process the payment with Stripe
-    /*const paymentIntent = */ await stripe.paymentIntents.create({
+    const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(totalAmount * 100), // Amount in cents
       currency: "usd",
       payment_method: paymentMethodId,
       confirm: true, // This attempts to charge the card immediately
       automatic_payment_methods: { enabled: true, allow_redirects: "never" }
+      // customer: ""
     });
+
+    console.log(paymentIntent);
+
+    // don't send tip percentage
 
     // If paymentIntent.status is not 'succeeded', the payment failed.
     // The `create` call will throw an error for card failures if `confirm: true` is set.
