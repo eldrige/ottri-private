@@ -19,7 +19,7 @@ import TipStep from "./steps/TipStep";
 import PaymentStep from "./steps/PaymentStep";
 
 export default function ClientForm() {
-  const [currStep, setCurrStep] = useState(7);
+  const [currStep, setCurrStep] = useState(0);
   const [processing, setProcessing] = useState(false);
 
   // Set up react-hook-form
