@@ -133,10 +133,10 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
             required
           />
           <Input
-            label="Service Address"
+            label="Billing Address"
             placeholder="Enter text..."
-            {...register("serviceAddress")}
-            error={errors.serviceAddress?.message}
+            {...register("billingAddress")}
+            error={errors.billingAddress?.message}
             required
           />
         </div>

@@ -29,6 +29,7 @@ export const orderFormSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   phoneNumber: z.string().min(1, "Phone number is required"),
   email: z.string().email("Invalid email format").min(1, "Email is required"),
+  billingAddress: z.string().min(1, "Billing address is required"),
   country: z.string().min(1, "Country is required"),
   state: z.string().min(1, "State is required"),
   city: z.string().min(1, "City is required"),

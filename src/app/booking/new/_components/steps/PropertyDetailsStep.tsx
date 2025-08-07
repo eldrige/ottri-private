@@ -20,7 +20,8 @@ export default function PropertyDetailsStep() {
   const selectedBedrooms = watch("bedrooms");
   const selectedBathrooms = watch("bathrooms");
   const selectedSquareFootage = watch("squareFootage");
-  // const serviceAddress = watch('serviceAddress');
+  const serviceAddress = watch("serviceAddress");
+  const useSameForBilling = watch("useSameForBilling");
 
   const handleSelectBedrooms = (option: { value: string; label: string }) => {
     setValue("bedrooms", option.value, { shouldValidate: true });
@@ -57,6 +58,7 @@ export default function PropertyDetailsStep() {
             register("serviceAddress").onChange(e);
             if (e.target.value) {
               trigger("serviceAddress");
+              if (useSameForBilling) setValue("billingAddress", e.target.value);
             }
           }}
         />
@@ -72,6 +74,9 @@ export default function PropertyDetailsStep() {
           type="checkbox"
           className="accent-secondary-700 size-4"
           {...register("useSameForBilling")}
+          onChange={(e) => {
+            setValue("billingAddress", e.target.checked ? serviceAddress : "");
+          }}
         />
         Use this address for billing address
       </label>
