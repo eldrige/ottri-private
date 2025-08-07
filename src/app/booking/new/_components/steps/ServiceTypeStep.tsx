@@ -9,10 +9,10 @@ export default function ServiceTypeStep() {
     register,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors }
   } = useFormContext();
   const selectedService = watch("serviceType");
-  const selectedSpecificType = watch("specificType");
+  const selectedSpecificType = watch("specificServiceType");
 
   return (
     <>
@@ -30,11 +30,10 @@ export default function ServiceTypeStep() {
               "flex items-center gap-4  px-4 border rounded-lg cursor-pointer transition-all py-3",
               selectedService === service.id
                 ? "border-primary-700 bg-primary-700/5"
-                : "border-black/10 hover:border-primary-700/50",
+                : "border-black/10 hover:border-primary-700/50"
             )}
           >
-            <service.Icon className="text-primary-700 size-6" />{" "}
-            {service.name}
+            <service.Icon className="text-primary-700 size-6" /> {service.name}
           </button>
         ))}
       </div>
@@ -48,21 +47,23 @@ export default function ServiceTypeStep() {
       <input
         type="hidden"
         {...register("serviceType", {
-          required: "Please select a service type",
+          required: "Please select a service type"
         })}
       />
 
       {selectedService && (
         <>
-
-
           <h3 className="text-heading-4 mt-6">Select Specific Type</h3>
 
           <div className="flex flex-col space-y-4">
             {specificTypes.map((type) => (
               <button
                 type="button"
-                onClick={() => setValue("specificType", type.id, { shouldValidate: true })}
+                onClick={() =>
+                  setValue("specificServiceType", type.id, {
+                    shouldValidate: true
+                  })
+                }
                 className={cn(
                   "flex items-center gap-4 py-3 px-4 border rounded-lg cursor-pointer transition-colors",
                   selectedSpecificType === type.id
@@ -92,8 +93,8 @@ export default function ServiceTypeStep() {
           {/* Hidden input for react-hook-form to track the specific type selection */}
           <input
             type="hidden"
-            {...register("specificType", {
-              required: "Please select a specific cleaning type",
+            {...register("specificServiceType", {
+              required: "Please select a specific cleaning type"
             })}
           />
         </>

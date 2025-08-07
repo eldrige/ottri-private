@@ -9,7 +9,7 @@ import StepsViewer from "./StepsViewer";
 import ServiceTypeStep from "./steps/ServiceTypeStep";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { orderFormSchema, OrderFormValues } from "../schema";
-import { addOnOptions, specificTypes } from "../formData";
+import { addOnOptions } from "../formData";
 import PropertyDetailsStep from "./steps/PropertyDetailsStep";
 import AddOnsStep from "./steps/AddOnsStep";
 import PetInfoStep from "./steps/PetInfoStep";
@@ -17,6 +17,7 @@ import AccessStep from "./steps/AccessStep";
 import ScheduleStep from "./steps/ScheduleStep";
 import TipStep from "./steps/TipStep";
 import PaymentStep from "./steps/PaymentStep";
+import { calculateBasePrice } from "@/utils/priceCalculation";
 
 export default function ClientForm() {
   const [currStep, setCurrStep] = useState(0);
@@ -88,13 +89,13 @@ export default function ClientForm() {
         return false;
       case 7:
         return (
-          !!errors.personalInfo?.fullName ||
-          !!errors.personalInfo?.phoneNumber ||
-          !!errors.personalInfo?.email ||
-          !!errors.billingInfo?.country ||
-          !!errors.billingInfo?.state ||
-          !!errors.billingInfo?.city ||
-          !!errors.billingInfo?.zipCode
+          !!errors.fullName ||
+          !!errors.phoneNumber ||
+          !!errors.email ||
+          !!errors.country ||
+          !!errors.state ||
+          !!errors.city ||
+          !!errors.zipCode
         );
       default:
         return false;
@@ -122,13 +123,13 @@ export default function ClientForm() {
         break;
       case 7:
         isValid = await trigger([
-          "personalInfo.fullName",
-          "personalInfo.phoneNumber",
-          "personalInfo.email",
-          "billingInfo.country",
-          "billingInfo.state",
-          "billingInfo.city",
-          "billingInfo.zipCode"
+          "fullName",
+          "phoneNumber",
+          "email",
+          "country",
+          "state",
+          "city",
+          "zipCode"
         ]);
         break;
       // Add more cases for additional steps
@@ -153,47 +154,54 @@ export default function ClientForm() {
     formValues.bedrooms,
     formValues.bathrooms,
     formValues.squareFootage,
+    formValues.fullName,
+    formValues.phoneNumber,
+    formValues.email,
+    formValues.country,
+    formValues.state,
+    formValues.city,
+    formValues.zipCode,
     validateCurrentStep
   ]);
 
   // Calculate price based on form values
   const calculatePrice = () => {
-    let basePrice = 0;
-    const specificType = formValues.specificServiceType;
+    // let basePrice = 0;
+    // const specificType = formValues.specificServiceType;
 
-    // Set base price based on specific type
-    basePrice +=
-      specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
+    // // Set base price based on specific type
+    // basePrice +=
+    //   specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
 
-    // Add price adjustments based on property details
-    if (formValues.bedrooms) {
-      // Add $20 per bedroom after the first
-      const bedroomCount =
-        formValues.bedrooms === "4+" ? 4 : parseInt(formValues.bedrooms);
-      if (bedroomCount > 1) {
-        basePrice += (bedroomCount - 1) * 20;
-      }
-    }
+    // // Add price adjustments based on property details
+    // if (formValues.bedrooms) {
+    //   // Add $20 per bedroom after the first
+    //   const bedroomCount =
+    //     formValues.bedrooms === "4+" ? 4 : parseInt(formValues.bedrooms);
+    //   if (bedroomCount > 1) {
+    //     basePrice += (bedroomCount - 1) * 20;
+    //   }
+    // }
 
-    if (formValues.bathrooms) {
-      // Add $25 per bathroom after the first
-      const bathroomCount =
-        formValues.bathrooms === "4+" ? 4 : parseInt(formValues.bathrooms);
-      if (bathroomCount > 1) {
-        basePrice += (bathroomCount - 1) * 25;
-      }
-    }
+    // if (formValues.bathrooms) {
+    //   // Add $25 per bathroom after the first
+    //   const bathroomCount =
+    //     formValues.bathrooms === "4+" ? 4 : parseInt(formValues.bathrooms);
+    //   if (bathroomCount > 1) {
+    //     basePrice += (bathroomCount - 1) * 25;
+    //   }
+    // }
 
-    // Add prices for selected add-ons
-    if (formValues.addOns && formValues.addOns.length > 0) {
-      formValues.addOns.forEach((addonId) => {
-        const addon = addOnOptions.find((a) => a.id === addonId);
-        if (addon) {
-          basePrice += addon.price;
-        }
-      });
-    }
-    return basePrice;
+    // // Add prices for selected add-ons
+    // if (formValues.addOns && formValues.addOns.length > 0) {
+    //   formValues.addOns.forEach((addonId) => {
+    //     const addon = addOnOptions.find((a) => a.id === addonId);
+    //     if (addon) {
+    //       basePrice += addon.price;
+    //     }
+    //   });
+    // }
+    return calculateBasePrice(formValues);
   };
 
   // Calculate the total with tip included
@@ -210,7 +218,7 @@ export default function ClientForm() {
   // Navigation functions
   const goToNextStep = async () => {
     const isValid = await validateCurrentStep();
-
+    console.log(errors, formValues);
     if (isValid && currStep < 7) {
       setCurrStep((prev) => prev + 1);
     }

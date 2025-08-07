@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { OrderFormValues } from "@/app/booking/new/schema";
 import Stripe from "stripe";
+import { calculateTotal } from "../../../utils/priceCalculation";
+import axios from "axios";
 
 // Initialize Stripe with your SECRET key.
-// IMPORTANT: Keep your secret key in .env.local and never expose it to the frontend.
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-07-30.basil"
 });
@@ -17,9 +18,10 @@ export async function POST(request: Request) {
   try {
     const { paymentMethodId, ...orderData }: OrderRequest =
       await request.json();
-    const totalAmount = 100; /* Recalculate the total amount on the server for security */
 
-    console.log({ ...orderData, paymentMethodId });
+    // Calculate the total amount using the same logic as the form
+    const totalAmount = calculateTotal(orderData);
+
     // 1. Process the payment with Stripe
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(totalAmount * 100), // Amount in cents
@@ -30,8 +32,36 @@ export async function POST(request: Request) {
       // customer: ""
     });
 
-    console.log(paymentIntent);
-
+    const bodyObj = {
+      price: totalAmount - (orderData.tipAmount || 0),
+      addOnIds: [],
+      createAccount: false,
+      fullName: orderData.fullName,
+      phoneNumber: orderData.phoneNumber,
+      address: orderData.serviceAddress,
+      tip: orderData.tipAmount,
+      otherAddOns: orderData.otherService,
+      pets: orderData.petType,
+      email: orderData.email,
+      petsInstructions: orderData.petInstructions,
+      date: orderData.preferredDate,
+      timeSlot: orderData.timeWindow,
+      serviceId: 1,
+      serviceTypeId: 4,
+      bedrooms: orderData.bedrooms,
+      bathrooms: orderData.bathrooms,
+      approximateSquareFootage: +orderData.squareFootage,
+      stripePaymentIntentId: paymentIntent.id,
+      stripeCustomerId: null,
+      entryInstructions: orderData.accessInstructions,
+      password: null,
+      country: orderData.country,
+      state: orderData.state,
+      zipCode: orderData.zipCode,
+      city: orderData.city,
+      currency: "USD"
+    };
+    console.log(bodyObj);
     // don't send tip percentage
 
     // If paymentIntent.status is not 'succeeded', the payment failed.
@@ -40,8 +70,14 @@ export async function POST(request: Request) {
     // 2. If payment was successful, save the order to your database
     // (Your database logic would go here)
     // e.g., const savedOrder = await db.orders.create({ ...orderData, stripePaymentId: paymentIntent.id });
+    const response = await axios.post(
+      "http://172.30.19.171:3000/api/v1/bookings",
+      bodyObj
+    );
+    console.log(response);
+
     const newOrderId =
-      "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+      "ORD-" + response.data.displayId.slice(0, 9).toUpperCase();
 
     // 3. Return a success response
     return NextResponse.json({

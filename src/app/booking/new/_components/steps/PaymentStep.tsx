@@ -46,15 +46,15 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
 
       // Validate personal and billing info first
       const isPersonalInfoValid = await trigger([
-        "personalInfo.fullName",
-        "personalInfo.phoneNumber",
-        "personalInfo.email"
+        "fullName",
+        "phoneNumber",
+        "email"
       ]);
       const isBillingInfoValid = await trigger([
-        "billingInfo.country",
-        "billingInfo.state",
-        "billingInfo.city",
-        "billingInfo.zipCode"
+        "country",
+        "state",
+        "city",
+        "zipCode"
       ]);
 
       if (!isPersonalInfoValid || !isBillingInfoValid || !cardComplete) {
@@ -114,22 +114,22 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
           <Input
             label="Full Name"
             placeholder="Enter text..."
-            {...register("personalInfo.fullName")}
-            error={errors.personalInfo?.fullName?.message}
+            {...register("fullName")}
+            error={errors.fullName?.message}
             required
           />
           <Input
             label="Phone Number"
             placeholder="Enter text..."
-            {...register("personalInfo.phoneNumber")}
-            error={errors.personalInfo?.phoneNumber?.message}
+            {...register("phoneNumber")}
+            error={errors.phoneNumber?.message}
             required
           />
           <Input
             label="Email Address"
             placeholder="Enter text..."
-            {...register("personalInfo.email")}
-            error={errors.personalInfo?.email?.message}
+            {...register("email")}
+            error={errors.email?.message}
             required
           />
           <Input
@@ -182,29 +182,29 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
             <Input
               label="Country"
               placeholder="Enter here..."
-              {...register("billingInfo.country")}
-              error={errors.billingInfo?.country?.message}
+              {...register("country")}
+              error={errors.country?.message}
               required
             />
             <Input
               label="State"
               placeholder="Enter here..."
-              {...register("billingInfo.state")}
-              error={errors.billingInfo?.state?.message}
+              {...register("state")}
+              error={errors.state?.message}
               required
             />
             <Input
               label="City"
               placeholder="Enter here..."
-              {...register("billingInfo.city")}
-              error={errors.billingInfo?.city?.message}
+              {...register("city")}
+              error={errors.city?.message}
               required
             />
             <Input
               label="Billing Zip Code"
               placeholder="12345"
-              {...register("billingInfo.zipCode")}
-              error={errors.billingInfo?.zipCode?.message}
+              {...register("zipCode")}
+              error={errors.zipCode?.message}
               required
             />
           </div>
