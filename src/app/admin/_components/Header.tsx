@@ -24,7 +24,7 @@ export default function Header() {
     <>
 
       {/* Desktop Header */}
-      <header className="hidden lg:flex flex-col w-60 bg-surface-25 rounded-lg p-4 ">
+      <header className="hidden lg:flex flex-col w-60 bg-surface-50 rounded-lg p-4 ">
         <Link href="/admin/" className='flex items-center gap-2.5 text-heading-5 lg:text-heading-4'>
           <Image className='h-8 w-8 lg:h-10lg:w-10' src={logo} alt='Ottri Logo' />
           <span>Ottri</span>
@@ -45,7 +45,7 @@ export default function Header() {
       </header>
 
       {/* Mobile Header */}
-      <header className="h-14 px-4 flex items-center justify-between text-white bg-secondary-700 rounded-2xl shadow-custom">
+      <header className="h-14 px-4 mx-1 mt-1 flex lg:hidden items-center justify-between text-white bg-secondary-700 rounded-2xl shadow-custom">
         <button onClick={() => setShowMobile(!showMobile)} className="cursor-pointer p-2">
           <MenuIcon className="size-6" />
         </button>
@@ -57,12 +57,12 @@ export default function Header() {
       {/* Popup Mobile Open Nav Menu */}
       <div
         className={cn(
-          "fixed top-0 left-0 w-full h-dvh bg-black/50 flex flex-col transition-all",
+          "fixed top-0 left-0 w-full h-dvh bg-black/50 flex flex-col transition-all lg:hidden",
           showMobile ? "opacity-100" : "invisible opacity-0"
         )}
         onClick={() => setShowMobile(false)} // Close when clicking the overlay
       >
-        <header className="h-15 px-4 flex items-center text-white bg-secondary-700 rounded-2xl shadow-custom">
+        <header className="h-15 px-4 mx-1 mt-1 flex items-center text-white bg-secondary-700 rounded-2xl shadow-custom">
           <button onClick={(e) => {
             e.stopPropagation(); // Prevent event from bubbling to the overlay
             setShowMobile(!showMobile);
@@ -72,7 +72,7 @@ export default function Header() {
         </header>
         <div
           className={cn(
-            "flex flex-col px-4 mt-2 h-full w-full max-w-sm text-secondary-700 bg-white shadow-custom-strong rounded-r-2xl transition",
+            "flex flex-col px-4 mt-2 ml-1 mb-1 h-full w-full max-w-sm text-secondary-700 bg-white shadow-custom-strong rounded-2xl transition",
             showMobile ? "translate-x-0" : "-translate-x-full"
           )}
           onClick={(e) => e.stopPropagation()} // Prevent clicks inside nav from closing it
