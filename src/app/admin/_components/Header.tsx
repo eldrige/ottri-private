@@ -48,7 +48,7 @@ export default function Header() {
 
 
       {/* Mobile Header */}
-      <header className="h-14 px-4 mx-1 mt-1 flex lg:hidden items-center justify-between text-white bg-secondary-700 rounded-2xl shadow-custom">
+      <header className="sticky top-1 h-14 px-4 mx-1 mt-1 flex lg:hidden items-center justify-between text-white bg-secondary-700 rounded-2xl shadow-custom">
         <button onClick={() => setShowMobile(!showMobile)} className="cursor-pointer p-2">
           <MenuIcon className="size-6" />
         </button>
@@ -65,7 +65,7 @@ export default function Header() {
         )}
         onClick={() => setShowMobile(false)} // Close when clicking the overlay
       >
-        <header className="h-15 px-4 mx-1 mt-1 flex items-center text-white bg-secondary-700 rounded-2xl shadow-custom">
+        <header className="min-h-14 px-4 mx-1 mt-1 flex items-center text-white bg-secondary-700 rounded-2xl shadow-custom">
           <button onClick={(e) => {
             e.stopPropagation(); // Prevent event from bubbling to the overlay
             setShowMobile(!showMobile);
