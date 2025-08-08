@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { servicesData } from "@/lib/sampleData";
-import { Service } from "@/lib/types";
+import { ServiceType } from "@/lib/types";
 
 export default function ServicesSection2() {
   return (
@@ -40,8 +40,8 @@ function ServiceCard({
   subtitle,
   services,
   priceFrom,
-  duration,
-}: Omit<Service, "pricingDetails" | "process">) {
+  duration
+}: Omit<ServiceType, "pricingDetails" | "process">) {
   return (
     <div
       className={cn(

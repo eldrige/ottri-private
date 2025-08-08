@@ -35,3 +35,60 @@ export interface TeamMember {
   specialities: string[];
   coverSrc: StaticImageData;
 }
+
+// Booking
+
+export interface BookingType {
+  id: number;
+  displayId: string;
+  status: string;
+  price: number;
+  tip: number;
+  currency: string;
+  notes: string;
+  bedrooms: string;
+  bathrooms: string;
+  approximateSquareFootage: number;
+  address: string;
+  mapLocation: null;
+  stripePaymentIntentId: string;
+  pets: string;
+  petsInstructions: string;
+  entryInstructions: string;
+  date: string;
+  customerId: null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  customer: null;
+  serviceTypes: BookingSpecificType[];
+  cleaner: BookingCleanerType[];
+  location: null;
+}
+
+interface BookingSpecificType {
+  id: number;
+  name: string;
+  description: string;
+  basePrice: number;
+  currency: string;
+  serviceId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  service: ServiceType;
+}
+
+interface ServiceType {
+  id: number;
+  name: string;
+  description: string;
+  popular: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+}
+
+interface BookingCleanerType {
+  id: string;
+}

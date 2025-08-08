@@ -9,8 +9,6 @@ export function calculateBasePrice(
 
   // Set base price based on specific type
   basePrice += specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
-  // fjaweiofjweoifj + lkjfsd --> fawhifoehfweafhow.lkjfsd
-  // fjaweiofjweoifj + ksjdlf --> lskdjajdlaksjdfas.ksjdlf
   // Add price adjustments based on property details
   if (orderData.bedrooms) {
     // Add $20 per bedroom after the first

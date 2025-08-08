@@ -1,9 +1,9 @@
-import { Service } from "@/lib/types";
+import { ServiceType } from "@/lib/types";
 import React from "react";
 
 export default function ServicesDetailsSection3({
-  process,
-}: Pick<Service, "process">) {
+  process
+}: Pick<ServiceType, "process">) {
   return (
     <section className="py-24 pb-36 gap-16 flex flex-col">
       <div className="text-center flex flex-col justify-center items-center space-y-4">

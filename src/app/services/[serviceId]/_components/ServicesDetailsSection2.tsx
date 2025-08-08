@@ -1,9 +1,9 @@
-import { PricingDetail, Service } from "@/lib/types";
+import { PricingDetail, ServiceType } from "@/lib/types";
 import React from "react";
 
 export default function ServicesDetailsSection2({
-  pricingDetails,
-}: Pick<Service, "pricingDetails">) {
+  pricingDetails
+}: Pick<ServiceType, "pricingDetails">) {
   return (
     <section className="py-24 pb-36 gap-16 flex flex-col">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
