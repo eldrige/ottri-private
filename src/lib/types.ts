@@ -28,9 +28,10 @@ export interface ServiceBooked {
   serviceName: string;
   cleanerName: string;
   cleanerImage?: StaticImageData;
+  price?: number;
   date: string;
   time: string;
   location: string;
-  state: "complete" | "scheduled";
+  state: "complete" | "scheduled" | "in-progress" | "pending" | "cancelled";
   rating: number;
 }
