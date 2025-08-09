@@ -23,3 +23,14 @@ export interface Service {
     className?: string | undefined;
   }) => React.JSX.Element;
 }
+
+export interface ServiceBooked {
+  serviceName: string;
+  cleanerName: string;
+  cleanerImage?: StaticImageData;
+  date: string;
+  time: string;
+  location: string;
+  state: "complete" | "scheduled";
+  rating: number;
+}

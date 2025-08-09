@@ -3,12 +3,45 @@ import React from "react";
 import ServiceCard, { AppointmentCard } from "./ServiceCard";
 import { CircleAlert, PlusIcon } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
-import StarIcon from "@/components/icons/StarIcon";
+import { ServiceBooked } from "@/lib/types";
+import userImage from "@/assets/user-profile-figure.png";
 
 export default function DashboardSection3() {
+  const bookedServices: ServiceBooked[] = [
+    {
+      serviceName: "Standard Cleaning",
+      cleanerName: "Sarah Johnson",
+      cleanerImage: userImage,
+      date: "May 16, 2025",
+      time: "2:00 PM - 4:00 PM",
+      location: "123 Main St, Apt 4B",
+      state: "complete",
+      rating: 5,
+    },
+    {
+      serviceName: "Standard Cleaning",
+      cleanerName: "Sarah Johnson",
+      cleanerImage: userImage,
+      date: "May 16, 2025",
+      time: "2:00 PM - 4:00 PM",
+      location: "123 Main St, Apt 4B",
+      state: "complete",
+      rating: 5,
+    },
+    {
+      serviceName: "Deep Cleaning",
+      cleanerName: "John Doe",
+      cleanerImage: userImage,
+      date: "May 17, 2025",
+      time: "10:00 AM - 12:00 PM",
+      location: "456 Elm St, Apt 2A",
+      state: "scheduled",
+      rating: 4,
+    },
+  ];
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 *:flex-1/2 gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 *:flex-1/2 gap-8">
         <div className="lg:p-6 lg:border border-surface-500/30 rounded-lg flex flex-col gap-6">
           <div className="flex flex-col lg:flex-row justify-between lg:items-center w-full">
             <div>
@@ -29,32 +62,9 @@ export default function DashboardSection3() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <ServiceCard>
-              <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
-                <CircleAlert className="w-4.25" />
-                Complete
-              </Badge>
-              <div className="flex items-center gap-0.25">
-                <StarIcon />
-                <p>5</p>
-              </div>
-            </ServiceCard>
-            <ServiceCard>
-              <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
-                <CircleAlert className="w-4.25" />
-                Complete
-              </Badge>
-              <div className="flex items-center gap-0.25">
-                <StarIcon />
-                <p>5</p>
-              </div>
-            </ServiceCard>
-            <ServiceCard>
-              <Badge className="bg-surface-500/15 text-caption items-center px-3 text-secondary-700 rounded-xl flex border-0 gap-2">
-                <CircleAlert className="w-4.25" />
-                Scheduled
-              </Badge>
-            </ServiceCard>
+            {bookedServices.map((service, index) => (
+              <ServiceCard key={index} service={service} />
+            ))}
           </div>
         </div>
         <div className=" lg:p-6 lg:border border-surface-500/30 rounded-lg flex flex-col gap-6">
@@ -77,24 +87,9 @@ export default function DashboardSection3() {
             </div>
           </div>
           <div className="flex flex-col gap-2.5">
-            <AppointmentCard>
-              <Button
-                size={"xs"}
-                className="w-full text-caption flex justify-center gap-3 "
-                variant={"outline"}
-              >
-                Cancel
-              </Button>
-            </AppointmentCard>
-            <AppointmentCard>
-              <Button
-                size={"xs"}
-                className="w-full text-caption flex justify-center gap-3 "
-                variant={"outline"}
-              >
-                Cancel
-              </Button>
-            </AppointmentCard>
+            {bookedServices.map((service, index) => (
+              <AppointmentCard key={index} service={service} />
+            ))}
           </div>
           <Button
             size={"xs"}

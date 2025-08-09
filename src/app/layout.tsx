@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Nunito_Sans, Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "./_components/Navbar";
-import Footer from "@/app/_components/Footer";
-import CookiesBanner from "./_components/CookiesBanner";
+// import Navbar from "./_components/Navbar";
+// import Footer from "@/app/_components/Footer";
+// import CookiesBanner from "./_components/CookiesBanner";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -31,13 +31,13 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${nunitoSans.variable} antialiased font-poppins`}
       >
-        <Navbar />
+        {/* <Navbar /> */}
         {children}
 
-        <footer className="bg-secondary-700">
+        {/* <footer className="bg-secondary-700">
           <Footer />
         </footer>
-        <CookiesBanner />
+        <CookiesBanner /> */}
       </body>
     </html>
   );
