@@ -170,7 +170,6 @@ function AppointmentCardDesktop({
   time,
   location,
   state,
-  rating,
 }: ServiceCardProps) {
   return (
     <div className="w-full">
@@ -223,12 +222,10 @@ function AppointmentCardDesktop({
 function AppointmentcardMobile({
   serviceName,
   cleanerName,
-  cleanerImage,
   date,
   time,
   location,
   state,
-  rating,
 }: ServiceCardProps) {
   return (
     <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">

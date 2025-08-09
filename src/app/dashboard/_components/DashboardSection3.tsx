@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import React from "react";
 import ServiceCard, { AppointmentCard } from "./ServiceCard";
-import { CircleAlert, PlusIcon } from "lucide-react";
-import { Badge } from "@/components/ui/Badge";
+import { PlusIcon } from "lucide-react";
 import { ServiceBooked } from "@/lib/types";
 import userImage from "@/assets/user-profile-figure.png";
 
