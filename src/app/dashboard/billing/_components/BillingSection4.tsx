@@ -52,23 +52,37 @@ function TransactionCard({
   state,
 }: TransactionCardProps) {
   return (
-    <div className="flex lg:border items-center border-surface-500/30 rounded-lg p-2 justify-between">
-      <div className="flex flex-col gap-1 h-full justify-between">
-        <h2 className="text-secondary-700 gap-2.5 font-semibold text-lg">
-          {service} - {cleaner}
-        </h2>
-        <p className="text-caption text-secondary-800">{date}</p>
+    <div className="flex  px-4 py-2 rounded-lg border border-surface-500/30  flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-1 h-full justify-between">
+          <h2 className="text-secondary-700 gap-2.5 font-semibold text-lg">
+            {service} - {cleaner}
+          </h2>
+          <p className="text-caption text-secondary-800">{date}</p>
+          <p className="text-red-500 py-2 text-nowrap md:hidden">
+            -${amount.toFixed(2)}
+          </p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="hidden md:block text-red-500 text-nowrap">
+            -${amount.toFixed(2)}
+          </p>
+          <Button
+            size={"xs"}
+            className="w-full hidden md:flex text-caption text-secondary-700 justify-center gap-3 "
+            variant={"outline"}
+          >
+            {state}
+          </Button>
+        </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-red-500">-${amount.toFixed(2)}</p>
-        <Button
-          size={"xs"}
-          className="w-full text-caption text-secondary-700 flex justify-center gap-3 "
-          variant={"outline"}
-        >
-          {state}
-        </Button>
-      </div>
+      <Button
+        size={"xs"}
+        className="w-full md:hidden text-caption text-secondary-700 flex justify-center gap-3 "
+        variant={"outline"}
+      >
+        {state}
+      </Button>
     </div>
   );
 }
