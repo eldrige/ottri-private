@@ -55,7 +55,7 @@ function MobileNav({
   return (
     <>
       {show && (
-        <div className="fixed px-2 top-0 left-0 w-full h-full bg-black/50 z-40">
+        <div className="md:hidden fixed px-2 top-0 left-0 w-full h-full bg-black/50 z-40">
           <div className="flex h-screen pt-18">
             <div className="flex h-98/100 flex-col w-5/7 pl-3 pr-12 py-5 bg-white rounded-xl">
               <div className="flex text-caption flex-col  gap-2.5">
