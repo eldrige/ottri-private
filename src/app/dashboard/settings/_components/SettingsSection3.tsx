@@ -84,7 +84,7 @@ function AccountActions() {
         </Button>
         <Button
           size={"xs"}
-          className=" w-full flex items-center justify-center bg-[#DC3545] py-2 px-4 gap-3"
+          className=" w-full flex items-center justify-center hover:border-[#DC3545] hover:text-[#DC3545] bg-[#DC3545] py-2 px-4 gap-3"
         >
           <p className="text-caption">Delete Account</p>
         </Button>
