@@ -14,18 +14,19 @@ import {
 import userImage from "@/assets/user-profile-figure.png";
 import Link from "next/link";
 import { SideNavLink } from "./SideNavBar";
+import Menu2 from "@/components/icons/Menu2";
 
 export default function Navbar() {
   const [showMobile, setShowMobile] = useState(false);
   return (
     <>
       <nav className="md:hidden fixed px-2 w-full top-1 z-50">
-        <div className="flex rounded-2xl px-6 py-2 shadow-lg bg-primary-700  text-white justify-between items-center container mx-auto">
+        <div className="flex rounded-2xl px-4 py-2 shadow-lg bg-primary-700  text-white justify-between items-center container mx-auto">
           <button
             onClick={() => setShowMobile((prev) => !prev)}
             className="cursor-pointer"
           >
-            {!showMobile ? <Menu /> : <XIcon />}
+            {!showMobile ? <Menu2 /> : <XIcon />}
           </button>
           <Link
             href="/"
@@ -34,7 +35,7 @@ export default function Navbar() {
             <span>Ottri</span>
           </Link>
           <Image
-            className="rounded-full size-11"
+            className="rounded-full size-10"
             src={userImage}
             alt={"user profile"}
           />
