@@ -31,7 +31,7 @@ export interface ServiceBooked {
   price?: number;
   date: string;
   time: string;
-  review: string;
+  review?: string;
   location: string;
   state: "complete" | "scheduled" | "in-progress" | "pending" | "cancelled";
   rating: number;
