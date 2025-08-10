@@ -6,7 +6,6 @@ import {
   CreditCard,
   FileText,
   HomeIcon,
-  Menu,
   Settings,
   UserIcon,
   XIcon,
