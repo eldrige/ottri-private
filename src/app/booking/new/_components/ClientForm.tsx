@@ -50,6 +50,7 @@ export default function ClientForm() {
 
   const {
     watch,
+    // setValue,
     handleSubmit,
     trigger,
     formState: { errors }
@@ -166,41 +167,6 @@ export default function ClientForm() {
 
   // Calculate price based on form values
   const calculatePrice = () => {
-    // let basePrice = 0;
-    // const specificType = formValues.specificServiceType;
-
-    // // Set base price based on specific type
-    // basePrice +=
-    //   specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
-
-    // // Add price adjustments based on property details
-    // if (formValues.bedrooms) {
-    //   // Add $20 per bedroom after the first
-    //   const bedroomCount =
-    //     formValues.bedrooms === "4+" ? 4 : parseInt(formValues.bedrooms);
-    //   if (bedroomCount > 1) {
-    //     basePrice += (bedroomCount - 1) * 20;
-    //   }
-    // }
-
-    // if (formValues.bathrooms) {
-    //   // Add $25 per bathroom after the first
-    //   const bathroomCount =
-    //     formValues.bathrooms === "4+" ? 4 : parseInt(formValues.bathrooms);
-    //   if (bathroomCount > 1) {
-    //     basePrice += (bathroomCount - 1) * 25;
-    //   }
-    // }
-
-    // // Add prices for selected add-ons
-    // if (formValues.addOns && formValues.addOns.length > 0) {
-    //   formValues.addOns.forEach((addonId) => {
-    //     const addon = addOnOptions.find((a) => a.id === addonId);
-    //     if (addon) {
-    //       basePrice += addon.price;
-    //     }
-    //   });
-    // }
     return calculateBasePrice(formValues);
   };
 

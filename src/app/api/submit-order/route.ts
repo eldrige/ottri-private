@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { OrderFormValues } from "@/app/booking/new/schema";
 import Stripe from "stripe";
-import { calculateTotal } from "../../../utils/priceCalculation";
+import {
+  calculateAddOnsPrice,
+  calculateServicesPrice,
+  calculateTotal
+} from "../../../utils/priceCalculation";
 import axios from "axios";
 
 // Initialize Stripe with your SECRET key.
@@ -32,8 +36,14 @@ export async function POST(request: Request) {
       // customer: ""
     });
 
+    const servicesPrice = calculateServicesPrice(orderData);
+    const addOnsPrice = calculateAddOnsPrice(orderData);
+
     const bodyObj = {
-      price: totalAmount - (orderData.tipAmount || 0),
+      servicesPrice: servicesPrice,
+      addOnsPrice: addOnsPrice,
+      tax: (servicesPrice + addOnsPrice) * 0.08,
+      timeSlotId: 9,
       addOnIds: [],
       createAccount: false,
       fullName: orderData.fullName,
@@ -44,10 +54,10 @@ export async function POST(request: Request) {
       pets: orderData.petType,
       email: orderData.email,
       petsInstructions: orderData.petInstructions,
-      date: orderData.preferredDate,
-      timeSlot: orderData.timeWindow,
+      // date: orderData.preferredDate,
+      // timeSlot: orderData.timeWindow,
       serviceId: 1,
-      serviceTypeId: 4,
+      serviceTypeId: 2,
       bedrooms: orderData.bedrooms,
       bathrooms: orderData.bathrooms,
       approximateSquareFootage: +orderData.squareFootage,
@@ -62,18 +72,13 @@ export async function POST(request: Request) {
       currency: "USD"
     };
     console.log(bodyObj);
-    // don't send tip percentage
 
-    // If paymentIntent.status is not 'succeeded', the payment failed.
-    // The `create` call will throw an error for card failures if `confirm: true` is set.
-
-    // 2. If payment was successful, save the order to your database
-    // (Your database logic would go here)
-    // e.g., const savedOrder = await db.orders.create({ ...orderData, stripePaymentId: paymentIntent.id });
-    const response = await axios.post(
-      "http://172.30.19.171:3000/api/v1/bookings",
-      bodyObj
-    );
+    const response = await axios
+      .post("http://172.30.19.171:3000/api/v1/bookings", bodyObj)
+      .catch((i) => {
+        console.log(i.response);
+        throw i;
+      });
     console.log(response);
 
     const newOrderId =

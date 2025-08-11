@@ -24,10 +24,18 @@ export default async function ConfirmationPage({
   );
 
   const bookingData = response.data as BookingType;
+  console.log(bookingData);
 
-  const formattedDate = format(bookingData.date, "PP");
+  const formattedDate = format(bookingData.timeSlot.date, "PP");
 
-  console.log(bookingData.serviceTypes);
+  const formattedFrom = format(
+    new Date().setHours(bookingData.timeSlot.startTime, 0, 0, 0),
+    "hh:mmaa"
+  );
+  const formattedTo = format(
+    new Date().setHours(bookingData.timeSlot.endTime, 0, 0, 0),
+    "hh:mmaa"
+  );
 
   return (
     <main className="text-secondary-700">
@@ -69,7 +77,7 @@ export default async function ConfirmationPage({
                       {formattedDate}
                     </p>
                     <p className="text-caption text-surface-500">
-                      10:00AM - 1:00 PM
+                      {formattedFrom} - {formattedTo}
                     </p>
                   </div>
                 </div>
@@ -96,7 +104,7 @@ export default async function ConfirmationPage({
                   <div className="space-y-1">
                     <p className="text-lg font-medium">Service</p>
                     <p className="text-caption text-surface-500">
-                      {bookingData.serviceTypes[0].service.name}
+                      {bookingData.serviceType.service.name}
                     </p>
                   </div>
                 </div>

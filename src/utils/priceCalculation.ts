@@ -1,21 +1,20 @@
 import { OrderFormValues } from "@/app/booking/new/schema";
 import { addOnOptions, specificTypes } from "@/app/booking/new/formData";
 
-export function calculateBasePrice(
-  orderData: Partial<OrderFormValues>
-): number {
-  let basePrice = 0;
+export function calculateServicesPrice(orderData: Partial<OrderFormValues>) {
+  let servicesPrice = 0;
   const specificType = orderData.specificServiceType;
 
   // Set base price based on specific type
-  basePrice += specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
+  servicesPrice +=
+    specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
   // Add price adjustments based on property details
   if (orderData.bedrooms) {
     // Add $20 per bedroom after the first
     const bedroomCount =
       orderData.bedrooms === "4+" ? 4 : parseInt(orderData.bedrooms);
     if (bedroomCount > 1) {
-      basePrice += (bedroomCount - 1) * 20;
+      servicesPrice += (bedroomCount - 1) * 20;
     }
   }
 
@@ -24,16 +23,22 @@ export function calculateBasePrice(
     const bathroomCount =
       orderData.bathrooms === "4+" ? 4 : parseInt(orderData.bathrooms);
     if (bathroomCount > 1) {
-      basePrice += (bathroomCount - 1) * 25;
+      servicesPrice += (bathroomCount - 1) * 25;
     }
   }
+
+  return servicesPrice;
+}
+
+export function calculateAddOnsPrice(orderData: Partial<OrderFormValues>) {
+  let addOnsPrice = 0;
 
   // Add prices for selected add-ons
   if (orderData.addOns && orderData.addOns.length > 0) {
     orderData.addOns.forEach((addonId) => {
       const addon = addOnOptions.find((a) => a.id === addonId);
       if (addon) {
-        basePrice += addon.price;
+        addOnsPrice += addon.price;
       }
     });
   }
@@ -44,16 +49,27 @@ export function calculateBasePrice(
 
     // Add additional charges based on square footage tiers
     if (footage === "1000") {
-      basePrice += 15; // Small additional charge for 500-1000 sq ft
+      addOnsPrice += 15; // Small additional charge for 500-1000 sq ft
     } else if (footage === "1500") {
-      basePrice += 30; // Medium additional charge for 1000-1500 sq ft
+      addOnsPrice += 30; // Medium additional charge for 1000-1500 sq ft
     } else if (footage === "2000") {
-      basePrice += 45; // Larger charge for 1500-2000 sq ft
+      addOnsPrice += 45; // Larger charge for 1500-2000 sq ft
     } else if (footage === "2500+") {
-      basePrice += 60; // Largest charge for 2500+ sq ft
+      addOnsPrice += 60; // Largest charge for 2500+ sq ft
     }
     // No additional charge for the smallest size (up to 500 sq ft)
   }
+  return addOnsPrice;
+}
+
+export function calculateBasePrice(
+  orderData: Partial<OrderFormValues>
+): number {
+  let basePrice = 0;
+
+  basePrice += calculateServicesPrice(orderData);
+
+  basePrice += calculateAddOnsPrice(orderData);
 
   return basePrice;
 }

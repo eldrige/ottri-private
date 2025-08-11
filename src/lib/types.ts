@@ -42,8 +42,10 @@ export interface BookingType {
   id: number;
   displayId: string;
   status: string;
-  price: number;
+  servicesPrice: number;
+  addOnsPrice: number;
   tip: number;
+  tax: number;
   currency: string;
   notes: string;
   bedrooms: string;
@@ -55,15 +57,29 @@ export interface BookingType {
   pets: string;
   petsInstructions: string;
   entryInstructions: string;
-  date: string;
   customerId: null;
+  serviceTypeId: number;
+  timeSlotId: number;
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
   customer: null;
-  serviceTypes: BookingSpecificType[];
-  cleaner: BookingCleanerType[];
+  serviceType: BookingSpecificType;
+  cleaners: BookingCleanerType[];
+  review: null;
   location: null;
+  price: number;
+  timeSlot: TimeSlotType;
+}
+
+interface TimeSlotType {
+  id: number;
+  date: string;
+  startTime: number;
+  endTime: number;
+  instances: number;
+  repetition: string;
+  freeInstances: number;
 }
 
 interface BookingSpecificType {
@@ -76,10 +92,10 @@ interface BookingSpecificType {
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
-  service: ServiceType;
+  service: BookingServiceType;
 }
 
-interface ServiceType {
+interface BookingServiceType {
   id: number;
   name: string;
   description: string;
