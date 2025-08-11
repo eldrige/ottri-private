@@ -1,0 +1,51 @@
+.custom-calendar-container .fc-theme-standard td,
+.custom-calendar-container .fc-theme-standard th {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.custom-calendar-container .fc-daygrid-day {
+  min-height: 4.5rem;
+  padding: 0.5rem;
+}
+
+.custom-calendar-container .fc-col-header-cell {
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.5rem;
+}
+
+.custom-calendar-container .fc-daygrid-day-number {
+  font-size: 1rem;
+}
+
+.custom-calendar-container .fc-daygrid-event-harness {
+  margin-top: 0.25rem;
+}
+
+.custom-calendar-container .fc-event {
+  border: none;
+  background: none;
+}
+
+.custom-calendar-container .fc-toolbar-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.custom-calendar-container .fc-button-primary {
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.custom-calendar-container .fc-button-primary:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.custom-calendar-container .fc-button-primary:not(:disabled).fc-button-active,
+.custom-calendar-container .fc-button-primary:not(:disabled):active {
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: black;
+}

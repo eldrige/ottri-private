@@ -1,10 +1,46 @@
+"use client";
+import React, { useState } from "react";
 import CalendarIcon from "@/components/icons/CalendarIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
 import { ChevronDown, Filter, ListIcon, PlusIcon } from "lucide-react";
-import React from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import "./calendar-styles.css";
 
 export default function AdminBookingsPage() {
+  const [activeView, setActiveView] = useState("calendar");
+
+  // Sample booking data
+  const events = [
+    {
+      title: "Maria Garcia",
+      start: "2025-08-29T09:00:00",
+      end: "2025-08-29T10:00:00",
+      extendedProps: {
+        status: "info"
+      }
+    },
+    {
+      title: "Jon Doe",
+      start: "2025-08-29T11:00:00",
+      end: "2025-08-29T12:00:00",
+      extendedProps: {
+        status: "warning"
+      }
+    },
+    {
+      title: "Emma Lee",
+      start: "2025-08-29T14:00:00",
+      end: "2025-08-29T15:00:00",
+      extendedProps: {
+        status: "success"
+      }
+    }
+  ];
+
   return (
     <main className="w-full h-full py-4 px-6">
       <div className="flex justify-between items-center">
@@ -29,15 +65,30 @@ export default function AdminBookingsPage() {
       </div>
 
       <div className="w-full mt-8 py-2 px-3 flex gap-4 rounded-4xl bg-surface-50">
-        <button className="flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 bg-white">
+        <button
+          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 ${
+            activeView === "calendar" ? "bg-white" : "text-secondary-700/70"
+          }`}
+          onClick={() => setActiveView("calendar")}
+        >
           <CalendarIcon className="size-4" />
           Calendar View
         </button>
-        <button className="flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 text-secondary-700/70">
+        <button
+          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 ${
+            activeView === "list" ? "bg-white" : "text-secondary-700/70"
+          }`}
+          onClick={() => setActiveView("list")}
+        >
           <ListIcon className="size-4" />
           List View
         </button>
-        <button className="flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 text-secondary-700/70">
+        <button
+          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 ${
+            activeView === "map" ? "bg-white" : "text-secondary-700/70"
+          }`}
+          onClick={() => setActiveView("map")}
+        >
           <LocationIcon className="size-4" />
           Map View
         </button>
@@ -46,53 +97,45 @@ export default function AdminBookingsPage() {
       <div className="mt-8 p-6 border border-black/10 rounded-lg">
         <h4 className="text-heading-5">Calendar Grid View</h4>
 
-        <div className="mt-8 grid grid-cols-7 gap-2 font-medium">
-          <div className="p-2 mb-2 border-b border-black/10">
-            <p className="text-center ">Sun</p>
-          </div>
-          <div className="p-2 mb-2 border-b border-black/10">
-            <p className="text-center ">Sun</p>
-          </div>
-          <div className="p-2 mb-2 border-b border-black/10">
-            <p className="text-center ">Sun</p>
-          </div>
-          <div className="p-2 mb-2 border-b border-black/10">
-            <p className="text-center ">Sun</p>
-          </div>
-          <div className="p-2 mb-2 border-b border-black/10">
-            <p className="text-center ">Sun</p>
-          </div>
-          <div className="p-2 mb-2 border-b border-black/10">
-            <p className="text-center ">Sun</p>
-          </div>
-          <div className="p-2 mb-2 border-b border-black/10">
-            <p className="text-center ">Sun</p>
-          </div>
+        <div className="mt-8 custom-calendar-container">
+          <FullCalendar
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: ""
+            }}
+            events={events}
+            eventContent={(eventInfo) => {
+              const status = eventInfo.event.extendedProps
+                .status as keyof typeof statusClasses;
+              const statusClasses = {
+                info: "bg-info/10 text-info-text",
+                warning: "bg-warning/10 text-warning-text",
+                success: "bg-success/10 text-success"
+              };
 
-          {[
-            27, 28, 29, 30, 31, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-            15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30
-          ].map((day, idx) => (
-            <div
-              key={idx}
-              className="p-2 min-h-18 border border-black/10 rounded-lg"
-            >
-              <p className="">{day}</p>
-              {day === 29 && idx !== 2 && (
-                <div className="space-y-1 text-tiny">
-                  <div className="p-2 rounded-lg bg-info/10 text-info-text">
-                    9:00 AM - Maria Garcia
-                  </div>
-                  <div className="p-2 rounded-lg bg-warning/10 text-warning-text">
-                    11:00 AM - Jon Doe
-                  </div>
-                  <div className="p-2 rounded-lg bg-success/10 text-success">
-                    2:00 PM - Emma Lee
-                  </div>
+              // Only show time and name
+              const timeText = eventInfo.timeText;
+              const title = eventInfo.event.title;
+
+              return (
+                <div
+                  className={`p-2 rounded-lg ${statusClasses[status]}`}
+                >{`${timeText} - ${title}`}</div>
+              );
+            }}
+            dayHeaderContent={(args) => {
+              return (
+                <div className="text-center">
+                  {args.date.toLocaleDateString("en-US", {
+                    weekday: "short"
+                  })}
                 </div>
-              )}
-            </div>
-          ))}
+              );
+            }}
+          />
         </div>
       </div>
     </main>
