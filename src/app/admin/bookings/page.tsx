@@ -97,7 +97,7 @@ export default function AdminBookingsPage() {
       <div className="mt-8 p-6 border border-black/10 rounded-lg">
         <h4 className="text-heading-5">Calendar Grid View</h4>
 
-        <div className="mt-8 custom-calendar-container">
+        <div className="mt-8 w-full custom-calendar-container">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
