@@ -1,5 +1,11 @@
 import figure2 from "@/assets/landing-section3-figure2.jpg";
 import figure3 from "@/assets/landing-section3-figure3.jpg";
+import ourTeamFigure1 from "@/assets/ourteam-figure1.jpg";
+import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
+import ourTeamFigure3 from "@/assets/ourteam-figure3.jpg";
+import ourTeamFigure4 from "@/assets/ourteam-figure4.jpg";
+import ourTeamFigure5 from "@/assets/ourteam-figure5.jpg";
+import ourTeamFigure6 from "@/assets/ourteam-figure6.jpg";
 import howweworkFigure1 from "@/assets/howwework-figure1.jpg";
 import howweworkFigure2 from "@/assets/howwework-figure2.jpg";
 import howweworkFigure3 from "@/assets/howwework-figure3.jpg";
@@ -9,13 +15,13 @@ import howweworkFigure6 from "@/assets/howwework-figure6.jpg";
 import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
-import { HowWeWork, Service } from "./types";
+import { Service, TeamMember, HowWeWork } from "./types";
 import {
   CalendarIcon,
   CreditCardIcon,
   MessageSquareIcon,
   ShieldCheck,
-  UserCheck,
+  UserCheck
 } from "lucide-react";
 import BroomSparkleIcon from "@/components/icons/BroomSparkleIcon";
 
@@ -29,25 +35,25 @@ export const servicesData: Service[] = [
     services: [
       "Office Cleaning",
       "Club House and Halls",
-      "Eateries and Kitchens",
+      "Eateries and Kitchens"
     ],
     priceFrom: 89,
     pricingDetails: [
       {
         size: "1-2 Bedrooms",
         priceRange: "89-109",
-        timeRange: "3-4",
+        timeRange: "3-4"
       },
       {
         size: "3-4 bedrooms",
         priceRange: "129-169",
-        timeRange: "4-5",
+        timeRange: "4-5"
       },
       {
         size: "1-2 Bedrooms",
         priceRange: "169-229",
-        timeRange: "5-6",
-      },
+        timeRange: "5-6"
+      }
     ],
     duration: "3-5",
     mostPopular: false,
@@ -56,8 +62,8 @@ export const servicesData: Service[] = [
       "Room-by-room systematic deep cleaning",
       "Quality check with detailed checklist",
       "Final walkthrough with customer",
-      "Photo documentation of completed work",
-    ],
+      "Photo documentation of completed work"
+    ]
   },
   {
     id: 2,
@@ -71,18 +77,18 @@ export const servicesData: Service[] = [
       {
         size: "1-2 Bedrooms",
         priceRange: "89-109",
-        timeRange: "3-4",
+        timeRange: "3-4"
       },
       {
         size: "3-4 bedrooms",
         priceRange: "129-169",
-        timeRange: "4-5",
+        timeRange: "4-5"
       },
       {
         size: "1-2 Bedrooms",
         priceRange: "169-229",
-        timeRange: "5-6",
-      },
+        timeRange: "5-6"
+      }
     ],
     duration: "3-5",
     mostPopular: true,
@@ -91,8 +97,8 @@ export const servicesData: Service[] = [
       "Room-by-room systematic deep cleaning",
       "Quality check with detailed checklist",
       "Final walkthrough with customer",
-      "Photo documentation of completed work",
-    ],
+      "Photo documentation of completed work"
+    ]
   },
   {
     id: 3,
@@ -110,25 +116,25 @@ export const servicesData: Service[] = [
       "Bathroom deep scrub with grout cleaning",
       "Dust all surfaces and furniture",
       "Empty all trash and replace liners",
-      "Make beds and tidy rooms",
+      "Make beds and tidy rooms"
     ],
     priceFrom: 89,
     pricingDetails: [
       {
         size: "1-2 Bedrooms",
         priceRange: "89-109",
-        timeRange: "3-4",
+        timeRange: "3-4"
       },
       {
         size: "3-4 bedrooms",
         priceRange: "129-169",
-        timeRange: "4-5",
+        timeRange: "4-5"
       },
       {
         size: "1-2 Bedrooms",
         priceRange: "89-109",
-        timeRange: "3-4",
-      },
+        timeRange: "3-4"
+      }
     ],
     duration: "3-5",
     mostPopular: false,
@@ -137,9 +143,111 @@ export const servicesData: Service[] = [
       "Room-by-room systematic deep cleaning",
       "Quality check with detailed checklist",
       "Final walkthrough with customer",
-      "Photo documentation of completed work",
+      "Photo documentation of completed work"
+    ]
+  }
+];
+
+export const teamMembers: TeamMember[] = [
+  {
+    id: 1,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out"
     ],
+    coverSrc: ourTeamFigure1
   },
+  {
+    id: 2,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out"
+    ],
+    coverSrc: ourTeamFigure2
+  },
+  {
+    id: 3,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out"
+    ],
+    coverSrc: ourTeamFigure3
+  },
+
+  {
+    id: 4,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out"
+    ],
+    coverSrc: ourTeamFigure4
+  },
+
+  {
+    id: 5,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out"
+    ],
+    coverSrc: ourTeamFigure5
+  },
+
+  {
+    id: 6,
+    name: "Jonas Cubb",
+    role: "Founder, Cleaner",
+    numberOfRantings: 245,
+    averageRatings: 4.9,
+    experience: 8,
+    location: "Downtown $ city Center",
+    specialities: [
+      "Deep cleaning",
+      "Move-in/Move-out",
+      "Deep cleaning",
+      "Move-in/Move-out"
+    ],
+    coverSrc: ourTeamFigure6
+  }
 ];
 
 export const howWeWorkData: HowWeWork[] = [
@@ -154,8 +262,8 @@ export const howWeWorkData: HowWeWork[] = [
       "Select service type and frequency",
       "Specify home size and special requests",
       "Choose convenient time slots",
-      "Add any special instructions",
-    ],
+      "Add any special instructions"
+    ]
   },
   {
     id: 2,
@@ -168,8 +276,8 @@ export const howWeWorkData: HowWeWork[] = [
       "Background-checked professionals only",
       "Skill-matched to your specific needs",
       "Local cleaners for faster service",
-      "Consistent team for recurring bookings",
-    ],
+      "Consistent team for recurring bookings"
+    ]
   },
   {
     id: 3,
@@ -182,8 +290,8 @@ export const howWeWorkData: HowWeWork[] = [
       "Booking confirmation within 2 hours",
       "Cleaner profile and arrival time",
       "Live tracking on cleaning day",
-      "Direct messaging capability",
-    ],
+      "Direct messaging capability"
+    ]
   },
   {
     id: 4,
@@ -196,8 +304,8 @@ export const howWeWorkData: HowWeWork[] = [
       "Eco-friendly supplies included",
       "Detailed room-by-room cleaning",
       "Quality assurance checklist",
-      "Respectful of your home and time",
-    ],
+      "Respectful of your home and time"
+    ]
   },
   {
     id: 5,
@@ -210,8 +318,8 @@ export const howWeWorkData: HowWeWork[] = [
       "Before/after documentation",
       "Quality checklist completion",
       "Customer satisfaction survey",
-      "Issues resolved immediately",
-    ],
+      "Issues resolved immediately"
+    ]
   },
   {
     id: 6,
@@ -224,7 +332,7 @@ export const howWeWorkData: HowWeWork[] = [
       "Contactless payment processing",
       "Transparent pricing breakdown",
       "Optional tipping feature",
-      "Receipts and invoices provided",
-    ],
-  },
+      "Receipts and invoices provided"
+    ]
+  }
 ];
