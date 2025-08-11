@@ -47,9 +47,9 @@ export default function ServiceHistorySection3() {
         <div className=" lg:p-6 lg:border border-surface-500/30 rounded-lg flex flex-col gap-6">
           <div className="flex flex-col lg:flex-row justify-between lg:items-center w-full">
             <div>
-              <h1 className="flex items-center gap-2.5 font-semibold text-lg">
+              <h3 className="flex text-secondary-700 items-center gap-2.5 font-medium text-lg">
                 Completed Services
-              </h1>
+              </h3>
               <h3 className="text-caption text-secondary-800">
                 Your cleaning history with ratings and reviews
               </h3>

@@ -16,9 +16,11 @@ function NotificationSettings() {
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
       <div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pb-1">
           <BellIcon className="size-6 text-secondary-700" />
-          <h2 className="text-secondary-700">Notifications</h2>
+          <h3 className="font-medium text-lg/0 text-secondary-700">
+            Notifications
+          </h3>
         </div>
         <p className="text-caption text-secondary-800 font-normal text-wrap">
           Choose what notifications you want to receive
@@ -27,9 +29,9 @@ function NotificationSettings() {
       <div className="flex flex-col gap-4 mt-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <h2 className="text-body font-semibold text-secondary-700">
+            <h3 className="text-body font-medium text-secondary-700">
               Booking Reminders
-            </h2>
+            </h3>
             <p className="text-caption text-secondary-800 font-normal text-wrap">
               Get notified about upcoming appointments
             </p>
@@ -40,9 +42,9 @@ function NotificationSettings() {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <h2 className="text-body font-semibold text-secondary-700">
+            <h3 className="text-body font-medium text-secondary-700">
               Promotional Emails
-            </h2>
+            </h3>
             <p className="text-caption text-secondary-800 font-normal text-wrap">
               Special offers and service updates
             </p>
@@ -60,9 +62,11 @@ function PrivacySecuritySettings() {
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
       <div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pb-1">
           <Shield className="size-6 text-secondary-700" />
-          <h2 className="text-secondary-700">Privacy & Security</h2>
+          <h3 className="font-medium text-lg/0 text-secondary-700">
+            Privacy & Security
+          </h3>
         </div>
         <p className="text-secondary-800 text-caption font-normal text-wrap">
           Manage your privacy and security setting
@@ -71,9 +75,9 @@ function PrivacySecuritySettings() {
       <div className="flex flex-col gap-4 mt-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <h2 className="text-body font-semibold text-secondary-700">
+            <h3 className="text-body font-medium text-secondary-700">
               Two-factor Authentication
-            </h2>
+            </h3>
             <p className="text-caption text-secondary-800  font-normal text-wrap">
               Add an extra layer of security to your account
             </p>
@@ -84,9 +88,9 @@ function PrivacySecuritySettings() {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <h2 className="text-body font-semibold text-secondary-700 ">
+            <h3 className="text-body font-medium text-secondary-700">
               Location Sharing
-            </h2>
+            </h3>
             <p className="text-caption text-secondary-800  font-normal text-wrap">
               Allow cleaners to see your location for navigation
             </p>

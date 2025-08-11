@@ -9,9 +9,9 @@ export default function BillingSection3() {
       <div className="p-3 lg:p-6 border items-center border-surface-500/30 rounded-lg flex flex-col gap-6">
         <div className="flex flex-col lg:flex-row justify-between lg:items-center w-full">
           <div>
-            <h1 className="flex items-center gap-2.5 font-semibold text-lg">
+            <h3 className="flex text-secondary-700 items-center gap-2.5 font-medium text-lg">
               Payment Methods
-            </h1>
+            </h3>
             <h3 className="text-caption text-secondary-800">
               Manage your saved payment methods
             </h3>

@@ -23,7 +23,9 @@ export default function StatCard({
         {Icon && <Icon className="text-primary-700 w-6" />}
       </div>
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-medium">{value}</h1>
+        <h3 className="flex font-poppins items-center gap-2.5 font-medium text-2xl text-secondary-700">
+          {value}
+        </h3>
         <p className="text-caption text-surface-500">{content}</p>
       </div>
     </div>
