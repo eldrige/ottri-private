@@ -19,6 +19,10 @@
     "*.{md,mdx,css,yml,yaml}": "prettier --write"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.19",
+    "@fullcalendar/daygrid": "^6.1.19",
+    "@fullcalendar/react": "^6.1.19",
+    "@fullcalendar/timegrid": "^6.1.19",
     "@googlemaps/js-api-loader": "^1.16.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
