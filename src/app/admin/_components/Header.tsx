@@ -57,7 +57,7 @@ export default function Header() {
       </div>
 
       {/* Mobile Header */}
-      <header className="sticky top-1 h-14 px-4 mx-1 mt-1 flex lg:hidden items-center justify-between text-white bg-secondary-700 rounded-2xl shadow-custom">
+      <header className="sticky top-1 z-50 h-14 px-4 mx-1 mt-1 flex lg:hidden items-center justify-between text-white bg-secondary-700 rounded-2xl shadow-custom">
         <button
           onClick={() => setShowMobile(!showMobile)}
           className="cursor-pointer p-2"
@@ -73,7 +73,7 @@ export default function Header() {
       {/* Popup Mobile Open Nav Menu */}
       <div
         className={cn(
-          "fixed top-0 left-0 w-full h-dvh bg-black/50 flex flex-col transition-all lg:hidden",
+          "fixed top-0 left-0 z-50 w-full h-dvh bg-black/50 flex flex-col transition-all lg:hidden",
           showMobile ? "opacity-100" : "invisible opacity-0"
         )}
         onClick={() => setShowMobile(false)} // Close when clicking the overlay

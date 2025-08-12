@@ -4,45 +4,17 @@ import CalendarIcon from "@/components/icons/CalendarIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
 import { ChevronDown, Filter, ListIcon, PlusIcon } from "lucide-react";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import "./calendar-styles.css";
+import CalendarView from "./panels/CalendarView";
+import ListView from "./panels/ListView";
+import { cn } from "@/lib/utils";
 
 export default function AdminBookingsPage() {
-  const [activeView, setActiveView] = useState("calendar");
-
-  // Sample booking data
-  const events = [
-    {
-      title: "Maria Garcia",
-      start: "2025-08-29T09:00:00",
-      end: "2025-08-29T10:00:00",
-      extendedProps: {
-        status: "info"
-      }
-    },
-    {
-      title: "Jon Doe",
-      start: "2025-08-29T11:00:00",
-      end: "2025-08-29T12:00:00",
-      extendedProps: {
-        status: "warning"
-      }
-    },
-    {
-      title: "Emma Lee",
-      start: "2025-08-29T14:00:00",
-      end: "2025-08-29T15:00:00",
-      extendedProps: {
-        status: "success"
-      }
-    }
-  ];
+  const [activeView, setActiveView] = useState<"calendar" | "list" | "map">(
+    "calendar"
+  );
 
   return (
-    <main className="w-full h-full py-4 px-6">
+    <main className="w-full h-full py-4 px-4 lg:px-6">
       <div className="flex justify-between items-center">
         <h3 className="text-heading-4">Bookings</h3>
         <p className="text-secondary-700/70">Welcome back Admin</p>
@@ -60,84 +32,68 @@ export default function AdminBookingsPage() {
           variant={"secondary"}
           className="flex gap-2 items-center"
         >
-          <PlusIcon /> New Booking
+          <PlusIcon className="size-5" /> New Booking
         </Button>
       </div>
 
-      <div className="w-full mt-8 py-2 px-3 flex gap-4 rounded-4xl bg-surface-50">
+      <div className="w-full mt-8 py-2 px-3 flex lg:gap-4 rounded-4xl bg-surface-50">
         <button
-          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 ${
-            activeView === "calendar" ? "bg-white" : "text-secondary-700/70"
+          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 min-w-fit transition-all ${
+            activeView === "calendar"
+              ? "bg-white px-4"
+              : "px-2 text-secondary-700/70"
           }`}
           onClick={() => setActiveView("calendar")}
         >
-          <CalendarIcon className="size-4" />
+          <CalendarIcon
+            className={cn(
+              "size-4",
+              activeView === "calendar" ? "block" : "hidden lg:block"
+            )}
+          />
           Calendar View
         </button>
         <button
-          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 ${
-            activeView === "list" ? "bg-white" : "text-secondary-700/70"
+          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 min-w-fit transition-all ${
+            activeView === "list"
+              ? "bg-white px-4"
+              : "px-2 text-secondary-700/70"
           }`}
           onClick={() => setActiveView("list")}
         >
-          <ListIcon className="size-4" />
+          <ListIcon
+            className={cn(
+              "size-4",
+              activeView === "list" ? "block" : "hidden lg:block"
+            )}
+          />
           List View
         </button>
         <button
-          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 ${
-            activeView === "map" ? "bg-white" : "text-secondary-700/70"
+          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 min-w-fit transition-all ${
+            activeView === "map"
+              ? "bg-white px-4"
+              : "px-2 text-secondary-700/70"
           }`}
           onClick={() => setActiveView("map")}
         >
-          <LocationIcon className="size-4" />
+          <LocationIcon
+            className={cn(
+              "size-4",
+              activeView === "map" ? "block" : "hidden lg:block"
+            )}
+          />
           Map View
         </button>
       </div>
 
-      <div className="mt-8 p-6 border border-black/10 rounded-lg">
-        <h4 className="text-heading-5">Calendar Grid View</h4>
-
-        <div className="mt-8 w-full custom-calendar-container">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: ""
-            }}
-            events={events}
-            eventContent={(eventInfo) => {
-              const status = eventInfo.event.extendedProps
-                .status as keyof typeof statusClasses;
-              const statusClasses = {
-                info: "bg-info/10 text-info-text",
-                warning: "bg-warning/10 text-warning-text",
-                success: "bg-success/10 text-success"
-              };
-
-              // Only show time and name
-              const timeText = eventInfo.timeText;
-              const title = eventInfo.event.title;
-
-              return (
-                <div
-                  className={`p-2 rounded-lg ${statusClasses[status]}`}
-                >{`${timeText} - ${title}`}</div>
-              );
-            }}
-            dayHeaderContent={(args) => {
-              return (
-                <div className="text-center">
-                  {args.date.toLocaleDateString("en-US", {
-                    weekday: "short"
-                  })}
-                </div>
-              );
-            }}
-          />
-        </div>
-      </div>
+      {activeView === "calendar" ? (
+        <CalendarView />
+      ) : activeView === "list" ? (
+        <ListView />
+      ) : (
+        <></>
+      )}
     </main>
   );
 }
