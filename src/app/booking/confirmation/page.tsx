@@ -20,7 +20,7 @@ export default async function ConfirmationPage({
   const { orderId = "" } = await searchParams;
 
   const response = await axios.get(
-    `http://172.30.19.171:3000/api/v1/bookings/${orderId.split("-")[1]}`
+    `http://172.22.11.156:3000/api/v1/bookings/${orderId.split("-")[1]}`
   );
 
   const bookingData = response.data as BookingType;
@@ -85,7 +85,11 @@ export default async function ConfirmationPage({
                   <ClockIcon className="text-primary-700 size-6" />
                   <div className="space-y-1">
                     <p className="text-lg font-medium">Duration</p>
-                    <p className="text-caption text-surface-500">3 hours</p>
+                    <p className="text-caption text-surface-500">
+                      {bookingData.timeSlot.endTime -
+                        bookingData.timeSlot.startTime}{" "}
+                      hours
+                    </p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -103,7 +107,7 @@ export default async function ConfirmationPage({
                   <FileIcon className="text-primary-700 size-6" />
                   <div className="space-y-1">
                     <p className="text-lg font-medium">Service</p>
-                    <p className="text-caption text-surface-500">
+                    <p className="text-caption text-surface-500 capitalize">
                       {bookingData.serviceType.service.name}
                     </p>
                   </div>
@@ -140,11 +144,13 @@ export default async function ConfirmationPage({
                 </Button>
               </div>
             </div>
-
             <div className="mx-6 sm:mx-0 p-4 space-y-3 bg-surface-50 rounded-lg text-surface-500 text-xs">
               <p>
                 <span className="font-bold">Estimated Arrival: </span>
-                9:50 AM - 10:10 AM
+                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:20{" "}
+                {bookingData.timeSlot.startTime - 1 < 12 ? "AM" : "PM"} -{" "}
+                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:40{" "}
+                {bookingData.timeSlot.startTime - 1 < 12 ? "AM" : "PM"}
               </p>
               <p>Your cleaner will contact you 30 minutes before arrival.</p>
             </div>
@@ -157,26 +163,32 @@ export default async function ConfirmationPage({
               <ul className="text-caption flex flex-col gap-4">
                 <li className="flex justify-between gap-2">
                   <span>Service: </span>
-                  <span>$120</span>
+                  <span>${bookingData.servicesPrice}</span>
                 </li>
                 <li className="flex justify-between gap-2">
                   <span>Add-Ons: </span>
-                  <span>$25</span>
+                  <span>${bookingData.addOnsPrice}</span>
                 </li>
                 <li className="flex justify-between gap-2">
                   <span>Tip: </span>
-                  <span>$14</span>
+                  <span>${bookingData.tip}</span>
                 </li>
                 <li className="flex justify-between gap-2">
                   <span>Tax: </span>
-                  <span>$11.6</span>
+                  <span>${bookingData.tax}</span>
                 </li>
               </ul>
               <hr className="text-surface-500/10" />
               <div>
                 <div className="flex justify-between gap-2 text-caption font-medium">
                   <span>Total: </span>
-                  <span className="text-primary-700">$176.6</span>
+                  <span className="text-primary-700">
+                    $
+                    {bookingData.servicesPrice +
+                      bookingData.addOnsPrice +
+                      bookingData.tip +
+                      bookingData.tax}
+                  </span>
                 </div>
               </div>
               <div className="flex gap-3 justify-center items-center text-success bg-success-background py-2 rounded-lg">
