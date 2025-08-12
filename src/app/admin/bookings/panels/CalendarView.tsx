@@ -35,10 +35,10 @@ export default function CalendarView() {
   ];
 
   return (
-    <div className="mt-8 p-6 border border-black/10 rounded-lg overflow-auto">
+    <div className="mt-8 p-6 lg:border border-black/10 rounded-lg overflow-auto">
       <h4 className="text-heading-5">Calendar Grid View</h4>
 
-      <div className="mt-8 w-full min-w-2xl custom-calendar-container">
+      <div className="mt-8 w-full min-w-4xl custom-calendar-container">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
