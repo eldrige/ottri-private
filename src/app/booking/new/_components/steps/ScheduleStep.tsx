@@ -3,8 +3,10 @@ import { scheduleOptions } from "../../formData";
 import { DateInput } from "@/components/ui/DateInput";
 import { useFormContext } from "react-hook-form";
 import { OrderFormValues } from "../../schema";
+import { TimeSlot } from "../../types";
+import { useMemo } from "react";
 
-export default function ScheduleStep() {
+export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
   const {
     setValue,
     watch,
@@ -22,6 +24,21 @@ export default function ScheduleStep() {
     setValue("timeWindow", option.value, { shouldValidate: true });
   };
 
+  const processedData = useMemo(() => {
+    const grouped: Record<string, number> = {};
+    timeSlots.forEach((item) => {
+      const date = new Date(item.date);
+      const dateKey = date.toISOString().split("T")[0];
+      if (grouped[dateKey]) {
+        grouped[dateKey] += item.instances;
+      } else {
+        grouped[dateKey] = item.instances;
+      }
+    });
+
+    return grouped;
+  }, [timeSlots]);
+
   return (
     <>
       <h3 className="text-heading-4">Choose Date And Time</h3>
@@ -29,6 +46,7 @@ export default function ScheduleStep() {
       <div className="grid lg:grid-cols-2 gap-8">
         <div>
           <DateInput
+            timeSlots={processedData}
             label="Preferred Date"
             value={selectedDate}
             onChange={handleDateChange}

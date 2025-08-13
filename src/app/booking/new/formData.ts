@@ -85,17 +85,32 @@ export const squareFootageOptions = [
 // Step 3
 
 export const addOnOptions = [
-  { id: "inside-oven", name: "Inside Oven", price: 25, apiId: "" },
+  { id: "inside-oven", name: "Inside Oven", price: 25, apiId: "inside oven" },
   {
     id: "inside-refrigerator",
     name: "Inside Refrigerator",
     price: 10,
-    apiId: "fridge"
+    apiId: "inside refrigerator"
   },
-  { id: "basement-cleaning", name: "Basement Cleaning", price: 20, apiId: "" },
-  { id: "interior-windows", name: "Interior Windows", price: 15, apiId: "" },
-  { id: "under-carpet", name: "Under Carpet", price: 20, apiId: "" },
-  { id: "others", name: "Others", price: 20, apiId: "" }
+  {
+    id: "basement-cleaning",
+    name: "Basement Cleaning",
+    price: 20,
+    apiId: "basement cleaning"
+  },
+  {
+    id: "interior-windows",
+    name: "Interior Windows",
+    price: 15,
+    apiId: "interior windows"
+  },
+  {
+    id: "under-carpet",
+    name: "Under Carpet",
+    price: 20,
+    apiId: "under carpet"
+  },
+  { id: "others", name: "Others", price: 20, apiId: "others" }
 ];
 
 // Step 4 - Pet Info

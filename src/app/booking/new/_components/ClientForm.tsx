@@ -18,11 +18,16 @@ import ScheduleStep from "./steps/ScheduleStep";
 import TipStep from "./steps/TipStep";
 import PaymentStep from "./steps/PaymentStep";
 import { calculateBasePrice } from "@/utils/priceCalculation";
+import { PreflightType } from "../types";
 
-export default function ClientForm() {
+export default function ClientForm({
+  preflight
+}: {
+  preflight: PreflightType;
+}) {
   const [currStep, setCurrStep] = useState(0);
   const [processing, setProcessing] = useState(false);
-
+  console.log(preflight);
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
@@ -264,7 +269,7 @@ export default function ClientForm() {
       case 4:
         return <AccessStep />;
       case 5:
-        return <ScheduleStep />;
+        return <ScheduleStep timeSlots={preflight.timeSlots} />;
       case 6:
         return <TipStep totalPrice={estimatedPrice} />;
       case 7:
