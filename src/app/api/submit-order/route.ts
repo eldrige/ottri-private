@@ -6,7 +6,7 @@ import {
   calculateServicesPrice,
   calculateTotal
 } from "../../../utils/priceCalculation";
-import axios from "axios";
+import { axios } from "@/lib/axios";
 
 // Initialize Stripe with your SECRET key.
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -73,12 +73,10 @@ export async function POST(request: Request) {
     };
     console.log(bodyObj);
 
-    const response = await axios
-      .post("http://172.30.19.171:3000/api/v1/bookings", bodyObj)
-      .catch((i) => {
-        console.log(i.response);
-        throw i;
-      });
+    const response = await axios.post("bookings", bodyObj).catch((i) => {
+      console.log(i.response);
+      throw i;
+    });
     console.log(response);
 
     const newOrderId =

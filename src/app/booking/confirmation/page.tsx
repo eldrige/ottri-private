@@ -6,8 +6,8 @@ import { FileIcon } from "@/components/icons/FileIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { axios } from "@/lib/axios";
 import { BookingType } from "@/lib/types";
-import axios from "axios";
 import { format } from "date-fns";
 import { DownloadIcon, PlusIcon } from "lucide-react";
 import React from "react";
@@ -20,7 +20,8 @@ export default async function ConfirmationPage({
   const { orderId = "" } = await searchParams;
 
   const response = await axios.get(
-    `http://172.22.11.156:3000/api/v1/bookings/${orderId.split("-")[1]}`
+    // `http://172.22.11.156:3000/api/v1/bookings/${orderId.split("-")[1]}`
+    `bookings/${orderId.split("-")[1]}`
   );
 
   const bookingData = response.data as BookingType;
