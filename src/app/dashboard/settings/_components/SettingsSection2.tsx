@@ -1,7 +1,8 @@
+"use client";
 import ToggleSwitchOff from "@/components/icons/ToggleSwitchOff";
 import ToggleSwitchOn from "@/components/icons/ToggleSwitchOn";
 import { BellIcon, Shield } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 export default function SettingsSection2() {
   return (
@@ -13,6 +14,13 @@ export default function SettingsSection2() {
 }
 
 function NotificationSettings() {
+  const [toggle, setToggle] = useState<{
+    bookingReminders: boolean;
+    promotionalEmails: boolean;
+  }>({
+    bookingReminders: false,
+    promotionalEmails: true,
+  });
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
       <div>
@@ -36,9 +44,17 @@ function NotificationSettings() {
               Get notified about upcoming appointments
             </p>
           </div>
-          <div>
-            <ToggleSwitchOff />
-          </div>
+          <button
+            className="cursor-pointer transform transition-all ease-in-out duration-200"
+            onClick={() =>
+              setToggle({
+                ...toggle,
+                bookingReminders: !toggle.bookingReminders,
+              })
+            }
+          >
+            {toggle.bookingReminders ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
+          </button>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
@@ -49,9 +65,21 @@ function NotificationSettings() {
               Special offers and service updates
             </p>
           </div>
-          <div>
-            <ToggleSwitchOn />
-          </div>
+          <button
+            className="cursor-pointer transform transition-all ease-in-out duration-200"
+            onClick={() =>
+              setToggle({
+                ...toggle,
+                promotionalEmails: !toggle.promotionalEmails,
+              })
+            }
+          >
+            {toggle.promotionalEmails ? (
+              <ToggleSwitchOn />
+            ) : (
+              <ToggleSwitchOff />
+            )}
+          </button>
         </div>
       </div>
     </div>
@@ -59,6 +87,10 @@ function NotificationSettings() {
 }
 
 function PrivacySecuritySettings() {
+  const [toggle, setToggle] = useState({
+    twoFactorAuth: false,
+    locationSharing: false,
+  });
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
       <div>
@@ -82,9 +114,17 @@ function PrivacySecuritySettings() {
               Add an extra layer of security to your account
             </p>
           </div>
-          <div>
-            <ToggleSwitchOn />
-          </div>
+          <button
+            className="cursor-pointer transform transition-all ease-in-out duration-200"
+            onClick={() =>
+              setToggle({
+                ...toggle,
+                twoFactorAuth: !toggle.twoFactorAuth,
+              })
+            }
+          >
+            {toggle.twoFactorAuth ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
+          </button>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
@@ -95,9 +135,17 @@ function PrivacySecuritySettings() {
               Allow cleaners to see your location for navigation
             </p>
           </div>
-          <div>
-            <ToggleSwitchOff />
-          </div>
+          <button
+            className="cursor-pointer transform transition-all ease-in-out duration-200"
+            onClick={() =>
+              setToggle({
+                ...toggle,
+                locationSharing: !toggle.locationSharing,
+              })
+            }
+          >
+            {toggle.locationSharing ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
+          </button>
         </div>
       </div>
     </div>

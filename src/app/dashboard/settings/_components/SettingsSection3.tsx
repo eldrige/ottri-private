@@ -17,7 +17,9 @@ function LanguageSettings() {
       <div>
         <div className="flex items-center gap-2">
           <GlobeIcon className="size-6 text-secondary-700" />
-          <h2 className="text-secondary-700">Preferences</h2>
+          <h3 className="font-medium text-lg/0 text-secondary-700">
+            Preferences
+          </h3>
         </div>
         <p className="text-caption text-secondary-800  font-normal text-wrap">
           Customize your app experience
@@ -67,7 +69,9 @@ function AccountActions() {
       <div>
         <div className="flex items-center gap-2">
           <IdCard className="size-8 stroke-1 rounded-full text-secondary-700" />
-          <h2 className="text-secondary-700">Account Actions</h2>
+          <h3 className="font-medium text-lg/0 text-secondary-700">
+            Account Actions
+          </h3>
         </div>
         <p className="text-caption text-secondary-800  font-normal text-wrap">
           Manage your account
