@@ -9,7 +9,7 @@ import StepsViewer from "./StepsViewer";
 import ServiceTypeStep from "./steps/ServiceTypeStep";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { orderFormSchema, OrderFormValues } from "../schema";
-import { addOnOptions } from "../formData";
+// import { addOnOptions } from "../formData";
 import PropertyDetailsStep from "./steps/PropertyDetailsStep";
 import AddOnsStep from "./steps/AddOnsStep";
 import PetInfoStep from "./steps/PetInfoStep";
@@ -27,13 +27,12 @@ export default function ClientForm({
 }) {
   const [currStep, setCurrStep] = useState(0);
   const [processing, setProcessing] = useState(false);
-  console.log(preflight);
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
-      serviceType: "",
-      specificServiceType: "",
+      serviceType: null,
+      specificServiceType: null,
       serviceAddress: "",
       useSameForBilling: false,
       bedrooms: "",
@@ -66,6 +65,8 @@ export default function ClientForm({
 
   // Watch form values for summary display
   const formValues = watch();
+
+  console.log({ preflight, formValues });
 
   // Check if current step has validation errors
   const currentStepHasErrors = () => {
@@ -259,11 +260,15 @@ export default function ClientForm({
   const renderCurrentStep = () => {
     switch (currStep) {
       case 0:
-        return <ServiceTypeStep />;
+        return <ServiceTypeStep services={preflight.services} />;
       case 1:
         return <PropertyDetailsStep />;
       case 2:
-        return <AddOnsStep />;
+        return (
+          formValues.serviceType?.serviceAddOn && (
+            <AddOnsStep serviceAddOns={formValues.serviceType.serviceAddOn} />
+          )
+        );
       case 3:
         return <PetInfoStep />;
       case 4:
@@ -275,7 +280,7 @@ export default function ClientForm({
       case 7:
         return <PaymentStep processPaymentRef={processPaymentRef} />;
       default:
-        return <ServiceTypeStep />;
+        return <ServiceTypeStep services={preflight.services} />;
     }
   };
 
@@ -345,20 +350,27 @@ export default function ClientForm({
             <div className="space-y-4 text-caption">
               <p className="text-caption flex justify-between">
                 Service Type:
-                <span>
-                  {(formValues.serviceType
+                <span className="capitalize">
+                  {/* {(formValues.serviceType
                     ? formValues.serviceType[0].toUpperCase() +
                       formValues.serviceType.slice(1)
+                    : null) || "Not selected"} */}
+                  {(formValues.serviceType
+                    ? // preflight.services.find(service => service.id === formValues.serviceType)?.name.split(" ")[0]
+                      formValues.serviceType.name.split(" ")[0]
                     : null) || "Not selected"}
                 </span>
               </p>
               {formValues.specificServiceType && (
                 <p className="text-caption flex justify-between">
                   Specific Type:
-                  <span>
-                    {(formValues.specificServiceType
+                  <span className="capitalize">
+                    {/* {(formValues.specificServiceType
                       ? formValues.specificServiceType[0].toUpperCase() +
-                        formValues.specificServiceType.slice(1)
+                      formValues.specificServiceType.slice(1)
+                      : null) || "Not selected"} */}
+                    {(formValues.specificServiceType
+                      ? formValues.specificServiceType.name.split(" ")[0]
                       : null) || "Not selected"}
                   </span>
                 </p>
@@ -392,12 +404,15 @@ export default function ClientForm({
               {formValues.addOns && formValues.addOns.length > 0 && (
                 <div className="text-caption space-y-2">
                   <p className="mb-2">Add-Ons:</p>
-                  {formValues.addOns.map((addonId) => {
-                    const addon = addOnOptions.find((a) => a.id === addonId);
+                  {formValues.addOns.map((addon) => {
+                    // const addon = addOnOptions.find((a) => a.id === addonId);
                     return (
-                      <p key={addonId} className="flex justify-between pl-4">
-                        {addon?.name}
-                        <span>${addon?.price}</span>
+                      <p
+                        key={addon.id}
+                        className="flex justify-between pl-4 capitalize"
+                      >
+                        {addon.name}
+                        <span>${addon.price}</span>
                       </p>
                     );
                   })}

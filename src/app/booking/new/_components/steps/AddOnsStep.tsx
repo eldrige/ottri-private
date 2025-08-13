@@ -1,37 +1,46 @@
 import { Input } from "@/components/ui/Input";
-import { addOnOptions } from "../../formData";
+// import { addOnOptions } from "../../formData";
 import { useFormContext } from "react-hook-form";
 import { OrderFormValues } from "../../schema";
+import { ServiceAddOn } from "../../types";
 
-export default function AddOnsStep() {
+export default function AddOnsStep({
+  serviceAddOns
+}: {
+  serviceAddOns: ServiceAddOn[];
+}) {
   const {
     register,
     watch,
-    setValue,
+    setValue
     // formState: { errors }
   } = useFormContext<OrderFormValues>();
-  
-  const selectedAddOns = watch('addOns') || [];
-  const isOthersSelected = selectedAddOns.includes('others');
-  
-  const handleAddonChange = (addonId: string, isChecked: boolean) => {
+
+  const selectedAddOns = watch("addOns") || [];
+  const otherService = watch("otherService");
+  const isOthersSelected = selectedAddOns.some((i) => i.name === "others");
+
+  const handleAddonChange = (
+    addOn: (typeof selectedAddOns)[0],
+    isChecked: boolean
+  ) => {
     let newAddOns = [...selectedAddOns];
-    
+
     if (isChecked) {
       // Add the addon if it's not already in the array
-      if (!newAddOns.includes(addonId)) {
-        newAddOns.push(addonId);
+      if (!newAddOns.some((i) => i.id === addOn.id)) {
+        newAddOns.push(addOn);
       }
     } else {
       // Remove the addon if it's in the array
-      newAddOns = newAddOns.filter(id => id !== addonId);
+      newAddOns = newAddOns.filter((item) => item.id !== addOn.id);
     }
-    
-    setValue('addOns', newAddOns);
-    
+
+    setValue("addOns", newAddOns);
+
     // Clear otherService if "Others" is unchecked
-    if (addonId === 'others' && !isChecked && watch('otherService')) {
-      setValue('otherService', '');
+    if (addOn.name === "others" && !isChecked && otherService) {
+      setValue("otherService", "");
     }
   };
 
@@ -40,21 +49,22 @@ export default function AddOnsStep() {
       <h3 className="text-heading-4">Add Extra Service</h3>
 
       <div className="grid lg:grid-cols-2 gap-4">
-        {addOnOptions.map((addon) => (
+        {serviceAddOns?.map((addon) => (
           <label
             key={addon.id}
-            className="flex p-4 gap-4 items-center text-caption font-medium border border-black/10 rounded-lg cursor-pointer"
+            className="flex p-4 gap-4 items-center text-caption font-medium border border-black/10 rounded-lg cursor-pointer capitalize"
           >
-            <input 
-              type="checkbox" 
-              className="accent-secondary-700 size-4" 
-              checked={selectedAddOns.includes(addon.id)}
-              {...register(`addOns`)}
-              value={addon.id}
-              onChange={(e) => handleAddonChange(addon.id, e.target.checked)}
+            <input
+              type="checkbox"
+              className="accent-secondary-700 size-4"
+              checked={selectedAddOns.some((item) => item.id === addon.id)}
+              // {...register(`addOns`)}
+              onChange={(e) => handleAddonChange(addon, e.target.checked)}
             />
             {addon.name}
-            <span className="ml-auto text-primary-700 font-normal">+${addon.price}</span>
+            <span className="ml-auto text-primary-700 font-normal">
+              +${addon.price}
+            </span>
           </label>
         ))}
       </div>

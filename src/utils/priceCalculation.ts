@@ -1,5 +1,4 @@
 import { OrderFormValues } from "@/app/booking/new/schema";
-import { addOnOptions, specificTypes } from "@/app/booking/new/formData";
 
 export function calculateServicesPrice(orderData: Partial<OrderFormValues>) {
   let servicesPrice = 0;
@@ -7,7 +6,8 @@ export function calculateServicesPrice(orderData: Partial<OrderFormValues>) {
 
   // Set base price based on specific type
   servicesPrice +=
-    specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
+    // specificTypes.find((s) => s.id === specificType)?.priceFrom || 0;
+    specificType?.basePrice || 0;
   // Add price adjustments based on property details
   if (orderData.bedrooms) {
     // Add $20 per bedroom after the first
@@ -35,8 +35,8 @@ export function calculateAddOnsPrice(orderData: Partial<OrderFormValues>) {
 
   // Add prices for selected add-ons
   if (orderData.addOns && orderData.addOns.length > 0) {
-    orderData.addOns.forEach((addonId) => {
-      const addon = addOnOptions.find((a) => a.id === addonId);
+    orderData.addOns.forEach((addon) => {
+      // const addon = addOnOptions.find((a) => a.id === addonId);
       if (addon) {
         addOnsPrice += addon.price;
       }

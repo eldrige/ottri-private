@@ -1,9 +1,42 @@
 import { z } from "zod";
 
+// Reusable schemas for nested types
+export const specificTypeSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  basePrice: z.number(),
+  currency: z.string(),
+  serviceId: z.number()
+});
+
+export const serviceAddOnSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  price: z.number(),
+  type: z.string(),
+  serviceId: z.number()
+});
+
+export const serviceTypeSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  popular: z.boolean(),
+  serviceTypes: z.array(specificTypeSchema),
+  serviceAddOn: z.array(serviceAddOnSchema)
+});
+
 export const orderFormSchema = z.object({
   // Step 1
-  serviceType: z.string().min(1, "Service type is required"),
-  specificServiceType: z.string().min(1, "Specific cleaning type is required"),
+  serviceType: serviceTypeSchema.nullable().refine((data) => !!data, {
+    message: "Service type is required"
+  }),
+  // specificServiceType: z.number().min(1, "Specific cleaning type is required"),
+  specificServiceType: specificTypeSchema.nullable().refine((data) => !!data, {
+    message: "Specific cleaning type is required"
+  }),
   // Step 2
   serviceAddress: z.string().min(1, "Service address is required"),
   useSameForBilling: z.boolean().optional(),
@@ -11,7 +44,8 @@ export const orderFormSchema = z.object({
   bathrooms: z.string().min(1, "Number of bathrooms is required"),
   squareFootage: z.string().min(1, "Square footage is required"),
   // Step 3
-  addOns: z.array(z.string()),
+  // addOns: z.array(z.string()),
+  addOns: z.array(serviceAddOnSchema),
   otherService: z.string().optional(),
   // Step 4
   petType: z.string(),
@@ -39,3 +73,6 @@ export const orderFormSchema = z.object({
 });
 
 export type OrderFormValues = z.infer<typeof orderFormSchema>;
+export type SpecificTypeSchema = z.infer<typeof specificTypeSchema>;
+export type ServiceAddOnSchema = z.infer<typeof serviceAddOnSchema>;
+export type ServiceTypeSchema = z.infer<typeof serviceTypeSchema>;

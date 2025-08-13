@@ -1,5 +1,5 @@
 export interface PreflightType {
-  services: Service[];
+  services: ServiceType[];
   serviceAreas: unknown[];
   timeSlots: TimeSlot[];
 }
@@ -15,7 +15,7 @@ export interface TimeSlot {
   repetition: string;
 }
 
-interface Service {
+export interface ServiceType {
   id: number;
   name: string;
   description: string;
@@ -23,23 +23,20 @@ interface Service {
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
-  serviceTypes: ServiceType[];
+  serviceTypes: SpecificType[];
   serviceAddOn: ServiceAddOn[];
 }
 
-interface ServiceAddOn {
+export interface ServiceAddOn {
   id: number;
   name: string;
   description: string;
   price: number;
   type: string;
   serviceId: number;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: null;
 }
 
-interface ServiceType {
+interface SpecificType {
   id: number;
   name: string;
   description: string;

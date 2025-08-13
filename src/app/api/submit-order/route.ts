@@ -7,11 +7,6 @@ import {
   calculateTotal
 } from "../../../utils/priceCalculation";
 import { axios } from "@/lib/axios";
-import {
-  addOnOptions,
-  serviceTypes,
-  specificTypes
-} from "@/app/booking/new/formData";
 
 // Initialize Stripe with your SECRET key.
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -49,9 +44,7 @@ export async function POST(request: Request) {
       addOnsPrice: addOnsPrice,
       tax: (servicesPrice + addOnsPrice) * 0.08,
       timeSlotId: 9,
-      addOnIds: addOnOptions
-        .filter((i) => orderData.addOns.includes(i.id))
-        .map((i) => i.apiId),
+      addOnIds: orderData.addOns.map((i) => i.id),
       createAccount: false,
       fullName: orderData.fullName,
       phoneNumber: orderData.phoneNumber,
@@ -63,11 +56,8 @@ export async function POST(request: Request) {
       petsInstructions: orderData.petInstructions,
       // date: orderData.preferredDate,
       // timeSlot: orderData.timeWindow,
-      serviceId: serviceTypes.find((i) => i.id === orderData.serviceType)
-        ?.apiId,
-      serviceTypeId: specificTypes.find(
-        (i) => i.id === orderData.specificServiceType
-      )?.apiId,
+      serviceId: orderData.serviceType?.id,
+      serviceTypeId: orderData.specificServiceType?.id,
       bedrooms: orderData.bedrooms,
       bathrooms: orderData.bathrooms,
       approximateSquareFootage: +orderData.squareFootage,
