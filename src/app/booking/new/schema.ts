@@ -11,7 +11,7 @@ export const orderFormSchema = z.object({
   bathrooms: z.string().min(1, "Number of bathrooms is required"),
   squareFootage: z.string().min(1, "Square footage is required"),
   // Step 3
-  addOns: z.array(z.string()).optional(),
+  addOns: z.array(z.string()),
   otherService: z.string().optional(),
   // Step 4
   petType: z.string(),

@@ -5,22 +5,26 @@ export const serviceTypes = [
   {
     id: "residential",
     name: "Residential Cleaning",
-    Icon: HomeIcon
+    Icon: HomeIcon,
+    apiId: "residential cleaning"
   },
   {
     id: "commercial",
     name: "Commercial Cleaning",
-    Icon: Building2
+    Icon: Building2,
+    apiId: "commercial cleaning"
   },
   {
     id: "outdoor",
     name: "Outdoor Cleaning",
-    Icon: Trees
+    Icon: Trees,
+    apiId: "outdoor cleaning"
   },
   {
     id: "specialized",
     name: "Specialized Services",
-    Icon: Shield
+    Icon: Shield,
+    apiId: "specialized services"
   }
 ];
 
@@ -29,25 +33,29 @@ export const specificTypes = [
     id: "one-time",
     name: "One-Time Deep Cleaning",
     subtitle: "Perfect for special occasions or seasonal cleaning",
-    priceFrom: 89
+    priceFrom: 89,
+    apiId: "one-time deep cleaning"
   },
   {
     id: "recurring",
     name: "Recurring Cleaning",
     subtitle: "Regular maintenance cleaning",
-    priceFrom: 89
+    priceFrom: 89,
+    apiId: "recurring cleaning"
   },
   {
     id: "move-in-out",
     name: "Move-in/Move-out Cleaning",
     subtitle: "Comprehensive cleaning for transition",
-    priceFrom: 120
+    priceFrom: 120,
+    apiId: "move-in/move-out cleaning"
   },
   {
     id: "post-construction",
     name: "Post-Construction Cleaning",
     subtitle: "Cleaning for after construction",
-    priceFrom: 149
+    priceFrom: 149,
+    apiId: "post-construction cleaning"
   }
 ];
 
@@ -77,12 +85,17 @@ export const squareFootageOptions = [
 // Step 3
 
 export const addOnOptions = [
-  { id: "inside-oven", name: "Inside Oven", price: 25 },
-  { id: "inside-refrigerator", name: "Inside Refrigerator", price: 10 },
-  { id: "basement-cleaning", name: "Basement Cleaning", price: 20 },
-  { id: "interior-windows", name: "Interior Windows", price: 15 },
-  { id: "under-carpet", name: "Under Carpet", price: 20 },
-  { id: "others", name: "Others", price: 20 }
+  { id: "inside-oven", name: "Inside Oven", price: 25, apiId: "" },
+  {
+    id: "inside-refrigerator",
+    name: "Inside Refrigerator",
+    price: 10,
+    apiId: "fridge"
+  },
+  { id: "basement-cleaning", name: "Basement Cleaning", price: 20, apiId: "" },
+  { id: "interior-windows", name: "Interior Windows", price: 15, apiId: "" },
+  { id: "under-carpet", name: "Under Carpet", price: 20, apiId: "" },
+  { id: "others", name: "Others", price: 20, apiId: "" }
 ];
 
 // Step 4 - Pet Info
