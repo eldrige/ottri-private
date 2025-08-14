@@ -6,19 +6,34 @@ import { ClockIcon } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-type BookingCardProps = Omit<ServiceBooked, "rating">;
+type BookingCardProps = Omit<ServiceBooked, "rating"> & {
+  setIsOpen: (isOpen: boolean) => void;
+  setBookedServiceOnRating: (service: Omit<ServiceBooked, "rating">) => void;
+};
 export default function BookingCard({
   service,
+  setIsOpen,
+  setBookedServiceOnRating,
 }: {
-  service: BookingCardProps;
+  service: Omit<ServiceBooked, "rating">;
+  setIsOpen: (isOpen: boolean) => void;
+  setBookedServiceOnRating: (service: Omit<ServiceBooked, "rating">) => void;
 }) {
   return (
     <>
       <div className="flex flex-col xl:hidden gap-4">
-        <MobileBookingCard {...service} />
+        <MobileBookingCard
+          {...service}
+          setIsOpen={setIsOpen}
+          setBookedServiceOnRating={setBookedServiceOnRating}
+        />
       </div>
       <div className="hidden xl:flex gap-4">
-        <DesktopBookingCard {...service} />
+        <DesktopBookingCard
+          {...service}
+          setIsOpen={setIsOpen}
+          setBookedServiceOnRating={setBookedServiceOnRating}
+        />
       </div>
     </>
   );
@@ -33,6 +48,8 @@ function DesktopBookingCard({
   location,
   state,
   price,
+  setIsOpen,
+  setBookedServiceOnRating,
 }: BookingCardProps) {
   return (
     <div className="w-full">
@@ -94,6 +111,19 @@ function DesktopBookingCard({
               </Button>
             ) : (
               <Button
+                onClick={() => {
+                  setBookedServiceOnRating({
+                    serviceName,
+                    cleanerName,
+                    cleanerImage,
+                    date,
+                    time,
+                    location,
+                    state,
+                    price,
+                  });
+                  setIsOpen(true);
+                }}
                 size={"xs"}
                 className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
               >
@@ -110,11 +140,14 @@ function DesktopBookingCard({
 function MobileBookingCard({
   serviceName,
   cleanerName,
+  cleanerImage,
   date,
   time,
   location,
   state,
   price,
+  setIsOpen,
+  setBookedServiceOnRating,
 }: BookingCardProps) {
   return (
     <div className="flex flex-col px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -172,6 +205,19 @@ function MobileBookingCard({
         </Button>
       ) : (
         <Button
+          onClick={() => {
+            setBookedServiceOnRating({
+              serviceName,
+              cleanerName,
+              cleanerImage,
+              date,
+              time,
+              location,
+              state,
+              price,
+            });
+            setIsOpen(true);
+          }}
           size={"xs"}
           className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
         >
