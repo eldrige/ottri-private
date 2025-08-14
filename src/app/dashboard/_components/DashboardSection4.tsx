@@ -39,7 +39,7 @@ function QuickActionCard({ title, Icon }: QuickActionCardProps) {
   return (
     <Button
       variant={"outline"}
-      className="p-4 border  hover:*:font-semibold hover:bg-secondary-700 hover:text-white border-surface-500/30 rounded-lg flex flex-col justify-center items-center gap-8"
+      className="p-4 border transition-all ease-in-out duration-300  hover:*:font-semibold hover:bg-secondary-700 hover:text-white border-surface-500/30 rounded-lg flex flex-col justify-center items-center gap-8"
     >
       <Icon />
       <h3 className="text-body">{title}</h3>
