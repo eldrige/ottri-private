@@ -89,7 +89,7 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
             }
             onChange={handleTimeWindowChange}
             error={errors.timeWindow?.message}
-            disabled={!selectedTimeWindow}
+            disabled={!selectedDate}
           />
         </div>
       </div>

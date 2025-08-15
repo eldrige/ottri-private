@@ -101,7 +101,6 @@ export default async function ConfirmationPage({
                     <p className="text-caption text-surface-500">
                       {bookingData.address}
                     </p>
-                    <p className="text-caption text-surface-500">ST 12345</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
