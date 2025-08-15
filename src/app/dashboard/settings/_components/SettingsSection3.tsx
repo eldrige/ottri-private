@@ -28,7 +28,9 @@ function LanguageSettings() {
       <div className="flex flex-col gap-4 mt-6">
         <div className="flex flex-col items-center gap-6 justify-between">
           <label className="w-full">
-            <h3 className="text-secondary-700 text-caption">Language</h3>
+            <h3 className="text-secondary-700 text-caption font-medium">
+              Language
+            </h3>
             <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
               <select className="w-full" name="filter" id="">
                 <option value="all">English</option>
@@ -38,7 +40,9 @@ function LanguageSettings() {
             </div>
           </label>
           <label className="w-full text-caption">
-            <h3 className="text-secondary-700 text-caption">Time Zone</h3>
+            <h3 className="text-secondary-700 text-caption font-medium">
+              Time Zone
+            </h3>
             <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
               <select className="w-full" name="filter" id="">
                 <option value="all">EasternTime (EST)</option>
@@ -48,7 +52,9 @@ function LanguageSettings() {
             </div>
           </label>
           <label className="w-full">
-            <h3 className="text-secondary-700 text-caption">Currency</h3>
+            <h3 className="text-secondary-700 text-caption font-medium">
+              Currency
+            </h3>
             <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
               <select className="w-full" name="filter" id="">
                 <option value="all">USD ($)</option>

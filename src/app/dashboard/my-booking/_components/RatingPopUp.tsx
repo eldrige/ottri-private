@@ -18,7 +18,7 @@ export default function RatingPopUp({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 mx-5 bg-black/10 flex items-center justify-center z-50">
+    <div className="fixed inset-0 mx-5 md:mx-0 bg-black/10 flex items-center justify-center z-50">
       <div className="bg-white p-3 md:p-6 rounded-lg shadow-lg w-full md:max-w-2xl">
         <div className="flex justify-between">
           <h3 className="font-bold text-secondary-700 text-xl">
