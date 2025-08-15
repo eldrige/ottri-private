@@ -18,8 +18,8 @@ export default function RatingPopUp({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/10 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+    <div className="fixed inset-0 mx-5 bg-black/10 flex items-center justify-center z-50">
+      <div className="bg-white p-3 md:p-6 rounded-lg shadow-lg w-full md:max-w-2xl">
         <div className="flex justify-between">
           <h3 className="font-bold text-secondary-700 text-xl">
             Review & Ratings
@@ -29,7 +29,7 @@ export default function RatingPopUp({
             className="cursor-pointer text-secondary-500"
           />
         </div>
-        <div className="bg-[#F7F8F8] flex flex-col gap-1 text-secondary-700 text-nowrap rounded-lg p-4 mt-4">
+        <div className="bg-[#F7F8F8] flex flex-col gap-1 text-secondary-700 md:text-nowrap rounded-lg p-4 mt-4">
           <h3>
             <span className="font-medium">Date & Time:</span> {booking.date} at{" "}
             {booking.time}
