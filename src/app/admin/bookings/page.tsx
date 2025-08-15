@@ -7,6 +7,7 @@ import { ChevronDown, Filter, ListIcon, PlusIcon } from "lucide-react";
 import CalendarView from "./panels/CalendarView";
 import ListView from "./panels/ListView";
 import { cn } from "@/lib/utils";
+import MapView from "./panels/MapView";
 
 export default function AdminBookingsPage() {
   const [activeView, setActiveView] = useState<"calendar" | "list" | "map">(
@@ -92,7 +93,7 @@ export default function AdminBookingsPage() {
       ) : activeView === "list" ? (
         <ListView />
       ) : (
-        <></>
+        <MapView />
       )}
     </main>
   );
