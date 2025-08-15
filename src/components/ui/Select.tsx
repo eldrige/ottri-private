@@ -15,6 +15,7 @@ interface SelectProps {
   className?: string;
   placeholder?: string;
   error?: string;
+  disabled?: boolean;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -24,7 +25,8 @@ const Select: React.FC<SelectProps> = ({
   onChange,
   className = "",
   placeholder = "Select option",
-  error
+  error,
+  disabled = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<
@@ -61,7 +63,10 @@ const Select: React.FC<SelectProps> = ({
   };
 
   return (
-    <div className={`flex flex-col ${className}`} ref={selectRef}>
+    <div
+      className={`flex flex-col ${disabled ? "opacity-50" : ""} ${className}`}
+      ref={selectRef}
+    >
       {label && (
         <div className="text-gray-800 text-sm font-normal mb-2">{label}</div>
       )}
@@ -74,6 +79,7 @@ const Select: React.FC<SelectProps> = ({
             "w-full rounded-lg bg-gray-50 px-4 py-3 text-left flex justify-between items-center border",
             error ? "border-error" : "border-gray-200"
           )}
+          disabled={disabled}
         >
           {selectedOption ? (
             <span>{selectedOption.label}</span>

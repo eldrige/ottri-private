@@ -38,12 +38,11 @@ export async function POST(request: Request) {
 
     const servicesPrice = calculateServicesPrice(orderData);
     const addOnsPrice = calculateAddOnsPrice(orderData);
-
     const bodyObj = {
       servicesPrice: servicesPrice,
       addOnsPrice: addOnsPrice,
       tax: (servicesPrice + addOnsPrice) * 0.08,
-      timeSlotId: 9,
+      timeSlotId: Number(orderData.timeWindow),
       addOnIds: orderData.addOns.map((i) => i.id),
       createAccount: false,
       fullName: orderData.fullName,
@@ -54,7 +53,7 @@ export async function POST(request: Request) {
       pets: orderData.petType,
       email: orderData.email,
       petsInstructions: orderData.petInstructions,
-      // date: orderData.preferredDate,
+      date: orderData.preferredDate,
       // timeSlot: orderData.timeWindow,
       serviceId: orderData.serviceType?.id,
       serviceTypeId: orderData.specificServiceType?.id,

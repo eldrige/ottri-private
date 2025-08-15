@@ -7,8 +7,8 @@ import "react-day-picker/dist/style.css";
 
 interface DateInputProps {
   label?: string;
-  value?: Date;
-  onChange?: (date: Date) => void;
+  value?: Date | null;
+  onChange?: (date: Date | undefined) => void;
   labelClassName?: string;
   containerClassName?: string;
   placeholder?: string;
@@ -34,11 +34,13 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
     ref
   ) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined | null>(
+      value
+    );
 
     const handleDateSelect = (date: Date | undefined) => {
       setSelectedDate(date);
-      if (onChange && date) {
+      if (onChange) {
         onChange(date);
       }
       setIsOpen(false);
@@ -86,6 +88,7 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
           {isOpen && (
             <div className="absolute z-50 mt-1 bg-white shadow-lg rounded-lg border border-gray-200">
               <DayPicker
+                timeZone="America/Kentucky/Louisville"
                 disabled={(date) => {
                   const dateKey = date.toISOString().split("T")[0];
                   const instances = timeSlots[dateKey] || 0;
@@ -97,7 +100,7 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
                 //   { from: new Date(), to: new Date(), }
                 // ]}
                 mode="single"
-                selected={selectedDate}
+                selected={selectedDate || undefined}
                 onSelect={handleDateSelect}
                 autoFocus
                 className="p-3"

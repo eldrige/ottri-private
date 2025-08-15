@@ -54,8 +54,14 @@ export const orderFormSchema = z.object({
   accessMethod: z.string(),
   accessInstructions: z.string().optional(),
   // Step 6
-  preferredDate: z.date(),
-  timeWindow: z.string(),
+  preferredDate: z
+    .date()
+    .nullable()
+    .refine((data) => !!data, { message: "Preferred date is required" }),
+  timeWindow: z
+    .string()
+    .nullable()
+    .refine((data) => !!data, { message: "Time window is required" }),
   // Step 7
   tipAmount: z.number().min(0, "Tip amount cannot be negative").optional(),
   tipPercentage: z.number().min(0).optional(),

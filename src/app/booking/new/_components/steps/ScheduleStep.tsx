@@ -1,5 +1,5 @@
 import Select from "@/components/ui/Select";
-import { scheduleOptions } from "../../formData";
+// import { scheduleOptions } from "../../formData";
 import { DateInput } from "@/components/ui/DateInput";
 import { useFormContext } from "react-hook-form";
 import { OrderFormValues } from "../../schema";
@@ -16,8 +16,11 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
   const selectedDate = watch("preferredDate");
   const selectedTimeWindow = watch("timeWindow");
 
-  const handleDateChange = (date: Date) => {
-    setValue("preferredDate", date, { shouldValidate: true });
+  const handleDateChange = (date: Date | undefined) => {
+    console.log({ date });
+    setValue("preferredDate", date || null, { shouldValidate: true });
+
+    setValue("timeWindow", null);
   };
 
   const handleTimeWindowChange = (option: { value: string; label: string }) => {
@@ -26,18 +29,36 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
 
   const processedData = useMemo(() => {
     const grouped: Record<string, number> = {};
-    timeSlots.forEach((item) => {
+    timeSlots?.forEach((item) => {
       const date = new Date(item.date);
       const dateKey = date.toISOString().split("T")[0];
       if (grouped[dateKey]) {
-        grouped[dateKey] += item.instances;
+        grouped[dateKey] += item.freeInstances;
       } else {
-        grouped[dateKey] = item.instances;
+        grouped[dateKey] = item.freeInstances;
       }
     });
 
     return grouped;
   }, [timeSlots]);
+  console.log(processedData);
+
+  const availableWindows = useMemo(() => {
+    if (!selectedDate) return [];
+    const timeWindows = timeSlots
+      .filter(
+        (i) =>
+          i.date === selectedDate.toISOString().split("T")[0] &&
+          i.freeInstances > 0
+      )
+      .sort((a, b) => a.startTime - b.startTime)
+      .map((i) => ({
+        label: `${i.startTime % 12 || 12}:00 ${i.startTime < 12 ? "AM" : "PM"} - ${i.endTime % 12 || 12}:00 ${i.endTime < 12 ? "AM" : "PM"}`,
+        value: i.id.toString()
+      }));
+
+    return timeWindows;
+  }, [selectedDate, timeSlots]);
 
   return (
     <>
@@ -56,17 +77,19 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
         <div>
           <Select
             label="Time window"
-            options={scheduleOptions}
+            options={availableWindows}
             placeholder="Select a time"
             value={
-              selectedTimeWindow
-                ? scheduleOptions.find(
+              // selectedTimeWindow
+              availableWindows
+                ? availableWindows.find(
                     (opt) => opt.value === selectedTimeWindow
                   )
                 : undefined
             }
             onChange={handleTimeWindowChange}
             error={errors.timeWindow?.message}
+            disabled={!selectedTimeWindow}
           />
         </div>
       </div>
