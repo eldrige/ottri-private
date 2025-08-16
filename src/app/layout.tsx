@@ -10,16 +10,16 @@ const poppins = Poppins({
 
 const nunitoSans = Nunito_Sans({
   variable: "--font-nunito-sans",
-  subsets: ["latin"],
+  subsets: ["latin"]
 });
 
 export const metadata: Metadata = {
   title: "Ottri",
-  description: "Ottri Cleaning Services",
+  description: "Ottri Cleaning Services"
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {

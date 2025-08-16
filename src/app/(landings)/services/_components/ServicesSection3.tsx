@@ -5,43 +5,43 @@ export default function ServicesSection3() {
     {
       title: "Inside Oven",
       price: 25,
-      subtitle: "Deep clean and degrease oven interior",
+      subtitle: "Deep clean and degrease oven interior"
     },
     {
       title: "Inside Refrigerator",
       price: 25,
-      subtitle: "Thorough fridge cleaning and sanitizing",
+      subtitle: "Thorough fridge cleaning and sanitizing"
     },
     {
       title: "Basement Cleaning",
       price: 25,
-      subtitle: "Complete basement cleaning and organization",
+      subtitle: "Complete basement cleaning and organization"
     },
     {
       title: "Window Cleaning",
       price: 25,
-      subtitle: "Interior windows and tracks",
+      subtitle: "Interior windows and tracks"
     },
     {
       title: "Garage Cleaning",
       price: 20,
-      subtitle: "Sweep, organize, and clean garage space",
+      subtitle: "Sweep, organize, and clean garage space"
     },
     {
       title: "Laundry Service",
       price: 35,
-      subtitle: "Wash, dry, and fold one load",
+      subtitle: "Wash, dry, and fold one load"
     },
     {
       title: "Closet Organization",
       price: 15,
-      subtitle: "Organize and arrange closet contents",
+      subtitle: "Organize and arrange closet contents"
     },
     {
       title: "Plant Care",
       price: 10,
-      subtitle: "Water and care for houseplants",
-    },
+      subtitle: "Water and care for houseplants"
+    }
   ];
   return (
     <section className="py-24 pb-36 gap-16 flex flex-col">
@@ -74,7 +74,7 @@ type PopularServiceCardProps = {
 function PopularServiceCard({
   title,
   price,
-  subtitle,
+  subtitle
 }: PopularServiceCardProps) {
   return (
     <div className="border border-black/10 text-center rounded-lg flex flex-col justify-between p-4 items-center gap-8">

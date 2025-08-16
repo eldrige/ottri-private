@@ -2,9 +2,8 @@ import Navbar from "./_components/Navbar";
 import Footer from "@/app/(landings)/_components/Footer";
 import CookiesBanner from "./_components/CookiesBanner";
 
-
 export default function LandingLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {

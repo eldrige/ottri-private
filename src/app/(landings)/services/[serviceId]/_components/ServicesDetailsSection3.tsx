@@ -2,7 +2,7 @@ import { Service } from "@/lib/types";
 import React from "react";
 
 export default function ServicesDetailsSection3({
-  process,
+  process
 }: Pick<Service, "process">) {
   return (
     <section className="py-24 pb-36 gap-16 flex flex-col">

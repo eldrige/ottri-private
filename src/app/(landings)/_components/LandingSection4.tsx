@@ -11,7 +11,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  type CarouselApi,
+  type CarouselApi
 } from "@/components/ui/Carousel";
 
 export default function LandingSection4() {
@@ -66,7 +66,7 @@ function ReviewCard({
   reviewMessage,
   review,
   service,
-  image,
+  image
 }: ReviewCardProps) {
   return (
     <div className="bg-white h-full text-surface-500 xl:min-w-98 xl:min-h-76.25 p-6 justify-between flex flex-col gap-2 md:gap-4 rounded-lg shadow-custom">
@@ -125,7 +125,7 @@ function ReviewSlider() {
         "“Ottri has transformed my home! The team was professional, thorough, and left my place sparkling clean. I highly recommend their services to anyone looking for a reliable cleaning service.”",
       service: "Recurring Cleaning",
       image: Sara,
-      review: 5,
+      review: 5
     },
     {
       name: "Sara Johnson",
@@ -134,7 +134,7 @@ function ReviewSlider() {
         "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
       service: "Move-out Cleaning",
       image: Sara2,
-      review: 5,
+      review: 5
     },
     {
       name: "Sara Johnson",
@@ -143,7 +143,7 @@ function ReviewSlider() {
         "“Ottri has transformed my home! The team was professional, thorough, and left my place sparkling clean. I highly recommend their services to anyone looking for a reliable cleaning service.”",
       service: "Recurring Cleaning",
       image: Sara,
-      review: 5,
+      review: 5
     },
     {
       name: "Sara Johnson",
@@ -152,7 +152,7 @@ function ReviewSlider() {
         "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
       service: "Move-out Cleaning",
       image: Sara2,
-      review: 5,
+      review: 5
     },
     {
       name: "Sara Johnson",
@@ -161,7 +161,7 @@ function ReviewSlider() {
         "“Trustworthy and dedicated - OTTRI Cleaning Services has made a huge difference in our residential cleaning routine. Our home has never looked better.”",
       service: "One-Time Cleaning",
       image: Sara2,
-      review: 5,
+      review: 5
     },
     {
       name: "Sara Johnson",
@@ -170,8 +170,8 @@ function ReviewSlider() {
         "“Ottri has transformed my home! The team was professional, thorough, and left my place sparkling clean. I highly recommend their services to anyone looking for a reliable cleaning service.”",
       service: "Recurring Cleaning",
       image: Sara,
-      review: 5,
-    },
+      review: 5
+    }
   ];
 
   useEffect(() => {
@@ -185,7 +185,7 @@ function ReviewSlider() {
     <Carousel
       setApi={setApi}
       opts={{
-        align: "start",
+        align: "start"
       }}
       className="w-full mx-auto"
     >

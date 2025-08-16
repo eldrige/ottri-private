@@ -16,7 +16,7 @@ export default function ServicesDetailsHero({
   title,
   priceFrom,
   duration,
-  coverSrc,
+  coverSrc
 }: ServicesDetailsHeroProps) {
   return (
     <section className="pt-16 pb-8">
@@ -52,7 +52,7 @@ function HeroTop({ title }: Pick<ServicesDetailsHeroProps, "title">) {
 }
 function HeroLeftSide({
   priceFrom,
-  duration,
+  duration
 }: Pick<ServicesDetailsHeroProps, "priceFrom" | "duration">) {
   return (
     <div className="md:my-15.5 flex flex-col gap-6">
@@ -103,7 +103,7 @@ function HeroLeftSide({
 }
 function HeroRightSide({
   coverSrc,
-  title,
+  title
 }: Pick<ServicesDetailsHeroProps, "coverSrc" | "title">) {
   return (
     <div className="h-full flex flex-col gap-4">

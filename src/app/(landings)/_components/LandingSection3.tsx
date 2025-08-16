@@ -122,7 +122,7 @@ type ServiceCardProps = {
   coverSrc: StaticImageData;
   mostPopular?: boolean;
   Icon: ({
-    className,
+    className
   }: {
     className?: string | undefined;
   }) => React.JSX.Element;
@@ -136,7 +136,7 @@ function ServiceCard({
   subtitle,
   services,
   priceFrom,
-  duration,
+  duration
 }: ServiceCardProps) {
   return (
     <div

@@ -8,7 +8,7 @@ import ServicesDetailsSection4 from "./_components/ServicesDetailsSection4";
 import ServicesDetailsSection5 from "./_components/ServicesDetailsSection5";
 
 async function ServicesDetailsPage({
-  params,
+  params
 }: {
   params: Promise<{ serviceId: string }>;
 }) {

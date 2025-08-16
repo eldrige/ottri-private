@@ -9,60 +9,60 @@ export default function LandingSection6() {
     {
       image: "/landing-section6-figure1.jpg",
       type: "multi-images",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure2.jpg",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure3.jpg",
       type: "multi-images",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure4.jpg",
       type: "video",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure5.jpg",
       type: "multi-images",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure6.jpg",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure7.jpg",
       type: "video",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure8.jpg",
       type: "multi-images",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure1.jpg",
       type: "video",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure2.jpg",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure3.jpg",
       type: "multi-images",
-      link: "/services",
+      link: "/services"
     },
     {
       image: "/landing-section6-figure4.jpg",
       type: "video",
-      link: "/services",
-    },
+      link: "/services"
+    }
   ];
 
   return (

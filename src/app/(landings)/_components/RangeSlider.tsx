@@ -49,16 +49,16 @@ export default function RangeSlider({
         style={{
           height: `${sliderHeight}px`,
           borderRadius: `${sliderHeight / 2}px`,
-          backgroundColor: trackColor,
+          backgroundColor: trackColor
         }}
       >
         {/* Progress bar */}
         <div
           className="absolute top-0 left-0 h-full"
           style={{
-            width: (+progressWidthValue.slice(0, -1) + 1) + "%",
+            width: +progressWidthValue.slice(0, -1) + 1 + "%",
             backgroundColor: progressColor,
-            borderRadius: `${sliderHeight / 2}px`,
+            borderRadius: `${sliderHeight / 2}px`
           }}
         >
           <div className="h-[80%] aspect-square rounded-full bg-white absolute right-px -translate-y-1/2 top-1/2" />
@@ -98,4 +98,3 @@ export default function RangeSlider({
     </div>
   );
 }
-

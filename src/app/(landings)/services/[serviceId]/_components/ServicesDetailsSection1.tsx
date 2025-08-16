@@ -2,7 +2,7 @@ import CustomCheckIcon from "@/components/icons/CustomCheckIcon";
 import React from "react";
 
 export default function ServicesDetailsSection1({
-  includedServices,
+  includedServices
 }: {
   includedServices: string[];
 }) {

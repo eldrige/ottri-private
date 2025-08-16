@@ -40,7 +40,7 @@ function ServiceCard({
   subtitle,
   services,
   priceFrom,
-  duration,
+  duration
 }: Omit<Service, "pricingDetails" | "process">) {
   return (
     <div

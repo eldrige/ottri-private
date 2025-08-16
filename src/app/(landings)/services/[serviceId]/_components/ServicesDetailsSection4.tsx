@@ -29,7 +29,7 @@ export default function ServicesDetailsSection4() {
 function QualityCard({
   Icon,
   title,
-  content,
+  content
 }: {
   Icon: React.JSX.Element;
   title: string;
