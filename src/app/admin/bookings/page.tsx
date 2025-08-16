@@ -3,7 +3,13 @@ import React, { useState } from "react";
 import CalendarIcon from "@/components/icons/CalendarIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
-import { ChevronDown, Filter, ListIcon, PlusIcon } from "lucide-react";
+import {
+  ChevronDown,
+  Filter,
+  ListIcon,
+  PlusIcon,
+  Settings
+} from "lucide-react";
 import CalendarView from "./panels/CalendarView";
 import ListView from "./panels/ListView";
 import { cn } from "@/lib/utils";
@@ -16,26 +22,37 @@ export default function AdminBookingsPage() {
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-2">
         <h3 className="text-heading-4">Bookings</h3>
         <p className="text-secondary-700/70">Welcome back Admin</p>
       </div>
-      <hr className="my-4 text-black/10" />
+      <hr className="my-4 text-black/10 hidden lg:block" />
 
-      <div className="flex items-center justify-between gap-6">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mt-6 lg:mt-0">
         <button className="flex gap-4 items-center text-sm font-medium py-2 px-4 bg-surface-50 rounded-lg">
           <Filter className="size-4" />
           All Bookings
           <ChevronDown className="size-4 text-secondary-700/50" />
         </button>
-        <Button
-          size={"2xs"}
-          variant={"secondary"}
-          className="flex gap-2 items-center"
-        >
-          <PlusIcon className="size-5" /> New Booking
-        </Button>
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          <Button
+            size={"2xs"}
+            variant={"secondary"}
+            className="flex gap-2 items-center text-base justify-center"
+          >
+            <PlusIcon className="size-5" /> New Booking
+          </Button>
+          <Button
+            size={"2xs"}
+            variant={"secondary-outline"}
+            className="flex gap-2 items-center text-base justify-center"
+          >
+            <Settings className="size-5" /> Manage Slots
+          </Button>
+        </div>
       </div>
+
+      <hr className="my-4 text-black/10 lg:hidden" />
 
       <div className="w-full mt-8 py-2 px-3 flex lg:gap-4 rounded-4xl bg-surface-50">
         <button

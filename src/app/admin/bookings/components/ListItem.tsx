@@ -119,7 +119,7 @@ export default function ListItem({
           <Button
             size="2xs"
             variant={"secondary-outline"}
-            className="text-xs flex items-center gap-1 border-black/10"
+            className="text-xs flex items-center justify-center gap-1 border-black/10"
           >
             <EditIcon className="size-4" />
             Edit
@@ -127,7 +127,7 @@ export default function ListItem({
           <Button
             size="2xs"
             variant={"secondary-outline"}
-            className="text-xs flex items-center gap-1 border-black/10"
+            className="text-xs flex items-center justify-center gap-1 border-black/10"
           >
             <CallIcon className="size-4" />
             Call
@@ -135,7 +135,7 @@ export default function ListItem({
           <Button
             size="2xs"
             variant={"destructive"}
-            className="text-xs flex items-center gap-1 border-black/10"
+            className="text-xs flex items-center justify-center gap-1 border-black/10"
           >
             <TrashIcon className="size-4" />
             Delete
