@@ -3,17 +3,20 @@ import React, { useState } from "react";
 import CalendarIcon from "@/components/icons/CalendarIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
-import {
-  ChevronDown,
-  Filter,
-  ListIcon,
-  PlusIcon,
-  Settings
-} from "lucide-react";
+import { Filter, ListIcon, PlusIcon, Settings } from "lucide-react";
 import CalendarView from "./panels/CalendarView";
 import ListView from "./panels/ListView";
 import { cn } from "@/lib/utils";
 import MapView from "./panels/MapView";
+import Select from "@/components/ui/Select";
+
+const filterOptions = [
+  { label: "All Bookings", value: "all-bookings" },
+  { label: "Pending", value: "pending" },
+  { label: "In Progress", value: "in-progress" },
+  { label: "Completed", value: "completed" },
+  { label: "Cancelled", value: "cancelled" }
+];
 
 export default function AdminBookingsPage() {
   const [activeView, setActiveView] = useState<"calendar" | "list" | "map">(
@@ -29,11 +32,16 @@ export default function AdminBookingsPage() {
       <hr className="my-4 text-black/10 hidden lg:block" />
 
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mt-6 lg:mt-0">
-        <button className="flex gap-4 items-center text-sm font-medium py-2 px-4 bg-surface-50 rounded-lg">
+        <div className="flex items-center text-sm bg-gray-50 rounded-lg pl-4">
           <Filter className="size-4" />
-          All Bookings
-          <ChevronDown className="size-4 text-secondary-700/50" />
-        </button>
+          <Select
+            options={filterOptions}
+            value={filterOptions[0]}
+            placeholder="All Bookings"
+            buttonClassName="border-none gap-2 font-medium"
+            accent="secondary"
+          />
+        </div>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           <Button
             size={"2xs"}

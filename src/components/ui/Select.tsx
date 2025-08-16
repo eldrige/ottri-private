@@ -16,6 +16,7 @@ interface SelectProps {
   placeholder?: string;
   error?: string;
   buttonClassName?: string;
+  accent?: "primary" | "secondary";
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -26,7 +27,8 @@ const Select: React.FC<SelectProps> = ({
   className = "",
   placeholder = "Select option",
   error,
-  buttonClassName = ""
+  buttonClassName = "",
+  accent = "primary"
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<
@@ -96,7 +98,15 @@ const Select: React.FC<SelectProps> = ({
                 onClick={() => handleSelect(option)}
                 className={`
                   px-2 py-1.5 cursor-pointer rounded
-                  ${selectedOption?.value === option.value ? "bg-primary-700 text-white" : "hover:bg-gray-100"}
+                  ${
+                    selectedOption?.value === option.value &&
+                    accent === "primary"
+                      ? "bg-primary-700 text-white"
+                      : selectedOption?.value === option.value &&
+                          accent === "secondary"
+                        ? "bg-secondary-700 text-white"
+                        : "hover:bg-gray-100"
+                  }
                 `}
               >
                 {option.label}
