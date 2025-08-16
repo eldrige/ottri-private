@@ -12,8 +12,6 @@ export default function LandingSection7() {
     { title: "North Valley", subtitle: "15 available this week" }
   ];
 
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY || "";
-
   return (
     <section className="pt-24 pb-8 lg:py-24 grid lg:grid-cols-2 gap-y-16">
       <div className="lg:pr-8 flex items-center">
@@ -23,7 +21,7 @@ export default function LandingSection7() {
             Real-time availability across all service areas
           </p>
           <div className="w-full aspect-[9/16] sm:aspect-square mt-8 flex items-center justify-center outline-2 outline-primary-700 outline-dashed outline-offset-2 rounded-lg">
-            <Map apiKey={apiKey} />
+            <Map />
           </div>
         </div>
       </div>

@@ -18,7 +18,7 @@ export interface Service {
   mostPopular?: boolean;
   process: string[];
   Icon: ({
-    className,
+    className
   }: {
     className?: string | undefined;
   }) => React.JSX.Element;
