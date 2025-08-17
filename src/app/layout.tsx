@@ -4,25 +4,26 @@ import "./globals.css";
 import Navbar from "./_components/Navbar";
 import Footer from "@/app/_components/Footer";
 import CookiesBanner from "./_components/CookiesBanner";
+import ReactQueryProvider from "./providers/QueryProvider";
 
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"]
-})
+});
 
 const nunitoSans = Nunito_Sans({
   variable: "--font-nunito-sans",
-  subsets: ["latin"],
-})
+  subsets: ["latin"]
+});
 
 export const metadata: Metadata = {
   title: "Ottri",
-  description: "Ottri Cleaning Services",
+  description: "Ottri Cleaning Services"
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -32,7 +33,7 @@ export default function RootLayout({
         className={`${poppins.variable} ${nunitoSans.variable} antialiased font-poppins`}
       >
         <Navbar />
-        {children}
+        <ReactQueryProvider>{children}</ReactQueryProvider>
 
         <footer className="bg-secondary-700">
           <Footer />
