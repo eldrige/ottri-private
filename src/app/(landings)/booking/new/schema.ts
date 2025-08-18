@@ -33,10 +33,10 @@ export const orderFormSchema = z.object({
   serviceType: serviceTypeSchema.nullable().refine((data) => !!data, {
     message: "Service type is required"
   }),
-  // specificServiceType: z.number().min(1, "Specific cleaning type is required"),
   specificServiceType: specificTypeSchema.nullable().refine((data) => !!data, {
     message: "Specific cleaning type is required"
   }),
+  frequency: z.string().min(1, "Frequency is required"),
   // Step 2
   serviceAddress: z.string().min(1, "Service address is required"),
   useSameForBilling: z.boolean().optional(),

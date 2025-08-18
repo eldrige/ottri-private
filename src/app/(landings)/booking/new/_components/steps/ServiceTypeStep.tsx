@@ -35,6 +35,11 @@ export default function ServiceTypeStep({
   } = useFormContext<OrderFormValues>();
   const selectedService = watch("serviceType");
   const selectedSpecificType = watch("specificServiceType");
+  const selectedFrequency = watch("frequency");
+
+  const handleFrequencyChange = (option: { value: string; label: string }) => {
+    setValue("frequency", option.value, { shouldValidate: true });
+  };
 
   return (
     <>
@@ -132,8 +137,15 @@ export default function ServiceTypeStep({
           <Select
             label="Cleaning frequency"
             options={frequencies}
-            value={frequencies[0]}
+            placeholder="Select frequency"
+            value={
+              selectedFrequency
+                ? frequencies.find((i) => i.value === selectedFrequency)
+                : undefined
+            }
+            onChange={handleFrequencyChange}
             buttonClassName="border-0 text-secondary-700/70"
+            error={errors.frequency?.message}
           />
         </>
       )}
