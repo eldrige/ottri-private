@@ -16,6 +16,8 @@ interface SelectProps {
   placeholder?: string;
   error?: string;
   disabled?: boolean;
+  buttonClassName?: string;
+  accent?: "primary" | "secondary";
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -26,7 +28,9 @@ const Select: React.FC<SelectProps> = ({
   className = "",
   placeholder = "Select option",
   error,
-  disabled = false
+  disabled = false,
+  buttonClassName = "",
+  accent = "primary"
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<
@@ -76,8 +80,9 @@ const Select: React.FC<SelectProps> = ({
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "w-full rounded-lg bg-gray-50 px-4 py-3 text-left flex justify-between items-center border",
-            error ? "border-error" : "border-gray-200"
+            "w-full rounded-lg bg-gray-50 px-4 py-3 text-left flex justify-between items-center border min-w-fit",
+            error ? "border-error" : "border-gray-200",
+            buttonClassName
           )}
           disabled={disabled}
         >
@@ -92,14 +97,22 @@ const Select: React.FC<SelectProps> = ({
         </button>
 
         {isOpen && (
-          <div className="absolute z-10 mt-1 px-3 py-3 space-y-1.5 w-full rounded-lg bg-white shadow-lg border border-gray-200 overflow-hidden">
+          <div className="absolute min-w-full z-10 mt-1 px-3 py-3 space-y-1.5 rounded-lg bg-white shadow-lg border border-gray-200 overflow-hidden">
             {options.map((option) => (
               <div
                 key={option.value}
                 onClick={() => handleSelect(option)}
                 className={`
                   px-2 py-1.5 cursor-pointer rounded
-                  ${selectedOption?.value === option.value ? "bg-primary-700 text-white" : "hover:bg-gray-100"}
+                  ${
+                    selectedOption?.value === option.value &&
+                    accent === "primary"
+                      ? "bg-primary-700 text-white"
+                      : selectedOption?.value === option.value &&
+                          accent === "secondary"
+                        ? "bg-secondary-700 text-white"
+                        : "hover:bg-gray-100"
+                  }
                 `}
               >
                 {option.label}

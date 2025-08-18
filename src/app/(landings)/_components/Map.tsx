@@ -2,8 +2,10 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 
-export default function Map({ apiKey }: { apiKey: string }) {
+export default function Map() {
   const mapRef = useRef<HTMLDivElement>(null);
+
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
   // Google maps setup
   useEffect(() => {
