@@ -1,0 +1,48 @@
+:root {
+  --fc-border-color: rgba(0, 0, 0, 0.1);
+  --fc-daygrid-event-dot-width: 5px;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border: 0;
+}
+
+[role="row"] {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.fc .fc-scrollgrid-liquid {
+  border-spacing: 16px;
+}
+
+.fc .fc-scrollgrid-section > * {
+  border: 0;
+}
+
+.fc-scrollgrid-sync-table > tbody {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.fc-day.fc-daygrid-day {
+  /* border: 0 */
+  border-radius: 8px;
+  padding: 0;
+  padding: 4px;
+}
+
+.fc-daygrid-day-top {
+  display: flex;
+  justify-content: start;
+}
+
+.fc-col-header-cell.fc-day {
+  padding-bottom: 4px;
+  /* margin-bottom: 8px; */
+  font-weight: 500;
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}

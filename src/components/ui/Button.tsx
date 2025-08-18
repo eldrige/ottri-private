@@ -4,39 +4,45 @@ import { cn } from "@/lib/utils";
 
 // Define button variants using class-variance-authority
 const buttonVariants = cva(
-  "text-white rounded-lg font-normal hover:bg-transparent transition border border-transparent disabled:border-transparent cursor-pointer disabled:cursor-default disabled:bg-surface-500/20 disabled:text-white",
+  "text-white rounded-lg font-normal hover:bg-transparent transition border border-transparent disabled:border-transparent cursor-pointer disabled:cursor-default disabled:bg-surface-500/20 disabled:text-white min-w-fit",
   {
     variants: {
       variant: {
-        default: "bg-primary-700 hover:text-primary-700 hover:border-primary-700",
-        secondary: "bg-secondary-700 hover:text-secondary-700 hover:border-secondary-700 hover:bg-white",
-        destructive: "",
-        outline: "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900",
+        default:
+          "bg-primary-700 hover:text-primary-700 hover:border-primary-700",
+        secondary:
+          "bg-secondary-700 hover:text-secondary-700 hover:border-secondary-700 hover:bg-white",
+        destructive:
+          "bg-error text-white hover:text-error hover:bg-white hover:border-error",
+        outline:
+          "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900",
         "default-outline": "text-primary-700 border-primary-700",
         "secondary-outline": "text-secondary-700 border-secondary-700",
-        ghost: "bg-white text-primary-700 border-transparent hover:bg-surface-200",
-        "ghost-secondary": "bg-white text-secondary-700 border-transparent hover:bg-surface-200",
+        ghost:
+          "bg-white text-primary-700 border-transparent hover:bg-surface-200",
+        "ghost-secondary":
+          "bg-white text-secondary-700 border-transparent hover:bg-surface-200",
         link: ""
       },
       size: {
         default: "py-4 px-8 text-xl",
         sm: "py-3 px-6",
         xs: "py-2 px-6",
+        "2xs": "py-2 px-4 text-xs",
         lg: "py-6 px-10 text-2xl",
-        icon: "p-2 w-10 h-10",
-      },
+        icon: "p-2 w-10 h-10"
+      }
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
-    },
+      size: "default"
+    }
   }
 );
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
-}
+    VariantProps<typeof buttonVariants> {}
 
 /**
  * Button component with multiple variants

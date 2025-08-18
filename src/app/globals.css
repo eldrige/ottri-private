@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #fbfcfc;
   --foreground: #000000;
 }
 
 @theme {
   /* Primary Colors */
   --color-primary-100: #fff2e6;
+  --color-primary-200: #fee5cf;
   --color-primary-500: #f39c12;
   --color-primary-700: #e67e22;
   --color-primary-900: #d35400;
@@ -19,6 +20,7 @@
   --color-secondary-900: #1a252f;
 
   /* Neutral Colors */
+  --color-surface-30: #fbfbfb;
   --color-surface-50: #f8f9fa;
   --color-surface-100: #e3e0e0;
   --color-surface-200: #e2e3e5;
@@ -28,7 +30,9 @@
 
   /* Semantic Colors */
   --color-success: #28a745;
+  --color-success-background: #e7f6eb;
   --color-warning: #ffc107;
+  --color-warning-text: #7e6008;
   --color-error: #dc3545;
   --color-info: #17a2b8;
 
@@ -67,6 +71,8 @@
 
   /* Custom shadow */
   --shadow-custom: 0px 0px 23px 0px #0000001a;
+  --shadow-custom-light: 0px 4px 16px 0px #0000000d;
+  --shadow-custom-strong: 0px 4px 8px 0px #051e1314;
 }
 
 @theme inline {
@@ -74,6 +80,10 @@
   --color-foreground: var(--foreground);
   --font-poppins: var(--font-poppins);
   --font-nunito-sans: var(--font-nunito-sans);
+}
+
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }
 
 body {
@@ -86,4 +96,8 @@ h1,
 h2 {
   font-family: var(--font-nunito-sans);
   line-height: 1.375;
+}
+
+button {
+  cursor: pointer;
 }
