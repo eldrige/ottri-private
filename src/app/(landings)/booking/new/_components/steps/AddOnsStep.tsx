@@ -12,8 +12,9 @@ export default function AddOnsStep({
   const {
     register,
     watch,
-    setValue
-    // formState: { errors }
+    setValue,
+    formState: { errors },
+    clearErrors
   } = useFormContext<OrderFormValues>();
 
   const selectedAddOns = watch("addOns") || [];
@@ -76,7 +77,9 @@ export default function AddOnsStep({
             label="Specify other service"
             placeholder="Enter text..."
             labelClassName="font-medium text-base"
+            error={errors.otherService?.message}
             {...register("otherService")}
+            onInput={() => clearErrors("otherService")}
           />
         </div>
       )}

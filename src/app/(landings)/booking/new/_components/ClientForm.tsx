@@ -57,7 +57,8 @@ export default function ClientForm({
     // setValue,
     handleSubmit,
     trigger,
-    formState: { errors }
+    formState: { errors },
+    setError
   } = methods;
   const processPaymentRef = useRef(() => Promise.resolve(""));
 
@@ -72,7 +73,11 @@ export default function ClientForm({
   const currentStepHasErrors = () => {
     switch (currStep) {
       case 0:
-        return !!errors.serviceType || !!errors.specificServiceType;
+        return (
+          !!errors.serviceType ||
+          !!errors.specificServiceType ||
+          !!errors.frequency
+        );
       case 1:
         return (
           !!errors.serviceAddress ||
@@ -81,8 +86,7 @@ export default function ClientForm({
           !!errors.squareFootage
         );
       case 2:
-        // Add-ons step has no required fields
-        return false;
+        return !!errors.otherService;
       case 3:
         // Pet info step has no required fields
         return false;
@@ -115,7 +119,11 @@ export default function ClientForm({
 
     switch (currStep) {
       case 0:
-        isValid = await trigger(["serviceType", "specificServiceType"]);
+        isValid = await trigger([
+          "serviceType",
+          "specificServiceType",
+          "frequency"
+        ]);
         break;
       case 1:
         isValid = await trigger([
@@ -124,6 +132,15 @@ export default function ClientForm({
           "bathrooms",
           "squareFootage"
         ]);
+        break;
+      case 2:
+        if (formValues.addOns.some((i) => i.name.toLowerCase() === "others")) {
+          if (formValues.otherService) isValid = true;
+          else
+            setError("otherService", {
+              message: "Please specify the other service needed"
+            });
+        } else isValid = true;
         break;
       case 5:
         isValid = await trigger(["timeWindow", "preferredDate"]);
@@ -145,7 +162,7 @@ export default function ClientForm({
     }
 
     return isValid;
-  }, [trigger, currStep]);
+  }, [trigger, setError, currStep, formValues.addOns, formValues.otherService]);
 
   // Run validation when form values change
   useEffect(() => {
@@ -157,10 +174,14 @@ export default function ClientForm({
   }, [
     formValues.serviceType,
     formValues.specificServiceType,
+    formValues.frequency,
     formValues.serviceAddress,
     formValues.bedrooms,
     formValues.bathrooms,
     formValues.squareFootage,
+    formValues.otherService,
+    formValues.petType,
+    formValues.petInstructions,
     formValues.fullName,
     formValues.phoneNumber,
     formValues.email,
@@ -351,13 +372,8 @@ export default function ClientForm({
               <p className="text-caption flex justify-between">
                 Service Type:
                 <span className="capitalize">
-                  {/* {(formValues.serviceType
-                    ? formValues.serviceType[0].toUpperCase() +
-                      formValues.serviceType.slice(1)
-                    : null) || "Not selected"} */}
                   {(formValues.serviceType
-                    ? // preflight.services.find(service => service.id === formValues.serviceType)?.name.split(" ")[0]
-                      formValues.serviceType.name.split(" ")[0]
+                    ? formValues.serviceType.name.split(" ")[0]
                     : null) || "Not selected"}
                 </span>
               </p>
@@ -365,14 +381,16 @@ export default function ClientForm({
                 <p className="text-caption flex justify-between">
                   Specific Type:
                   <span className="capitalize">
-                    {/* {(formValues.specificServiceType
-                      ? formValues.specificServiceType[0].toUpperCase() +
-                      formValues.specificServiceType.slice(1)
-                      : null) || "Not selected"} */}
                     {(formValues.specificServiceType
                       ? formValues.specificServiceType.name.split(" ")[0]
                       : null) || "Not selected"}
                   </span>
+                </p>
+              )}
+              {formValues.frequency && (
+                <p className="text-caption flex justify-between">
+                  Frequency:
+                  <span className="capitalize">{formValues.frequency}</span>
                 </p>
               )}
               {formValues.bedrooms && (

@@ -9,7 +9,8 @@ export default function PetInfoStep() {
     register,
     watch,
     setValue,
-    formState: { errors }
+    formState: { errors },
+    clearErrors
   } = useFormContext<OrderFormValues>();
 
   const selectedPetType = watch("petType");
@@ -49,12 +50,9 @@ export default function PetInfoStep() {
             placeholder="e.g., keep bedroom door closed, cat is nervous around strangers"
             {...register("petInstructions")}
             rows={2}
+            error={errors.petInstructions?.message}
+            onInput={() => clearErrors("petInstructions")}
           />
-          {errors.petInstructions && (
-            <p className="text-xs text-error mt-1">
-              {errors.petInstructions.message as string}
-            </p>
-          )}
         </div>
       )}
     </>
