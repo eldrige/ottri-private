@@ -7,6 +7,7 @@ import { ServiceType } from "../../types";
 import { Building2, HomeIcon, Shield, Trees } from "lucide-react";
 import React from "react";
 import { OrderFormValues } from "../../schema";
+import Select from "@/components/ui/Select";
 
 const iconsObj: Record<string, React.ReactNode> = {
   "residential cleaning": <HomeIcon />,
@@ -14,6 +15,12 @@ const iconsObj: Record<string, React.ReactNode> = {
   "outdoor cleaning": <Trees />,
   "specialized services": <Shield />
 };
+
+const frequencies = [
+  { label: "Monthly (Save 10%)", value: "monthly" },
+  { label: "Bi-weekly (Save 15%)", value: "bi-weekly" },
+  { label: "Weekly (Save 10%)", value: "weekly" }
+];
 
 export default function ServiceTypeStep({
   services
@@ -72,6 +79,8 @@ export default function ServiceTypeStep({
 
       {selectedService && (
         <>
+          <hr className="text-surface-500/10" />
+
           <h3 className="text-heading-4 mt-6">Select Specific Type</h3>
 
           <div className="flex flex-col space-y-4">
@@ -116,6 +125,15 @@ export default function ServiceTypeStep({
             {...register("specificServiceType", {
               required: "Please select a specific cleaning type"
             })}
+          />
+
+          <hr className="text-surface-500/10" />
+
+          <Select
+            label="Cleaning frequency"
+            options={frequencies}
+            value={frequencies[0]}
+            buttonClassName="border-0 text-secondary-700/70"
           />
         </>
       )}
