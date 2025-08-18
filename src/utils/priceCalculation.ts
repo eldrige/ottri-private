@@ -1,4 +1,4 @@
-import { OrderFormValues } from "@/app/booking/new/schema";
+import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
 
 export function calculateServicesPrice(orderData: Partial<OrderFormValues>) {
   let servicesPrice = 0;

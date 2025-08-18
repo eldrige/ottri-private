@@ -1,6 +1,6 @@
 "use server";
 import { NextResponse } from "next/server";
-import { OrderFormValues } from "@/app/booking/new/schema";
+import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
 import Stripe from "stripe";
 import {
   calculateAddOnsPrice,
