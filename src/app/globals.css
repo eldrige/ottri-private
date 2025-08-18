@@ -35,6 +35,7 @@
   --color-warning-text: #7e6008;
   --color-error: #dc3545;
   --color-info: #17a2b8;
+  --color-info-text: #12889b;
 
   /* Badge Colors */
   --color-badge-green: #34a853;
@@ -71,8 +72,6 @@
 
   /* Custom shadow */
   --shadow-custom: 0px 0px 23px 0px #0000001a;
-  --shadow-custom-light: 0px 4px 16px 0px #0000000d;
-  --shadow-custom-strong: 0px 4px 8px 0px #051e1314;
 }
 
 @theme inline {
