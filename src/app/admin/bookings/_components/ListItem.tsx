@@ -45,7 +45,7 @@ export default function ListItem({
         <div className="flex items-center gap-3">
           <span className="font-medium">{bookingName}</span>
           <Select
-            // label='In Progress'
+            accent="secondary"
             options={statuses}
             buttonClassName={cn(
               "py-1.5 px-3 gap-2",

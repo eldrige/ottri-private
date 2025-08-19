@@ -1,5 +1,5 @@
 import React from "react";
-import ListItem from "../components/ListItem";
+import ListItem from "../_components/ListItem";
 
 const statuses = [
   { label: "Pending", value: "pending" },

@@ -4,11 +4,12 @@ import CalendarIcon from "@/components/icons/CalendarIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
 import { Filter, ListIcon, PlusIcon, Settings } from "lucide-react";
-import CalendarView from "./panels/CalendarView";
-import ListView from "./panels/ListView";
+import CalendarView from "./_panels/CalendarView";
+import ListView from "./_panels/ListView";
 import { cn } from "@/lib/utils";
-import MapView from "./panels/MapView";
+import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
+import PanelViewer from "../_components/PanelViewer";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -19,9 +20,7 @@ const filterOptions = [
 ];
 
 export default function AdminBookingsPage() {
-  const [activeView, setActiveView] = useState<"calendar" | "list" | "map">(
-    "calendar"
-  );
+  const [activeView, setActiveView] = useState<string>("calendar");
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
@@ -62,56 +61,54 @@ export default function AdminBookingsPage() {
 
       <hr className="my-4 text-black/10 lg:hidden" />
 
-      <div className="w-full mt-8 py-2 px-3 flex lg:gap-4 rounded-4xl bg-surface-50">
-        <button
-          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 min-w-fit transition-all ${
-            activeView === "calendar"
-              ? "bg-white px-4"
-              : "px-2 text-secondary-700/70"
-          }`}
-          onClick={() => setActiveView("calendar")}
-        >
-          <CalendarIcon
-            className={cn(
-              "size-4",
-              activeView === "calendar" ? "block" : "hidden lg:block"
-            )}
-          />
-          Calendar View
-        </button>
-        <button
-          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 min-w-fit transition-all ${
-            activeView === "list"
-              ? "bg-white px-4"
-              : "px-2 text-secondary-700/70"
-          }`}
-          onClick={() => setActiveView("list")}
-        >
-          <ListIcon
-            className={cn(
-              "size-4",
-              activeView === "list" ? "block" : "hidden lg:block"
-            )}
-          />
-          List View
-        </button>
-        <button
-          className={`flex-1 text-sm py-2 rounded-4xl flex justify-center items-center gap-2 min-w-fit transition-all ${
-            activeView === "map"
-              ? "bg-white px-4"
-              : "px-2 text-secondary-700/70"
-          }`}
-          onClick={() => setActiveView("map")}
-        >
-          <LocationIcon
-            className={cn(
-              "size-4",
-              activeView === "map" ? "block" : "hidden lg:block"
-            )}
-          />
-          Map View
-        </button>
-      </div>
+      <PanelViewer
+        views={[
+          {
+            viewName: "calendar",
+            content: (
+              <>
+                <CalendarIcon
+                  className={cn(
+                    "size-4",
+                    activeView === "calendar" ? "block" : "hidden lg:block"
+                  )}
+                />
+                Calendar View
+              </>
+            )
+          },
+          {
+            viewName: "list",
+            content: (
+              <>
+                <ListIcon
+                  className={cn(
+                    "size-4",
+                    activeView === "list" ? "block" : "hidden lg:block"
+                  )}
+                />
+                List View
+              </>
+            )
+          },
+          {
+            viewName: "map",
+            content: (
+              <>
+                <LocationIcon
+                  className={cn(
+                    "size-4",
+                    activeView === "map" ? "block" : "hidden lg:block"
+                  )}
+                />
+                Map View
+              </>
+            )
+          }
+        ]}
+        activeView={activeView}
+        setActiveView={setActiveView}
+      />
 
       {activeView === "calendar" ? (
         <CalendarView />
