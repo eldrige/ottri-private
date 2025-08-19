@@ -35,14 +35,14 @@ function FeaturedArticle({
 }: FeaturedArticleProps) {
   return (
     <div className="flex flex-col  md:flex-row shadow-custom-strong rounded-lg">
-      <div className="w-full flex md:flex-[44%]">
+      <div className="w-full flex md:flex-44/100">
         <Image
           src={coverSrc}
           alt={title}
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
-      <div className="flex self-center md:flex-[56%] flex-col text-left gap-3 md:gap-5 p-5 md:px-10 md:py-13">
+      <div className="flex self-center md:flex-56/100 flex-col text-left gap-3 md:gap-5 p-5 md:px-10 md:py-13">
         <span className="w-fit py-1 px-4 bg-surface-500/10 rounded-lg text">
           {category}
         </span>
