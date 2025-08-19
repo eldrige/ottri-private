@@ -4,10 +4,10 @@ import CalendarIcon from "@/components/icons/CalendarIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
 import { Filter, ListIcon, PlusIcon, Settings } from "lucide-react";
-import CalendarView from "./panels/CalendarView";
-import ListView from "./panels/ListView";
+import CalendarView from "./_panels/CalendarView";
+import ListView from "./_panels/ListView";
 import { cn } from "@/lib/utils";
-import MapView from "./panels/MapView";
+import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
 
 const filterOptions = [
