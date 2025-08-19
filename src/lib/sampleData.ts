@@ -10,7 +10,7 @@ import ourTeamFigure6 from "@/assets/ourteam-figure6.jpg";
 import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
-import { Service, TeamMember } from "./types";
+import { Article, Service, TeamMember } from "./types";
 
 export const servicesData: Service[] = [
   {
@@ -234,5 +234,80 @@ export const teamMembers: TeamMember[] = [
       "Move-in/Move-out"
     ],
     coverSrc: ourTeamFigure6
+  }
+];
+
+export const articlesData: Article[] = [
+  {
+    id: 2,
+    isPopular: false,
+    category: "Eco-Friendly Cleaning",
+    title: "Essential Cleaning Supplies every home needs",
+    description:
+      "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
+    coverSrc: ourTeamFigure2,
+    authorName: "Ruby Jones",
+    readTime: "8 min read",
+    postedAt: "March 15, 2025"
+  },
+  {
+    id: 3,
+    isPopular: false,
+    category: "Eco-Friendly Cleaning",
+    title: "Essential Cleaning Supplies every home needs",
+    description:
+      "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
+    coverSrc: ourTeamFigure2,
+    authorName: "Ruby Jones",
+    readTime: "8 min read",
+    postedAt: "March 15, 2025"
+  },
+  {
+    id: 1,
+    isPopular: true,
+    category: "Cleaning Tips",
+    title: "The Ultimate Spring Cleaning guide: Room by room checklist",
+    description:
+      "Transform your home this spring with our comprehensive cleaning checklist. From deep cleaning techniques to organization tips, we cover everything you need for a fresh start",
+    coverSrc: ourTeamFigure1,
+    authorName: "Ruby Jones",
+    readTime: "8 min read",
+    postedAt: "March 15, 2025"
+  },
+  {
+    id: 4,
+    isPopular: false,
+    category: "Eco-Friendly Cleaning",
+    title: "Essential Cleaning Supplies every home needs",
+    description:
+      "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
+    coverSrc: ourTeamFigure2,
+    authorName: "Ruby Jones",
+    readTime: "8 min read",
+    postedAt: "March 15, 2025"
+  },
+  {
+    id: 5,
+    isPopular: false,
+    category: "Eco-Friendly Cleaning",
+    title: "Essential Cleaning Supplies every home needs",
+    description:
+      "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
+    coverSrc: ourTeamFigure2,
+    authorName: "Ruby Jones",
+    readTime: "8 min read",
+    postedAt: "March 15, 2025"
+  },
+  {
+    id: 6,
+    isPopular: false,
+    category: "Eco-Friendly Cleaning",
+    title: "Essential Cleaning Supplies every home needs",
+    description:
+      "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
+    coverSrc: ourTeamFigure2,
+    authorName: "Ruby Jones",
+    readTime: "8 min read",
+    postedAt: "March 15, 2025"
   }
 ];

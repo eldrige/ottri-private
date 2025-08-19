@@ -35,3 +35,15 @@ export interface TeamMember {
   specialities: string[];
   coverSrc: StaticImageData;
 }
+
+export interface Article {
+  id: number;
+  isPopular: boolean;
+  category: string;
+  title: string;
+  description: string;
+  coverSrc: StaticImageData;
+  authorName: string;
+  readTime: string;
+  postedAt: string;
+}
