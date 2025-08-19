@@ -5,7 +5,7 @@ import React from "react";
 
 export default function BlogHero() {
   return (
-    <section className="py-8 lg:py-24 space-y-8">
+    <section className="pt-8 lg:pt-24 space-y-8">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
         <Badge className="w-fit" variant="default" mode="outline">
           Ottri Blog

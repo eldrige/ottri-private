@@ -38,7 +38,7 @@ export interface TeamMember {
 
 export interface Article {
   id: number;
-  isPopular: boolean;
+  isFeatured: boolean;
   category: string;
   title: string;
   description: string;

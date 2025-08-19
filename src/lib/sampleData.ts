@@ -240,7 +240,7 @@ export const teamMembers: TeamMember[] = [
 export const articlesData: Article[] = [
   {
     id: 2,
-    isPopular: false,
+    isFeatured: false,
     category: "Eco-Friendly Cleaning",
     title: "Essential Cleaning Supplies every home needs",
     description:
@@ -252,7 +252,7 @@ export const articlesData: Article[] = [
   },
   {
     id: 3,
-    isPopular: false,
+    isFeatured: false,
     category: "Eco-Friendly Cleaning",
     title: "Essential Cleaning Supplies every home needs",
     description:
@@ -264,8 +264,8 @@ export const articlesData: Article[] = [
   },
   {
     id: 1,
-    isPopular: true,
-    category: "Cleaning Tips",
+    isFeatured: true,
+    category: "Popular",
     title: "The Ultimate Spring Cleaning guide: Room by room checklist",
     description:
       "Transform your home this spring with our comprehensive cleaning checklist. From deep cleaning techniques to organization tips, we cover everything you need for a fresh start",
@@ -276,7 +276,7 @@ export const articlesData: Article[] = [
   },
   {
     id: 4,
-    isPopular: false,
+    isFeatured: false,
     category: "Eco-Friendly Cleaning",
     title: "Essential Cleaning Supplies every home needs",
     description:
@@ -288,7 +288,7 @@ export const articlesData: Article[] = [
   },
   {
     id: 5,
-    isPopular: false,
+    isFeatured: false,
     category: "Eco-Friendly Cleaning",
     title: "Essential Cleaning Supplies every home needs",
     description:
@@ -300,7 +300,7 @@ export const articlesData: Article[] = [
   },
   {
     id: 6,
-    isPopular: false,
+    isFeatured: false,
     category: "Eco-Friendly Cleaning",
     title: "Essential Cleaning Supplies every home needs",
     description:
