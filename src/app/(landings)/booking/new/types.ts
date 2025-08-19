@@ -6,13 +6,14 @@ export interface PreflightType {
 
 export interface TimeSlot {
   id: number;
-  templateId: number;
   date: string;
   startTime: number;
   endTime: number;
   instances: number;
-  freeInstances: number;
-  repetition: string;
+  endDate: null;
+  isTemplate: boolean;
+  templateId: null;
+  slots: Record<string, number>;
 }
 
 export interface ServiceType {

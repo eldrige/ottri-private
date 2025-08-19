@@ -29,28 +29,42 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
 
   const processedData = useMemo(() => {
     const grouped: Record<string, number> = {};
-    timeSlots?.forEach((item) => {
-      const date = new Date(item.date);
-      const dateKey = date.toISOString().split("T")[0];
-      if (grouped[dateKey]) {
-        grouped[dateKey] += item.freeInstances;
-      } else {
-        grouped[dateKey] = item.freeInstances;
-      }
+
+    timeSlots.forEach((item) => {
+      Object.entries(item.slots).forEach((entry) => {
+        if (entry[1] > 0) return;
+        if (grouped[entry[0]]) grouped[entry[0]] += 1;
+        else grouped[entry[0]] = 1;
+      });
     });
 
-    return grouped;
+    const unavailableDates = Object.entries(grouped)
+      .filter((i) => i[1] === timeSlots.length)
+      .map((i) => i[0]);
+    // timeSlots?.forEach((item) => {
+    //   const date = new Date(item.date);
+    //   const dateKey = date.toISOString().split("T")[0];
+    //   if (grouped[dateKey]) {
+    //     grouped[dateKey] += item.freeInstances;
+    //   } else {
+    //     grouped[dateKey] = item.freeInstances;
+    //   }
+    // });
+
+    return unavailableDates;
   }, [timeSlots]);
   console.log(processedData);
 
   const availableWindows = useMemo(() => {
     if (!selectedDate) return [];
     const timeWindows = timeSlots
-      .filter(
-        (i) =>
-          i.date === selectedDate.toISOString().split("T")[0] &&
-          i.freeInstances > 0
-      )
+      .filter((i) => {
+        const slotCount = i.slots[selectedDate.toISOString().split("T")[0]];
+        console.log({ slotCount, i });
+        return typeof slotCount !== "number" || slotCount > 0;
+        // i.date === selectedDate.toISOString().split("T")[0] &&
+        // i.freeInstances > 0
+      })
       .sort((a, b) => a.startTime - b.startTime)
       .map((i) => ({
         label: `${i.startTime % 12 || 12}:00 ${i.startTime < 12 ? "AM" : "PM"} - ${i.endTime % 12 || 12}:00 ${i.endTime < 12 ? "AM" : "PM"}`,

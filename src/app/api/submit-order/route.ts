@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     const servicesPrice = calculateServicesPrice(orderData);
     const addOnsPrice = calculateAddOnsPrice(orderData);
     const bodyObj = {
+      cleaningFrequency: orderData.frequency,
       servicesPrice: servicesPrice,
       addOnsPrice: addOnsPrice,
       tax: (servicesPrice + addOnsPrice) * 0.08,
@@ -60,7 +61,7 @@ export async function POST(request: Request) {
       serviceTypeId: orderData.specificServiceType?.id,
       bedrooms: orderData.bedrooms,
       bathrooms: orderData.bathrooms,
-      approximateSquareFootage: +orderData.squareFootage,
+      approximateSquareFootage: orderData.squareFootage,
       stripePaymentIntentId: paymentIntent.id,
       stripeCustomerId: null,
       entryInstructions: orderData.accessInstructions,

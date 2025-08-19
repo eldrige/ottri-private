@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from "react";
-import { format } from "date-fns";
+import { addMonths, format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import CalendarIcon from "@/components/icons/CalendarIcon";
 import "react-day-picker/dist/style.css";
@@ -14,7 +14,8 @@ interface DateInputProps {
   placeholder?: string;
   disabled?: boolean;
   error?: string;
-  timeSlots: Record<string, number>;
+  // timeSlots: Record<string, number>;
+  timeSlots: string[];
 }
 
 const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
@@ -90,15 +91,13 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
               <DayPicker
                 timeZone="America/Kentucky/Louisville"
                 disabled={(date) => {
+                  if (date < new Date()) return true;
+
+                  if (date > addMonths(new Date(), 3)) return true;
+
                   const dateKey = date.toISOString().split("T")[0];
-                  const instances = timeSlots[dateKey] || 0;
-                  return instances <= 0;
+                  return timeSlots.includes(dateKey);
                 }}
-                // disabled={[
-                //   { before: new Date() },
-                //   { after: addMonths(new Date(), 2) },
-                //   { from: new Date(), to: new Date(), }
-                // ]}
                 mode="single"
                 selected={selectedDate || undefined}
                 onSelect={handleDateSelect}
