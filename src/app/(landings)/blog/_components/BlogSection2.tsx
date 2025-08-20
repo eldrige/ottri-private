@@ -3,6 +3,7 @@ import { articlesData } from "@/lib/sampleData";
 import { Article } from "@/lib/types";
 import { ArrowRight, CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import React from "react";
 
@@ -38,7 +39,7 @@ function CategoryFilter() {
     router.push(`?${params.toString()}`);
   };
   return (
-    <div className="flex gap-8 mx-auto">
+    <div className="flex gap-8 flex-wrap mx-auto">
       {articleCategories.map((cat) => (
         <div
           key={cat}
@@ -70,10 +71,12 @@ function LatestArticles() {
         </p>
       </div>
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articlesData.map((article) => (
-            <ArticleCard key={article.id} {...article} />
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {articlesData
+            .filter((article) => !article.isFeatured)
+            .map((article) => (
+              <ArticleCard key={article.id} {...article} />
+            ))}
         </div>
       </div>
     </div>
@@ -88,7 +91,8 @@ function ArticleCard({
   description,
   coverSrc,
   readTime,
-  postedAt
+  postedAt,
+  id
 }: ArticleCardProps) {
   return (
     <div className="flex flex-col shadow-custom-strong rounded-lg">
@@ -96,32 +100,32 @@ function ArticleCard({
         <Image
           src={coverSrc}
           alt={title}
-          className="w-full h-64 object-cover rounded-lg"
+          className="w-full h-64 object-cover rounded-t-lg"
         />
       </div>
-      <div className="flex h-full justify-between flex-col text-left gap-3 p-5 ">
-        <h2 className="text-heading-4 md:text-heading-3 text-secondary-700 font-semibold">
-          {title}
-        </h2>
+      <div className="flex h-full justify-between flex-col text-left gap-6 px-6 py-8">
+        <h3 className="text-xl text-secondary-700 font-medium">{title}</h3>
         <p className="text-subtitle text-surface-500 max-w-6xl mx-auto">
           {description}
         </p>
-        <div className="flex flex-wrap items-center gap-4 mt-2 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
+        <div className="flex flex-wrap items-center gap-4 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
           <div>
             <UserIcon className="size-5 text-surface-500" />
             <span className="text-surface-500">{authorName}</span>
           </div>
           <div>
-            <ClockIcon className="*:size-5 text-surface-500" />
+            <ClockIcon className="size-5 text-surface-500" />
             <span className="text-surface-500">{readTime}</span>
           </div>
         </div>
-        <div className="flex justify-between">
-          <div className="flex items-center gap-2 text-primary-700 cursor-pointer">
+        <div className="flex justify-between border-t border-surface-500/20 pt-6">
+          <div className="flex items-center gap-2 text-primary-700">
             <CalendarIcon className="size-5 text-surface-500" />
             <span className="text-surface-500">{postedAt}</span>
           </div>
-          <ArrowRight className="size-5 text-primary-700" />
+          <Link href={`/post/${id}`}>
+            <ArrowRight className=" text-primary-700" />
+          </Link>
         </div>
       </div>
     </div>

@@ -309,5 +309,17 @@ export const articlesData: Article[] = [
     authorName: "Ruby Jones",
     readTime: "8 min read",
     postedAt: "March 15, 2025"
+  },
+  {
+    id: 7,
+    isFeatured: false,
+    category: "Eco-Friendly Cleaning",
+    title: "Essential Cleaning Supplies every home needs",
+    description:
+      "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
+    coverSrc: ourTeamFigure2,
+    authorName: "Ruby Jones",
+    readTime: "8 min read",
+    postedAt: "March 15, 2025"
   }
 ];
