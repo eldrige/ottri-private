@@ -123,7 +123,7 @@ function ArticleCard({
             <CalendarIcon className="size-5 text-surface-500" />
             <span className="text-surface-500">{postedAt}</span>
           </div>
-          <Link href={`/post/${id}`}>
+          <Link href={`/blog/post/${id}`}>
             <ArrowRight className=" text-primary-700" />
           </Link>
         </div>
