@@ -9,6 +9,7 @@ import ListView from "./_panels/ListView";
 import { cn } from "@/lib/utils";
 import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
+import Link from "next/link";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -50,13 +51,15 @@ export default function AdminBookingsPage() {
           >
             <PlusIcon className="size-5" /> New Booking
           </Button>
-          <Button
-            size={"2xs"}
-            variant={"secondary-outline"}
-            className="flex gap-2 items-center text-base justify-center"
-          >
-            <Settings className="size-5" /> Manage Slots
-          </Button>
+          <Link href={"/admin/bookings/manage"}>
+            <Button
+              size={"2xs"}
+              variant={"secondary-outline"}
+              className="flex gap-2 items-center text-base justify-center"
+            >
+              <Settings className="size-5" /> Manage Slots
+            </Button>
+          </Link>
         </div>
       </div>
 
