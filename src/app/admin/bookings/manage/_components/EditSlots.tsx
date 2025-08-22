@@ -31,7 +31,7 @@ export default function EditSlots({ onClose }: { onClose: () => void }) {
         </div>
         <div>
           <p className="text-caption">Service Type*</p>
-          <div className="mt-3 flex items-start gap-4 flex-wrap">
+          <div className="mt-3 flex items-start gap-4 flex-wrap flex-col md:flex-row">
             <Checkbox label="All Services" accent="secondary" />
             <Checkbox label="Deep Clean" accent="secondary" />
             <Checkbox label="Office Clean" accent="secondary" />
