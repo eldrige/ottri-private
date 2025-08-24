@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { ArrowLeftIcon, PlusIcon, UsersIcon } from "lucide-react";
 import React, { useState } from "react";
 import EditSlots from "./_components/EditSlots";
+import Link from "next/link";
 
 export default function ManageSlotsPage() {
   const [editSlot, setEditSlot] = useState(false);
@@ -20,19 +21,24 @@ export default function ManageSlotsPage() {
       </div>
       <hr className="my-4 text-black/10 hidden lg:block" />
 
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mt-6 lg:mt-0">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mt-6">
         <div className="w-full flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-6 lg:gap-8">
-          <button className="flex items-center gap-2 font-medium text-sm">
+          <Link
+            href={"/admin/bookings"}
+            className="flex items-center gap-2 font-medium text-sm"
+          >
             <ArrowLeftIcon className="text-secondary-700 size-5" />
             Back to booking
-          </button>
-          <Button
-            size={"2xs"}
-            variant={"secondary"}
-            className="flex gap-2 items-center text-base justify-center"
-          >
-            <PlusIcon className="size-5" /> Create new slot
-          </Button>
+          </Link>
+          <Link href={"/admin/bookings/manage/new"}>
+            <Button
+              size={"2xs"}
+              variant={"secondary"}
+              className="flex gap-2 items-center text-base justify-center"
+            >
+              <PlusIcon className="size-5" /> Create new slot
+            </Button>
+          </Link>
         </div>
       </div>
 

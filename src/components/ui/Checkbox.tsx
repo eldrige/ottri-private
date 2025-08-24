@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { CheckIcon } from "lucide-react";
-import React, { InputHTMLAttributes, forwardRef } from "react";
+import React, { InputHTMLAttributes, forwardRef, useId } from "react";
 
 export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -22,7 +22,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     ref
   ) => {
     // Generate a unique ID for the checkbox if not provided
-    const checkboxId = id || crypto.randomUUID();
+    const customId = useId();
+    const checkboxId = id || customId;
 
     return (
       <div className="flex items-center">
