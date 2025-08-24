@@ -65,7 +65,13 @@ export default function StaffJobsPage() {
         setActiveView={setActiveView}
       />
 
-      {activeView === "staff-overview" ? <StaffOverviewView /> : <>fawefwaef</>}
+      <div className="mt-8">
+        {activeView === "staff-overview" ? (
+          <StaffOverviewView />
+        ) : (
+          <>fawefwaef</>
+        )}
+      </div>
     </main>
   );
 }
