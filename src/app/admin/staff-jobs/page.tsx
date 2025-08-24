@@ -5,6 +5,7 @@ import { Filter, PlusIcon, Settings } from "lucide-react";
 import { useState } from "react";
 import PanelViewer from "../_components/PanelViewer";
 import StaffOverviewView from "./_panels/StaffOverviewView";
+import JobAssignmentView from "./_panels/JobAssignmentView";
 
 const filterOptions = [
   { label: "All Cleaners", value: "all-cleaners" },
@@ -68,6 +69,8 @@ export default function StaffJobsPage() {
       <div className="mt-8">
         {activeView === "staff-overview" ? (
           <StaffOverviewView />
+        ) : activeView === "job-assignment" ? (
+          <JobAssignmentView />
         ) : (
           <>fawefwaef</>
         )}
