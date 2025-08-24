@@ -13,21 +13,21 @@ type ServicesDetailsHeroProps = Pick<
 >;
 
 export default function ServicesDetailsHero({
-  title,
+  name: title,
   priceFrom,
   duration,
-  coverSrc,
+  coverImage: coverSrc
 }: ServicesDetailsHeroProps) {
   return (
     <section className="pt-16 pb-8">
       <div className="pt-8 flex flex-col gap-8 md:gap-12">
-        <HeroTop title={title} />
+        <HeroTop name={title} />
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-6">
             <HeroLeftSide priceFrom={priceFrom} duration={duration} />
           </div>
           <div className="flex-7">
-            <HeroRightSide coverSrc={coverSrc} title={title} />
+            <HeroRightSide coverImage={coverSrc} name={title} />
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default function ServicesDetailsHero({
   );
 }
 
-function HeroTop({ title }: Pick<ServicesDetailsHeroProps, "title">) {
+function HeroTop({ name: title }: Pick<ServicesDetailsHeroProps, "title">) {
   return (
     <>
       <Link
@@ -52,7 +52,7 @@ function HeroTop({ title }: Pick<ServicesDetailsHeroProps, "title">) {
 }
 function HeroLeftSide({
   priceFrom,
-  duration,
+  duration
 }: Pick<ServicesDetailsHeroProps, "priceFrom" | "duration">) {
   return (
     <div className="md:my-15.5 flex flex-col gap-6">
@@ -102,8 +102,8 @@ function HeroLeftSide({
   );
 }
 function HeroRightSide({
-  coverSrc,
-  title,
+  coverImage: coverSrc,
+  name: title
 }: Pick<ServicesDetailsHeroProps, "coverSrc" | "title">) {
   return (
     <div className="h-full flex flex-col gap-4">

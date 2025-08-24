@@ -1,31 +1,43 @@
+"use client";
 import { Badge } from "@/components/ui/Badge";
 import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
-import { servicesData } from "@/lib/sampleData";
 import { Service } from "@/lib/types";
+import { useServices } from "@/lib/hooks/useServices";
+import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
 
 export default function ServicesSection2() {
+  const { data, isLoading } = useServices();
   return (
     <section className=" md:px-26 pb-10 space-y-8">
+      {isLoading && (
+        <div className="w-full flex items-center justify-center">
+          <Loader2 className="animate-spin w-4 h-4" />
+        </div>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {servicesData.map((service, idx) => (
-          <ServiceCard
-            key={idx}
-            id={service.id}
-            coverSrc={service.coverSrc}
-            Icon={service.Icon}
-            services={service.services}
-            priceFrom={89}
-            duration="3-5"
-            title={service.title}
-            subtitle={service.subtitle}
-            {...(service.mostPopular ? { mostPopular: true } : {})}
-          />
-        ))}
+        {data && data.length > 0
+          ? data.map((service, idx) => (
+              <ServiceCard
+                key={idx}
+                id={service.id}
+                coverImage={service.coverImage || ourTeamFigure2}
+                Icon={service.Icon}
+                services={service.services}
+                priceFrom={89}
+                duration="3-5"
+                name={service.name}
+                subtitle={service.subtitle}
+                {...(service.mostPopular ? { mostPopular: true } : {})}
+              />
+            ))
+          : !isLoading && (
+              <div className="col-span-3 text-center w-full">No Services</div>
+            )}
       </div>
     </section>
   );
@@ -33,14 +45,14 @@ export default function ServicesSection2() {
 
 function ServiceCard({
   id,
-  coverSrc,
+  coverImage,
   Icon,
   mostPopular,
-  title,
+  name: title,
   subtitle,
-  services,
+  // services,
   priceFrom,
-  duration,
+  duration
 }: Omit<Service, "pricingDetails" | "process">) {
   return (
     <div
@@ -56,7 +68,7 @@ function ServiceCard({
       )}
       <Image
         className="rounded-t-lg aspect-[2/1] w-full object-cover"
-        src={coverSrc}
+        src={coverImage}
         alt={`${title}'s cover`}
       />
       <div className="space-y-4 flex flex-col justify-between h-full px-6">
@@ -68,12 +80,12 @@ function ServiceCard({
               : "text-primary-700 bg-surface-500/5"
           )}
         >
-          <Icon />
+          {Icon && <Icon />}
         </div>
         <h4 className="text-heading-4 text-secondary-700">{title}</h4>
         <p className="text-base text-surface-700">{subtitle}</p>
         <div className="lg:hidden space-y-4">
-          <ul className="text-surface-700 marker:text-primary-700 space-y-4">
+          {/* <ul className="text-surface-700 marker:text-primary-700 space-y-4">
             {services.slice(0, 3).map((service) => (
               <li className="flex items-center" key={service}>
                 <span className="block w-2 h-2 rounded-full bg-primary-700 mr-2" />
@@ -83,7 +95,7 @@ function ServiceCard({
             <span className="text-primary-700">
               +{services.slice(3).length} more features
             </span>
-          </ul>
+          </ul> */}
 
           <hr className="text-black/10" />
 

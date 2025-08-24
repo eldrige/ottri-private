@@ -40,7 +40,7 @@ export default function LandingSection3() {
       </div>
       <div className="hidden lg:grid grid-cols-3 gap-x-8">
         {servicesData.map((card) => (
-          <ServiceCard key={card.title} {...card} />
+          <ServiceCard key={card.name} {...card} />
         ))}
       </div>
       {/* Mobile carousel  */}
@@ -122,7 +122,7 @@ type ServiceCardProps = {
   coverSrc: StaticImageData;
   mostPopular?: boolean;
   Icon: ({
-    className,
+    className
   }: {
     className?: string | undefined;
   }) => React.JSX.Element;
@@ -136,7 +136,7 @@ function ServiceCard({
   subtitle,
   services,
   priceFrom,
-  duration,
+  duration
 }: ServiceCardProps) {
   return (
     <div

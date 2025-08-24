@@ -8,7 +8,7 @@ import ServicesDetailsSection4 from "./_components/ServicesDetailsSection4";
 import ServicesDetailsSection5 from "./_components/ServicesDetailsSection5";
 
 async function ServicesDetailsPage({
-  params,
+  params
 }: {
   params: Promise<{ serviceId: string }>;
 }) {
@@ -23,8 +23,8 @@ async function ServicesDetailsPage({
     <main>
       <div className="container mx-auto px-6">
         <ServicesDetailsHero
-          coverSrc={service.coverSrc}
-          title={service.title}
+          coverImage={service.coverImage}
+          name={service.name}
           priceFrom={service.priceFrom}
           duration={service.duration}
         />

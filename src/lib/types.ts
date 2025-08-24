@@ -8,17 +8,17 @@ export type PricingDetail = {
 
 export interface Service {
   id: number;
-  title: string;
+  name: string;
   subtitle: string;
   services: string[];
   priceFrom: number;
   duration: string;
-  coverSrc: StaticImageData;
+  coverImage: StaticImageData;
   pricingDetails: PricingDetail[];
   mostPopular?: boolean;
   process: string[];
   Icon: ({
-    className,
+    className
   }: {
     className?: string | undefined;
   }) => React.JSX.Element;

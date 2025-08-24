@@ -15,32 +15,32 @@ import { Service, TeamMember } from "./types";
 export const servicesData: Service[] = [
   {
     id: 1,
-    coverSrc: figure1,
+    coverImage: figure1,
     Icon: RewardStars,
-    title: "Commercial Cleaning",
+    name: "Commercial Cleaning",
     subtitle: "Tailored cleaning solutions for businesses of all sizes.",
     services: [
       "Office Cleaning",
       "Club House and Halls",
-      "Eateries and Kitchens",
+      "Eateries and Kitchens"
     ],
     priceFrom: 89,
     pricingDetails: [
       {
         size: "1-2 Bedrooms",
         priceRange: "89-109",
-        timeRange: "3-4",
+        timeRange: "3-4"
       },
       {
         size: "3-4 bedrooms",
         priceRange: "129-169",
-        timeRange: "4-5",
+        timeRange: "4-5"
       },
       {
         size: "1-2 Bedrooms",
         priceRange: "169-229",
-        timeRange: "5-6",
-      },
+        timeRange: "5-6"
+      }
     ],
     duration: "3-5",
     mostPopular: false,
@@ -49,14 +49,14 @@ export const servicesData: Service[] = [
       "Room-by-room systematic deep cleaning",
       "Quality check with detailed checklist",
       "Final walkthrough with customer",
-      "Photo documentation of completed work",
-    ],
+      "Photo documentation of completed work"
+    ]
   },
   {
     id: 2,
-    coverSrc: figure2,
+    coverImage: figure2,
     Icon: ReloadIcon,
-    title: "Residential Cleaning",
+    name: "Residential Cleaning",
     subtitle: "Making homes sparkle and shine with our top-tier services.",
     services: ["Move in / Move outs", "Spring cleaning", "Junk Removal"],
     priceFrom: 89,
@@ -64,18 +64,18 @@ export const servicesData: Service[] = [
       {
         size: "1-2 Bedrooms",
         priceRange: "89-109",
-        timeRange: "3-4",
+        timeRange: "3-4"
       },
       {
         size: "3-4 bedrooms",
         priceRange: "129-169",
-        timeRange: "4-5",
+        timeRange: "4-5"
       },
       {
         size: "1-2 Bedrooms",
         priceRange: "169-229",
-        timeRange: "5-6",
-      },
+        timeRange: "5-6"
+      }
     ],
     duration: "3-5",
     mostPopular: true,
@@ -84,14 +84,14 @@ export const servicesData: Service[] = [
       "Room-by-room systematic deep cleaning",
       "Quality check with detailed checklist",
       "Final walkthrough with customer",
-      "Photo documentation of completed work",
-    ],
+      "Photo documentation of completed work"
+    ]
   },
   {
     id: 3,
-    coverSrc: figure3,
+    coverImage: figure3,
     Icon: BoxIcon,
-    title: "Post Construction Cleaning",
+    name: "Post Construction Cleaning",
     subtitle:
       "We excel in post-construction cleaning to make your space ready for use.",
     services: [
@@ -103,25 +103,25 @@ export const servicesData: Service[] = [
       "Bathroom deep scrub with grout cleaning",
       "Dust all surfaces and furniture",
       "Empty all trash and replace liners",
-      "Make beds and tidy rooms",
+      "Make beds and tidy rooms"
     ],
     priceFrom: 89,
     pricingDetails: [
       {
         size: "1-2 Bedrooms",
         priceRange: "89-109",
-        timeRange: "3-4",
+        timeRange: "3-4"
       },
       {
         size: "3-4 bedrooms",
         priceRange: "129-169",
-        timeRange: "4-5",
+        timeRange: "4-5"
       },
       {
         size: "1-2 Bedrooms",
         priceRange: "89-109",
-        timeRange: "3-4",
-      },
+        timeRange: "3-4"
+      }
     ],
     duration: "3-5",
     mostPopular: false,
@@ -130,9 +130,9 @@ export const servicesData: Service[] = [
       "Room-by-room systematic deep cleaning",
       "Quality check with detailed checklist",
       "Final walkthrough with customer",
-      "Photo documentation of completed work",
-    ],
-  },
+      "Photo documentation of completed work"
+    ]
+  }
 ];
 
 export const teamMembers: TeamMember[] = [
@@ -148,9 +148,9 @@ export const teamMembers: TeamMember[] = [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
-      "Move-in/Move-out",
+      "Move-in/Move-out"
     ],
-    coverSrc: ourTeamFigure1,
+    coverSrc: ourTeamFigure1
   },
   {
     id: 2,
@@ -164,9 +164,9 @@ export const teamMembers: TeamMember[] = [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
-      "Move-in/Move-out",
+      "Move-in/Move-out"
     ],
-    coverSrc: ourTeamFigure2,
+    coverSrc: ourTeamFigure2
   },
   {
     id: 3,
@@ -180,9 +180,9 @@ export const teamMembers: TeamMember[] = [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
-      "Move-in/Move-out",
+      "Move-in/Move-out"
     ],
-    coverSrc: ourTeamFigure3,
+    coverSrc: ourTeamFigure3
   },
 
   {
@@ -197,9 +197,9 @@ export const teamMembers: TeamMember[] = [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
-      "Move-in/Move-out",
+      "Move-in/Move-out"
     ],
-    coverSrc: ourTeamFigure4,
+    coverSrc: ourTeamFigure4
   },
 
   {
@@ -214,9 +214,9 @@ export const teamMembers: TeamMember[] = [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
-      "Move-in/Move-out",
+      "Move-in/Move-out"
     ],
-    coverSrc: ourTeamFigure5,
+    coverSrc: ourTeamFigure5
   },
 
   {
@@ -231,8 +231,8 @@ export const teamMembers: TeamMember[] = [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
-      "Move-in/Move-out",
+      "Move-in/Move-out"
     ],
-    coverSrc: ourTeamFigure6,
-  },
+    coverSrc: ourTeamFigure6
+  }
 ];
