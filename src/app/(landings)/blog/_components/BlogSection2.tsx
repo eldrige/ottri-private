@@ -1,11 +1,18 @@
 "use client";
 import { articlesData } from "@/lib/sampleData";
 import { Article } from "@/lib/types";
-import { ArrowRight, CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CalendarIcon,
+  ClockIcon,
+  UserIcon
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function BlogSection2() {
   return (
@@ -69,7 +76,21 @@ function LatestArticles() {
       !article.isFeatured &&
       (category === "All Posts" ? true : article.category === category)
   );
+  const [currentSlide, setCurrentSlide] = useState(0);
 
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % filteredArticles.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide(
+      (prev) => (prev - 1 + filteredArticles.length) % filteredArticles.length
+    );
+  };
+
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [category]);
   return (
     <div className="text-center flex flex-col justify-center items-center space-y-8">
       <div className="flex flex-col gap-2">
@@ -81,11 +102,65 @@ function LatestArticles() {
         </p>
       </div>
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="hidden lg:grid lg:grid-cols-3 gap-8">
           {filteredArticles.length > 0 &&
             filteredArticles.map((article) => (
               <ArticleCard key={article.id} {...article} />
             ))}
+        </div>
+        <div className="lg:hidden space-y-4">
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-300 ease-in-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {filteredArticles.map((article) => (
+                <div key={article.id} className="w-full flex-shrink-0">
+                  <ArticleCard {...article} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex justify-center gap-1">
+            {filteredArticles.map((_, index) => (
+              <span
+                key={index}
+                className={cn(
+                  "w-3 h-3 rounded-full cursor-pointer",
+                  currentSlide === index
+                    ? "bg-primary-700"
+                    : "bg-surface-200/60"
+                )}
+                onClick={() => setCurrentSlide(index)}
+              />
+            ))}
+          </div>
+          <div className="flex justify-center gap-4">
+            <button
+              disabled={currentSlide === 0}
+              className={cn(
+                "*:h-6 *:w-6 transition-colors",
+                currentSlide === 0
+                  ? "text-secondary-700/30"
+                  : "text-primary-700 cursor-pointer"
+              )}
+              onClick={prevSlide}
+            >
+              <ArrowLeft />
+            </button>
+            <button
+              disabled={currentSlide === filteredArticles.length - 1}
+              className={cn(
+                "*:h-6 *:w-6 transition-colors",
+                currentSlide === filteredArticles.length - 1
+                  ? "text-secondary-700/30"
+                  : "text-primary-700 cursor-pointer"
+              )}
+              onClick={nextSlide}
+            >
+              <ArrowRight />
+            </button>
+          </div>
         </div>
         {filteredArticles.length === 0 && (
           <div className="w-full flex justify-center">
@@ -113,7 +188,7 @@ function ArticleCard({
   category
 }: ArticleCardProps) {
   return (
-    <div className="relative flex flex-col shadow-custom-strong rounded-lg">
+    <div className="w-full relative overflow-hidden flex flex-col shadow-custom-strong rounded-lg">
       <span className="absolute left-4 top-4 text-[10px] w-fit py-1 px-4 bg-white rounded-sm text">
         {category}
       </span>
@@ -121,12 +196,12 @@ function ArticleCard({
         <Image
           src={coverSrc}
           alt={title}
-          className="aspect-2/1 object-cover rounded-t-lg"
+          className="w-full lg:aspect-2/1 aspect-5/3 object-cover rounded-t-lg"
         />
       </div>
       <div className="flex h-full justify-between flex-col text-left gap-6 px-6 py-8">
         <h3 className="text-xl text-secondary-700 font-medium">{title}</h3>
-        <p className="text-subtitle text-surface-500 max-w-6xl mx-auto">
+        <p className="text-subtitle text-surface-500 text-wrap">
           {description}
         </p>
         <div className="flex flex-wrap items-center gap-4 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
