@@ -80,9 +80,10 @@ function LatestArticles() {
       </div>
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredArticles.map((article) => (
-            <ArticleCard key={article.id} {...article} />
-          ))}
+          {filteredArticles.length > 0 &&
+            filteredArticles.map((article) => (
+              <ArticleCard key={article.id} {...article} />
+            ))}
         </div>
         {filteredArticles.length === 0 && (
           <div className="w-full flex justify-center">
@@ -111,7 +112,7 @@ function ArticleCard({
 }: ArticleCardProps) {
   return (
     <div className="relative flex flex-col shadow-custom-strong rounded-lg">
-      <span className="absolute left-4 top-4 text-[10px] w-fit py-1 px-4 bg-white rounded-lg text">
+      <span className="absolute left-4 top-4 text-[10px] w-fit py-1 px-4 bg-white rounded-sm text">
         {category}
       </span>
       <div className="w-full flex">
