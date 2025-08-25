@@ -14,7 +14,9 @@ export default function page() {
         <BlogSection2 />
       </div>
       <BlogSection3 />
-      <BlogSection4 />
+      <div className="container mx-auto px-6">
+        <BlogSection4 />
+      </div>
     </main>
   );
 }

@@ -39,22 +39,24 @@ function CategoryFilter() {
     router.replace(`?${params.toString()}`, { scroll: false });
   };
   return (
-    <div className="flex gap-8 flex-wrap mx-auto">
-      {articleCategories.map((cat) => (
-        <div
-          key={cat}
-          className={`px-4 cursor-pointer py-2 border transition-all rounded-lg ${
-            category === cat
-              ? "bg-primary-700 text-white"
-              : " bg-transparent border border-primary-700 text-primary-700"
-          }`}
-          onClick={() => {
-            updateFilter("category", cat === "all" ? "" : cat);
-          }}
-        >
-          {cat}
-        </div>
-      ))}
+    <div className="overflow-x-auto no-scrollbar">
+      <div className="flex transition-transform duration-300 ease-in-out gap-6 md:gap-8 text-nowrap mx-auto">
+        {articleCategories.map((cat, idx) => (
+          <div
+            key={idx}
+            className={`px-4 text-body cursor-pointer py-2 border transition-all rounded-lg ${
+              category === cat
+                ? "bg-primary-700 text-white"
+                : " bg-transparent border border-primary-700 text-primary-700"
+            }`}
+            onClick={() => {
+              updateFilter("category", cat === "all" ? "" : cat);
+            }}
+          >
+            {cat}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
