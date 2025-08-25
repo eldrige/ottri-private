@@ -36,7 +36,7 @@ function CategoryFilter() {
     } else {
       params.set(key, value);
     }
-    router.push(`?${params.toString()}`);
+    router.replace(`?${params.toString()}`, { scroll: false });
   };
   return (
     <div className="flex gap-8 flex-wrap mx-auto">
@@ -45,8 +45,8 @@ function CategoryFilter() {
           key={cat}
           className={`px-4 cursor-pointer py-2 border transition-all rounded-lg ${
             category === cat
-              ? "bg-primary-700 text-white hover:bg-white hover:border hover:text-primary-700 hover:border-primary-700"
-              : "hover:bg-primary-700 hover:text-white hover:border-primary-700 bg-transparent border border-primary-700 text-primary-700"
+              ? "bg-primary-700 text-white"
+              : " bg-transparent border border-primary-700 text-primary-700"
           }`}
           onClick={() => {
             updateFilter("category", cat === "all" ? "" : cat);
@@ -60,6 +60,14 @@ function CategoryFilter() {
 }
 
 function LatestArticles() {
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category") || "All Posts";
+  const filteredArticles = articlesData.filter(
+    (article) =>
+      !article.isFeatured &&
+      (category === "All Posts" ? true : article.category === category)
+  );
+
   return (
     <div className="text-center flex flex-col justify-center items-center space-y-4">
       <div>
@@ -72,12 +80,18 @@ function LatestArticles() {
       </div>
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articlesData
-            .filter((article) => !article.isFeatured)
-            .map((article) => (
-              <ArticleCard key={article.id} {...article} />
-            ))}
+          {filteredArticles.map((article) => (
+            <ArticleCard key={article.id} {...article} />
+          ))}
         </div>
+        {filteredArticles.length === 0 && (
+          <div className="w-full flex justify-center">
+            <p>
+              No acrticles of category{" "}
+              <span className="text-primary-700">{` "${category}"`}</span>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -92,15 +106,19 @@ function ArticleCard({
   coverSrc,
   readTime,
   postedAt,
-  id
+  id,
+  category
 }: ArticleCardProps) {
   return (
-    <div className="flex flex-col shadow-custom-strong rounded-lg">
+    <div className="relative flex flex-col shadow-custom-strong rounded-lg">
+      <span className="absolute left-4 top-4 text-[10px] w-fit py-1 px-4 bg-white rounded-lg text">
+        {category}
+      </span>
       <div className="w-full flex">
         <Image
           src={coverSrc}
           alt={title}
-          className="w-full h-64 object-cover rounded-t-lg"
+          className="aspect-2/1 object-cover rounded-t-lg"
         />
       </div>
       <div className="flex h-full justify-between flex-col text-left gap-6 px-6 py-8">

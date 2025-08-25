@@ -26,7 +26,6 @@ type FeaturedArticleProps = Article;
 
 function FeaturedArticle({
   authorName,
-  category,
   title,
   description,
   coverSrc,
@@ -34,17 +33,17 @@ function FeaturedArticle({
   postedAt
 }: FeaturedArticleProps) {
   return (
-    <div className="flex flex-col  md:flex-row shadow-custom-strong rounded-lg">
+    <div className="flex flex-col  md:flex-row shadow-custom rounded-4xl">
       <div className="w-full flex md:flex-44/100">
         <Image
           src={coverSrc}
           alt={title}
-          className="w-full h-full object-cover rounded-lg"
+          className="w-full h-full object-cover rounded-l-4xl"
         />
       </div>
       <div className="flex self-center md:flex-56/100 flex-col text-left gap-3 md:gap-5 p-5 md:px-10 md:py-13">
         <span className="w-fit py-1 px-4 bg-surface-500/10 rounded-lg text">
-          {category}
+          Popular
         </span>
         <h2 className="text-heading-4 md:text-heading-3 text-secondary-700 font-semibold">
           {title}
@@ -67,7 +66,7 @@ function FeaturedArticle({
           </div>
         </div>
         <Button className="w-fit py-2" size={"xs"}>
-          Book with Maria
+          Book with Ottri
         </Button>
       </div>
     </div>
