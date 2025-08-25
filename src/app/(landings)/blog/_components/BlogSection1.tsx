@@ -33,16 +33,16 @@ function FeaturedArticle({
   postedAt
 }: FeaturedArticleProps) {
   return (
-    <div className="flex flex-col  md:flex-row shadow-custom rounded-4xl">
+    <div className="flex flex-col gap-8 md:gap-0 md:flex-row md:shadow-custom rounded-4xl">
       <div className="w-full flex md:flex-44/100">
         <Image
           src={coverSrc}
           alt={title}
-          className="w-full h-full object-cover rounded-l-4xl"
+          className="w-full h-full object-cover rounded-lg md:rounded-l-4xl"
         />
       </div>
-      <div className="flex self-center md:flex-56/100 flex-col text-left gap-3 md:gap-5 p-5 md:px-10 md:py-13">
-        <span className="w-fit py-1 px-4 bg-surface-500/10 rounded-lg text">
+      <div className="flex self-center md:flex-56/100 flex-col text-left gap-4 md:gap-5 md:px-10 md:py-13">
+        <span className="w-fit py-1 px-4 bg-secondary-700/10 rounded-lg text">
           Popular
         </span>
         <h2 className="text-heading-4 md:text-heading-3 text-secondary-700 font-semibold">
@@ -51,7 +51,7 @@ function FeaturedArticle({
         <p className="text-subtitle text-surface-500 max-w-6xl mx-auto">
           {description}
         </p>
-        <div className="flex flex-wrap items-center gap-4 mt-2 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 mt-2 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
           <div>
             <UserIcon className="size-5 text-surface-500" />
             <span className="text-surface-500">{authorName}</span>
@@ -65,7 +65,7 @@ function FeaturedArticle({
             <span className="text-surface-500">{readTime}</span>
           </div>
         </div>
-        <Button className="w-fit py-2" size={"xs"}>
+        <Button className="md:w-fit py-2" size={"xs"}>
           Book with Ottri
         </Button>
       </div>

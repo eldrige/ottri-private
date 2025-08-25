@@ -69,8 +69,8 @@ function LatestArticles() {
   );
 
   return (
-    <div className="text-center flex flex-col justify-center items-center space-y-4">
-      <div>
+    <div className="text-center flex flex-col justify-center items-center space-y-8">
+      <div className="flex flex-col gap-2">
         <h2 className="text-heading-3 md:text-heading-2 text-secondary-700 font-semibold">
           Latest Articles
         </h2>
