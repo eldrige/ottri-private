@@ -15,7 +15,7 @@ export default function PanelViewer({
   setActiveView
 }: PanelViewerProps) {
   return (
-    <div className="w-full mt-8 py-2 px-3 flex lg:gap-4 rounded-4xl bg-surface-50">
+    <div className="w-full mt-8 py-2 px-3 flex lg:gap-4 rounded-4xl bg-surface-50 overflow-x-hidden">
       {views.map((view) => (
         <button
           key={view.viewName}
@@ -24,7 +24,10 @@ export default function PanelViewer({
               ? "bg-white px-4"
               : "px-2 text-secondary-700/70"
           }`}
-          onClick={() => setActiveView(view.viewName)}
+          onClick={(e) => {
+            setActiveView(view.viewName);
+            (e.target as HTMLElement).scrollIntoView({ behavior: "smooth" });
+          }}
         >
           {view.content}
         </button>

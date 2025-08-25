@@ -47,8 +47,10 @@ const bookingsData = [
 
 export default function JobAssignmentView() {
   return (
-    <div className="p-6 border border-black/10 rounded-lg">
-      <h4 className="text-heading-5">Current Job Assignments (3)</h4>
+    <div className="lg:p-6 lg:border border-black/10 rounded-lg">
+      <h4 className="text-heading-5">
+        Current Job Assignments ({bookingsData.length})
+      </h4>
       <div className="mt-4 space-y-4">
         {bookingsData.map((booking) => (
           <JobListItem

@@ -8,7 +8,7 @@ import React, { useState } from "react";
 
 export default function StaffOverviewView() {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
       <StaffBox
         name="Maria Garcia"
         rating={4.9}
@@ -77,7 +77,7 @@ function StaffBox({
   return (
     <div className="p-4 border border-black/10 rounded-lg">
       <div className="flex items-center gap-3">
-        <div className="rounded-full p-2 h-13.5 aspect-square bg-gray-100 font-medium flex items-center justify-center">
+        <div className="hidden md:flex rounded-full p-2 h-13.5 aspect-square bg-gray-100 font-medium items-center justify-center">
           {name
             .split(" ")
             .map((i) => i[0])
