@@ -3,6 +3,7 @@ import BlogHero from "./_components/BlogHero";
 import BlogSection1 from "./_components/BlogSection1";
 import BlogSection2 from "./_components/BlogSection2";
 import BlogSection3 from "./_components/BlogSection3";
+import BlogSection4 from "./_components/BlogSection4";
 
 export default function page() {
   return (
@@ -13,6 +14,7 @@ export default function page() {
         <BlogSection2 />
       </div>
       <BlogSection3 />
+      <BlogSection4 />
     </main>
   );
 }

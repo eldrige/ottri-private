@@ -4,11 +4,11 @@ import React from "react";
 
 export default function BlogSection3() {
   return (
-    <div className="bg-secondary-700 py-8 md:py-16 flex items-center justify-center mb-24">
+    <div className="bg-secondary-700 py-8 md:py-16 flex items-center justify-center mb-12">
       <div className="flex flex-col px-6 md:px-0 text-center items-center gap-2 justify-center">
-        <h3 className="text-3xl md:text text-white">
+        <h2 className="text-heading-2.5 text-white">
           Stay Updated with Cleaning Tips
-        </h3>
+        </h2>
         <p className="text-surface-300/80 text-center">
           Get weekly cleaning tips, exclusive guides, and special offers
           delivered to your inbox.
