@@ -26,7 +26,10 @@ export default function PanelViewer({
           }`}
           onClick={(e) => {
             setActiveView(view.viewName);
-            (e.target as HTMLElement).scrollIntoView({ behavior: "smooth" });
+            (e.target as HTMLElement).scrollIntoView({
+              behavior: "smooth",
+              block: "nearest"
+            });
           }}
         >
           {view.content}

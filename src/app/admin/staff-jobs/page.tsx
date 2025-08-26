@@ -1,11 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
-import { Filter, PlusIcon, Settings } from "lucide-react";
+import { Filter, PlusIcon } from "lucide-react";
 import { useState } from "react";
 import PanelViewer from "../_components/PanelViewer";
 import StaffOverviewView from "./_panels/StaffOverviewView";
 import JobAssignmentView from "./_panels/JobAssignmentView";
+import PerformanceView from "./_panels/PerformanceView";
 
 const filterOptions = [
   { label: "All Cleaners", value: "all-cleaners" },
@@ -44,13 +45,6 @@ export default function StaffJobsPage() {
           >
             <PlusIcon className="size-5" /> Add Cleaner
           </Button>
-          <Button
-            size={"2xs"}
-            variant={"secondary-outline"}
-            className="flex gap-2 items-center text-base justify-center"
-          >
-            <Settings className="size-5" /> Manage Slots
-          </Button>
         </div>
       </div>
 
@@ -71,8 +65,10 @@ export default function StaffJobsPage() {
           <StaffOverviewView />
         ) : activeView === "job-assignment" ? (
           <JobAssignmentView />
+        ) : activeView === "performance" ? (
+          <PerformanceView />
         ) : (
-          <>fawefwaef</>
+          <>Not Found</>
         )}
       </div>
     </main>
