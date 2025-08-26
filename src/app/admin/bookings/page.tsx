@@ -44,13 +44,15 @@ export default function AdminBookingsPage() {
           />
         </div>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-          <Button
-            size={"2xs"}
-            variant={"secondary"}
-            className="flex gap-2 items-center text-base justify-center"
-          >
-            <PlusIcon className="size-5" /> New Booking
-          </Button>
+          <Link href={"/admin/bookings/manage/new"}>
+            <Button
+              size={"2xs"}
+              variant={"secondary"}
+              className="flex gap-2 items-center text-base justify-center"
+            >
+              <PlusIcon className="size-5" /> New Booking
+            </Button>
+          </Link>
           <Link href={"/admin/bookings/manage"}>
             <Button
               size={"2xs"}
