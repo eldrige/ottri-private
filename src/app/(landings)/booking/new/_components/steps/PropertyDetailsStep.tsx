@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { useFormContext } from "react-hook-form";
 import { OrderFormValues } from "../../schema";
@@ -7,13 +6,13 @@ import {
   bathroomOptions,
   squareFootageOptions
 } from "../../formData";
+import AddressInput from "../AddressInput";
 
 export default function PropertyDetailsStep() {
   const {
     register,
     setValue,
     watch,
-    trigger,
     formState: { errors }
   } = useFormContext<OrderFormValues>();
 
@@ -48,23 +47,16 @@ export default function PropertyDetailsStep() {
       </div>
       <div className="p-4 space-y-2 rounded-2xl border-2 border-primary-200">
         <h4 className="text-heading-5 ">Service Address*</h4>
-        <Input
-          type="text"
-          placeholder="123, main street, City, State 1234"
-          {...register("serviceAddress", {
-            required: "Service address is required"
-          })}
-          onChange={(e) => {
-            register("serviceAddress").onChange(e);
-            if (e.target.value) {
-              trigger("serviceAddress");
-              if (useSameForBilling) setValue("billingAddress", e.target.value);
-            }
+        <AddressInput
+          value={serviceAddress}
+          onChange={(value) => {
+            setValue("serviceAddress", value, { shouldValidate: true });
+            if (useSameForBilling) setValue("billingAddress", value);
           }}
+          placeholder="Start typing your address"
+          error={errors.serviceAddress?.message}
+          required
         />
-        {errors.serviceAddress && (
-          <p className="text-xs text-error">{errors.serviceAddress.message}</p>
-        )}
         <p className="text-surface-500">
           This is where our team will provide the cleaning service
         </p>

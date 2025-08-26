@@ -14,6 +14,7 @@ import {
   useElements,
   useStripe
 } from "@stripe/react-stripe-js";
+import AddressInput from "../AddressInput";
 
 // Load Stripe outside of component to avoid recreating on re-renders
 const stripePromise = loadStripe(
@@ -31,8 +32,12 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
   const {
     register,
     formState: { errors },
-    trigger
+    trigger,
+    watch,
+    setValue
   } = useFormContext<OrderFormValues>();
+  const billingAddress = watch("billingAddress");
+
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [cardComplete, setCardComplete] = useState(false);
@@ -132,10 +137,20 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
             error={errors.email?.message}
             required
           />
-          <Input
+          {/* <Input
             label="Billing Address"
             placeholder="Enter text..."
             {...register("billingAddress")}
+            error={errors.billingAddress?.message}
+            required
+          /> */}
+          <AddressInput
+            label="Billing Address"
+            value={billingAddress}
+            onChange={(value) => {
+              setValue("billingAddress", value, { shouldValidate: true });
+            }}
+            placeholder="Start typing your address"
             error={errors.billingAddress?.message}
             required
           />
