@@ -18,7 +18,7 @@ export default function BlogHero() {
           deep cleaning guides to eco-friendly solutions, we share the knowledge
           that keeps your home sparkling.
         </p>
-        <div className="flex relative w-full lg:min-w-sm lg:mx-auto flex-col gap-4">
+        <div className="flex relative w-full lg:min-w-sm lg:w-fit lg:mx-auto flex-col gap-4">
           <Input
             placeholder="Search articles..."
             className="placeholder:text-surface-500 text-caption border rounded-lg pl-10 pr-5 py-2 border-surface-500/20"

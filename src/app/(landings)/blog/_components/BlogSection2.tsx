@@ -35,18 +35,18 @@ function CategoryFilter() {
     "Organizations",
     "Eco-Friendly"
   ];
-  const updateFilter = (key: string, value: string) => {
+  const updateFilter = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (value === "all" || !value) {
-      params.delete(key);
+      params.delete("category");
     } else {
-      params.set(key, value);
+      params.set("category", value);
     }
     router.replace(`?${params.toString()}`, { scroll: false });
   };
   return (
-    <div className="overflow-x-auto no-scrollbar">
+    <div className="overflow-x-auto lg:flex lg:justify-center no-scrollbar">
       <div className="flex transition-transform duration-300 ease-in-out gap-6 md:gap-8 text-nowrap mx-auto">
         {articleCategories.map((cat, idx) => (
           <div
@@ -57,7 +57,7 @@ function CategoryFilter() {
                 : " bg-transparent border border-primary-700 text-primary-700"
             }`}
             onClick={() => {
-              updateFilter("category", cat === "all" ? "" : cat);
+              updateFilter(cat);
             }}
           >
             {cat}
@@ -109,13 +109,16 @@ function LatestArticles() {
             ))}
         </div>
         <div className="lg:hidden space-y-4">
-          <div className="overflow-hidden">
+          <div className="overflow-hidden w-full max-w-full">
             <div
-              className="flex transition-transform duration-300 ease-in-out"
+              className="flex max-w-md transition-transform duration-300 ease-in-out"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
               {filteredArticles.map((article) => (
-                <div key={article.id} className="w-full flex-shrink-0">
+                <div
+                  key={article.id}
+                  className="w-full flex-shrink-0 max-w-full px-2 sm:px-4"
+                >
                   <ArticleCard {...article} />
                 </div>
               ))}
@@ -188,7 +191,7 @@ function ArticleCard({
   category
 }: ArticleCardProps) {
   return (
-    <div className="w-full relative overflow-hidden flex flex-col shadow-custom-strong rounded-lg">
+    <div className="w-full max-w-md mx-auto relative overflow-hidden flex flex-col shadow-custom-strong rounded-lg">
       <span className="absolute left-4 top-4 text-[10px] w-fit py-1 px-4 bg-white rounded-sm text">
         {category}
       </span>
@@ -204,7 +207,7 @@ function ArticleCard({
         <p className="text-subtitle text-surface-500 text-wrap">
           {description}
         </p>
-        <div className="flex flex-wrap items-center gap-4 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
+        <div className="flex flex-wrap items-center gap-4 text-surface-500 *:flex *:gap-2 *:items-center">
           <div>
             <UserIcon className="size-5 text-surface-500" />
             <span className="text-surface-500">{authorName}</span>
@@ -220,7 +223,7 @@ function ArticleCard({
             <span className="text-surface-500">{postedAt}</span>
           </div>
           <Link href={`/blog/post/${id}`}>
-            <ArrowRight className=" text-primary-700" />
+            <ArrowRight className="text-primary-700" />
           </Link>
         </div>
       </div>
