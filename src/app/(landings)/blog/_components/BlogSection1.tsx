@@ -1,15 +1,17 @@
 import ClockIcon from "@/components/icons/ClockIcon";
 import { Button } from "@/components/ui/Button";
-import { articlesData } from "@/lib/sampleData";
 import { Article } from "@/lib/types";
+import { converReadTime, formatDate } from "@/lib/utils";
 import { CalendarIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-export default function BlogSection1() {
-  const [popularArticles] = articlesData.filter(
-    (article) => article.isFeatured
+export default async function BlogSection1() {
+  const response = await fetch(
+    "http://ottri-backend-600e2b0645fc.herokuapp.com/api/v1/articles/published"
   );
+  const data = (await response.json()) as Article[];
+  const [popularArticles] = data.filter((article) => article.isFeatured);
   return (
     <section className="py-8 lg:py-24 flex flex-col gap-8">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
@@ -25,17 +27,19 @@ export default function BlogSection1() {
 type FeaturedArticleProps = Article;
 
 function FeaturedArticle({
-  authorName,
+  author: authorName,
   title,
-  description,
-  coverSrc,
-  readTime,
-  postedAt
+  content: description,
+  thumbnail: coverSrc,
+  readingTime: readTime,
+  publicationDate: postedAt
 }: FeaturedArticleProps) {
   return (
     <div className="flex flex-col gap-8 md:gap-0 md:flex-row md:shadow-custom rounded-4xl">
       <div className="w-full flex md:flex-44/100">
         <Image
+          width={10}
+          height={10}
           src={coverSrc}
           alt={title}
           className="w-full h-full object-cover rounded-lg md:rounded-l-4xl"
@@ -48,8 +52,8 @@ function FeaturedArticle({
         <h2 className="text-heading-4 md:text-heading-3 text-secondary-700 font-semibold">
           {title}
         </h2>
-        <p className="text-subtitle text-surface-500 max-w-6xl mx-auto">
-          {description}
+        <p className="text-subtitle  text-surface-500 max-w-6xl mx-auto">
+          {description.slice(0, 200)}
         </p>
         <div className="flex flex-col md:flex-row md:items-center gap-4 mt-2 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
           <div>
@@ -58,11 +62,11 @@ function FeaturedArticle({
           </div>
           <div>
             <CalendarIcon className="size-5 text-surface-500" />
-            <span className="text-surface-500">{postedAt}</span>
+            <span className="text-surface-500">{formatDate(postedAt)}</span>
           </div>
           <div>
             <ClockIcon className="*:size-5 text-surface-500" />
-            <span className="text-surface-500">{readTime}</span>
+            <span className="text-surface-500">{converReadTime(readTime)}</span>
           </div>
         </div>
         <Button className="md:w-fit py-2" size={"xs"}>

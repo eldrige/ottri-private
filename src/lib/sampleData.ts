@@ -243,36 +243,36 @@ export const articlesData: Article[] = [
     isFeatured: true,
     category: "Cleaning Tips",
     title: "The Ultimate Spring Cleaning guide: Room by room checklist",
-    description:
+    content:
       "Transform your home this spring with our comprehensive cleaning checklist. From deep cleaning techniques to organization tips, we cover everything you need for a fresh start",
-    coverSrc: ourTeamFigure1,
-    authorName: "Ruby Jones",
-    readTime: "8 min read",
-    postedAt: "March 15, 2025"
+    thumbnail: ourTeamFigure1,
+    author: "Ruby Jones",
+    readingTime: "8 min read",
+    publicationDate: "March 15, 2025"
   },
   {
     id: 2,
     isFeatured: false,
     category: "Eco-Friendly",
     title: "Essential Cleaning Supplies every home needs",
-    description:
+    content:
       "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
-    coverSrc: ourTeamFigure2,
-    authorName: "Ruby Jones",
-    readTime: "8 min read",
-    postedAt: "March 15, 2025"
+    thumbnail: ourTeamFigure2,
+    author: "Ruby Jones",
+    readingTime: "8 min read",
+    publicationDate: "March 15, 2025"
   },
   {
     id: 3,
     isFeatured: false,
     category: "Cleaning Tips",
     title: "Essential Cleaning Supplies every home needs",
-    description:
+    content:
       "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
-    coverSrc: ourTeamFigure2,
-    authorName: "Ruby Jones",
-    readTime: "8 min read",
-    postedAt: "March 15, 2025"
+    thumbnail: ourTeamFigure2,
+    author: "Ruby Jones",
+    readingTime: "8 min read",
+    publicationDate: "March 15, 2025"
   },
 
   {
@@ -280,47 +280,47 @@ export const articlesData: Article[] = [
     isFeatured: false,
     category: "Product Review",
     title: "Essential Cleaning Supplies every home needs",
-    description:
+    content:
       "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
-    coverSrc: ourTeamFigure2,
-    authorName: "Ruby Jones",
-    readTime: "8 min read",
-    postedAt: "March 15, 2025"
+    thumbnail: ourTeamFigure2,
+    author: "Ruby Jones",
+    readingTime: "8 min read",
+    publicationDate: "March 15, 2025"
   },
   {
     id: 5,
     isFeatured: false,
     category: "Eco-Friendly",
     title: "Essential Cleaning Supplies every home needs",
-    description:
+    content:
       "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
-    coverSrc: ourTeamFigure2,
-    authorName: "Ruby Jones",
-    readTime: "8 min read",
-    postedAt: "March 15, 2025"
+    thumbnail: ourTeamFigure2,
+    author: "Ruby Jones",
+    readingTime: "8 min read",
+    publicationDate: "March 15, 2025"
   },
   {
     id: 6,
     isFeatured: false,
     category: "Professional Tips",
     title: "Essential Cleaning Supplies every home needs",
-    description:
+    content:
       "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
-    coverSrc: ourTeamFigure2,
-    authorName: "Ruby Jones",
-    readTime: "8 min read",
-    postedAt: "March 15, 2025"
+    thumbnail: ourTeamFigure2,
+    author: "Ruby Jones",
+    readingTime: "8 min read",
+    publicationDate: "March 15, 2025"
   },
   {
     id: 7,
     isFeatured: false,
     category: "Eco-Friendly",
     title: "Essential Cleaning Supplies every home needs",
-    description:
+    content:
       "Discover the must-have cleaning products that will tackle any mess. Our expert guide covers eco-friendly options and budgets...",
-    coverSrc: ourTeamFigure2,
-    authorName: "Ruby Jones",
-    readTime: "8 min read",
-    postedAt: "March 15, 2025"
+    thumbnail: ourTeamFigure2,
+    author: "Ruby Jones",
+    readingTime: "8 min read",
+    publicationDate: "March 15, 2025"
   }
 ];

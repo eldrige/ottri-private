@@ -41,9 +41,16 @@ export interface Article {
   isFeatured: boolean;
   category: string;
   title: string;
-  description: string;
-  coverSrc: StaticImageData;
-  authorName: string;
-  readTime: string;
-  postedAt: string;
+  excerpt: string;
+  content: string;
+  thumbnail: StaticImageData;
+  author: string;
+  readingTime: number;
+  publicationDate: string;
+  tags: string[];
+  publisherId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+  status: "published" | "scheduled" | "draft";
 }
