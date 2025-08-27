@@ -43,7 +43,7 @@ export interface Article {
   title: string;
   excerpt: string;
   content: string;
-  thumbnail: StaticImageData;
+  thumbnail: string;
   author: string;
   readingTime: number;
   publicationDate: string;

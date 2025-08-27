@@ -6,7 +6,6 @@ export default async function BlogSection2() {
     "http://ottri-backend-600e2b0645fc.herokuapp.com/api/v1/articles/published"
   );
   const data = await response.json();
-  console.log(data);
   return (
     <section className="py-8 lg:py-24 flex flex-col gap-12">
       <CategoryFilter />

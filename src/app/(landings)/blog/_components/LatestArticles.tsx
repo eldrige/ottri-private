@@ -149,8 +149,8 @@ function ArticleCard({
       </span>
       <div className="w-full flex">
         <Image
-          width={10}
-          height={10}
+          width={500}
+          height={500}
           src={coverSrc}
           alt={title}
           className="w-full lg:aspect-2/1 aspect-5/3 object-cover rounded-t-lg"

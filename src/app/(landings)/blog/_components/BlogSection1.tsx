@@ -38,8 +38,8 @@ function FeaturedArticle({
     <div className="flex flex-col gap-8 md:gap-0 md:flex-row md:shadow-custom rounded-4xl">
       <div className="w-full flex md:flex-44/100">
         <Image
-          width={10}
-          height={10}
+          width={500}
+          height={500}
           src={coverSrc}
           alt={title}
           className="w-full h-full object-cover rounded-lg md:rounded-l-4xl"
@@ -53,7 +53,7 @@ function FeaturedArticle({
           {title}
         </h2>
         <p className="text-subtitle  text-surface-500 max-w-6xl mx-auto">
-          {description.slice(0, 200)}
+          {description.slice(0, 200)}...
         </p>
         <div className="flex flex-col md:flex-row md:items-center gap-4 mt-2 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
           <div>
