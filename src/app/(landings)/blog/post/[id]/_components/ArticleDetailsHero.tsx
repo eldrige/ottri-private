@@ -7,7 +7,7 @@ export default function ArticleDetails({ title }: Pick<Article, "title">) {
   return (
     <section>
       <Link
-        href="/services"
+        href="/blog"
         className="text-primary-500 text-lg mr-auto items-center gap-4 flex"
       >
         <ArrowLeft size={24} /> Back to all Articles
