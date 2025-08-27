@@ -79,8 +79,9 @@ export default function AddressInput({
       //777 Brockton Avenue, Abington MA 2351
       setIsLoading(true);
       try {
+        const apiKey = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
         const res = await axios.get(
-          `https://api.geoapify.com/v1/geocode/autocomplete?text=${searchTerm}&apiKey=689096e1206944719cfd8f5fee46f13c&format=json`
+          `https://api.geoapify.com/v1/geocode/autocomplete?text=${searchTerm}&filter=countrycode:us&apiKey=${apiKey}&format=json`
         );
         console.log(res.data);
         const data = res.data as ApiResType;
@@ -130,7 +131,8 @@ export default function AddressInput({
   const formatUSAddress = (address: string): string => {
     return address
       .replace(/, United States of America$/, "")
-      .replace(/, USA$/, "");
+      .replace(/, USA$/, "")
+      .replace(/, United States$/, "");
   };
 
   const handleSelectAddress = (address: string) => {
