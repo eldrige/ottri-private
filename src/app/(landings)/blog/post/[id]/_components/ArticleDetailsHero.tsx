@@ -54,28 +54,28 @@ export default function ArticleDetails({
         <p className="text-subtitle text-surface-500">{excerpt}</p>
       </div>
       <div className="w-full h-0.25 bg-surface-500/30" />
-      <div className="flex gap-5 flex-col md:flex-row py-2">
-        <div className="md:w-2/5 flex flex-col gap-3 md:flex-row md:items-center justify-between mt-2 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
+      <div className="w-full flex gap-5 flex-col md:flex-row justify-between py-2">
+        <div className="flex flex-col gap-4 md:gap-8 md:flex-row md:items-center mt-2 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
           <div>
-            <UserIcon className="size-5 text-surface-500" />
+            <UserIcon className="size-6 text-surface-500" />
             <span className="text-surface-500">{author}</span>
           </div>
           <div>
-            <CalendarIcon className="size-5 text-surface-500" />
+            <CalendarIcon className="size-6 text-surface-500" />
             <span className="text-surface-500">
               {formatDate(publicationDate)}
             </span>
           </div>
           <div>
-            <ClockIcon className="*:size-5 text-surface-500" />
+            <ClockIcon className="size-6 text-surface-500" />
             <span className="text-surface-500">
               {converReadTime(readingTime)}
             </span>
           </div>
         </div>
-        <div className="flex md:justify-end cursor-pointer md:w-3/5">
+        <div className="flex md:justify-end cursor-pointer">
           <div className="w-full lg:w-fit items-center justify-center px-3 py-2 text-body border gap-3 text-primary-700 rounded-lg border-primary-700 flex">
-            <Share2Icon />
+            <Share2Icon className="size-6" />
             <p>Share </p>
           </div>
         </div>
