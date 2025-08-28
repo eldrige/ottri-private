@@ -136,6 +136,14 @@ export const servicesData: Service[] = [
   }
 ];
 
+export const ourProcesses = [
+  "Pre-cleaning walkthrough and assessment",
+  "Room-by-room systematic deep cleaning",
+  "Quality check with detailed checklist",
+  "Final walkthrough with customer",
+  "Photo documentation of completed work"
+];
+
 export const teamMembers: TeamMember[] = [
   {
     id: 1,

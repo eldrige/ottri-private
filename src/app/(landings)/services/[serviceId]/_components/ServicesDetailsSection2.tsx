@@ -1,5 +1,4 @@
-import { PricingDetail } from "@/lib/types";
-import { Service } from "../../_utils/types";
+import { PricingDetail, Service } from "../../_utils/types";
 import React from "react";
 
 export default function ServicesDetailsSection2({
@@ -16,12 +15,13 @@ export default function ServicesDetailsSection2({
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-32 gap-4">
-        {pricingDetails.map((elem, _index) => (
+        {pricingDetails.map((elem) => (
           <PricingDetailCard
-            key={_index}
-            timeRange={elem.timeRange}
-            priceRange={elem.priceRange}
-            size={elem.size}
+            key={elem.id}
+            duration={elem.duration}
+            minPrice={elem.minPrice}
+            maxPrice={elem.maxPrice}
+            criteria={elem.criteria}
           />
         ))}
       </div>
@@ -29,14 +29,19 @@ export default function ServicesDetailsSection2({
   );
 }
 
-function PricingDetailCard({ priceRange, size, timeRange }: PricingDetail) {
+function PricingDetailCard({
+  minPrice,
+  maxPrice,
+  criteria,
+  duration
+}: Pick<PricingDetail, "criteria" | "minPrice" | "maxPrice" | "duration">) {
   return (
     <div className="border border-black/10 text-center rounded-lg flex flex-col justify-between p-4 items-center gap-8">
-      <p className="text-surface-500 text-base">{size}</p>
+      <p className="text-surface-500 text-base">{criteria}</p>
       <span className="text-primary-700 text-2xl font-medium">
-        ${priceRange}
+        ${`${minPrice}-${maxPrice}`}
       </span>
-      <p className="text-surface-500 text-base">{timeRange} hours</p>
+      <p className="text-surface-500 text-base">{duration}</p>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export interface Service {
   deletedAt: string | null;
 }
 
-type PricingDetail = {
+export type PricingDetail = {
   id: number;
   criteria: string;
   minPrice: number;

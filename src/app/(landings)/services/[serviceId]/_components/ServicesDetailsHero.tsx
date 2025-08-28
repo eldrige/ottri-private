@@ -9,13 +9,17 @@ import { Service } from "../../_utils/types";
 
 type ServicesDetailsHeroProps = Pick<
   Service,
-  "name" | "priceFrom" | "duration" | "coverImage"
->;
+  "name" | "coverImage" | "description"
+> & {
+  duration: string;
+  priceFrom: string;
+};
 
 export default function ServicesDetailsHero({
   name: title,
   priceFrom,
   duration,
+  description,
   coverImage: coverSrc
 }: ServicesDetailsHeroProps) {
   return (
@@ -24,7 +28,11 @@ export default function ServicesDetailsHero({
         <HeroTop name={title} />
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-6">
-            <HeroLeftSide priceFrom={priceFrom} duration={duration} />
+            <HeroLeftSide
+              description={description}
+              priceFrom={priceFrom}
+              duration={duration}
+            />
           </div>
           <div className="flex-7">
             <HeroRightSide coverImage={coverSrc} name={title} />
@@ -35,7 +43,7 @@ export default function ServicesDetailsHero({
   );
 }
 
-function HeroTop({ name: title }: Pick<ServicesDetailsHeroProps, "name">) {
+function HeroTop({ name }: Pick<ServicesDetailsHeroProps, "name">) {
   return (
     <>
       <Link
@@ -45,15 +53,16 @@ function HeroTop({ name: title }: Pick<ServicesDetailsHeroProps, "name">) {
         <ArrowLeft size={24} /> Back to all services
       </Link>
       <h1 className="text-heading-3 text-primary-700 md:text-heading-1 text-center md:text-start">
-        {title}
+        {name}
       </h1>
     </>
   );
 }
 function HeroLeftSide({
   priceFrom,
-  duration
-}: Pick<ServicesDetailsHeroProps, "priceFrom" | "duration">) {
+  duration,
+  description
+}: Pick<ServicesDetailsHeroProps, "priceFrom" | "duration" | "description">) {
   return (
     <div className="md:my-15.5 flex flex-col gap-6">
       <div className="flex flex-col gap-4 text-center md:text-start">
@@ -61,13 +70,10 @@ function HeroLeftSide({
           Book in Minutes
         </h1>
         <p className="text-surface-500 text-subtitle tracking-wide">
-          Perfect for special occasions or seasonal cleaning
+          {description.slice(0, 50)}
         </p>
         <p className="text-surface-500 text-subtitle tracking-wide">
-          Our most comprehensive cleaning service that tackles every corner of
-          your home with meticulous attention to detail. Ideal for spring
-          cleaning, before hosting events, or when you want that extra level of
-          sparkle.
+          {description.slice(50)}
         </p>
       </div>
       <hr className="text-black/20" />

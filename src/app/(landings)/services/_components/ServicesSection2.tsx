@@ -8,11 +8,11 @@ import { ArrowRight, RotateCwIcon, Sparkle } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { Service } from "../_utils/types";
 import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
-import { fetchServices } from "@/lib/api/services";
+import { getServices } from "@/lib/api/services";
 import BoxIcon from "@/components/icons/BoxIcon";
 
 export default async function ServicesSection2() {
-  const services = await fetchServices();
+  const services = await getServices();
   return (
     <section className=" md:px-26 pb-10 space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
