@@ -5,7 +5,7 @@ import { ArrowLeft, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { Service } from "@/lib/types";
+import { Service } from "../../_utils/types";
 
 type ServicesDetailsHeroProps = Pick<
   Service,

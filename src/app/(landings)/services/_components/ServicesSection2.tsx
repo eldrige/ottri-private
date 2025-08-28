@@ -1,43 +1,38 @@
-"use client";
+"use server";
 import { Badge } from "@/components/ui/Badge";
 import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
-import { Service } from "@/lib/types";
-import { useServices } from "@/lib/hooks/useServices";
+import { Service } from "../_utils/types";
 import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
+import { fetchServices } from "@/lib/api/services";
 
-export default function ServicesSection2() {
-  const { data, isLoading } = useServices();
+export default async function ServicesSection2() {
+  const services = await fetchServices();
   return (
     <section className=" md:px-26 pb-10 space-y-8">
-      {isLoading && (
-        <div className="w-full flex items-center justify-center">
-          <Loader2 className="animate-spin w-4 h-4" />
-        </div>
-      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {data && data.length > 0
-          ? data.map((service, idx) => (
-              <ServiceCard
-                key={idx}
-                id={service.id}
-                coverImage={service.coverImage || ourTeamFigure2}
-                Icon={service.Icon}
-                services={service.services}
-                priceFrom={89}
-                duration="3-5"
-                name={service.name}
-                subtitle={service.subtitle}
-                {...(service.mostPopular ? { mostPopular: true } : {})}
-              />
-            ))
-          : !isLoading && (
-              <div className="col-span-3 text-center w-full">No Services</div>
-            )}
+        {services && services.length > 0 ? (
+          services.map((service, idx) => (
+            <ServiceCard
+              key={idx}
+              id={service.id}
+              coverImage={service.coverImage || ourTeamFigure2}
+              Icon={service.Icon}
+              services={service.services}
+              priceFrom={89}
+              duration="3-5"
+              name={service.name}
+              subtitle={service.subtitle}
+              {...(service.mostPopular ? { mostPopular: true } : {})}
+            />
+          ))
+        ) : (
+          <div className="col-span-3 text-center w-full">No Services</div>
+        )}
       </div>
     </section>
   );

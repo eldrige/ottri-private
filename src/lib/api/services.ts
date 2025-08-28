@@ -1,4 +1,4 @@
-import { Service } from "../types";
+import { Service } from "@/app/(landings)/services/_utils/types";
 import axios from "./axios";
 
 export async function fetchServices() {

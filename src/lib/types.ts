@@ -6,24 +6,6 @@ export type PricingDetail = {
   timeRange: string;
 };
 
-export interface Service {
-  id: number;
-  name: string;
-  subtitle: string;
-  services: string[];
-  priceFrom: number;
-  duration: string;
-  coverImage: StaticImageData;
-  pricingDetails: PricingDetail[];
-  mostPopular?: boolean;
-  process: string[];
-  Icon: ({
-    className
-  }: {
-    className?: string | undefined;
-  }) => React.JSX.Element;
-}
-
 export interface TeamMember {
   id: number;
   name: string;

@@ -10,7 +10,8 @@ import ourTeamFigure6 from "@/assets/ourteam-figure6.jpg";
 import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
-import { Service, TeamMember } from "./types";
+import { TeamMember } from "./types";
+import { Service } from "@/app/(landings)/services/_utils/types";
 
 export const servicesData: Service[] = [
   {

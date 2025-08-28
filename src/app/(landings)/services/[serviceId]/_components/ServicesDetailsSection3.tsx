@@ -1,4 +1,4 @@
-import { Service } from "@/lib/types";
+import { Service } from "../../_utils/types";
 import React from "react";
 
 export default function ServicesDetailsSection3({
