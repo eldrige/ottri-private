@@ -21,9 +21,11 @@ export default async function ServicesSection2() {
             const priceFrom = Math.min(
               ...service.pricingDetails.map((detail) => detail.minPrice)
             );
+
             const durationsArray = service.pricingDetails.map(
               (detail) => detail.duration
             );
+
             const durationStart = Math.min(
               ...durationsArray.map((elem) => Number(elem.split("-")[0]))
             );
