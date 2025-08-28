@@ -28,7 +28,7 @@ export type PricingDetail = {
   serviceId: number;
 };
 
-type ServiceAddOn = {
+export type ServiceAddOn = {
   id: number;
   name: string;
   description: string;
@@ -40,7 +40,7 @@ type ServiceAddOn = {
   deletedAt: string | null;
 };
 
-type serviceType = {
+export type serviceType = {
   id: number;
   name: string;
   description: string;

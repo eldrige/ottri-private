@@ -2,7 +2,7 @@ import React from "react";
 import ServicesDetailsHero from "./_components/ServicesDetailsHero";
 import ServicesDetailsSection1 from "./_components/ServicesDetailsSection1";
 import ServicesDetailsSection2 from "./_components/ServicesDetailsSection2";
-import { getUniqueService } from "@/lib/api/services";
+import { getUniqueService } from "../_utils/queries";
 
 async function ServicesDetailsPage({
   params

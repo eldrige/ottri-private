@@ -8,7 +8,7 @@ import { ArrowRight, RotateCwIcon, Sparkle } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { Service } from "../_utils/types";
 import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
-import { getServices } from "@/lib/api/services";
+import { getServices } from "../_utils/queries";
 import BoxIcon from "@/components/icons/BoxIcon";
 
 export default async function ServicesSection2() {
