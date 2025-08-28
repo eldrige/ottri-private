@@ -1,7 +1,7 @@
 import { Service } from "../types";
-import api from "./axios";
+import axios from "./axios";
 
 export async function fetchServices() {
-  const { data } = (await api.get("/services")) as { data: Service[] };
-  return data;
+  const { data: services } = await axios.get("/services");
+  return services as Service[];
 }
