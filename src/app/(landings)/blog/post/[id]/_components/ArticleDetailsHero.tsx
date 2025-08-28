@@ -1,3 +1,4 @@
+"use client";
 import { Badge } from "@/components/ui/Badge";
 import { Article } from "@/lib/types";
 import { converReadTime, formatDate } from "@/lib/utils";
@@ -73,7 +74,7 @@ export default function ArticleDetails({
           </div>
         </div>
         <div className="flex md:justify-end cursor-pointer md:w-3/5">
-          <div className="px-3 py-2 text-body border gap-3 text-primary-700 rounded-lg border-primary-700 flex">
+          <div className="w-full lg:w-fit items-center justify-center px-3 py-2 text-body border gap-3 text-primary-700 rounded-lg border-primary-700 flex">
             <Share2Icon />
             <p>Share </p>
           </div>
@@ -83,7 +84,7 @@ export default function ArticleDetails({
       <div className="flex">
         <Image
           width={1000}
-          className="aspect-[3/1.2] shadow-custom w-full h-full object-cover rounded-lg md:rounded-lg"
+          className="lg:aspect-[3/1.2] aspect-2/1 shadow-custom w-full h-full object-cover rounded-lg md:rounded-lg"
           height={1000}
           src={thumbnail}
           alt={title + " image"}
@@ -94,11 +95,11 @@ export default function ArticleDetails({
       {tags.length > 0 && (
         <div className="flex flex-col gap-3">
           <h3 className="text-lg text-secondary-500">Tags</h3>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {tags.map((tag, idx) => (
               <span
                 key={idx}
-                className="w-fit py-1 px-4 text-secondary-700 bg-secondary-700/10 rounded-lg text"
+                className="w-fit py-1 px-4 text-secondary-700 bg-secondary-700/10 rounded-lg text-caption"
               >
                 {tag}
               </span>
