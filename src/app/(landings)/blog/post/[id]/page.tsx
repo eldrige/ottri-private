@@ -1,12 +1,18 @@
-"use client";
 import React from "react";
-import { articlesData } from "@/lib/sampleData";
-import { useParams } from "next/navigation";
 import ArticleDetails from "./_components/ArticleDetailsHero";
+import { Article } from "@/lib/types";
+import RelatedArticles from "./_components/RelatedArticles";
 
-function ServicesDetailsPage() {
-  const { id } = useParams<{ id: string }>();
-  const article = articlesData.find((elem) => elem.id === Number(id));
+async function ArticlesDetailsPage({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const responseArticleDetails = await fetch(
+    `http://ottri-backend-600e2b0645fc.herokuapp.com/api/v1/articles/${id}`
+  );
+  const article = (await responseArticleDetails.json()) as Article;
   if (!article) {
     return (
       <main>
@@ -15,12 +21,11 @@ function ServicesDetailsPage() {
     );
   }
   return (
-    <main>
-      <div className="container mx-auto px-6">
-        <ArticleDetails title={article.title} />
-      </div>
-    </main>
+    <>
+      <ArticleDetails {...article} />
+      <RelatedArticles id={article.id} category={article.category} />
+    </>
   );
 }
 
-export default ServicesDetailsPage;
+export default ArticlesDetailsPage;
