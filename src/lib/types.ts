@@ -1,11 +1,5 @@
 import { StaticImageData } from "next/image";
 
-export type PricingDetail = {
-  size: string;
-  priceRange: string;
-  timeRange: string;
-};
-
 export interface TeamMember {
   id: number;
   name: string;

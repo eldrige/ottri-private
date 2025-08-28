@@ -20,7 +20,7 @@ export const servicesData: Service[] = [
     Icon: RewardStars,
     name: "Commercial Cleaning",
     subtitle: "Tailored cleaning solutions for businesses of all sizes.",
-    services: [
+    serviceAddOn: [
       "Office Cleaning",
       "Club House and Halls",
       "Eateries and Kitchens"
@@ -44,7 +44,7 @@ export const servicesData: Service[] = [
       }
     ],
     duration: "3-5",
-    mostPopular: false,
+    popular: false,
     process: [
       "Pre-cleaning walkthrough and assessment",
       "Room-by-room systematic deep cleaning",
@@ -59,7 +59,7 @@ export const servicesData: Service[] = [
     Icon: ReloadIcon,
     name: "Residential Cleaning",
     subtitle: "Making homes sparkle and shine with our top-tier services.",
-    services: ["Move in / Move outs", "Spring cleaning", "Junk Removal"],
+    serviceAddOn: ["Move in / Move outs", "Spring cleaning", "Junk Removal"],
     priceFrom: 89,
     pricingDetails: [
       {
@@ -79,7 +79,7 @@ export const servicesData: Service[] = [
       }
     ],
     duration: "3-5",
-    mostPopular: true,
+    popular: true,
     process: [
       "Pre-cleaning walkthrough and assessment",
       "Room-by-room systematic deep cleaning",
@@ -95,7 +95,7 @@ export const servicesData: Service[] = [
     name: "Post Construction Cleaning",
     subtitle:
       "We excel in post-construction cleaning to make your space ready for use.",
-    services: [
+    serviceAddOn: [
       "All rooms thoroughly cleaned and organized",
       "Inside appliances (oven, fridge, microwave, dishwasher)",
       "Baseboards, window sills, and door frames",
@@ -125,7 +125,7 @@ export const servicesData: Service[] = [
       }
     ],
     duration: "3-5",
-    mostPopular: false,
+    popular: false,
     process: [
       "Pre-cleaning walkthrough and assessment",
       "Room-by-room systematic deep cleaning",

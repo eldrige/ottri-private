@@ -4,11 +4,12 @@ import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, RotateCwIcon, Sparkle } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { Service } from "../_utils/types";
 import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
 import { fetchServices } from "@/lib/api/services";
+import BoxIcon from "@/components/icons/BoxIcon";
 
 export default async function ServicesSection2() {
   const services = await fetchServices();
@@ -16,20 +17,37 @@ export default async function ServicesSection2() {
     <section className=" md:px-26 pb-10 space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {services && services.length > 0 ? (
-          services.map((service, idx) => (
-            <ServiceCard
-              key={idx}
-              id={service.id}
-              coverImage={service.coverImage || ourTeamFigure2}
-              Icon={service.Icon}
-              services={service.services}
-              priceFrom={89}
-              duration="3-5"
-              name={service.name}
-              subtitle={service.subtitle}
-              {...(service.mostPopular ? { mostPopular: true } : {})}
-            />
-          ))
+          services.map((service) => {
+            const priceFrom = Math.min(
+              ...service.pricingDetails.map((detail) => detail.minPrice)
+            );
+            const durationsArray = service.pricingDetails.map(
+              (detail) => detail.duration
+            );
+            const durationStart = Math.min(
+              ...durationsArray.map((elem) => Number(elem.split("-")[0]))
+            );
+
+            const durationEnd = Math.max(
+              ...durationsArray.map((elem) =>
+                Number(elem.split("-")[1].split(" ")[0])
+              )
+            );
+
+            return (
+              <ServiceCard
+                key={service.id}
+                id={service.id}
+                coverImage={service.coverImage || ourTeamFigure2}
+                serviceAddOn={service.serviceAddOn}
+                priceFrom={priceFrom}
+                duration={`${durationStart}-${durationEnd}`}
+                name={service.name}
+                description={service.description.slice(0, 80)}
+                popular={service.popular}
+              />
+            );
+          })
         ) : (
           <div className="col-span-3 text-center w-full">No Services</div>
         )}
@@ -38,17 +56,27 @@ export default async function ServicesSection2() {
   );
 }
 
+type ServiceCardProps = Pick<
+  Service,
+  | "id"
+  | "coverImage"
+  | "popular"
+  | "name"
+  | "description"
+  | "serviceAddOn"
+  | "priceFrom"
+> & { priceFrom: number; duration: string };
+
 function ServiceCard({
   id,
   coverImage,
-  Icon,
-  mostPopular,
+  popular: mostPopular,
   name: title,
-  subtitle,
-  // services,
+  description,
+  serviceAddOn: serviceAddsOn,
   priceFrom,
   duration
-}: Omit<Service, "pricingDetails" | "process">) {
+}: ServiceCardProps) {
   return (
     <div
       className={cn(
@@ -62,7 +90,7 @@ function ServiceCard({
         </div>
       )}
       <Image
-        className="rounded-t-lg aspect-[2/1] w-full object-cover"
+        className="rounded-t-lg aspect-2/1 w-full object-cover"
         src={coverImage}
         alt={`${title}'s cover`}
       />
@@ -75,22 +103,28 @@ function ServiceCard({
               : "text-primary-700 bg-surface-500/5"
           )}
         >
-          {Icon && <Icon />}
+          {mostPopular ? (
+            <RotateCwIcon />
+          ) : id % 2 === 0 ? (
+            <BoxIcon />
+          ) : (
+            <Sparkle />
+          )}
         </div>
         <h4 className="text-heading-4 text-secondary-700">{title}</h4>
-        <p className="text-base text-surface-700">{subtitle}</p>
+        <p className="text-base text-surface-700">{description}</p>
         <div className="lg:hidden space-y-4">
-          {/* <ul className="text-surface-700 marker:text-primary-700 space-y-4">
-            {services.slice(0, 3).map((service) => (
-              <li className="flex items-center" key={service}>
+          <ul className="text-surface-700 marker:text-primary-700 space-y-4">
+            {serviceAddsOn.slice(0, 3).map((service) => (
+              <li className="flex items-center" key={service.id}>
                 <span className="block w-2 h-2 rounded-full bg-primary-700 mr-2" />
-                {service}
+                {service.name}
               </li>
             ))}
             <span className="text-primary-700">
-              +{services.slice(3).length} more features
+              +{serviceAddsOn.length - 3} more features
             </span>
-          </ul> */}
+          </ul>
 
           <hr className="text-black/10" />
 

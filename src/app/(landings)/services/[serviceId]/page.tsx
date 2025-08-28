@@ -28,7 +28,7 @@ async function ServicesDetailsPage({
           priceFrom={service.priceFrom}
           duration={service.duration}
         />
-        <ServicesDetailsSection1 includedServices={service.services} />
+        <ServicesDetailsSection1 includedServices={service.serviceAddOn} />
         <ServicesDetailsSection2 pricingDetails={service.pricingDetails} />
         <ServicesDetailsSection3 process={service.process} />
       </div>
