@@ -1,17 +1,18 @@
-import React from 'react';
-import { Nav, NavLink } from './Nav';
-import BoxIcon2 from '@/components/icons/BoxIcon2';
-import DollarIcon2 from '@/components/icons/DollarIcon2';
-import GraphIcon from '@/components/icons/GraphIcon';
-import LocationIcon from '@/components/icons/LocationIcon';
-import MarketingIcon from '@/components/icons/MarketingIcon';
-import { CalendarIcon, UsersIcon } from 'lucide-react';
+import React from "react";
+import { Nav, NavLink } from "./Nav";
+import BoxIcon2 from "@/components/icons/BoxIcon2";
+import DollarIcon2 from "@/components/icons/DollarIcon2";
+import GraphIcon from "@/components/icons/GraphIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
+import MarketingIcon from "@/components/icons/MarketingIcon";
+import { CalendarIcon, UsersIcon } from "lucide-react";
 
 type NavItem = {
   href: string;
   icon: React.ReactNode;
   label: string;
   badge?: number;
+  end?: boolean;
 };
 
 export default function AdminNavbar() {
@@ -19,7 +20,8 @@ export default function AdminNavbar() {
     {
       href: "/admin",
       icon: <GraphIcon className="size-4" />,
-      label: "Overview"
+      label: "Overview",
+      end: true
     },
     {
       href: "/admin/bookings",
@@ -57,7 +59,7 @@ export default function AdminNavbar() {
   return (
     <Nav>
       {navItems.map((item, index) => (
-        <NavLink key={index} href={item.href}>
+        <NavLink key={index} href={item.href} end={item.end}>
           {item.icon}
           {item.label}
           {item.badge && (

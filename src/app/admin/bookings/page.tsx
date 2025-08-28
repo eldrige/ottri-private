@@ -9,6 +9,7 @@ import ListView from "./_panels/ListView";
 import { cn } from "@/lib/utils";
 import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
+import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
 
 const filterOptions = [
@@ -42,20 +43,24 @@ export default function AdminBookingsPage() {
           />
         </div>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-          <Button
-            size={"2xs"}
-            variant={"secondary"}
-            className="flex gap-2 items-center text-base justify-center"
-          >
-            <PlusIcon className="size-5" /> New Booking
-          </Button>
-          <Button
-            size={"2xs"}
-            variant={"secondary-outline"}
-            className="flex gap-2 items-center text-base justify-center"
-          >
-            <Settings className="size-5" /> Manage Slots
-          </Button>
+          <Link href={"/admin/bookings/manage/new"}>
+            <Button
+              size={"2xs"}
+              variant={"secondary"}
+              className="flex gap-2 items-center text-base justify-center"
+            >
+              <PlusIcon className="size-5" /> New Booking
+            </Button>
+          </Link>
+          <Link href={"/admin/bookings/manage"}>
+            <Button
+              size={"2xs"}
+              variant={"secondary-outline"}
+              className="flex gap-2 items-center text-base justify-center"
+            >
+              <Settings className="size-5" /> Manage Slots
+            </Button>
+          </Link>
         </div>
       </div>
 
