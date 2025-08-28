@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import axios from "@/lib/axios";
 
 export default async function RelatedArticles({
   category,
@@ -12,16 +13,18 @@ export default async function RelatedArticles({
   category: string;
   id: number;
 }) {
-  const response = await fetch(
-    `http://ottri-backend-600e2b0645fc.herokuapp.com/api/v1/articles/published`
-  );
-  const articles = (await response.json()) as Article[];
+  const { data: articles } = (await axios.get(`/articles/published`)) as {
+    data: Article[];
+  };
+
   const relatedArticles = articles.filter(
     (article) => article.category === category && article.id !== id
   );
+
   if (relatedArticles.length < 1) {
     return "";
   }
+
   return (
     <section className="flex pt-12 flex-col gap-3">
       <div className="w-full text-center">

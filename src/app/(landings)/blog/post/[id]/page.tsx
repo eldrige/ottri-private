@@ -2,6 +2,7 @@ import React from "react";
 import ArticleDetails from "./_components/ArticleDetailsHero";
 import { Article } from "@/lib/types";
 import RelatedArticles from "./_components/RelatedArticles";
+import axios from "@/lib/axios";
 
 async function ArticlesDetailsPage({
   params
@@ -9,10 +10,10 @@ async function ArticlesDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const responseArticleDetails = await fetch(
-    `http://ottri-backend-600e2b0645fc.herokuapp.com/api/v1/articles/${id}`
-  );
-  const article = (await responseArticleDetails.json()) as Article;
+  const { data: article } = (await axios.get(`articles/${id}`)) as {
+    data: Article;
+  };
+
   if (!article) {
     return (
       <main>

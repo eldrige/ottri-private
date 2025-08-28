@@ -5,20 +5,21 @@ import { converReadTime, formatDate } from "@/lib/utils";
 import { CalendarIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import axios from "@/lib/axios";
 
 export default async function BlogSection1() {
-  const response = await fetch(
-    "http://ottri-backend-600e2b0645fc.herokuapp.com/api/v1/articles/published"
-  );
-  const data = (await response.json()) as Article[];
-  const [popularArticles] = data.filter((article) => article.isFeatured);
+  const { data } = (await axios.get("/articles/published")) as {
+    data: Article[];
+  };
+
+  const [popularArticle] = data.filter((article) => article.isFeatured);
   return (
     <section className="py-8 lg:py-24 flex flex-col gap-8">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
         <h2 className="text-heading-3 md:text-heading-2 font-semibold">
           Featured Article
         </h2>
-        <FeaturedArticle {...popularArticles} />
+        <FeaturedArticle {...popularArticle} />
       </div>
     </section>
   );
