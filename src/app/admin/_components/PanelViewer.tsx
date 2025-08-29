@@ -28,7 +28,8 @@ export default function PanelViewer({
             setActiveView(view.viewName);
             (e.target as HTMLElement).scrollIntoView({
               behavior: "smooth",
-              block: "nearest"
+              block: "nearest",
+              inline: "center"
             });
           }}
         >
