@@ -7,6 +7,7 @@ import PanelViewer from "../_components/PanelViewer";
 import DollarIcon2 from "@/components/icons/DollarIcon2";
 import LineGraphIncreaseIcon from "@/components/icons/LineGraphIncreaseIcon";
 import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
+import RevenueOverviewPanel from "./_panels/RevenueOverviewPanel";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -147,6 +148,10 @@ export default function FinancialsPage() {
           activeView={activeView}
           setActiveView={setActiveView}
         />
+      </div>
+
+      <div className="mt-8 w-full">
+        {activeView === "revenue-overview" ? <RevenueOverviewPanel /> : ""}
       </div>
     </main>
   );
