@@ -27,7 +27,9 @@ export default function RevenueOverviewPanel() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div className="border border-black/10 rounded-lg">
         <div className="flex items-center justify-between px-6 py-6.5">
-          <h5 className="text-subtitle">Daily Revenue Breakdown</h5>
+          <h5 className="text-subtitle tracking-tight">
+            Daily Revenue Breakdown
+          </h5>
           <p className="text-xs px-2 py-1 border border-black/10 rounded-lg">
             8 days
           </p>
