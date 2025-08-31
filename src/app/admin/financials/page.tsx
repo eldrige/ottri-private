@@ -9,6 +9,7 @@ import LineGraphIncreaseIcon from "@/components/icons/LineGraphIncreaseIcon";
 import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
 import RevenueOverviewPanel from "./_panels/RevenueOverviewPanel";
 import ServicePerformancePanel from "./_panels/ServicePerformancePanel";
+import InvoiceManagementPanel from "./_panels/InvoiceManagementPanel";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -154,6 +155,7 @@ export default function FinancialsPage() {
       <div className="mt-8 w-full">
         {activeView === "revenue-overview" && <RevenueOverviewPanel />}
         {activeView === "service-performance" && <ServicePerformancePanel />}
+        {activeView === "invoice-management" && <InvoiceManagementPanel />}
       </div>
     </main>
   );
