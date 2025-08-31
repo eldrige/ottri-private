@@ -32,9 +32,7 @@ async function ServicesDetailsPage({
   );
   const duration = `${durationStart}-${durationEnd}`;
   const serviceAddOn = service.serviceAddOn.map((elem) => elem.name);
-  if (!service) {
-    return <></>;
-  }
+
   return (
     <>
       <ServicesDetailsHero
@@ -43,6 +41,11 @@ async function ServicesDetailsPage({
         name={service.name}
         priceFrom={`${minPrice}-${maxPrice}`}
         duration={duration}
+        supportingImages={
+          service.supportingImages.length > 0
+            ? service.supportingImages
+            : [ourTeamFigure2, ourTeamFigure2, ourTeamFigure2]
+        }
       />
       <ServicesDetailsSection1 includedServices={serviceAddOn} />
       <ServicesDetailsSection2 pricingDetails={service.pricingDetails} />

@@ -9,7 +9,7 @@ import { Service } from "../../_utils/types";
 
 type ServicesDetailsHeroProps = Pick<
   Service,
-  "name" | "coverImage" | "description"
+  "name" | "coverImage" | "description" | "supportingImages"
 > & {
   duration: string;
   priceFrom: string;
@@ -20,7 +20,8 @@ export default function ServicesDetailsHero({
   priceFrom,
   duration,
   description,
-  coverImage: coverSrc
+  coverImage: coverSrc,
+  supportingImages
 }: ServicesDetailsHeroProps) {
   return (
     <section className="pt-16 pb-8">
@@ -35,7 +36,11 @@ export default function ServicesDetailsHero({
             />
           </div>
           <div className="flex-7">
-            <HeroRightSide coverImage={coverSrc} name={title} />
+            <HeroRightSide
+              coverImage={coverSrc}
+              name={title}
+              supportingImages={supportingImages}
+            />
           </div>
         </div>
       </div>
@@ -109,8 +114,9 @@ function HeroLeftSide({
 }
 function HeroRightSide({
   coverImage: coverSrc,
-  name: title
-}: Pick<ServicesDetailsHeroProps, "coverImage" | "name">) {
+  name: title,
+  supportingImages
+}: Pick<ServicesDetailsHeroProps, "coverImage" | "name" | "supportingImages">) {
   return (
     <div className="h-full flex flex-col gap-4">
       <div className="flex-7 flex ">
@@ -121,21 +127,14 @@ function HeroRightSide({
         />
       </div>
       <div className="grid grid-cols-3 *:flex-1 w-full flex-2 gap-x-2 self-end ">
-        <Image
-          className="rounded-lg aspect-[2/1] w-full object-cover"
-          src={coverSrc}
-          alt={`${title}'s cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/1] w-full object-cover"
-          src={coverSrc}
-          alt={`${title}'s cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/1] w-full object-cover"
-          src={coverSrc}
-          alt={`${title}'s cover`}
-        />
+        {supportingImages.map((image, index) => (
+          <Image
+            key={index}
+            className="rounded-lg aspect-[2/1] w-full object-cover"
+            src={image}
+            alt={`${title}'s cover`}
+          />
+        ))}
       </div>
     </div>
   );
