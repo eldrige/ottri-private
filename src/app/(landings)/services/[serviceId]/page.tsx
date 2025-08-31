@@ -3,6 +3,7 @@ import ServicesDetailsHero from "./_components/ServicesDetailsHero";
 import ServicesDetailsSection1 from "./_components/ServicesDetailsSection1";
 import ServicesDetailsSection2 from "./_components/ServicesDetailsSection2";
 import { getUniqueService } from "../_utils/queries";
+import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
 
 async function ServicesDetailsPage({
   params
@@ -38,7 +39,7 @@ async function ServicesDetailsPage({
     <>
       <ServicesDetailsHero
         description={service.description}
-        coverImage={service.coverImage}
+        coverImage={service.coverImage || ourTeamFigure2}
         name={service.name}
         priceFrom={`${minPrice}-${maxPrice}`}
         duration={duration}
