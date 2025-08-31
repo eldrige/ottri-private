@@ -7,7 +7,7 @@ export interface Service {
   description: string;
   serviceAddOn: ServiceAddOn[];
   serviceTypes: serviceType[];
-  supportingImages: string[];
+  supportingImages: (string | StaticImageData)[];
   cleaningChecklist: string[];
   popular: boolean;
   priceFrom: number;
