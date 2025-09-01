@@ -1,10 +1,11 @@
 "use client";
-import CallIcon from "@/components/icons/CallIcon";
-import EditIcon from "@/components/icons/EditIcon";
-import TrashIcon from "@/components/icons/TrashIcon";
+import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
+import ClockIcon from "@/components/icons/ClockIcon";
+import ClockIcon2 from "@/components/icons/ClockIcon2";
 import { Button } from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
+import { FileTextIcon } from "lucide-react";
 import React, { useState } from "react";
 
 interface StatusType {
@@ -15,27 +16,23 @@ interface StatusType {
 export default function FinancialsListItem({
   statuses,
   initialStatus,
-  bookingName,
-  bookingNumber,
+  invoiceName,
+  clientName,
   service,
-  dateTime,
-  cleaners,
-  address,
-  phone,
-  price,
-  notes
+  amount,
+  payment,
+  date,
+  due
 }: {
   statuses: StatusType[];
   initialStatus: StatusType;
-  bookingName: string;
-  bookingNumber: number;
+  invoiceName: string;
+  clientName: string;
   service: string;
-  dateTime: string;
-  cleaners?: string;
-  address: string;
-  phone: string;
-  price: number;
-  notes?: string;
+  amount: number;
+  payment: string;
+  date: string;
+  due: string;
 }) {
   const [status, setStatus] = useState(initialStatus);
 
@@ -43,19 +40,19 @@ export default function FinancialsListItem({
     <div className="p-4 border border-black/10 rounded-lg flex flex-col lg:flex-row justify-between gap-4">
       <div>
         <div className="flex items-center gap-3">
-          <span className="font-medium">{bookingName}</span>
+          <span className="font-medium">{invoiceName}</span>
           <Select
             accent="secondary"
             options={statuses}
             buttonClassName={cn(
               "py-1.5 px-3 gap-2",
-              status.value === "pending"
+              status.value === "unpaid"
                 ? "bg-warning/20 *:text-warning-text"
-                : status.value === "in-progress"
+                : status.value === "pending"
                   ? "bg-info/20 *:text-info-text"
-                  : status.value === "completed"
+                  : status.value === "paid"
                     ? "bg-success/10 *:text-success"
-                    : status.value === "cancelled"
+                    : status.value === "overdue"
                       ? "bg-error/10 *:text-error"
                       : ""
             )}
@@ -67,48 +64,47 @@ export default function FinancialsListItem({
               setStatus(newStatus);
             }}
           />
-          <span className="text-xs text-secondary-700/70">
-            #{bookingNumber.toString().padStart(3, "0")}
+          <span className={""}>
+            {/* {statusIcon} */}
+            {status.value === "paid" ? (
+              <CheckBrokenIcon className="size-4 text-success" />
+            ) : status.value === "overdue" ? (
+              <ClockIcon className="size-4 text-error" />
+            ) : (
+              ""
+            )}
           </span>
         </div>
 
-        <div className="mt-4 lg:mt-6 text-xs flex flex-wrap gap-x-8 gap-y-4">
+        <div className="mt-4 lg:mt-6 text-xs flex flex-wrap flex-col md:flex-row gap-x-8 gap-y-4">
           <div className="space-y-1">
+            <p>
+              <span className="font-medium mr-2">Client&apos;s name:</span>
+              <span>{clientName}</span>
+            </p>
             <p>
               <span className="font-medium mr-2">Service:</span>
               <span>{service}</span>
             </p>
-            <p>
-              <span className="font-medium mr-2">Date & Time:</span>
-              <span>{dateTime}</span>
-            </p>
-            <p>
-              <span className="font-medium mr-2">Cleaners:</span>
-              {cleaners ? (
-                <span>{cleaners}</span>
-              ) : (
-                <span className="text-error">Unassigned</span>
-              )}
-            </p>
-            {notes && (
-              <p className="mt-2 text-xs text-secondary-700/70">
-                <span className="font-medium mr-2">Notes:</span>
-                <span>{notes}</span>
-              </p>
-            )}
           </div>
           <div className="space-y-1">
             <p>
-              <span className="font-medium mr-2">Address:</span>
-              <span>{address}</span>
+              <span className="font-medium mr-2">Amount:</span>
+              <span>${amount}</span>
             </p>
             <p>
-              <span className="font-medium mr-2">Phone:</span>
-              <span>{phone}</span>
+              <span className="font-medium mr-2">Payment:</span>
+              <span>{payment}</span>
+            </p>
+          </div>
+          <div className="space-y-1">
+            <p>
+              <span className="font-medium mr-2">Date:</span>
+              <span>{date}</span>
             </p>
             <p>
-              <span className="font-medium mr-2">Price:</span>
-              <span>${price}</span>
+              <span className="font-medium mr-2">Due:</span>
+              <span>{due}</span>
             </p>
           </div>
         </div>
@@ -121,33 +117,20 @@ export default function FinancialsListItem({
             variant={"secondary-outline"}
             className="text-xs flex items-center justify-center gap-1 border-black/10"
           >
-            <EditIcon className="size-4" />
-            Edit
+            <FileTextIcon className="size-4" />
+            View
           </Button>
-          <Button
-            size="2xs"
-            variant={"secondary-outline"}
-            className="text-xs flex items-center justify-center gap-1 border-black/10"
-          >
-            <CallIcon className="size-4" />
-            Call
-          </Button>
-          <Button
-            size="2xs"
-            variant={"destructive"}
-            className="text-xs flex items-center justify-center gap-1 border-black/10"
-          >
-            <TrashIcon className="size-4" />
-            Delete
-          </Button>
-        </div>
-        {!cleaners && (
-          <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0">
-            <Button size={"2xs"} variant={"secondary"}>
-              Assign Cleaner
+          {status.value !== "paid" && (
+            <Button
+              size="2xs"
+              variant={"secondary-outline"}
+              className="text-xs flex items-center justify-center gap-1 border-black/10"
+            >
+              <ClockIcon2 className="size-4" />
+              Remind
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

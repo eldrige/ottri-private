@@ -6,54 +6,64 @@ import FinancialsListItem from "../_components/FinancialsListItem";
 const statuses = [
   { label: "Paid", value: "paid" },
   { label: "Unpaid", value: "unpaid" },
-  { label: "Overdue", value: "overdue" }
+  { label: "Overdue", value: "overdue" },
+  { label: "Pending", value: "pending" }
 ];
 
-const bookingsData = [
+const invoicesData = [
   {
     id: 1,
     status: statuses[1], // In Progress
-    name: "Sara Johnson",
-    bookingNumber: 1,
-    service: "Deep Cleaning",
-    dateTime: "25-07-2025 at 9:00 AM",
-    cleaners: "Maria Gracia",
-    address: "123 Oak Street",
-    phone: "(555) 123-4567",
-    price: 150,
-    notes: "Pet-friendly cleaning request"
+    invoiceName: "INV-001",
+    clientName: "Sarah Johnson",
+    service: "Deep Clean",
+    amount: 150,
+    payment: "Credit Card",
+    date: "2025-06-27",
+    due: "2025-06-27"
+  },
+  {
+    id: 2,
+    status: statuses[0], // In Progress
+    invoiceName: "INV-002",
+    clientName: "Sarah Johnson",
+    service: "Deep Clean",
+    amount: 150,
+    payment: "Bank Transfer",
+    date: "2025-06-27",
+    due: "2025-06-27"
   }
 ];
 
 export default function InvoiceManagementPanel() {
   return (
-    <div className="border border-black/10 rounded-lg p-6">
-      <div className="flex items-center justify-between">
-        <h5 className="text-subtitle ">Invoice Management (4 total)</h5>
+    <div className="lg:border border-black/10 rounded-lg lg:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h5 className="text-subtitle ">
+          Invoice Management ({invoicesData.length} total)
+        </h5>
         <Button
           variant={"secondary"}
           size={"2xs"}
-          className="flex items-center gap-1"
+          className="flex items-center justify-center gap-1"
         >
           <ClockIcon2 className="size-4" />
           Send All Reminders
         </Button>
       </div>
-      <div className="mt-8">
-        {bookingsData.map((booking) => (
+      <div className="mt-8 space-y-4">
+        {invoicesData.map((invoice) => (
           <FinancialsListItem
-            key={booking.id}
+            key={invoice.id}
             statuses={statuses}
-            initialStatus={booking.status}
-            bookingName={booking.name}
-            bookingNumber={booking.bookingNumber}
-            service={booking.service}
-            dateTime={booking.dateTime}
-            cleaners={booking.cleaners}
-            address={booking.address}
-            phone={booking.phone}
-            price={booking.price}
-            notes={booking.notes}
+            initialStatus={invoice.status}
+            invoiceName={invoice.invoiceName}
+            clientName={invoice.clientName}
+            service={invoice.service}
+            amount={invoice.amount}
+            payment={invoice.payment}
+            date={invoice.date}
+            due={invoice.due}
           />
         ))}
       </div>
