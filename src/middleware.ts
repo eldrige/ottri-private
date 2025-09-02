@@ -34,7 +34,6 @@ async function isAuthenticated(req: NextRequest) {
         }
       )
     ).data;
-    console.log({ email, password, loginResponse: loginResponse.data });
     const isAuth = loginResponse.data.role === "ADMIN";
     return isAuth;
   } catch (e) {

@@ -10,6 +10,7 @@ import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
 import RevenueOverviewPanel from "./_panels/RevenueOverviewPanel";
 import ServicePerformancePanel from "./_panels/ServicePerformancePanel";
 import InvoiceManagementPanel from "./_panels/InvoiceManagementPanel";
+import RefundsPanel from "./_panels/RefundsPanel";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -156,6 +157,7 @@ export default function FinancialsPage() {
         {activeView === "revenue-overview" && <RevenueOverviewPanel />}
         {activeView === "service-performance" && <ServicePerformancePanel />}
         {activeView === "invoice-management" && <InvoiceManagementPanel />}
+        {activeView === "refunds" && <RefundsPanel />}
       </div>
     </main>
   );
