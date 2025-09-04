@@ -7,6 +7,7 @@ import { CalendarIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import LatestArticles, { CategoryFilter } from "./LatestArticles";
+import Link from "next/link";
 
 export default function BlogSection1({ articles }: { articles: Article[] }) {
   const [category, setCategory] = React.useState("All Posts");
@@ -37,6 +38,7 @@ export default function BlogSection1({ articles }: { articles: Article[] }) {
 type FeaturedArticleProps = Article;
 
 function FeaturedArticle({
+  id,
   author: authorName,
   title,
   content: description,
@@ -59,9 +61,14 @@ function FeaturedArticle({
         <span className="w-fit py-1 px-4 bg-secondary-700/10 rounded-lg text">
           Popular
         </span>
-        <h2 className="text-heading-4 md:text-heading-3 text-secondary-700 font-semibold">
-          {title}
-        </h2>
+        <Link
+          className="hover:text-primary-700 transition-all transform duration-200"
+          href={`/blog/post/${id}`}
+        >
+          <h2 className="text-heading-4 md:text-heading-3 font-semibold">
+            {title}
+          </h2>
+        </Link>
         <p className="text-subtitle  text-surface-500 max-w-6xl mx-auto">
           {description.slice(0, 200)}...
         </p>
