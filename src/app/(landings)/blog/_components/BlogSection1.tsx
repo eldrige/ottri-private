@@ -1,3 +1,4 @@
+"use client";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { Button } from "@/components/ui/Button";
 import { Article } from "@/lib/types";
@@ -5,23 +6,31 @@ import { converReadTime, formatDate } from "@/lib/utils";
 import { CalendarIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import axios from "@/lib/axios";
+import LatestArticles, { CategoryFilter } from "./LatestArticles";
 
-export default async function BlogSection1() {
-  const { data } = (await axios.get("/articles/published")) as {
-    data: Article[];
-  };
-
-  const [popularArticle] = data.filter((article) => article.isFeatured);
+export default function BlogSection1({ articles }: { articles: Article[] }) {
+  const [category, setCategory] = React.useState("All Posts");
+  const [popularArticle] = articles.filter((article) => article.isFeatured);
+  const filteredArticles = articles.filter(
+    (article) =>
+      !article.isFeatured &&
+      (category === "All Posts" ? true : article.category === category)
+  );
   return (
-    <section className="py-8 lg:py-24 flex flex-col gap-8">
-      <div className="text-center flex flex-col justify-center items-center space-y-4">
-        <h2 className="text-heading-3 md:text-heading-2 font-semibold">
-          Featured Article
-        </h2>
-        <FeaturedArticle {...popularArticle} />
-      </div>
-    </section>
+    <>
+      <section className="py-8 lg:py-24 flex flex-col gap-8">
+        <div className="text-center flex flex-col justify-center items-center space-y-4">
+          <h2 className="text-heading-3 md:text-heading-2 font-semibold">
+            Featured Article
+          </h2>
+          <FeaturedArticle {...popularArticle} />
+        </div>
+      </section>
+      <section className="py-8 lg:py-24 flex flex-col gap-12">
+        <CategoryFilter category={category} setCategory={setCategory} />
+        <LatestArticles articlesData={filteredArticles} />
+      </section>
+    </>
   );
 }
 

@@ -1,14 +1,14 @@
 import React from "react";
 import BlogHero from "./_components/BlogHero";
 import BlogSection1 from "./_components/BlogSection1";
-import BlogSection2 from "./_components/BlogSection2";
+import { getPublishedArticles } from "./_utils/queries";
 
-export default function page() {
+export default async function page() {
+  const articles = await getPublishedArticles();
   return (
     <>
       <BlogHero />
-      <BlogSection1 />
-      <BlogSection2 />
+      <BlogSection1 articles={articles} />
     </>
   );
 }

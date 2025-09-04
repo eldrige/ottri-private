@@ -7,7 +7,6 @@ import {
   ClockIcon,
   UserIcon
 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,31 +17,20 @@ export default function LatestArticles({
 }: {
   articlesData: Article[];
 }) {
-  const searchParams = useSearchParams();
-  const category = searchParams.get("category") || "All Posts";
-  const filteredArticles = articlesData.filter(
-    (article) =>
-      !article.isFeatured &&
-      (category === "All Posts" ? true : article.category === category)
-  );
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % filteredArticles.length);
+    setCurrentSlide((prev) => (prev + 1) % articlesData.length);
   };
 
   const prevSlide = () => {
     setCurrentSlide(
-      (prev) => (prev - 1 + filteredArticles.length) % filteredArticles.length
+      (prev) => (prev - 1 + articlesData.length) % articlesData.length
     );
   };
   useEffect(() => {
     console.log(articlesData);
   }, [articlesData]);
-
-  useEffect(() => {
-    setCurrentSlide(0);
-  }, [category]);
   return (
     <div className="text-center flex flex-col justify-center items-center space-y-8">
       <div className="flex flex-col gap-2">
@@ -55,8 +43,8 @@ export default function LatestArticles({
       </div>
       <div>
         <div className="hidden lg:grid lg:grid-cols-3 gap-8">
-          {filteredArticles.length > 0 &&
-            filteredArticles.map((article) => (
+          {articlesData.length > 0 &&
+            articlesData.map((article) => (
               <ArticleCard key={article.id} {...article} />
             ))}
         </div>
@@ -66,7 +54,7 @@ export default function LatestArticles({
               className="flex max-w-md transition-transform duration-300 ease-in-out"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
-              {filteredArticles.map((article) => (
+              {articlesData.map((article) => (
                 <div
                   key={article.id}
                   className="w-full flex-shrink-0 max-w-full px-2 sm:px-4"
@@ -77,7 +65,7 @@ export default function LatestArticles({
             </div>
           </div>
           <div className="flex justify-center gap-1">
-            {filteredArticles.map((_, index) => (
+            {articlesData.map((_, index) => (
               <span
                 key={index}
                 className={cn(
@@ -104,10 +92,10 @@ export default function LatestArticles({
               <ArrowLeft />
             </button>
             <button
-              disabled={currentSlide === filteredArticles.length - 1}
+              disabled={currentSlide === articlesData.length - 1}
               className={cn(
                 "*:h-6 *:w-6 transition-colors",
-                currentSlide === filteredArticles.length - 1
+                currentSlide === articlesData.length - 1
                   ? "text-secondary-700/30"
                   : "text-primary-700 cursor-pointer"
               )}
@@ -117,12 +105,9 @@ export default function LatestArticles({
             </button>
           </div>
         </div>
-        {filteredArticles.length === 0 && (
+        {articlesData.length === 0 && (
           <div className="w-full flex justify-center">
-            <p>
-              No acrticles of category{" "}
-              <span className="text-primary-700">{` "${category}"`}</span>
-            </p>
+            <p>No acrticles of this category</p>
           </div>
         )}
       </div>
@@ -185,10 +170,13 @@ function ArticleCard({
   );
 }
 
-export function CategoryFilter() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const category = searchParams.get("category") || "all";
+export function CategoryFilter({
+  category,
+  setCategory
+}: {
+  category: string;
+  setCategory: (cat: string) => void;
+}) {
   const articleCategories = [
     "All Posts",
     "Cleaning Tips",
@@ -197,16 +185,7 @@ export function CategoryFilter() {
     "Organizations",
     "Eco-Friendly"
   ];
-  const updateFilter = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
 
-    if (value === "all" || !value) {
-      params.delete("category");
-    } else {
-      params.set("category", value);
-    }
-    router.replace(`?${params.toString()}`, { scroll: false });
-  };
   return (
     <div className="overflow-x-auto lg:flex lg:justify-center no-scrollbar">
       <div className="flex transition-transform duration-300 ease-in-out gap-6 md:gap-8 text-nowrap mx-auto">
@@ -218,8 +197,9 @@ export function CategoryFilter() {
                 ? "bg-primary-700 text-white"
                 : " bg-transparent border border-primary-700 text-primary-700"
             }`}
-            onClick={() => {
-              updateFilter(cat);
+            onClick={(e) => {
+              e.preventDefault();
+              setCategory(cat);
             }}
           >
             {cat}

@@ -1,41 +1,29 @@
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import React from "react";
 
 export default function BlogSection3() {
   return (
-    <div className="bg-secondary-700 py-8 md:py-16 flex items-center justify-center mb-12">
-      <div className="flex flex-col px-6 md:px-0 text-center items-center gap-2 justify-center">
-        <h2 className="text-heading-2.5 text-white">
-          Stay Updated with Cleaning Tips
+    <section className="py-6 mt-4 mb-8 md:my-12 flex flex-col items-center gap-4">
+      <div className="text-secondary-700 text-center">
+        <h2 className="text-heading-2.5 font-semibold">
+          Ready for a Professional Clean?
         </h2>
-        <p className="text-surface-300/80 text-center">
-          Get weekly cleaning tips, exclusive guides, and special offers
-          delivered to your inbox.
-        </p>
-        <div className="w-full max-w-xl mt-2">
-          <form
-            className="flex flex-col md:flex-row items-center gap-2 w-full"
-            action=""
-          >
-            <Input
-              className="py-3 w-full md:flex-2"
-              name="email"
-              type="text"
-              placeholder="Enter your email...."
-            />
-            <Button
-              className="text-body py-2 md:flex-1 border-secondary-700 w-full text-white text-lg hover:border-primary-700"
-              type="submit"
-            >
-              Subscribe
-            </Button>
-          </form>
-        </div>
-        <p className="text-surface-300/80 text-center">
-          No spam, unsubscribe anytime. Join 2,000+ happy subscribers.
+        <p className="text-subtitle text-base max-w-6xl mx-auto mb-2">
+          {`While you're learning new tips, let our experts handle the heavy lifting.`}
         </p>
       </div>
-    </div>
+      <div className="flex w-full md:w-fit flex-col *:text-nowrap *:flex-1 sm:flex-row gap-4">
+        <Button className="border-primary-700 border-2" size="xs">
+          Book Your Cleaning
+        </Button>
+        <Button
+          size="xs"
+          className="text-secondary-700 border-secondary-700"
+          variant="secondary-outline"
+        >
+          Explore our services
+        </Button>
+      </div>
+    </section>
   );
 }
