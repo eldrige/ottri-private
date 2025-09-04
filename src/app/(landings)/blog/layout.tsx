@@ -1,6 +1,6 @@
 import React from "react";
+import BlogSection2 from "./_components/BlogSection2";
 import BlogSection3 from "./_components/BlogSection3";
-import BlogSection4 from "./_components/BlogSection4";
 
 export default function BlogLayout({
   children
@@ -10,9 +10,9 @@ export default function BlogLayout({
   return (
     <main>
       <div className="container pb-24 mx-auto px-6">{children}</div>
-      <BlogSection3 />
+      <BlogSection2 />
       <div className="container mx-auto px-6">
-        <BlogSection4 />
+        <BlogSection3 />
       </div>
     </main>
   );

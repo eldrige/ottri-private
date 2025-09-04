@@ -1,7 +1,7 @@
 "use client";
 import { Badge } from "@/components/ui/Badge";
 import { Article } from "@/lib/types";
-import { converReadTime, formatDate } from "@/lib/utils";
+import { converReadTime, formatDate, shareLinks } from "@/lib/utils";
 import {
   ArrowLeft,
   CalendarIcon,
@@ -14,7 +14,7 @@ import Link from "next/link";
 import React from "react";
 import SpringCleaningChecklist from "./SpringCleaningChecklist";
 
-export default function ArticleDetails({
+export default function ArticleDetailsHero({
   title,
   category,
   excerpt,
@@ -35,6 +35,7 @@ export default function ArticleDetails({
   | "thumbnail"
   | "content"
   | "tags"
+  | "id"
 >) {
   return (
     <section className="pt-8 lg:pt-24 space-y-8">
@@ -73,12 +74,19 @@ export default function ArticleDetails({
             </span>
           </div>
         </div>
-        <div className="flex md:justify-end cursor-pointer">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            shareLinks(window.location.href);
+          }}
+          className="flex md:justify-end cursor-pointer"
+        >
           <div className="w-full lg:w-fit items-center justify-center px-3 py-2 text-body border gap-3 text-primary-700 rounded-lg border-primary-700 flex">
             <Share2Icon className="size-6" />
             <p>Share </p>
           </div>
-        </div>
+        </button>
       </div>
       <div className="w-full h-0.25 bg-surface-500/30" />
       <div className="flex">

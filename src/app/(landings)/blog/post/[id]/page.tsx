@@ -1,5 +1,5 @@
 import React from "react";
-import ArticleDetails from "./_components/ArticleDetailsHero";
+import ArticleDetailsHero from "./_components/ArticleDetailsHero";
 import { Article } from "@/lib/types";
 import RelatedArticles from "./_components/RelatedArticles";
 import axios from "@/lib/axios";
@@ -23,7 +23,7 @@ async function ArticlesDetailsPage({
   }
   return (
     <>
-      <ArticleDetails {...article} />
+      <ArticleDetailsHero {...article} />
       <RelatedArticles id={article.id} category={article.category} />
     </>
   );
