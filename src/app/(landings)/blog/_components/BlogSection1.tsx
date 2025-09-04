@@ -1,7 +1,7 @@
 "use client";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { Button } from "@/components/ui/Button";
-import { Article } from "@/lib/types";
+import { Article } from "../_utils/types";
 import { converReadTime, formatDate } from "@/lib/utils";
 import { CalendarIcon, UserIcon } from "lucide-react";
 import Image from "next/image";

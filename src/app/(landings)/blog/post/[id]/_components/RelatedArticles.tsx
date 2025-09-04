@@ -1,5 +1,5 @@
 "use server";
-import { Article } from "@/lib/types";
+import { Article } from "../../../_utils/types";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

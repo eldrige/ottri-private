@@ -1,5 +1,5 @@
 import axios from "@/lib/axios";
-import { Article } from "@/lib/types";
+import { Article } from "./types";
 
 export async function getPublishedArticles() {
   const response = await axios.get("/articles/published");

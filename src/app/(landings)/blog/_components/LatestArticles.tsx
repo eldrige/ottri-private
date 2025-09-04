@@ -1,5 +1,5 @@
 "use client";
-import { Article } from "@/lib/types";
+import { Article } from "../_utils/types";
 import {
   ArrowLeft,
   ArrowRight,

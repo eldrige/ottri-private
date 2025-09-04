@@ -1,6 +1,6 @@
 import React from "react";
 import ArticleDetailsHero from "./_components/ArticleDetailsHero";
-import { Article } from "@/lib/types";
+import { Article } from "../../_utils/types";
 import RelatedArticles from "./_components/RelatedArticles";
 import { getArticleById } from "../../_utils/queries";
 

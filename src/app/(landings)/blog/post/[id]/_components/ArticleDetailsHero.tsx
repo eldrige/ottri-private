@@ -1,6 +1,6 @@
 "use client";
 import { Badge } from "@/components/ui/Badge";
-import { Article } from "@/lib/types";
+import { Article } from "../../../_utils/types";
 import { converReadTime, formatDate, shareLinks } from "@/lib/utils";
 import {
   ArrowLeft,
