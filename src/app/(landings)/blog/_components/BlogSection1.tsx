@@ -5,12 +5,12 @@ import { Article } from "../_utils/types";
 import { converReadTime, formatDate } from "@/lib/utils";
 import { CalendarIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import LatestArticles, { CategoryFilter } from "./LatestArticles";
 import Link from "next/link";
 
 export default function BlogSection1({ articles }: { articles: Article[] }) {
-  const [category, setCategory] = React.useState("All Posts");
+  const [category, setCategory] = useState("All Posts");
   const [popularArticle] = articles.filter((article) => article.isFeatured);
   const filteredArticles = articles.filter(
     (article) =>
