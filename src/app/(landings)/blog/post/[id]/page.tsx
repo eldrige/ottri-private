@@ -2,7 +2,7 @@ import React from "react";
 import ArticleDetailsHero from "./_components/ArticleDetailsHero";
 import { Article } from "@/lib/types";
 import RelatedArticles from "./_components/RelatedArticles";
-import axios from "@/lib/axios";
+import { getArticleById } from "../../_utils/queries";
 
 async function ArticlesDetailsPage({
   params
@@ -10,9 +10,7 @@ async function ArticlesDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { data: article } = (await axios.get(`articles/${id}`)) as {
-    data: Article;
-  };
+  const article: Article = await getArticleById(id);
 
   if (!article) {
     return (
