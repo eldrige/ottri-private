@@ -78,7 +78,11 @@ export default function OverviewPanel() {
       {inventoryItems.map((item, idx) => (
         <div
           key={idx}
-          className="p-4 border border-black/10 rounded-lg space-y-4"
+          className={cn(
+            "p-4 border border-black/10 rounded-lg space-y-4",
+            item.status === "Critical" &&
+              "shadow-[0px_0px_4px_0px] shadow-error"
+          )}
         >
           <div className="flex justify-between items-center">
             <p className="font-medium">{item.name}</p>
