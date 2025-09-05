@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Filter, PlusIcon, SearchIcon } from "lucide-react";
 import Select from "@/components/ui/Select";
 import OverviewPanel from "./_panels/OverviewPanel";
+import QuickRestockPanel from "./_panels/QuickRestockPanel";
 
 export default function InventoryPage() {
   const [activeView, setActiveView] = useState<string>("overview");
@@ -136,7 +137,10 @@ export default function InventoryPage() {
         </Button>
       </div>
 
-      <div>{activeView === "overview" && <OverviewPanel />}</div>
+      <div>
+        {activeView === "overview" && <OverviewPanel />}
+        {activeView === "quick-restock" && <QuickRestockPanel />}
+      </div>
     </main>
   );
 }
