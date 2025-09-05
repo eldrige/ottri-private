@@ -11,6 +11,7 @@ import { Filter, PlusIcon, SearchIcon } from "lucide-react";
 import Select from "@/components/ui/Select";
 import OverviewPanel from "./_panels/OverviewPanel";
 import QuickRestockPanel from "./_panels/QuickRestockPanel";
+import AlertsPanel from "./_panels/AlertsPanel";
 
 export default function InventoryPage() {
   const [activeView, setActiveView] = useState<string>("overview");
@@ -140,6 +141,7 @@ export default function InventoryPage() {
       <div>
         {activeView === "overview" && <OverviewPanel />}
         {activeView === "quick-restock" && <QuickRestockPanel />}
+        {activeView === "alerts" && <AlertsPanel />}
       </div>
     </main>
   );
