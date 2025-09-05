@@ -12,6 +12,7 @@ import Select from "@/components/ui/Select";
 import OverviewPanel from "./_panels/OverviewPanel";
 import QuickRestockPanel from "./_panels/QuickRestockPanel";
 import AlertsPanel from "./_panels/AlertsPanel";
+import ExpenseHistory from "./_panels/ExpenseHistory";
 
 export default function InventoryPage() {
   const [activeView, setActiveView] = useState<string>("overview");
@@ -142,6 +143,7 @@ export default function InventoryPage() {
         {activeView === "overview" && <OverviewPanel />}
         {activeView === "quick-restock" && <QuickRestockPanel />}
         {activeView === "alerts" && <AlertsPanel />}
+        {activeView === "expense-history" && <ExpenseHistory />}
       </div>
     </main>
   );
