@@ -1,11 +1,11 @@
-import React from 'react';
-import { Nav, NavLink } from './Nav';
-import BoxIcon2 from '@/components/icons/BoxIcon2';
-import DollarIcon2 from '@/components/icons/DollarIcon2';
-import GraphIcon from '@/components/icons/GraphIcon';
-import LocationIcon from '@/components/icons/LocationIcon';
-import MarketingIcon from '@/components/icons/MarketingIcon';
-import { CalendarIcon, UsersIcon } from 'lucide-react';
+import React from "react";
+import { Nav, NavLink } from "./Nav";
+import BoxIcon2 from "@/components/icons/BoxIcon2";
+import DollarIcon2 from "@/components/icons/DollarIcon2";
+import GraphIcon from "@/components/icons/GraphIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
+import MarketingIcon from "@/components/icons/MarketingIcon";
+import { CalendarIcon, UsersIcon } from "lucide-react";
 
 type NavItem = {
   href: string;

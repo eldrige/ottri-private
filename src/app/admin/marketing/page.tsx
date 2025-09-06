@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export default function MarketingPage() {
-  return (
-    <div>MarketingPage</div>
-  )
+  return <div>MarketingPage</div>;
 }

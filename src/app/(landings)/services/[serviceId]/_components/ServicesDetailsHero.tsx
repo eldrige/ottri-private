@@ -5,10 +5,10 @@ import { ArrowLeft, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { Service } from "@/lib/types";
+import { ServiceType } from "@/lib/types";
 
 type ServicesDetailsHeroProps = Pick<
-  Service,
+  ServiceType,
   "title" | "priceFrom" | "duration" | "coverSrc"
 >;
 

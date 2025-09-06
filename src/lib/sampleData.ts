@@ -10,9 +10,9 @@ import ourTeamFigure6 from "@/assets/ourteam-figure6.jpg";
 import RewardStars from "@/components/icons/RewardStars";
 import ReloadIcon from "@/components/icons/ReloadIcon";
 import BoxIcon from "@/components/icons/BoxIcon";
-import { Service, TeamMember } from "./types";
+import { ServiceType, TeamMember } from "./types";
 
-export const servicesData: Service[] = [
+export const servicesData: ServiceType[] = [
   {
     id: 1,
     coverSrc: figure1,
