@@ -8,12 +8,12 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: "border-surface-50 focus-visible:outline-surface-500",
-        error: "border-error focus-visible:outline-error",
+        error: "border-error focus-visible:outline-error"
       }
     },
     defaultVariants: {
-      variant: "default",
-    },
+      variant: "default"
+    }
   }
 );
 
@@ -22,7 +22,7 @@ export interface InputProps
     VariantProps<typeof inputVariants> {
   label?: string;
   helperText?: string;
-  error?: string;
+  error?: string | boolean;
   labelClassName?: string;
 }
 
@@ -46,9 +46,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {error && (
-          <p className="text-xs text-error">{error}</p>
-        )}
+        {error && <p className="text-xs text-error">{error}</p>}
       </div>
     );
   }

@@ -15,6 +15,7 @@ import {
   useStripe
 } from "@stripe/react-stripe-js";
 import AddressInput from "../AddressInput";
+import PasswordStrengthChecker from "./PasswordStrengthChecker";
 
 // Load Stripe outside of component to avoid recreating on re-renders
 const stripePromise = loadStripe(
@@ -37,10 +38,28 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
     setValue
   } = useFormContext<OrderFormValues>();
   const billingAddress = watch("billingAddress");
+  const [createAccount, setCreateAccount] = useState(false);
 
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [cardComplete, setCardComplete] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    length: false,
+    uppercase: false,
+    number: false,
+    symbol: false
+  });
+
+  // Update password criteria when password changes
+  useEffect(() => {
+    setPasswordCriteria({
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      number: /\d/.test(password),
+      symbol: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    });
+  }, [password]);
 
   useEffect(() => {
     processPaymentRef.current = async () => {
@@ -62,7 +81,18 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
         "zipCode"
       ]);
 
-      if (!isPersonalInfoValid || !isBillingInfoValid || !cardComplete) {
+      // Add validation for password fields if creating account
+      let isPasswordValid = true;
+      if (createAccount) {
+        isPasswordValid = await trigger(["password", "confirmPassword"]);
+      }
+
+      if (
+        !isPersonalInfoValid ||
+        !isBillingInfoValid ||
+        !cardComplete ||
+        (createAccount && !isPasswordValid)
+      ) {
         setPaymentError(
           "Please fill in all required fields and complete card information."
         );
@@ -105,7 +135,14 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
         return false;
       }
     };
-  }, [stripe, elements, processPaymentRef, trigger, cardComplete]);
+  }, [
+    stripe,
+    elements,
+    processPaymentRef,
+    trigger,
+    cardComplete,
+    createAccount
+  ]);
 
   return (
     <>
@@ -242,9 +279,53 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
         <input
           className="accent-primary-700 caret-primary-700 text-white size-4"
           type="checkbox"
+          checked={createAccount}
+          onChange={(e) => {
+            setCreateAccount(e.target.checked);
+            setValue("createAccount", e.target.checked);
+          }}
         />
         Create account for easy booking next time
       </label>
+
+      {createAccount && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+          <div>
+            <Input
+              label="Password"
+              type="password"
+              placeholder="Enter password"
+              {...register("password", {
+                required: createAccount ? "Password is required" : false,
+                onChange: (e) => {
+                  setPassword(e.target.value);
+                  trigger("confirmPassword");
+                }
+              })}
+              error={!!errors.password?.message}
+              required={createAccount}
+            />
+            <PasswordStrengthChecker criteria={passwordCriteria} />
+          </div>
+          <Input
+            label="Confirm Password"
+            type="password"
+            placeholder="Confirm your password"
+            {...register("confirmPassword", {
+              required: createAccount ? "Please confirm your password" : false,
+              validate: createAccount
+                ? (value) =>
+                    value === watch("password") || "Passwords do not match"
+                : undefined,
+              onChange: () => {
+                trigger("password");
+              }
+            })}
+            error={errors.confirmPassword?.message}
+            required={createAccount}
+          />
+        </div>
+      )}
     </>
   );
 }

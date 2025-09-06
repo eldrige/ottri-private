@@ -19,6 +19,8 @@ import TipStep from "./steps/TipStep";
 import PaymentStep from "./steps/PaymentStep";
 import { calculateBasePrice } from "@/utils/priceCalculation";
 import { PreflightType } from "../types";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function ClientForm({
   preflight
@@ -27,6 +29,7 @@ export default function ClientForm({
 }) {
   const [currStep, setCurrStep] = useState(0);
   const [processing, setProcessing] = useState(false);
+  const router = useRouter();
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
@@ -48,7 +51,8 @@ export default function ClientForm({
       timeWindow: undefined,
       tipAmount: 0,
       tipPercentage: 0,
-      paymentMethodId: ""
+      paymentMethodId: "",
+      createAccount: false
     }
   });
 
@@ -99,6 +103,7 @@ export default function ClientForm({
         // Tip step - no required fields by default
         return false;
       case 7:
+        console.log(errors);
         return (
           !!errors.fullName ||
           !!errors.phoneNumber ||
@@ -106,7 +111,9 @@ export default function ClientForm({
           !!errors.country ||
           !!errors.state ||
           !!errors.city ||
-          !!errors.zipCode
+          !!errors.zipCode ||
+          !!errors.password ||
+          !!errors.confirmPassword
         );
       default:
         return false;
@@ -153,8 +160,11 @@ export default function ClientForm({
           "country",
           "state",
           "city",
-          "zipCode"
+          "zipCode",
+          "password",
+          "confirmPassword"
         ]);
+
         break;
       // Add more cases for additional steps
       default:
@@ -264,7 +274,8 @@ export default function ClientForm({
       if (result.success) {
         // Handle successful submission
         // e.g., redirect to confirmation page
-        window.location.href = `/booking/confirmation?orderId=${result.orderId}`;
+        // window.location.href = `/booking/confirmation?orderId=${result.orderId}`;
+        await router.push(`/booking/confirmation?orderId=${result.orderId}`);
       } else {
         // Handle error
         alert(result.error?.message || "An error occurred");
@@ -318,7 +329,12 @@ export default function ClientForm({
           onSubmit={handleSubmit(onSubmit)}
           className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-x-8 items-start w-full"
         >
-          <div className="w-full max-w-full lg:col-span-2 lg:bg-white rounded-2xl lg:shadow-custom-light space-y-6 lg:px-8 py-8">
+          <div
+            className={cn(
+              "w-full max-w-full lg:col-span-2 lg:bg-white rounded-2xl lg:shadow-custom-light space-y-6 lg:px-8 py-8",
+              processing && "pointer-events-none opacity-50"
+            )}
+          >
             {/* Current step content */}
             {renderCurrentStep()}
 

@@ -27,18 +27,29 @@ export async function POST(request: Request) {
     // Calculate the total amount using the same logic as the form
     const totalAmount = calculateTotal(orderData);
 
+    let customerId: string | undefined = undefined;
+    // Create customer if user logging in
+    if (orderData.createAccount) {
+      const customer = await stripe.customers.create({
+        email: orderData.email,
+        name: orderData.fullName
+      });
+      customerId = customer.id;
+    }
+
     // 1. Process the payment with Stripe
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(totalAmount * 100), // Amount in cents
       currency: "usd",
       payment_method: paymentMethodId,
       confirm: true, // This attempts to charge the card immediately
-      automatic_payment_methods: { enabled: true, allow_redirects: "never" }
-      // customer: ""
+      automatic_payment_methods: { enabled: true, allow_redirects: "never" },
+      customer: customerId
     });
 
     const servicesPrice = calculateServicesPrice(orderData);
     const addOnsPrice = calculateAddOnsPrice(orderData);
+    console.log(paymentIntent);
     const bodyObj = {
       cleaningFrequency: orderData.frequency,
       servicesPrice: servicesPrice,
@@ -46,7 +57,6 @@ export async function POST(request: Request) {
       tax: (servicesPrice + addOnsPrice) * 0.08,
       timeSlotId: Number(orderData.timeWindow),
       addOnIds: orderData.addOns.map((i) => i.id),
-      createAccount: false,
       fullName: orderData.fullName,
       phoneNumber: orderData.phoneNumber,
       address: orderData.serviceAddress,
@@ -63,19 +73,20 @@ export async function POST(request: Request) {
       bathrooms: orderData.bathrooms,
       approximateSquareFootage: orderData.squareFootage,
       stripePaymentIntentId: paymentIntent.id,
-      stripeCustomerId: null,
+      stripeCustomerId: customerId,
       entryInstructions: orderData.accessInstructions,
-      password: null,
       country: orderData.country,
       state: orderData.state,
       zipCode: orderData.zipCode,
       city: orderData.city,
-      currency: "USD"
+      currency: "USD",
+      createAccount: orderData.createAccount,
+      password: orderData.password
     };
     console.log(bodyObj);
 
     const response = await axios.post("bookings", bodyObj).catch((i) => {
-      console.log(i.response);
+      console.log(i.response.data);
       throw i;
     });
     console.log(response);
