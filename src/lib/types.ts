@@ -38,6 +38,18 @@ export interface TeamMember {
   coverSrc: StaticImageData;
 }
 
+export interface ServiceBooked {
+  serviceName: string;
+  cleanerName: string;
+  cleanerImage?: StaticImageData;
+  price?: number;
+  date: string;
+  time: string;
+  review?: string;
+  location: string;
+  state: "complete" | "scheduled" | "in-progress" | "pending" | "cancelled";
+  rating: number;
+}
 export interface HowWeWork {
   id: number;
   title: string;

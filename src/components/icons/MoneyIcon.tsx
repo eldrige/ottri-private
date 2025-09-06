@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 function MoneyIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -12,3 +12,4 @@ function MoneyIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default MoneyIcon;
+
