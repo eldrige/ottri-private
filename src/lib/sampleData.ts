@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import BroomSparkleIcon from "@/components/icons/BroomSparkleIcon";
 
-export const servicesData: Service[] = [
+export const servicesData: ServiceType[] = [
   {
     id: 1,
     coverSrc: howweworkFigure1,

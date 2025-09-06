@@ -12,6 +12,7 @@ const badgeVariants = cva(
         secondary: "bg-secondary-700 border-secondary-700",
         tertiary: "bg-surface-200 border-surface-200",
         success: "bg-success border-success",
+        "success-outline": "bg-white text-success border-success",
         error: "bg-error border-error",
         warning: "bg-warning border-warning",
         info: "bg-info border-info"
