@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import ClientForm from "./_components/ClientForm";
 import Link from "next/link";
-import { axios } from "@/lib/axios";
+import axios from "@/lib/axios";
 import { PreflightType } from "./types";
 
 export default async function NewOrderPage() {

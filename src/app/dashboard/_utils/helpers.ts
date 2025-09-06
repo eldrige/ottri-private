@@ -5,3 +5,9 @@ export function formatName(name: string) {
     .join(" ");
   return result;
 }
+
+export function formatHour24To12(hour24: number) {
+  const period = hour24 >= 12 ? "PM" : "AM";
+  const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+  return `${hour12}:00${period}`;
+}

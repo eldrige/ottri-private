@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import userImage from "@/assets/user-profile-figure.png";
+import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
 import ClockIcon from "@/components/icons/ClockIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
@@ -10,7 +9,7 @@ import StarIcon from "@/components/icons/StarIcon";
 import { Button } from "@/components/ui/Button";
 import { Booking } from "../_utils/types";
 import { formatDate } from "@/lib/utils";
-import { formatName } from "../_utils/helpers";
+import { formatHour24To12, formatName } from "../_utils/helpers";
 
 export default function ServiceCard({
   service
@@ -29,7 +28,7 @@ export default function ServiceCard({
   );
 }
 
-type ServiceCardProps = Booking;
+type ServiceCardProps = Booking & { rating?: number };
 
 function DesktopServiceCard({
   serviceType,
@@ -45,13 +44,12 @@ function DesktopServiceCard({
         <div className="flex gap-4 items-center">
           <Image
             className="rounded-full size-12"
-            src={cleaners[0]?.image ? cleaners[0].image : userImage}
+            src={
+              cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+            }
             alt={"user profile"}
           />
-          <Link
-            href={"/dashboard/profile"}
-            className="flex cursor-pointer gap-1 flex-col"
-          >
+          <div className="gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
@@ -64,7 +62,8 @@ function DesktopServiceCard({
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <ClockIcon className="text-surface-500/50 *:size-5" />
                 <p className="text-nowrap">
-                  {timeSlot.startTime}:00 - {timeSlot.endTime}:00
+                  {formatHour24To12(timeSlot.startTime)} -{" "}
+                  {formatHour24To12(timeSlot.endTime)}
                 </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
@@ -72,24 +71,26 @@ function DesktopServiceCard({
                 <p className="text-nowrap">{address}</p>
               </div>
             </div>
-          </Link>
+          </div>
         </div>
         <div className="flex gap-2">
           {status === "COMPLETED" ? (
-            <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
+            <Badge className="bg-badge-green-opac text-[14px] items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
               <CircleAlert className="w-4.25" />
               Completed
             </Badge>
           ) : (
-            <Badge className="bg-surface-500/15 text-caption items-center px-3 text-secondary-700 rounded-xl flex border-0 gap-2">
+            <Badge className="bg-surface-500/15 text-[14px] items-center px-3 text-secondary-700 rounded-xl flex border-0 gap-2">
               <CircleAlert className="w-4.25" />
               Scheduled
             </Badge>
           )}
-          <div className="flex items-center gap-0.25">
-            <StarIcon />
-            <p>{rating}</p>
-          </div>
+          {rating && (
+            <div className="flex items-center gap-0.25">
+              <StarIcon />
+              <p>{rating}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -124,9 +125,7 @@ function MobileServiceCard({
             </div>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <Link href={"/dashboard/profile"}>
-              <p>{cleaners[0]?.name || "No Cleaner"} </p>
-            </Link>
+            <p>{cleaners[0]?.name || "No Cleaner"} </p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>
@@ -134,7 +133,8 @@ function MobileServiceCard({
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
               <ClockIcon className="text-surface-500/50 *:size-5" />
               <p className="text-nowrap">
-                {timeSlot.startTime} - {timeSlot.endTime}
+                {formatHour24To12(timeSlot.startTime)} -{" "}
+                {formatHour24To12(timeSlot.endTime)}
               </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
@@ -178,13 +178,12 @@ function AppointmentCardDesktop({
         <div className="flex gap-4 items-center">
           <Image
             className="rounded-full size-12"
-            src={cleaners[0]?.image ? cleaners[0].image : userImage}
+            src={
+              cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+            }
             alt={"user profile"}
           />
-          <Link
-            href={"/dashboard/profile"}
-            className="flex cursor-pointer gap-1 flex-col"
-          >
+          <div className="flex gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
@@ -197,7 +196,8 @@ function AppointmentCardDesktop({
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <ClockIcon className="text-surface-500/50 *:size-5" />
                 <p className="text-nowrap">
-                  {timeSlot.startTime} - {timeSlot.endTime}
+                  {formatHour24To12(timeSlot.startTime)} -{" "}
+                  {formatHour24To12(timeSlot.endTime)}
                 </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
@@ -205,7 +205,7 @@ function AppointmentCardDesktop({
                 <p className="text-nowrap">{address}</p>
               </div>
             </div>
-          </Link>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button
@@ -236,7 +236,9 @@ function AppointmentCardMobile({
           <div className="flex items-center gap-4 mb-2 w-full">
             <Image
               className="rounded-full size-11"
-              src={cleaners[0]?.image ? cleaners[0].image : userImage}
+              src={
+                cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+              }
               alt={"user profile"}
             />
             <h1 className="font-medium text-body text-secondary-700">
@@ -244,9 +246,7 @@ function AppointmentCardMobile({
             </h1>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <Link href={"/dashboard/profile"}>
-              <p>{cleaners[0]?.name || "No Cleaner"}</p>
-            </Link>
+            <p>{cleaners[0]?.name || "No Cleaner"}</p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>
@@ -254,7 +254,8 @@ function AppointmentCardMobile({
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
               <ClockIcon className="text-surface-500/50 *:size-5" />
               <p className="text-nowrap">
-                {timeSlot.startTime} - {timeSlot.endTime}
+                {formatHour24To12(timeSlot.startTime)} -{" "}
+                {formatHour24To12(timeSlot.endTime)}
               </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
