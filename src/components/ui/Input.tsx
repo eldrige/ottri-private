@@ -8,12 +8,12 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: "border-surface-50 focus-visible:outline-surface-500",
-        error: "border-error focus-visible:outline-error",
+        error: "border-error focus-visible:outline-error"
       }
     },
     defaultVariants: {
-      variant: "default",
-    },
+      variant: "default"
+    }
   }
 );
 
@@ -22,21 +22,22 @@ export interface InputProps
     VariantProps<typeof inputVariants> {
   label?: string;
   helperText?: string;
-  error?: string;
+  error?: string | boolean;
+  labelClassName?: string;
 }
 
 /**
  * Input component with multiple variants
  */
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, label, error, ...props }, ref) => {
+  ({ className, variant, label, error, labelClassName, ...props }, ref) => {
     // If there's an error, force the variant to error
     const inputVariant = error ? "error" : variant;
 
     return (
       <div className="flex flex-col w-full space-y-2">
         {label && (
-          <label className="text-caption" htmlFor={props.id}>
+          <label className={cn("text-sm", labelClassName)} htmlFor={props.id}>
             {label}
           </label>
         )}
@@ -45,9 +46,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {error && (
-          <p className="text-xs text-error">{error}</p>
-        )}
+        {error && <p className="text-xs text-error">{error}</p>}
       </div>
     );
   }
