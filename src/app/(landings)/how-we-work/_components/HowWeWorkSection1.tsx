@@ -21,7 +21,7 @@ function HowWeWorkCard({
   img,
   Icon,
   content,
-  steps,
+  steps
 }: Pick<HowWeWork, "Icon" | "id" | "img" | "title" | "content" | "steps">) {
   return (
     <div

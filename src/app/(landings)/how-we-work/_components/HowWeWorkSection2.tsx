@@ -38,7 +38,7 @@ export default function HowWeWorkSection2() {
 function QualityCard({
   Icon,
   title,
-  content,
+  content
 }: {
   Icon: React.JSX.Element;
   title: string;
