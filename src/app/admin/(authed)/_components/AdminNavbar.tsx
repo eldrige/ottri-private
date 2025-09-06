@@ -12,6 +12,7 @@ type NavItem = {
   icon: React.ReactNode;
   label: string;
   badge?: number;
+  end?: boolean;
 };
 
 export default function AdminNavbar() {
@@ -19,7 +20,8 @@ export default function AdminNavbar() {
     {
       href: "/admin",
       icon: <GraphIcon className="size-4" />,
-      label: "Overview"
+      label: "Overview",
+      end: true
     },
     {
       href: "/admin/bookings",
@@ -57,7 +59,7 @@ export default function AdminNavbar() {
   return (
     <Nav>
       {navItems.map((item, index) => (
-        <NavLink key={index} href={item.href}>
+        <NavLink key={index} href={item.href} end={item.end}>
           {item.icon}
           {item.label}
           {item.badge && (

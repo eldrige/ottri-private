@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 type ServiceHistoryCardProps = Omit<ServiceBooked, "state">;
 
 export default function ServiceHistoryCard({
-  service,
+  service
 }: {
   service: ServiceHistoryCardProps;
 }) {
@@ -24,7 +24,7 @@ function DesktopServiceHistoryCard({
   location,
   price,
   rating,
-  review,
+  review
 }: ServiceHistoryCardProps) {
   return (
     <div className="w-full">

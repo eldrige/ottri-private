@@ -10,7 +10,6 @@ export default function MyBookingSection3({
 }: {
   upcomingBookings: Booking[];
 }) {
-  console.log(upcomingBookings);
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-8">

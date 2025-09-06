@@ -8,7 +8,7 @@ import {
   HomeIcon,
   Settings,
   UserIcon,
-  XIcon,
+  XIcon
 } from "lucide-react";
 import userImage from "@/assets/user-profile-figure.png";
 import Link from "next/link";
@@ -47,7 +47,7 @@ export default function Navbar() {
 
 function MobileNav({
   show,
-  setShow,
+  setShow
 }: {
   show: boolean;
   setShow: (value: React.SetStateAction<boolean>) => void;
