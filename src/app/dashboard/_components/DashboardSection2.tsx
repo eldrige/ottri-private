@@ -27,13 +27,13 @@ export default function DashboardSection2({
       <StatCard
         title="Total Cleanings"
         value={(totalCleanings || 0).toString()}
-        content="+3 this month"
+        content={`+${(totalCleanings || 0).toString()} this month`}
         Icon={BroomSparkleIcon}
       />
       <StatCard
         title="Amount Spent"
         value={`$${(amountSpent || 0).toFixed(2)}`}
-        content="+24.67 this month"
+        content={`+${(amountSpent || 0).toFixed(2)} this month`}
         Icon={MoneyIcon}
       />
       <Button

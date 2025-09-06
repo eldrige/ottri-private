@@ -1,4 +1,3 @@
-import { ServiceBooked } from "@/lib/types";
 import React from "react";
 import Image from "next/image";
 import userImage from "@/assets/user-profile-figure.png";
@@ -6,19 +5,27 @@ import { ClockIcon } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-type BookingCardProps = Omit<ServiceBooked, "rating"> & {
-  setIsOpen: (isOpen: boolean) => void;
-  setBookedServiceOnRating: (service: Omit<ServiceBooked, "rating">) => void;
-};
+import { Booking } from "../../_utils/types";
+import { formatDate } from "@/lib/utils";
+import { formatHour24To12, formatName } from "../../_utils/helpers";
+type BookingCardProps = Pick<
+  Booking,
+  "serviceType" | "cleaners" | "timeSlot" | "address" | "status" | "price"
+>;
+
 export default function BookingCard({
   service,
   setIsOpen,
-  setBookedServiceOnRating,
+  setBookedServiceOnRating
 }: {
-  service: Omit<ServiceBooked, "rating">;
-  setIsOpen: (isOpen: boolean) => void;
-  setBookedServiceOnRating: (service: Omit<ServiceBooked, "rating">) => void;
+  service: Pick<
+    Booking,
+    "serviceType" | "cleaners" | "timeSlot" | "address" | "status" | "price"
+  >;
+  setIsOpen?: (isOpen: boolean) => void;
+  setBookedServiceOnRating?: (service: Partial<Booking>) => void;
 }) {
+  console.log("in the card:", service.serviceType.name);
   return (
     <>
       <div className="flex flex-col xl:hidden gap-4">
@@ -40,55 +47,59 @@ export default function BookingCard({
 }
 
 function DesktopBookingCard({
-  serviceName,
-  cleanerName,
-  cleanerImage,
-  date,
-  time,
-  location,
-  state,
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status,
   price,
   setIsOpen,
-  setBookedServiceOnRating,
-}: BookingCardProps) {
+  setBookedServiceOnRating
+}: BookingCardProps & {
+  setIsOpen?: (isOpen: boolean) => void;
+  setBookedServiceOnRating?: (service: Partial<Booking>) => void;
+}) {
   return (
     <div className="w-full">
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex gap-4 items-center">
           <Image
             className="rounded-full size-12"
-            src={cleanerImage ? cleanerImage : userImage}
+            src={cleaners[0]?.image || userImage}
             alt={"user profile"}
           />
           <div className="flex cursor-pointer gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceName}
+              {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleanerName}</p>
+              <p>{cleaners[0]?.name || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-              <p>{date}</p>
+              <p>{formatDate(timeSlot.date)}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <ClockIcon className="text-surface-500/50 *:size-5" />
-                <p className="text-nowrap">{time}</p>
+                <p className="text-nowrap">
+                  {formatHour24To12(timeSlot.startTime)} -{" "}
+                  {formatHour24To12(timeSlot.endTime)}
+                </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <LocationIcon className="text-surface-500/50 *:size-5" />
-                <p className="text-nowrap">{location}</p>
+                <p className="text-nowrap">{address}</p>
               </div>
             </div>
           </div>
-          {state === "in-progress" ? (
+          {status === "DRAFT" ? (
             <Badge className="bg-badge-blue-opac text-badge-blue items-center px-4 py-1 rounded-lg flex border-0 gap-2">
               In Progress
             </Badge>
-          ) : state === "pending" ? (
+          ) : status === "PENDING" ? (
             <Badge className="bg-badge-orange-opac text-badge-orange items-center px-4 py-1 rounded-lg flex border-0 gap-2">
               Pending
             </Badge>
-          ) : state === "complete" ? (
+          ) : status === "COMPLETED" ? (
             <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
               Complete
             </Badge>
@@ -101,7 +112,7 @@ function DesktopBookingCard({
         <div className="flex gap-2">
           <div className="flex w-full items-center gap-5">
             <p>${price}</p>
-            {state !== "complete" && state !== "cancelled" ? (
+            {status !== "COMPLETED" && status !== "FAILED" ? (
               <Button
                 size={"xs"}
                 className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
@@ -113,14 +124,12 @@ function DesktopBookingCard({
               <Button
                 onClick={() => {
                   setBookedServiceOnRating({
-                    serviceName,
-                    cleanerName,
-                    cleanerImage,
-                    date,
-                    time,
-                    location,
-                    state,
-                    price,
+                    serviceType,
+                    cleaners,
+                    timeSlot,
+                    address,
+                    status,
+                    price
                   });
                   setIsOpen(true);
                 }}
@@ -138,17 +147,18 @@ function DesktopBookingCard({
 }
 
 function MobileBookingCard({
-  serviceName,
-  cleanerName,
-  cleanerImage,
-  date,
-  time,
-  location,
-  state,
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status,
   price,
   setIsOpen,
-  setBookedServiceOnRating,
-}: BookingCardProps) {
+  setBookedServiceOnRating
+}: BookingCardProps & {
+  setIsOpen?: (isOpen: boolean) => void;
+  setBookedServiceOnRating?: (service: Partial<Booking>) => void;
+}) {
   return (
     <div className="flex flex-col px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
       <div className="flex gap-4 w-full items-center">
@@ -156,17 +166,17 @@ function MobileBookingCard({
           <div className="flex justify-between  items-center gap-4 mb-2 w-full">
             <div className="flex gap-2 items-center">
               <h1 className="font-medium text-body text-secondary-700">
-                {serviceName}
+                {formatName(serviceType.name)}
               </h1>
-              {state === "in-progress" ? (
+              {status === "DRAFT" ? (
                 <Badge className="bg-badge-blue-opac text-badge-blue items-center px-4 py-1 rounded-lg flex border-0 gap-2">
                   In Progress
                 </Badge>
-              ) : state === "pending" ? (
+              ) : status === "PENDING" ? (
                 <Badge className="bg-badge-orange-opac text-badge-orange items-center px-4 py-1 rounded-lg flex border-0 gap-2">
                   Pending
                 </Badge>
-              ) : state === "complete" ? (
+              ) : status === "COMPLETED" ? (
                 <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
                   Complete
                 </Badge>
@@ -179,23 +189,26 @@ function MobileBookingCard({
             <p className="text-body font-medium text-secondary-700">${price}</p>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <p>{cleanerName}</p>
+            <p>{cleaners[0]?.name || "No Cleaner"}</p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-            <p>{date}</p>
+            <p>{formatDate(timeSlot.date)}</p>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
               <ClockIcon className="text-surface-500/50 *:size-5" />
-              <p className="text-nowrap">{time}</p>
+              <p className="text-nowrap">
+                {formatHour24To12(timeSlot.startTime)} -{" "}
+                {formatHour24To12(timeSlot.endTime)}
+              </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
               <LocationIcon className="text-surface-500/50 *:size-5" />
-              <p className="text-nowrap">{location}</p>
+              <p className="text-nowrap">{address}</p>
             </div>
           </div>
         </div>
       </div>
-      {state !== "complete" && state !== "cancelled" ? (
+      {status !== "COMPLETED" && status !== "FAILED" ? (
         <Button
           size={"xs"}
           className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
@@ -207,14 +220,12 @@ function MobileBookingCard({
         <Button
           onClick={() => {
             setBookedServiceOnRating({
-              serviceName,
-              cleanerName,
-              cleanerImage,
-              date,
-              time,
-              location,
-              state,
-              price,
+              serviceType,
+              cleaners,
+              timeSlot,
+              address,
+              status,
+              price
             });
             setIsOpen(true);
           }}

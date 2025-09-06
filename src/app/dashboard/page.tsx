@@ -12,6 +12,7 @@ export default async function DashboardPage() {
   const bookings = await getBookings();
   const amountSpent = bookings.reduce((acc, booking) => acc + booking.price, 0);
   const totalCleanings = bookings.length;
+  console.log(bookings[0]);
   const nextCleaning = {
     date: nextCleaningDate(bookings[0].timeSlot.date),
     time:

@@ -2,48 +2,18 @@
 import React, { useState } from "react";
 import BookingCard from "./BookingCard";
 import { FilterIcon } from "lucide-react";
-import { ServiceBooked } from "@/lib/types";
-
-import userImage from "@/assets/user-profile-figure.png";
 import RatingPopUp from "./RatingPopUp";
+import { Booking } from "../../_utils/types";
 
-export default function MyBookingSection4() {
+export default function MyBookingSection4({
+  pastBookings
+}: {
+  pastBookings: Booking[];
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const bookedServices: Omit<ServiceBooked, "rating">[] = [
-    {
-      serviceName: "Standard Cleaning",
-      cleanerName: "Sarah Johnson",
-      cleanerImage: userImage,
-      date: "May 16, 2025",
-      time: "2:00 PM - 4:00 PM",
-      location: "123 Main St, Apt 4B",
-      state: "complete",
-      price: 75,
-    },
-    {
-      serviceName: "Standard Cleaning",
-      cleanerName: "Sarah Johnson",
-      cleanerImage: userImage,
-      date: "May 16, 2025",
-      time: "2:00 PM - 4:00 PM",
-      location: "123 Main St, Apt 4B",
-      state: "complete",
-      price: 45,
-    },
-    {
-      serviceName: "Deep Cleaning",
-      cleanerName: "John Doe",
-      cleanerImage: userImage,
-      date: "May 17, 2025",
-      time: "10:00 AM - 12:00 PM",
-      location: "456 Elm St, Apt 2A",
-      state: "complete",
-      price: 45,
-    },
-  ];
-  const [bookedServiceOnRating, setBookedServiceOnRating] = useState<
-    Omit<ServiceBooked, "rating">
-  >(bookedServices[0]);
+  const [bookedServiceOnRating, setBookedServiceOnRating] = useState<Booking>(
+    pastBookings[0]
+  );
   return (
     <>
       <div className="flex flex-col gap-6">
@@ -70,14 +40,20 @@ export default function MyBookingSection4() {
               </div>
             </div>
             <div className="flex flex-col gap-2.5">
-              {bookedServices.map((service, index) => (
-                <BookingCard
-                  key={index}
-                  service={service}
-                  setIsOpen={setIsOpen}
-                  setBookedServiceOnRating={setBookedServiceOnRating}
-                />
-              ))}
+              {pastBookings.length > 0 ? (
+                pastBookings.map((service, index) => (
+                  <BookingCard
+                    key={index}
+                    service={service}
+                    setIsOpen={setIsOpen}
+                    setBookedServiceOnRating={setBookedServiceOnRating}
+                  />
+                ))
+              ) : (
+                <div className="text-caption w-full text-center text-secondary-800">
+                  No past appointments
+                </div>
+              )}
             </div>
           </div>
         </div>
