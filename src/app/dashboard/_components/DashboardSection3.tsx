@@ -2,42 +2,13 @@ import { Button } from "@/components/ui/Button";
 import React from "react";
 import ServiceCard, { AppointmentCard } from "./ServiceCard";
 import { PlusIcon } from "lucide-react";
-import { getBookings } from "../_utils/queries";
+import { Booking } from "../_utils/types";
 
-export default async function DashboardSection3() {
-  const bookedServices = await getBookings();
-  // const bookedServices: ServiceBooked[] = [
-  //   {
-  //     serviceName: "Standard Cleaning",
-  //     cleanerName: "Sarah Johnson",
-  //     cleanerImage: userImage,
-  //     date: "May 16, 2025",
-  //     time: "2:00 PM - 4:00 PM",
-  //     location: "123 Main St, Apt 4B",
-  //     state: "complete",
-  //     rating: 5,
-  //   },
-  //   {
-  //     serviceName: "Standard Cleaning",
-  //     cleanerName: "Sarah Johnson",
-  //     cleanerImage: userImage,
-  //     date: "May 16, 2025",
-  //     time: "2:00 PM - 4:00 PM",
-  //     location: "123 Main St, Apt 4B",
-  //     state: "complete",
-  //     rating: 5,
-  //   },
-  //   {
-  //     serviceName: "Deep Cleaning",
-  //     cleanerName: "John Doe",
-  //     cleanerImage: userImage,
-  //     date: "May 17, 2025",
-  //     time: "10:00 AM - 12:00 PM",
-  //     location: "456 Elm St, Apt 2A",
-  //     state: "scheduled",
-  //     rating: 4,
-  //   },
-  // ];
+export default function DashboardSection3({
+  bookings
+}: {
+  bookings: Booking[];
+}) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 xl:grid-cols-2 *:flex-1/2 gap-8">
@@ -61,7 +32,7 @@ export default async function DashboardSection3() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {bookedServices.map((booking, index) => (
+            {bookings.map((booking, index) => (
               <ServiceCard key={index} service={booking} />
             ))}
           </div>
@@ -86,7 +57,7 @@ export default async function DashboardSection3() {
             </div>
           </div>
           <div className="flex flex-col gap-2.5">
-            {bookedServices.map((service, index) => (
+            {bookings.map((service, index) => (
               <AppointmentCard key={index} service={service} />
             ))}
           </div>

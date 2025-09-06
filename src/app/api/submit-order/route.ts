@@ -7,7 +7,7 @@ import {
   calculateServicesPrice,
   calculateTotal
 } from "../../../utils/priceCalculation";
-import { axios } from "@/lib/axios";
+import axios from "@/lib/axios";
 
 // Initialize Stripe with your SECRET key.
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
