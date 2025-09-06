@@ -4,7 +4,7 @@ import React from "react";
 
 export default function ServicesDetailsSection4() {
   return (
-    <section className=" bg-secondary-700 py-8 md:py-24 flex items-center justify-center">
+    <section className=" bg-secondary-700 py-8 mt-12 md:py-24 flex items-center justify-center">
       <div className="container px-6 gap-16 grid grid-cols-1 md:grid-cols-3">
         <QualityCard
           Icon={<LucideShield size={35} className="text-primary-700" />}

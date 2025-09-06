@@ -13,4 +13,3 @@ export default function GraphIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
