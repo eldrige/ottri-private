@@ -1,10 +1,12 @@
 "use client";
+import { Booking } from "@/app/admin/types";
 import CallIcon from "@/components/icons/CallIcon";
 import EditIcon from "@/components/icons/EditIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { Button } from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 import React, { useState } from "react";
 
 interface StatusType {
@@ -15,35 +17,38 @@ interface StatusType {
 export default function ListItem({
   statuses,
   initialStatus,
-  bookingName,
-  bookingNumber,
-  service,
-  dateTime,
-  cleaners,
-  address,
-  phone,
-  price,
-  notes
+  booking
 }: {
   statuses: StatusType[];
   initialStatus: StatusType;
-  bookingName: string;
-  bookingNumber: number;
-  service: string;
-  dateTime: string;
-  cleaners?: string;
-  address: string;
-  phone: string;
-  price: number;
-  notes?: string;
+  booking: Booking;
 }) {
   const [status, setStatus] = useState(initialStatus);
+
+  const bookingName = booking.customer?.personalInformation.fullName || "";
+  const bookingNumber = booking.id;
+  const service = booking.serviceType.name;
+  const dateTime = format(
+    new Date(booking.timeSlot.date),
+    "dd-MM-yyyy 'at' h:mm a"
+  );
+  const cleaners = booking.cleaners;
+  const address = booking.address;
+  const phone = booking.customer?.personalInformation.phoneNumber || "";
+  const price = booking.price || 0;
+  const notes = [
+    booking.otherAddOns,
+    booking.petsInstructions,
+    booking.entryInstructions
+  ]
+    .filter((i) => i)
+    .join(", ");
 
   return (
     <div className="p-4 border border-black/10 rounded-lg flex flex-col lg:flex-row justify-between gap-4">
       <div>
         <div className="flex items-center gap-3">
-          <span className="font-medium">{bookingName}</span>
+          <span className="font-medium">{bookingName || "Guest"}</span>
           <Select
             accent="secondary"
             options={statuses}
@@ -76,7 +81,7 @@ export default function ListItem({
           <div className="space-y-1">
             <p>
               <span className="font-medium mr-2">Service:</span>
-              <span>{service}</span>
+              <span className="capitalize">{service}</span>
             </p>
             <p>
               <span className="font-medium mr-2">Date & Time:</span>
@@ -84,8 +89,8 @@ export default function ListItem({
             </p>
             <p>
               <span className="font-medium mr-2">Cleaners:</span>
-              {cleaners ? (
-                <span>{cleaners}</span>
+              {cleaners?.length ? (
+                cleaners.map((cleaner) => <span key={cleaner}>{cleaners}</span>)
               ) : (
                 <span className="text-error">Unassigned</span>
               )}

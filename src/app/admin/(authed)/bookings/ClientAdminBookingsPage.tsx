@@ -11,6 +11,7 @@ import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
 import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
+import { Booking } from "../../types";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -20,7 +21,11 @@ const filterOptions = [
   { label: "Cancelled", value: "cancelled" }
 ];
 
-export default function ClientAdminBookingsPage() {
+export default function ClientAdminBookingsPage({
+  bookings
+}: {
+  bookings: Booking[];
+}) {
   const [activeView, setActiveView] = useState<string>("calendar");
 
   return (
@@ -116,9 +121,9 @@ export default function ClientAdminBookingsPage() {
       />
 
       {activeView === "calendar" ? (
-        <CalendarView />
+        <CalendarView bookings={bookings} />
       ) : activeView === "list" ? (
-        <ListView />
+        <ListView bookings={bookings} />
       ) : (
         <MapView />
       )}

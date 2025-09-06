@@ -4,35 +4,50 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "../calendar-styles.css";
+import { Booking } from "@/app/admin/types";
 
-export default function CalendarView() {
+export default function CalendarView({ bookings }: { bookings: Booking[] }) {
   // Sample booking data
-  const events = [
-    {
-      title: "Maria Garcia",
-      start: "2025-08-29T09:00:00",
-      end: "2025-08-29T10:00:00",
-      extendedProps: {
-        status: "info"
-      }
-    },
-    {
-      title: "Jon Doe",
-      start: "2025-08-29T11:00:00",
-      end: "2025-08-29T12:00:00",
-      extendedProps: {
-        status: "warning"
-      }
-    },
-    {
-      title: "Emma Lee",
-      start: "2025-08-29T14:00:00",
-      end: "2025-08-29T15:00:00",
-      extendedProps: {
-        status: "success"
-      }
+  // const events = [
+  //   {
+  //     title: "Maria Garcia",
+  //     start: "2025-08-29T09:00:00",
+  //     end: "2025-08-29T10:00:00",
+  //     extendedProps: {
+  //       status: "info"
+  //     }
+  //   },
+  //   {
+  //     title: "Jon Doe",
+  //     start: "2025-08-29T11:00:00",
+  //     end: "2025-08-29T12:00:00",
+  //     extendedProps: {
+  //       status: "warning"
+  //     }
+  //   },
+  //   {
+  //     title: "Emma Lee",
+  //     start: "2025-08-29T14:00:00",
+  //     end: "2025-08-29T15:00:00",
+  //     extendedProps: {
+  //       status: "success"
+  //     }
+  //   }
+  // ];
+
+  const myEvents = bookings.map((booking) => ({
+    title: booking.customer?.personalInformation.fullName || "Guest",
+    start: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.startTime}:00:00`,
+    end: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.endTime}:00:00`,
+    extendedProps: {
+      status:
+        booking.status === "PENDING"
+          ? "warning"
+          : booking.status === "COMPLETED"
+            ? "success"
+            : "info"
     }
-  ];
+  }));
 
   return (
     <div className="mt-8 p-6 lg:border border-black/10 rounded-lg overflow-auto">
@@ -47,7 +62,7 @@ export default function CalendarView() {
             center: "title",
             right: ""
           }}
-          events={events}
+          events={myEvents}
           eventContent={(eventInfo) => {
             const status = eventInfo.event.extendedProps
               .status as keyof typeof statusClasses;

@@ -8,7 +8,7 @@ export interface BookingsResponse {
 export interface Booking {
   id: number;
   displayId: string;
-  status: string;
+  status: "DRAFT" | "PENDING" | "CONFIRMED" | "COMPLETED" | "FAILED";
   servicesPrice: number;
   addOnsPrice: number;
   tip: number;
@@ -37,6 +37,7 @@ export interface Booking {
   cleaners: string[];
   review: null;
   timeSlot: TimeSlot;
+  price: number;
 }
 
 interface TimeSlot {

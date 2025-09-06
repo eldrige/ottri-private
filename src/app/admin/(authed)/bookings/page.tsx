@@ -1,9 +1,11 @@
 import { serverRequest } from "@/lib/axios";
 import ClientAdminBookingsPage from "./ClientAdminBookingsPage";
+import { BookingsResponse } from "../../types";
 
 export default async function AdminBookingsPage() {
-  const bookings = await serverRequest("bookings", "GET");
+  const res = await serverRequest("bookings", "GET");
+  const bookings = res.data as BookingsResponse;
 
   console.log(bookings.data);
-  return <ClientAdminBookingsPage />;
+  return <ClientAdminBookingsPage bookings={bookings.data} />;
 }
