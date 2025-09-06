@@ -13,7 +13,7 @@ type BookingCardProps = Omit<ServiceBooked, "rating"> & {
 export default function BookingCard({
   service,
   setIsOpen,
-  setBookedServiceOnRating,
+  setBookedServiceOnRating
 }: {
   service: Omit<ServiceBooked, "rating">;
   setIsOpen: (isOpen: boolean) => void;
@@ -49,7 +49,7 @@ function DesktopBookingCard({
   state,
   price,
   setIsOpen,
-  setBookedServiceOnRating,
+  setBookedServiceOnRating
 }: BookingCardProps) {
   return (
     <div className="w-full">
@@ -120,7 +120,7 @@ function DesktopBookingCard({
                     time,
                     location,
                     state,
-                    price,
+                    price
                   });
                   setIsOpen(true);
                 }}
@@ -147,7 +147,7 @@ function MobileBookingCard({
   state,
   price,
   setIsOpen,
-  setBookedServiceOnRating,
+  setBookedServiceOnRating
 }: BookingCardProps) {
   return (
     <div className="flex flex-col px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -214,7 +214,7 @@ function MobileBookingCard({
               time,
               location,
               state,
-              price,
+              price
             });
             setIsOpen(true);
           }}

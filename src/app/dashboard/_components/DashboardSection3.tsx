@@ -15,7 +15,7 @@ export default function DashboardSection3() {
       time: "2:00 PM - 4:00 PM",
       location: "123 Main St, Apt 4B",
       state: "complete",
-      rating: 5,
+      rating: 5
     },
     {
       serviceName: "Standard Cleaning",
@@ -25,7 +25,7 @@ export default function DashboardSection3() {
       time: "2:00 PM - 4:00 PM",
       location: "123 Main St, Apt 4B",
       state: "complete",
-      rating: 5,
+      rating: 5
     },
     {
       serviceName: "Deep Cleaning",
@@ -35,8 +35,8 @@ export default function DashboardSection3() {
       time: "10:00 AM - 12:00 PM",
       location: "456 Elm St, Apt 2A",
       state: "scheduled",
-      rating: 4,
-    },
+      rating: 4
+    }
   ];
   return (
     <div className="flex flex-col gap-6">

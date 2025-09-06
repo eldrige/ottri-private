@@ -1,6 +1,10 @@
 import React from "react";
 
-export default function DollarIcon({ className = "text-primary-700" }: { className?: string; }) {
+export default function DollarIcon({
+  className = "text-primary-700"
+}: {
+  className?: string;
+}) {
   return (
     <span className={className}>
       <svg

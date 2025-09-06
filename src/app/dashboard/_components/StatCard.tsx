@@ -14,7 +14,7 @@ export default function StatCard({
   title,
   value,
   content,
-  Icon,
+  Icon
 }: StatCardProps) {
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col justify-between gap-8">

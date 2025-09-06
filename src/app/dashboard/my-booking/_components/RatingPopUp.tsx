@@ -6,7 +6,7 @@ import React, { useState } from "react";
 export default function RatingPopUp({
   booking,
   isOpen,
-  onClose,
+  onClose
 }: {
   booking: Omit<ServiceBooked, "rating">;
   isOpen: boolean;

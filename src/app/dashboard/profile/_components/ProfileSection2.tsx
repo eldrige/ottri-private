@@ -60,7 +60,7 @@ function PersonalInfoForm() {
     email: "jennymurphy@gmail.com",
     phone: "(555) 123-4567",
     address: "123-Main st, Apt 4B, New York, NY 1001",
-    yearJoined: 2023,
+    yearJoined: 2023
   });
 
   function handleOnchange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -68,7 +68,7 @@ function PersonalInfoForm() {
     setFormData((prev) => {
       return {
         ...prev,
-        [e.target.name]: e.target.value,
+        [e.target.name]: e.target.value
       };
     });
   }

@@ -12,4 +12,3 @@ function MoneyIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default MoneyIcon;
-

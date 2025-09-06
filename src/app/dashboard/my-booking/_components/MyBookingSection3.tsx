@@ -15,7 +15,7 @@ export default function MyBookingSection3() {
       time: "2:00 PM - 4:00 PM",
       location: "123 Main St, Apt 4B",
       state: "in-progress",
-      price: 75,
+      price: 75
     },
     {
       serviceName: "Standard Cleaning",
@@ -25,7 +25,7 @@ export default function MyBookingSection3() {
       time: "2:00 PM - 4:00 PM",
       location: "123 Main St, Apt 4B",
       state: "pending",
-      price: 45,
+      price: 45
     },
     {
       serviceName: "Deep Cleaning",
@@ -35,8 +35,8 @@ export default function MyBookingSection3() {
       time: "10:00 AM - 12:00 PM",
       location: "456 Elm St, Apt 2A",
       state: "scheduled",
-      price: 45,
-    },
+      price: 45
+    }
   ];
   return (
     <div className="flex flex-col gap-6">

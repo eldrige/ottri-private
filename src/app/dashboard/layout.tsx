@@ -3,7 +3,7 @@ import DashboardNavbar from "./_components/DashboardNavbar";
 import SideNavBar from "./_components/SideNavBar";
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {

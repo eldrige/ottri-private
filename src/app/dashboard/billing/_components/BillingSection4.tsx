@@ -49,7 +49,7 @@ function TransactionCard({
   cleaner,
   date,
   amount,
-  state,
+  state
 }: TransactionCardProps) {
   return (
     <div className="flex  px-4 py-2 rounded-lg border border-surface-500/30  flex-col gap-4">

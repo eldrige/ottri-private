@@ -14,7 +14,7 @@ export default function ServiceHistorySection3() {
       review: "“Excellent service, very thoughtful”",
       location: "123 Main St, City, Country",
       state: "complete",
-      rating: 3,
+      rating: 3
     },
     {
       serviceName: "Deep Cleaning",
@@ -26,7 +26,7 @@ export default function ServiceHistorySection3() {
       review: "“Excellent service, very thoughtful”",
       location: "123 Main St, City, Country",
       state: "complete",
-      rating: 5,
+      rating: 5
     },
     {
       serviceName: "Deep Cleaning",
@@ -38,8 +38,8 @@ export default function ServiceHistorySection3() {
       review: "“Excellent service, very thoughtful”",
       location: "123 Main St, City, Country",
       state: "complete",
-      rating: 5,
-    },
+      rating: 5
+    }
   ];
   return (
     <div className="flex flex-col gap-6">

@@ -19,7 +19,7 @@ function NotificationSettings() {
     promotionalEmails: boolean;
   }>({
     bookingReminders: false,
-    promotionalEmails: true,
+    promotionalEmails: true
   });
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
@@ -49,7 +49,7 @@ function NotificationSettings() {
             onClick={() =>
               setToggle({
                 ...toggle,
-                bookingReminders: !toggle.bookingReminders,
+                bookingReminders: !toggle.bookingReminders
               })
             }
           >
@@ -70,7 +70,7 @@ function NotificationSettings() {
             onClick={() =>
               setToggle({
                 ...toggle,
-                promotionalEmails: !toggle.promotionalEmails,
+                promotionalEmails: !toggle.promotionalEmails
               })
             }
           >
@@ -89,7 +89,7 @@ function NotificationSettings() {
 function PrivacySecuritySettings() {
   const [toggle, setToggle] = useState({
     twoFactorAuth: false,
-    locationSharing: false,
+    locationSharing: false
   });
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
@@ -119,7 +119,7 @@ function PrivacySecuritySettings() {
             onClick={() =>
               setToggle({
                 ...toggle,
-                twoFactorAuth: !toggle.twoFactorAuth,
+                twoFactorAuth: !toggle.twoFactorAuth
               })
             }
           >
@@ -140,7 +140,7 @@ function PrivacySecuritySettings() {
             onClick={() =>
               setToggle({
                 ...toggle,
-                locationSharing: !toggle.locationSharing,
+                locationSharing: !toggle.locationSharing
               })
             }
           >

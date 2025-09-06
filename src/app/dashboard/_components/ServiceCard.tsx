@@ -11,7 +11,7 @@ import { ServiceBooked } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 
 export default function ServiceCard({
-  service,
+  service
 }: {
   service: ServiceCardProps;
 }) {
@@ -37,7 +37,7 @@ function DesktopServiceCard({
   time,
   location,
   state,
-  rating,
+  rating
 }: ServiceCardProps) {
   return (
     <div className="w-full">
@@ -101,7 +101,7 @@ function MobileServiceCard({
   time,
   location,
   state,
-  rating,
+  rating
 }: Omit<ServiceCardProps, "cleanerImage">) {
   return (
     <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -146,7 +146,7 @@ function MobileServiceCard({
 }
 
 export function AppointmentCard({
-  service,
+  service
 }: Readonly<{
   service: ServiceCardProps;
 }>) {
@@ -169,7 +169,7 @@ function AppointmentCardDesktop({
   date,
   time,
   location,
-  state,
+  state
 }: ServiceCardProps) {
   return (
     <div className="w-full">
@@ -225,7 +225,7 @@ function AppointmentcardMobile({
   date,
   time,
   location,
-  state,
+  state
 }: ServiceCardProps) {
   return (
     <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
