@@ -5,10 +5,10 @@ import { ArrowLeft, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { Service } from "@/lib/types";
+import { ServiceType } from "@/lib/types";
 
 type ServicesDetailsHeroProps = Pick<
-  Service,
+  ServiceType,
   "title" | "priceFrom" | "duration" | "coverSrc"
 >;
 
@@ -107,7 +107,7 @@ function HeroRightSide({
 }: Pick<ServicesDetailsHeroProps, "coverSrc" | "title">) {
   return (
     <div className="h-full flex flex-col gap-4">
-      <div className="flex-7 flex ">
+      <div className="flex-7 flex">
         <Image
           className="rounded-lg aspect-[2/1] w-full object-cover"
           src={coverSrc}
