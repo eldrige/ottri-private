@@ -20,7 +20,7 @@ const filterOptions = [
   { label: "Cancelled", value: "cancelled" }
 ];
 
-export default function AdminBookingsPage() {
+export default function ClientAdminBookingsPage() {
   const [activeView, setActiveView] = useState<string>("calendar");
 
   return (
