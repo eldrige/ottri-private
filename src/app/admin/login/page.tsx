@@ -39,7 +39,6 @@ export default function AdminLogin() {
       setError(
         err instanceof Error ? err.message : "An error occurred during login"
       );
-    } finally {
       setLoading(false);
     }
   };
