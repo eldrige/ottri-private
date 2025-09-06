@@ -7,11 +7,11 @@ import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
 import { CircleAlert } from "lucide-react";
 import StarIcon from "@/components/icons/StarIcon";
-import { ServiceBooked } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
+import { Booking } from "../_utils/types";
 
 export default function ServiceCard({
-  service,
+  service
 }: {
   service: ServiceCardProps;
 }) {
@@ -27,17 +27,15 @@ export default function ServiceCard({
   );
 }
 
-type ServiceCardProps = ServiceBooked;
+type ServiceCardProps = Booking;
 
 function DesktopServiceCard({
-  serviceName,
-  cleanerName,
-  cleanerImage,
-  date,
-  time,
-  location,
-  state,
-  rating,
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status,
+  rating
 }: ServiceCardProps) {
   return (
     <div className="w-full">
@@ -45,7 +43,7 @@ function DesktopServiceCard({
         <div className="flex gap-4 items-center">
           <Image
             className="rounded-full size-12"
-            src={cleanerImage ? cleanerImage : userImage}
+            src={cleaners[0]?.image ? cleaners[0].image : userImage}
             alt={"user profile"}
           />
           <Link
@@ -53,27 +51,29 @@ function DesktopServiceCard({
             className="flex cursor-pointer gap-1 flex-col"
           >
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceName}
+              {serviceType.name}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleanerName}</p>
+              <p>{cleaners[0]?.name}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-              <p>{date}</p>
+              <p>{timeSlot.date}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <ClockIcon className="text-surface-500/50 *:size-5" />
-                <p className="text-nowrap">{time}</p>
+                <p className="text-nowrap">
+                  {timeSlot.startTime} - {timeSlot.endTime}
+                </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <LocationIcon className="text-surface-500/50 *:size-5" />
-                <p className="text-nowrap">{location}</p>
+                <p className="text-nowrap">{address}</p>
               </div>
             </div>
           </Link>
         </div>
         <div className="flex gap-2">
-          {state === "complete" ? (
+          {status === "COMPLETED" ? (
             <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
               <CircleAlert className="w-4.25" />
               Completed
@@ -95,13 +95,12 @@ function DesktopServiceCard({
 }
 
 function MobileServiceCard({
-  serviceName,
-  cleanerName,
-  date,
-  time,
-  location,
-  state,
-  rating,
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status,
+  rating
 }: Omit<ServiceCardProps, "cleanerImage">) {
   return (
     <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -109,12 +108,12 @@ function MobileServiceCard({
         <div className="flex cursor-pointer gap-2 w-full flex-col">
           <div className="flex items-center justify-between w-full">
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceName}
+              {serviceType.name}
             </h1>
             <div className="flex flex-row-reverse md:flex-row items-center gap-2">
               <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
                 <CircleAlert className="w-4.25" />
-                {state.charAt(0).toUpperCase() + state.slice(1)}
+                {status.charAt(0).toUpperCase() + status.slice(1)}
               </Badge>
               <div className="flex items-center gap-0.25">
                 <StarIcon />
@@ -124,19 +123,21 @@ function MobileServiceCard({
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
             <Link href={"/dashboard/profile"}>
-              <p>{cleanerName} </p>
+              <p>{cleaners[0]?.name} </p>
             </Link>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-            <p>{date}</p>
+            <p>{timeSlot.date}</p>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
               <ClockIcon className="text-surface-500/50 *:size-5" />
-              <p className="text-nowrap">{time}</p>
+              <p className="text-nowrap">
+                {timeSlot.startTime} - {timeSlot.endTime}
+              </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
               <LocationIcon className="text-surface-500/50 *:size-5" />
-              <p className="text-nowrap">{location}</p>
+              <p className="text-nowrap">{address}</p>
             </div>
           </div>
         </div>
@@ -146,14 +147,14 @@ function MobileServiceCard({
 }
 
 export function AppointmentCard({
-  service,
+  service
 }: Readonly<{
   service: ServiceCardProps;
 }>) {
   return (
     <>
       <div className="flex flex-col xl:hidden gap-4">
-        <AppointmentcardMobile {...service} />
+        <AppointmentCardMobile {...service} />
       </div>
       <div className="hidden xl:flex gap-4">
         <AppointmentCardDesktop {...service} />
@@ -163,13 +164,11 @@ export function AppointmentCard({
 }
 
 function AppointmentCardDesktop({
-  serviceName,
-  cleanerName,
-  cleanerImage,
-  date,
-  time,
-  location,
-  state,
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status
 }: ServiceCardProps) {
   return (
     <div className="w-full">
@@ -177,7 +176,7 @@ function AppointmentCardDesktop({
         <div className="flex gap-4 items-center">
           <Image
             className="rounded-full size-12"
-            src={cleanerImage ? cleanerImage : userImage}
+            src={cleaners[0]?.image ? cleaners[0].image : userImage}
             alt={"user profile"}
           />
           <Link
@@ -185,28 +184,30 @@ function AppointmentCardDesktop({
             className="flex cursor-pointer gap-1 flex-col"
           >
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceName}
+              {serviceType.name}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleanerName}</p>
+              <p>{cleaners[0]?.name}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-              <p>{date}</p>
+              <p>{timeSlot.date}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <ClockIcon className="text-surface-500/50 *:size-5" />
-                <p className="text-nowrap">{time}</p>
+                <p className="text-nowrap">
+                  {timeSlot.startTime} - {timeSlot.endTime}
+                </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <LocationIcon className="text-surface-500/50 *:size-5" />
-                <p className="text-nowrap">{location}</p>
+                <p className="text-nowrap">{address}</p>
               </div>
             </div>
           </Link>
         </div>
         <div className="flex gap-2">
           <Button
-            disabled={state === "complete"}
+            disabled={status === "COMPLETED"}
             size={"xs"}
             className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
             variant={"outline"}
@@ -219,13 +220,12 @@ function AppointmentCardDesktop({
   );
 }
 
-function AppointmentcardMobile({
-  serviceName,
-  cleanerName,
-  date,
-  time,
-  location,
-  state,
+function AppointmentCardMobile({
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status
 }: ServiceCardProps) {
   return (
     <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -234,33 +234,35 @@ function AppointmentcardMobile({
           <div className="flex items-center gap-4 mb-2 w-full">
             <Image
               className="rounded-full size-11"
-              src={userImage}
+              src={cleaners[0]?.image ? cleaners[0].image : userImage}
               alt={"user profile"}
             />
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceName}
+              {serviceType.name}
             </h1>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
             <Link href={"/dashboard/profile"}>
-              <p>{cleanerName}</p>
+              <p>{cleaners[0]?.name}</p>
             </Link>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-            <p>{date}</p>
+            <p>{timeSlot.date}</p>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
               <ClockIcon className="text-surface-500/50 *:size-5" />
-              <p className="text-nowrap">{time}</p>
+              <p className="text-nowrap">
+                {timeSlot.startTime} - {timeSlot.endTime}
+              </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
               <LocationIcon className="text-surface-500/50 *:size-5" />
-              <p className="text-nowrap">{location}</p>
+              <p className="text-nowrap">{address}</p>
             </div>
           </div>
           <div className="flex flex-row-reverse md:flex-row items-center gap-2">
             <Button
-              disabled={state === "complete"}
+              disabled={status === "COMPLETED"}
               size={"xs"}
               className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
               variant={"outline"}
