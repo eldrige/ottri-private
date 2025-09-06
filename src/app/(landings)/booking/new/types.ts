@@ -13,6 +13,8 @@ export interface TimeSlot {
   endDate: null;
   isTemplate: boolean;
   templateId: null;
+  isActive: boolean;
+  weekDays: number[];
   slots: Record<string, number>;
 }
 

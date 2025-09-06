@@ -15,7 +15,8 @@ interface DateInputProps {
   disabled?: boolean;
   error?: string;
   // timeSlots: Record<string, number>;
-  timeSlots: string[];
+  unavailableDates: Set<string>;
+  availableWeekdays: Set<number>;
 }
 
 const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
@@ -29,7 +30,8 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
       placeholder = "mm/dd/yy",
       disabled = false,
       error,
-      timeSlots,
+      unavailableDates,
+      availableWeekdays,
       ...props
     },
     ref
@@ -96,7 +98,11 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
                   if (date > addMonths(new Date(), 3)) return true;
 
                   const dateKey = date.toISOString().split("T")[0];
-                  return timeSlots.includes(dateKey);
+                  if (unavailableDates.has(dateKey)) return true;
+
+                  if (!availableWeekdays.has(date.getDay())) return true;
+
+                  return false;
                 }}
                 mode="single"
                 selected={selectedDate || undefined}

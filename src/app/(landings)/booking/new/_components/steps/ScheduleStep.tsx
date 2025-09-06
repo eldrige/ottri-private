@@ -38,20 +38,15 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
       });
     });
 
-    const unavailableDates = Object.entries(grouped)
-      .filter((i) => i[1] === timeSlots.length)
-      .map((i) => i[0]);
-    // timeSlots?.forEach((item) => {
-    //   const date = new Date(item.date);
-    //   const dateKey = date.toISOString().split("T")[0];
-    //   if (grouped[dateKey]) {
-    //     grouped[dateKey] += item.freeInstances;
-    //   } else {
-    //     grouped[dateKey] = item.freeInstances;
-    //   }
-    // });
+    const unavailableDates = new Set(
+      Object.entries(grouped)
+        .filter((i) => i[1] === timeSlots.length)
+        .map((i) => i[0])
+    );
 
-    return unavailableDates;
+    const availableWeekdays = new Set(timeSlots.flatMap((i) => i.weekDays));
+
+    return { unavailableDates, availableWeekdays };
   }, [timeSlots]);
   console.log(processedData);
 
@@ -59,11 +54,12 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
     if (!selectedDate) return [];
     const timeWindows = timeSlots
       .filter((i) => {
+        const dateDay = selectedDate.getDay();
+        if (!i.weekDays.includes(dateDay)) return false;
+
         const slotCount = i.slots[selectedDate.toISOString().split("T")[0]];
         console.log({ slotCount, i });
         return typeof slotCount !== "number" || slotCount > 0;
-        // i.date === selectedDate.toISOString().split("T")[0] &&
-        // i.freeInstances > 0
       })
       .sort((a, b) => a.startTime - b.startTime)
       .map((i) => ({
@@ -81,7 +77,8 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
       <div className="grid lg:grid-cols-2 gap-8">
         <div>
           <DateInput
-            timeSlots={processedData}
+            unavailableDates={processedData.unavailableDates}
+            availableWeekdays={processedData.availableWeekdays}
             label="Preferred Date"
             value={selectedDate}
             onChange={handleDateChange}
