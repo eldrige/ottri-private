@@ -52,12 +52,12 @@ export interface Booking {
   bathrooms: string | null;
   approximateSquareFootage: number | null;
   address: string;
-  mapLocation: null;
+  mapLocation: string | null;
   stripePaymentIntentId: string;
   pets: string;
   petsInstructions: string;
   entryInstructions: string;
-  customerEmail: null;
+  customerEmail: string | null;
   customerId: number;
   serviceTypeId: number;
   timeSlotId: number;

@@ -9,6 +9,8 @@ import { CircleAlert } from "lucide-react";
 import StarIcon from "@/components/icons/StarIcon";
 import { Button } from "@/components/ui/Button";
 import { Booking } from "../_utils/types";
+import { formatDate } from "@/lib/utils";
+import { formatName } from "../_utils/helpers";
 
 export default function ServiceCard({
   service
@@ -51,18 +53,18 @@ function DesktopServiceCard({
             className="flex cursor-pointer gap-1 flex-col"
           >
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceType.name}
+              {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name}</p>
+              <p>{cleaners[0]?.name || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-              <p>{timeSlot.date}</p>
+              <p>{formatDate(timeSlot.date)}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
                 <ClockIcon className="text-surface-500/50 *:size-5" />
                 <p className="text-nowrap">
-                  {timeSlot.startTime} - {timeSlot.endTime}
+                  {timeSlot.startTime}:00 - {timeSlot.endTime}:00
                 </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
@@ -108,7 +110,7 @@ function MobileServiceCard({
         <div className="flex cursor-pointer gap-2 w-full flex-col">
           <div className="flex items-center justify-between w-full">
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceType.name}
+              {formatName(serviceType.name)}
             </h1>
             <div className="flex flex-row-reverse md:flex-row items-center gap-2">
               <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
@@ -123,10 +125,10 @@ function MobileServiceCard({
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
             <Link href={"/dashboard/profile"}>
-              <p>{cleaners[0]?.name} </p>
+              <p>{cleaners[0]?.name || "No Cleaner"} </p>
             </Link>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-            <p>{timeSlot.date}</p>
+            <p>{formatDate(timeSlot.date)}</p>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
@@ -184,12 +186,12 @@ function AppointmentCardDesktop({
             className="flex cursor-pointer gap-1 flex-col"
           >
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceType.name}
+              {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name}</p>
+              <p>{cleaners[0]?.name || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-              <p>{timeSlot.date}</p>
+              <p>{formatDate(timeSlot.date)}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
@@ -238,15 +240,15 @@ function AppointmentCardMobile({
               alt={"user profile"}
             />
             <h1 className="font-medium text-body text-secondary-700">
-              {serviceType.name}
+              {formatName(serviceType.name)}
             </h1>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
             <Link href={"/dashboard/profile"}>
-              <p>{cleaners[0]?.name}</p>
+              <p>{cleaners[0]?.name || "No Cleaner"}</p>
             </Link>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
-            <p>{timeSlot.date}</p>
+            <p>{formatDate(timeSlot.date)}</p>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
