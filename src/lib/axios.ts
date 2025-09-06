@@ -4,12 +4,7 @@ import { cookies } from "next/headers";
 
 // Create the base axios instance
 export const axios = Axios.create({
-  baseURL: process.env.BACKEND_API,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJuLmtheWlyYW5nYUBhbHVzdHVkZW50LmNvbSIsImlhdCI6MTc1NzE1NjMzNSwiZXhwIjoxNzU3MTg1MTM1fQ.Hbe6al-NCwsXXAXmHgzKhN1X5jjlpkm1C33pxSTZ7cY" // Hardcoded token
-  }
+  baseURL: process.env.BACKEND_API
 });
 
 // Create a function for server-side requests that automatically adds auth headers
