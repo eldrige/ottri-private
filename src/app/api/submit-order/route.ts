@@ -103,9 +103,11 @@ export async function POST(request: Request) {
   } catch (error) {
     // Handle different types of errors
     let errorMessage = "An unknown error occurred.";
+    let errorCode = 400;
     if (error instanceof Stripe.errors.StripeCardError) {
       // Card was declined
       errorMessage = error.message;
+      errorCode = error.statusCode || 400;
     } else if (error instanceof Error) {
       console.error("Error submitting order:", error);
       errorMessage = "Order submission failed due to a server error.";
@@ -115,7 +117,7 @@ export async function POST(request: Request) {
       {
         error: { message: errorMessage }
       },
-      { status: 400 }
+      { status: errorCode }
     ); // Use 400 for client-side errors like card
   }
 }

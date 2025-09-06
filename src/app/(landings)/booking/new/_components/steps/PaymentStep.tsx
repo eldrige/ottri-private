@@ -319,6 +319,7 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
                 : undefined,
               onChange: () => {
                 trigger("password");
+                trigger("confirmPassword");
               }
             })}
             error={errors.confirmPassword?.message}

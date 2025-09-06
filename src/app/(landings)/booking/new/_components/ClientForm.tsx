@@ -275,17 +275,21 @@ export default function ClientForm({
         // Handle successful submission
         // e.g., redirect to confirmation page
         // window.location.href = `/booking/confirmation?orderId=${result.orderId}`;
-        await router.push(`/booking/confirmation?orderId=${result.orderId}`);
+        router.push(`/booking/confirmation?orderId=${result.orderId}`);
       } else {
         // Handle error
+        // if (response.status === 409) {
+        //   setError("email")
+        // }
+        console.log(response.status);
+        setProcessing(false);
         alert(result.error?.message || "An error occurred");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setProcessing(false);
       alert("Failed to submit form. Please try again.");
     }
-
-    setProcessing(false);
   };
 
   // Render the current step
