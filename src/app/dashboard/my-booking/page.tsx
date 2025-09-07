@@ -7,19 +7,13 @@ import { getBookings } from "../_utils/queries";
 
 export default async function MyBookingPage() {
   const bookings = await getBookings();
-  const upCommingBookings = bookings.filter((booking) => {
-    const bookingDate = new Date(booking.timeSlot.date);
-    const today = new Date();
-    const in30Days = new Date();
-    in30Days.setDate(today.getDate() + 30);
-    return bookingDate >= today && bookingDate <= in30Days;
-  });
+  const upCommingBookings = bookings.filter(
+    (booking) => booking.status !== "COMPLETED"
+  );
 
-  const pastBookings = bookings.filter((booking) => {
-    const bookingDate = new Date(booking.timeSlot.date);
-    const today = new Date();
-    return bookingDate < today;
-  });
+  const pastBookings = bookings.filter(
+    (booking) => booking.status === "COMPLETED"
+  );
 
   const totalUpcomingBookings = upCommingBookings.length;
 

@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/Button";
-import { ServiceBooked } from "@/lib/types";
 import { StarIcon, XIcon } from "lucide-react";
 import React, { useState } from "react";
+import { Booking } from "../../_utils/types";
+import { formatDate } from "@/lib/utils";
+import { formatHour24To12, formatName } from "../../_utils/helpers";
 
 export default function RatingPopUp({
   booking,
   isOpen,
   onClose
 }: {
-  booking: Omit<ServiceBooked, "rating">;
+  booking: Booking;
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -31,14 +33,16 @@ export default function RatingPopUp({
         </div>
         <div className="bg-[#F7F8F8] flex flex-col gap-1 text-secondary-700 md:text-nowrap rounded-lg p-4 mt-4">
           <h3>
-            <span className="font-medium">Date & Time:</span> {booking.date} at{" "}
-            {booking.time}
+            <span className="font-medium">Date & Time:</span>{" "}
+            {formatDate(booking.timeSlot.date)} at{" "}
+            {formatHour24To12(booking.timeSlot.startTime)}
           </h3>
           <h3>
-            <span className="font-medium">Address:</span> {booking.location}
+            <span className="font-medium">Address:</span> {booking.address}
           </h3>
           <h3>
-            <span className="font-medium">Service:</span> {booking.serviceName}
+            <span className="font-medium">Service:</span>{" "}
+            {formatName(booking.serviceType.name)}
           </h3>
         </div>
         <div className="flex text-secondary-700 items-center flex-col gap-4 my-4">

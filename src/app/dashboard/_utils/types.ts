@@ -96,3 +96,16 @@ export interface Booking {
   location: string | null;
   price: number;
 }
+
+export interface Review {
+  id: number;
+  comment: string;
+  isFeatured: boolean;
+  rating: number;
+  completionRate: number;
+  reviewerId: number;
+  bookingId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}

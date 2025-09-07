@@ -1,5 +1,5 @@
 import { serverRequest } from "@/lib/axios";
-import { Booking, Profile, User } from "./types";
+import { Booking, Profile, Review, User } from "./types";
 
 export async function getUserProfile() {
   const { data: userInfo } = await serverRequest("/auth/profile");
@@ -16,4 +16,11 @@ export async function getBookings(status?: string) {
     `/bookings?${status ? `status=${status}` : ""}`
   );
   return bookings.data as Booking[];
+}
+
+export async function getBookingReview(bookingId: number) {
+  const { data: review } = await serverRequest(
+    `/bookings/${bookingId}/reviews`
+  );
+  return review as Review;
 }
