@@ -121,23 +121,26 @@ function DesktopBookingCard({
                 Cancel
               </Button>
             ) : (
-              <Button
-                onClick={() => {
-                  setBookedServiceOnRating({
-                    serviceType,
-                    cleaners,
-                    timeSlot,
-                    address,
-                    status,
-                    price
-                  });
-                  setIsOpen(true);
-                }}
-                size={"xs"}
-                className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
-              >
-                Rate Cleaning
-              </Button>
+              setIsOpen &&
+              setBookedServiceOnRating && (
+                <Button
+                  onClick={() => {
+                    setBookedServiceOnRating({
+                      serviceType,
+                      cleaners,
+                      timeSlot,
+                      address,
+                      status,
+                      price
+                    });
+                    setIsOpen(true);
+                  }}
+                  size={"xs"}
+                  className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
+                >
+                  Rate Cleaning
+                </Button>
+              )
             )}
           </div>
         </div>
@@ -217,23 +220,26 @@ function MobileBookingCard({
           Cancel
         </Button>
       ) : (
-        <Button
-          onClick={() => {
-            setBookedServiceOnRating({
-              serviceType,
-              cleaners,
-              timeSlot,
-              address,
-              status,
-              price
-            });
-            setIsOpen(true);
-          }}
-          size={"xs"}
-          className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
-        >
-          Rate Cleaning
-        </Button>
+        setIsOpen &&
+        setBookedServiceOnRating && (
+          <Button
+            onClick={() => {
+              setBookedServiceOnRating({
+                serviceType,
+                cleaners,
+                timeSlot,
+                address,
+                status,
+                price
+              });
+              setIsOpen(true);
+            }}
+            size={"xs"}
+            className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
+          >
+            Rate Cleaning
+          </Button>
+        )
       )}
     </div>
   );
