@@ -50,6 +50,7 @@ interface AddressInputProps {
   error?: string;
   required?: boolean;
   label?: string;
+  onSelectedAddress?: (address: Result) => void;
 }
 
 export default function AddressInput({
@@ -58,7 +59,8 @@ export default function AddressInput({
   placeholder = "Enter address",
   error,
   required,
-  label
+  label,
+  onSelectedAddress
 }: AddressInputProps) {
   const [searchTerm, setSearchTerm] = useState(value);
   const [apiResults, setApiResults] = useState<Result[]>([]);
@@ -135,11 +137,14 @@ export default function AddressInput({
       .replace(/, United States$/, "");
   };
 
-  const handleSelectAddress = (address: string) => {
-    const formattedAddress = formatUSAddress(address);
+  const handleSelectAddress = (address: Result) => {
+    const formattedAddress = formatUSAddress(address.formatted);
     setSearchTerm(formattedAddress);
     if (onChange) {
       onChange(formattedAddress);
+    }
+    if (onSelectedAddress) {
+      onSelectedAddress(address);
     }
     setShowDropdown(false);
   };
@@ -183,7 +188,7 @@ export default function AddressInput({
                   role="option"
                   aria-selected={searchTerm === formattedAddress}
                   className="px-4 py-2 hover:bg-primary-50 cursor-pointer text-sm"
-                  onClick={() => handleSelectAddress(result.formatted)}
+                  onClick={() => handleSelectAddress(result)}
                 >
                   {formattedAddress}
                 </li>

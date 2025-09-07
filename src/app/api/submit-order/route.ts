@@ -11,7 +11,7 @@ import { axios } from "@/lib/axios";
 
 // Initialize Stripe with your SECRET key.
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-07-30.basil"
+  apiVersion: "2025-08-27.basil"
 });
 
 // Extend the type to include the paymentMethodId we added
@@ -85,21 +85,36 @@ export async function POST(request: Request) {
     };
     console.log(bodyObj);
 
-    const response = await axios.post("bookings", bodyObj).catch((i) => {
+    const apiResponse = await axios.post("bookings", bodyObj).catch((i) => {
       console.log(i.response.data);
       throw i;
     });
-    console.log(response);
+    console.log(apiResponse);
 
     const newOrderId =
-      "ORD-" + response.data.displayId.slice(0, 9).toUpperCase();
+      "ORD-" + apiResponse.data.displayId.slice(0, 9).toUpperCase();
 
     // 3. Return a success response
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       orderId: newOrderId,
       message: "Order submitted successfully"
     });
+
+    console.log(apiResponse.data);
+
+    if (orderData.createAccount) {
+      const data = apiResponse.data as {
+        userSession: { accessToken: string; refreshToken: string };
+      };
+      setTokens(
+        response,
+        data.userSession.refreshToken,
+        data.userSession.accessToken
+      );
+    }
+
+    return response;
   } catch (error) {
     // Handle different types of errors
     let errorMessage = "An unknown error occurred.";
@@ -120,4 +135,27 @@ export async function POST(request: Request) {
       { status: errorCode }
     ); // Use 400 for client-side errors like card
   }
+}
+
+function setTokens(
+  response: NextResponse,
+  refreshToken: string,
+  accessToken: string
+) {
+  // Set cookies for the tokens
+  response.cookies.set("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    // maxAge: 15 * 60, // 15 minutes in seconds
+    path: "/"
+  });
+
+  response.cookies.set("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    // maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+    path: "/"
+  });
 }

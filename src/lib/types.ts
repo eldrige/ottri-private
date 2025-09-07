@@ -50,12 +50,12 @@ export interface UserData {
   email: string;
   role: string;
   signUpMethod: string;
-  settingsData: undefined;
+  settingsData: unknown;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
-  personalInformation: null;
+  personalInformation: PersonalInformation;
   settings: Settings;
 }
 
@@ -67,6 +67,22 @@ interface Settings {
   promotionalEmails: boolean;
   twoFactorAuth: boolean;
   shareMyLocation: boolean;
+}
+
+interface PersonalInformation {
+  id: number;
+  fullName: string;
+  phoneNumber: string;
+  address: string;
+  country: string;
+  state: string;
+  zipCode: string;
+  city: string;
+  stripeCustomerId: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
 }
 
 export interface ServiceBooked {

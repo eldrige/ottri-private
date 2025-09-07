@@ -21,11 +21,14 @@ import { calculateBasePrice } from "@/utils/priceCalculation";
 import { PreflightType } from "../types";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { UserData } from "@/lib/types";
 
 export default function ClientForm({
-  preflight
+  preflight,
+  userData
 }: {
   preflight: PreflightType;
+  userData: UserData | undefined;
 }) {
   const [currStep, setCurrStep] = useState(0);
   const [processing, setProcessing] = useState(false);
@@ -36,8 +39,6 @@ export default function ClientForm({
     defaultValues: {
       serviceType: null,
       specificServiceType: null,
-      serviceAddress: "",
-      useSameForBilling: false,
       bedrooms: "",
       bathrooms: "",
       squareFootage: "",
@@ -52,7 +53,17 @@ export default function ClientForm({
       tipAmount: 0,
       tipPercentage: 0,
       paymentMethodId: "",
-      createAccount: false
+      createAccount: false,
+      fullName: userData?.personalInformation.fullName,
+      email: userData?.email,
+      phoneNumber: userData?.personalInformation.phoneNumber,
+      billingAddress: userData?.personalInformation.address,
+      serviceAddress: userData?.personalInformation.address,
+      country: userData?.personalInformation.country,
+      state: userData?.personalInformation.state,
+      city: userData?.personalInformation.city,
+      zipCode: userData?.personalInformation.zipCode,
+      useSameForBilling: !!userData
     }
   });
 
@@ -314,7 +325,12 @@ export default function ClientForm({
       case 6:
         return <TipStep totalPrice={estimatedPrice} />;
       case 7:
-        return <PaymentStep processPaymentRef={processPaymentRef} />;
+        return (
+          <PaymentStep
+            processPaymentRef={processPaymentRef}
+            isUser={!!userData}
+          />
+        );
       default:
         return <ServiceTypeStep services={preflight.services} />;
     }
