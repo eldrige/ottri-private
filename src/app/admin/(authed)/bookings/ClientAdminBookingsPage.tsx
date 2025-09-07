@@ -12,13 +12,14 @@ import Select from "@/components/ui/Select";
 import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
 import { BookingsResponse, ServiceOption } from "../../types";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
-  { label: "Pending", value: "pending" },
-  { label: "In Progress", value: "in-progress" },
-  { label: "Completed", value: "completed" },
-  { label: "Cancelled", value: "cancelled" }
+  { label: "Pending", value: "PENDING" },
+  { label: "In Progress", value: "INPROGRESS" },
+  { label: "Completed", value: "COMPLETED" },
+  { label: "Cancelled", value: "CANCELLED" }
 ];
 
 export default function ClientAdminBookingsPage({
@@ -28,6 +29,9 @@ export default function ClientAdminBookingsPage({
   bookingsResponse: BookingsResponse;
   servicesOptions: ServiceOption[];
 }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const filter = searchParams.get("filter");
   const [activeView, setActiveView] = useState<string>("calendar");
 
   return (
@@ -43,7 +47,16 @@ export default function ClientAdminBookingsPage({
           <Filter className="size-4" />
           <Select
             options={filterOptions}
-            value={filterOptions[0]}
+            value={
+              filter
+                ? filterOptions.find((i) => i.value === filter)
+                : filterOptions[0]
+            }
+            onChange={(option) => {
+              if (option.value === "all-bookings")
+                router.push("/admin/bookings");
+              else router.push(`/admin/bookings?filter=${option.value}`);
+            }}
             placeholder="All Bookings"
             buttonClassName="border-none gap-2 font-medium"
             accent="secondary"

@@ -18,12 +18,14 @@ export default function ListItem({
   statuses,
   initialStatus,
   booking,
-  setEditBooking
+  setEditBooking,
+  setAssignCleaners
 }: {
   statuses: StatusType[];
   initialStatus: StatusType;
   booking: Booking;
   setEditBooking: (booking: Booking) => void;
+  setAssignCleaners: (booking: Booking) => void;
 }) {
   const [status, setStatus] = useState(initialStatus);
 
@@ -56,13 +58,13 @@ export default function ListItem({
             options={statuses}
             buttonClassName={cn(
               "py-1.5 px-3 gap-2",
-              status.value === "pending"
+              status.value === "PENDING"
                 ? "bg-warning/20 *:text-warning-text"
-                : status.value === "in-progress"
+                : status.value === "INPROGRESS"
                   ? "bg-info/20 *:text-info-text"
-                  : status.value === "completed"
+                  : status.value === "COMPLETED"
                     ? "bg-success/10 *:text-success"
-                    : status.value === "cancelled"
+                    : status.value === "CANCELLED"
                       ? "bg-error/10 *:text-error"
                       : ""
             )}
@@ -92,7 +94,7 @@ export default function ListItem({
             <p>
               <span className="font-medium mr-2">Cleaners:</span>
               {cleaners?.length ? (
-                cleaners.map((cleaner) => <span key={cleaner}>{cleaners}</span>)
+                cleaners.map((cleaner) => <span key={cleaner}>{cleaner}</span>)
               ) : (
                 <span className="text-error">Unassigned</span>
               )}
@@ -149,9 +151,13 @@ export default function ListItem({
             Delete
           </Button>
         </div>
-        {!cleaners && (
+        {!cleaners.length && (
           <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0">
-            <Button size={"2xs"} variant={"secondary"}>
+            <Button
+              size={"2xs"}
+              variant={"secondary"}
+              onClick={() => setAssignCleaners(booking)}
+            >
               Assign Cleaner
             </Button>
           </div>

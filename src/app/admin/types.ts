@@ -150,3 +150,22 @@ interface ServiceType {
   updatedAt: string;
   deletedAt: null;
 }
+
+// Cleaner Type
+export interface Cleaner {
+  status: "AVAILABLE" | "UNAVAILABLE";
+  createdAt: string;
+  updatedAt: string;
+  id: number;
+  profile: string;
+  fullName: string;
+  phoneNumber: string;
+  description: string;
+  address: string | null;
+  quote: string | null;
+  experience: string | null;
+  preferences: string[];
+  languages: string[];
+  userId: number;
+  location: unknown | null;
+}
