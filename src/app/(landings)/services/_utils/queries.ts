@@ -1,5 +1,5 @@
 import { Service, serviceType } from "@/app/(landings)/services/_utils/types";
-import axios from "@/lib/api/axios";
+import { axios } from "@/lib/axios";
 
 export async function getServices() {
   const { data: services } = await axios.get("/services");

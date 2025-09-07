@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import axios from "@/lib/axios";
+import { axios } from "@/lib/axios";
 
 export default async function RelatedArticles({
   category,
