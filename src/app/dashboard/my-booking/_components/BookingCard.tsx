@@ -133,7 +133,7 @@ function DesktopBookingCard({
               {formatName(status)}
             </Badge>
           ) : (
-            status !== "CANCELLED" && (
+            status === "CANCELLED" && (
               <Badge className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2">
                 Cancelled
               </Badge>
@@ -219,7 +219,7 @@ function MobileBookingCard({
                 </Badge>
               ) : (
                 handleCancel &&
-                status !== "CANCELLED" && (
+                status === "CANCELLED" && (
                   <Badge
                     onClick={handleCancel}
                     className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2"

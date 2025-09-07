@@ -6,7 +6,7 @@ import { userMiddleware } from "./middlewares/userMiddleware";
 export async function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.startsWith("/admin")) {
     return adminMiddleware(req);
-  } else {
+  } else if (req.nextUrl.pathname.startsWith("/dashboard")) {
     return userMiddleware(req);
   }
 }
