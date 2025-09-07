@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { X } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 export default function AssignCleaner({
   booking,
@@ -16,10 +16,43 @@ export default function AssignCleaner({
   cleaners: Cleaner[];
   onClose: () => void;
 }) {
+  const [selectedCleanerId, setSelectedCleanerId] = useState<string | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(false);
+
   const dateTime = format(
     new Date(booking.timeSlot.date),
     "dd-MM-yyyy 'at' h:mm a"
   );
+
+  const handleAssignCleaner = async () => {
+    if (!selectedCleanerId) return;
+
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/admin/bookings/assign", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          bookingId: booking.id,
+          cleanerId: selectedCleanerId
+        })
+      });
+
+      if (response.ok) {
+        onClose();
+      } else {
+        console.error("Failed to assign cleaner");
+      }
+    } catch (error) {
+      console.error("Error assigning cleaner:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="border border-black/10 rounded-lg p-4 w-full max-w-2xl space-y-4">
@@ -51,7 +84,7 @@ export default function AssignCleaner({
             <span className="font-medium mr-2">Cleaners:</span>
             {booking.cleaners?.length ? (
               booking.cleaners.map((cleaner) => (
-                <span key={cleaner}>{cleaner}</span>
+                <span key={cleaner.id}>{cleaner.fullName}</span>
               ))
             ) : (
               <span className="text-error">Unassigned</span>
@@ -76,18 +109,27 @@ export default function AssignCleaner({
 
       <p className="font-semibold">Available Cleaners</p>
 
-      <div>
-        {cleaners.length &&
+      <div className="space-y-4 max-h-[400px] overflow-y-auto">
+        {!!cleaners.length &&
           cleaners.map((cleaner) => (
-            <div key={cleaner.id} className="p-4 border border-black/10">
+            <div
+              key={cleaner.id}
+              className={cn(
+                "p-4 border rounded-lg cursor-pointer transition-colors",
+                selectedCleanerId === cleaner.id.toString()
+                  ? "border-secondary-700 bg-secondary-700/5"
+                  : "border-black/10 hover:border-secondary-700/50"
+              )}
+              onClick={() => setSelectedCleanerId(cleaner.id.toString())}
+            >
               <div className="flex items-center justify-between font-medium">
                 <p className="capitalize">{cleaner.fullName}</p>
-                <p>159 Jobs</p>
+                <p>{cleaner.stats.totalBookings} Jobs</p>
               </div>
               <div className="mt-2 text-sm flex items-center gap-4">
                 <p className="flex gap-2">
                   <StarIcon className="size-4" />
-                  4.9
+                  {cleaner.stats.averageRating}
                 </p>
                 <p className="flex gap-2">
                   <ClockIcon2 className="size-4 text-black/25" />
@@ -97,24 +139,25 @@ export default function AssignCleaner({
                     <span className="text-error">unavailable</span>
                   )}
                 </p>
-                <p className="text-secondary-700/70 ml-auto">1 Complaints</p>
+                <p className="text-secondary-700/70 ml-auto">0 Complaints</p>
               </div>
-
-              <div className="mt-4 flex gap-2.5">
-                {cleaner.preferences.map((pref, idx) => (
-                  <p
-                    key={"pref"}
-                    className={cn(
-                      "text-xs py-1 px-2 rounded-lg",
-                      idx % 2 === 0
-                        ? "border text-info-text bg-info/10 border-info/20"
-                        : "bg-secondary-700/10"
-                    )}
-                  >
-                    {pref}
-                  </p>
-                ))}
-              </div>
+              {cleaner.specialities.length > 0 && (
+                <div className="mt-4 flex gap-2.5">
+                  {cleaner.specialities.map((item, idx) => (
+                    <p
+                      key={item.id}
+                      className={cn(
+                        "text-xs py-1 px-2 rounded-lg capitalize",
+                        idx % 2 === 0
+                          ? "border text-info-text bg-info/10 border-info/20"
+                          : "bg-secondary-700/10"
+                      )}
+                    >
+                      {item.name}
+                    </p>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
       </div>
@@ -124,8 +167,13 @@ export default function AssignCleaner({
           <Button variant={"secondary-outline"} size={"xs"} onClick={onClose}>
             Cancel
           </Button>
-          <Button variant={"secondary"} size={"xs"}>
-            Assign Cleaner
+          <Button
+            variant={"secondary"}
+            size={"xs"}
+            onClick={handleAssignCleaner}
+            disabled={!selectedCleanerId || isLoading}
+          >
+            {isLoading ? "Assigning..." : "Assign Cleaner"}
           </Button>
         </div>
       </div>

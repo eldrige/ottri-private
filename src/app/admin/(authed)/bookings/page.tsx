@@ -1,6 +1,6 @@
 import { axios, serverRequest } from "@/lib/axios";
 import ClientAdminBookingsPage from "./ClientAdminBookingsPage";
-import { BookingsResponse, ServiceOption } from "../../types";
+import { BookingsResponse, Cleaner, ServiceOption } from "../../types";
 
 export default async function AdminBookingsPage({
   searchParams
@@ -14,17 +14,19 @@ export default async function AdminBookingsPage({
       `bookings?limit=30${filter ? `&status=${filter}` : ""}`,
       "GET"
     ),
-    axios.get("services")
+    axios.get("services"),
+    axios.get("cleaners?limit=50")
   ]);
   const bookings = res[0].data as BookingsResponse;
-
   const servicesOptions = res[1].data as ServiceOption[];
+  const cleaners = res[2].data as Cleaner[];
 
   console.log(bookings.data);
   return (
     <ClientAdminBookingsPage
       bookingsResponse={bookings}
       servicesOptions={servicesOptions}
+      cleaners={cleaners}
     />
   );
 }

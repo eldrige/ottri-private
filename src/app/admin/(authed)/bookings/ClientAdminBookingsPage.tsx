@@ -11,7 +11,7 @@ import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
 import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
-import { BookingsResponse, ServiceOption } from "../../types";
+import { BookingsResponse, Cleaner, ServiceOption } from "../../types";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const filterOptions = [
@@ -24,10 +24,12 @@ const filterOptions = [
 
 export default function ClientAdminBookingsPage({
   bookingsResponse,
-  servicesOptions
+  servicesOptions,
+  cleaners
 }: {
   bookingsResponse: BookingsResponse;
   servicesOptions: ServiceOption[];
+  cleaners: Cleaner[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -141,6 +143,7 @@ export default function ClientAdminBookingsPage({
         <ListView
           bookingsResponse={bookingsResponse}
           servicesOptions={servicesOptions}
+          cleaners={cleaners}
         />
       ) : (
         <MapView />

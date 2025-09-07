@@ -94,7 +94,9 @@ export default function ListItem({
             <p>
               <span className="font-medium mr-2">Cleaners:</span>
               {cleaners?.length ? (
-                cleaners.map((cleaner) => <span key={cleaner}>{cleaner}</span>)
+                cleaners.map((cleaner) => (
+                  <span key={cleaner.id}>{cleaner.fullName}</span>
+                ))
               ) : (
                 <span className="text-error">Unassigned</span>
               )}

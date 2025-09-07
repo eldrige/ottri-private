@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import ListItem from "../_components/ListItem";
-import { Booking, BookingsResponse, ServiceOption } from "@/app/admin/types";
+import {
+  Booking,
+  BookingsResponse,
+  Cleaner,
+  ServiceOption
+} from "@/app/admin/types";
 import { cn } from "@/lib/utils";
 import EditBooking from "../_components/EditBooking";
 import AssignCleaner from "../_components/AssignCleaner";
@@ -69,10 +74,12 @@ import AssignCleaner from "../_components/AssignCleaner";
 
 export default function ListView({
   bookingsResponse,
-  servicesOptions
+  servicesOptions,
+  cleaners
 }: {
   bookingsResponse: BookingsResponse;
   servicesOptions: ServiceOption[];
+  cleaners: Cleaner[];
 }) {
   const bookings = bookingsResponse.data;
   const [editBooking, setEditBooking] = useState<Booking | null>(null);
@@ -100,7 +107,7 @@ export default function ListView({
         <div className="sticky left-0 top-0 flex flex-col items-center pt-4">
           <AssignCleaner
             booking={assignCleaners}
-            cleaners={[]}
+            cleaners={cleaners}
             onClose={() => setAssignCleaners(null)}
           />
         </div>
@@ -108,7 +115,7 @@ export default function ListView({
       <div
         className={cn(
           "mt-8 lg:p-6 lg:border border-black/10 rounded-lg",
-          editBooking || (assignCleaners && "invisible")
+          (editBooking || assignCleaners) && "invisible"
         )}
       >
         <h4 className="text-heading-5">

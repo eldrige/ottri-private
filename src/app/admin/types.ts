@@ -1,3 +1,5 @@
+import { UserData } from "@/lib/types";
+
 export interface BookingsResponse {
   limit: number;
   page: number;
@@ -34,7 +36,7 @@ export interface Booking {
   deletedAt: null;
   customer: Customer | null;
   serviceType: ServiceType;
-  cleaners: string[];
+  cleaners: Cleaner[];
   review: null;
   timeSlot: TimeSlot;
   price: number;
@@ -153,19 +155,33 @@ interface ServiceType {
 
 // Cleaner Type
 export interface Cleaner {
-  status: "AVAILABLE" | "UNAVAILABLE";
-  createdAt: string;
-  updatedAt: string;
   id: number;
   profile: string;
   fullName: string;
   phoneNumber: string;
   description: string;
-  address: string | null;
-  quote: string | null;
-  experience: string | null;
-  preferences: string[];
+  quote: string;
+  status: "AVAILABLE" | "UNAVAILABLE";
+  experience: string;
+  address: string;
+  preference: string;
   languages: string[];
+  mapLocation: null;
   userId: number;
-  location: unknown | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  user: UserData;
+  specialities: ServiceOption[];
+  serviceAreas: string[];
+  qualifications: string[];
+  location: null;
+  stats: Stats;
+}
+
+interface Stats {
+  totalBookings: number;
+  completedBookings: number;
+  averageCompletionRate: number;
+  averageRating: number;
 }
