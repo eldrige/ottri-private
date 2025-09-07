@@ -2,5 +2,6 @@
     "tailwindCSS.experimental.configFile": "src/app/globals.css",
     "tailwindCSS.experimental.classRegex": [
         ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
-    ]
+    ],
+    "postman.settings.dotenv-detection-notification-visibility": false
 }

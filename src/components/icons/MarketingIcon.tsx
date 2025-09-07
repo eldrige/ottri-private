@@ -18,4 +18,3 @@ export default function MarketingIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
