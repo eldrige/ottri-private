@@ -1,13 +1,10 @@
-import { LucideProps } from "lucide-react";
-import React, { ForwardRefExoticComponent, RefAttributes } from "react";
+import React, { ComponentType } from "react";
 
 type StatCardProps = {
   title: string;
   value: string;
   content: string;
-  Icon?: ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-  >;
+  Icon?: ComponentType<{ className?: string }>;
 };
 
 export default function StatCard({

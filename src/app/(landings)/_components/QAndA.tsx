@@ -10,8 +10,8 @@ export default function QAndA({
 }: {
   question: string;
   answer: string;
-  show: boolean;
-  onClick: () => void;
+  show?: boolean;
+  onClick?: () => void;
 }) {
   // const [show, setShow] = useState(false);
   return (

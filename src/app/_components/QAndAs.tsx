@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import QAndA from "./QAndA";
+import QAndA from "@/components/QAndA";
 
 export default function QAndAs() {
   const [shown, setShown] = useState<number>();

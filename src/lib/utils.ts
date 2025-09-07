@@ -11,7 +11,11 @@ export function cn(...inputs: ClassValue[]): string {
 
 export function formatDate(isoString: string) {
   const date = new Date(isoString);
-  const options = { year: "numeric", month: "long", day: "numeric" };
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  } as const;
   const formatted = date.toLocaleDateString("en-US", options);
   return formatted;
 }
