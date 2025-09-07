@@ -11,7 +11,7 @@ import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
 import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
-import { Booking } from "../../types";
+import { BookingsResponse, ServiceOption } from "../../types";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -22,9 +22,11 @@ const filterOptions = [
 ];
 
 export default function ClientAdminBookingsPage({
-  bookings
+  bookingsResponse,
+  servicesOptions
 }: {
-  bookings: Booking[];
+  bookingsResponse: BookingsResponse;
+  servicesOptions: ServiceOption[];
 }) {
   const [activeView, setActiveView] = useState<string>("calendar");
 
@@ -121,9 +123,12 @@ export default function ClientAdminBookingsPage({
       />
 
       {activeView === "calendar" ? (
-        <CalendarView bookings={bookings} />
+        <CalendarView bookings={bookingsResponse.data} />
       ) : activeView === "list" ? (
-        <ListView bookings={bookings} />
+        <ListView
+          bookingsResponse={bookingsResponse}
+          servicesOptions={servicesOptions}
+        />
       ) : (
         <MapView />
       )}

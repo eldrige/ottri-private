@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import ListItem from "../_components/ListItem";
-import { Booking } from "@/app/admin/types";
+import { Booking, BookingsResponse, ServiceOption } from "@/app/admin/types";
+import { cn } from "@/lib/utils";
+import EditBooking from "../_components/EditBooking";
 
 // const statuses = [
 //   { label: "Pending", value: "pending" },
@@ -64,31 +66,57 @@ import { Booking } from "@/app/admin/types";
 //   }
 // ];
 
-export default function ListView({ bookings }: { bookings: Booking[] }) {
+export default function ListView({
+  bookingsResponse,
+  servicesOptions
+}: {
+  bookingsResponse: BookingsResponse;
+  servicesOptions: ServiceOption[];
+}) {
+  const bookings = bookingsResponse.data;
+  const [editBooking, setEditBooking] = useState<Booking | null>(bookings[0]);
   const statuses = [
-    { label: "Pending", value: "pending" },
-    { label: "In Progress", value: "in-progress" },
-    { label: "Completed", value: "completed" },
-    { label: "Cancelled", value: "cancelled" }
+    { label: "Pending", value: "PENDING" },
+    { label: "In Progress", value: "INPROGRESS" },
+    { label: "Completed", value: "COMPLETED" },
+    { label: "Cancelled", value: "CANCELLED" }
   ];
-  return (
-    <div className="mt-8 lg:p-6 lg:border border-black/10 rounded-lg">
-      <h4 className="text-heading-5">
-        Booking List ({bookings.length} Booking
-        {bookings.length !== 1 ? "s" : ""})
-      </h4>
 
-      <div className="mt-8 space-y-4">
-        {bookings.map((booking) => (
-          <ListItem
-            key={booking.id}
-            statuses={statuses}
-            initialStatus={
-              statuses[Math.floor(Math.random() * statuses.length)]
-            }
-            booking={booking}
+  return (
+    <div className="relative">
+      {editBooking && (
+        <div className="sticky left-0 top-0 flex flex-col items-center pt-4">
+          <EditBooking
+            booking={editBooking}
+            servicesOptions={servicesOptions}
+            onClose={() => setEditBooking(null)}
           />
-        ))}
+        </div>
+      )}
+      <div
+        className={cn(
+          "mt-8 lg:p-6 lg:border border-black/10 rounded-lg",
+          editBooking && "invisible"
+        )}
+      >
+        <h4 className="text-heading-5">
+          Booking List ({bookingsResponse.total} Booking
+          {bookings.length !== 1 ? "s" : ""})
+        </h4>
+
+        <div className="mt-8 space-y-4">
+          {bookings.map((booking) => (
+            <ListItem
+              key={booking.id}
+              statuses={statuses}
+              initialStatus={
+                statuses[Math.floor(Math.random() * statuses.length)]
+              }
+              booking={booking}
+              setEditBooking={setEditBooking}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -17,11 +17,13 @@ interface StatusType {
 export default function ListItem({
   statuses,
   initialStatus,
-  booking
+  booking,
+  setEditBooking
 }: {
   statuses: StatusType[];
   initialStatus: StatusType;
   booking: Booking;
+  setEditBooking: (booking: Booking) => void;
 }) {
   const [status, setStatus] = useState(initialStatus);
 
@@ -125,6 +127,7 @@ export default function ListItem({
             size="2xs"
             variant={"secondary-outline"}
             className="text-xs flex items-center justify-center gap-1 border-black/10"
+            onClick={() => setEditBooking(booking)}
           >
             <EditIcon className="size-4" />
             Edit
