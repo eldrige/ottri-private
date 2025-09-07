@@ -11,7 +11,7 @@ import { axios } from "@/lib/axios";
 
 // Initialize Stripe with your SECRET key.
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-07-30.basil"
+  apiVersion: "2025-08-27.basil"
 });
 
 // Extend the type to include the paymentMethodId we added
