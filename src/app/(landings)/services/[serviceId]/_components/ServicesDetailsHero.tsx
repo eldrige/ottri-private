@@ -5,29 +5,42 @@ import { ArrowLeft, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { ServiceType } from "@/lib/types";
+import { Service } from "../../_utils/types";
 
 type ServicesDetailsHeroProps = Pick<
-  ServiceType,
-  "title" | "priceFrom" | "duration" | "coverSrc"
->;
+  Service,
+  "name" | "coverImage" | "description" | "supportingImages"
+> & {
+  duration: string;
+  priceFrom: string;
+};
 
 export default function ServicesDetailsHero({
-  title,
+  name: title,
   priceFrom,
   duration,
-  coverSrc
+  description,
+  coverImage: coverSrc,
+  supportingImages
 }: ServicesDetailsHeroProps) {
   return (
     <section className="pt-16 pb-8">
       <div className="pt-8 flex flex-col gap-8 md:gap-12">
-        <HeroTop title={title} />
+        <HeroTop name={title} />
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-6">
-            <HeroLeftSide priceFrom={priceFrom} duration={duration} />
+            <HeroLeftSide
+              description={description}
+              priceFrom={priceFrom}
+              duration={duration}
+            />
           </div>
           <div className="flex-7">
-            <HeroRightSide coverSrc={coverSrc} title={title} />
+            <HeroRightSide
+              coverImage={coverSrc}
+              name={title}
+              supportingImages={supportingImages}
+            />
           </div>
         </div>
       </div>
@@ -35,7 +48,7 @@ export default function ServicesDetailsHero({
   );
 }
 
-function HeroTop({ title }: Pick<ServicesDetailsHeroProps, "title">) {
+function HeroTop({ name }: Pick<ServicesDetailsHeroProps, "name">) {
   return (
     <>
       <Link
@@ -45,15 +58,16 @@ function HeroTop({ title }: Pick<ServicesDetailsHeroProps, "title">) {
         <ArrowLeft size={24} /> Back to all services
       </Link>
       <h1 className="text-heading-3 text-primary-700 md:text-heading-1 text-center md:text-start">
-        {title}
+        {name}
       </h1>
     </>
   );
 }
 function HeroLeftSide({
   priceFrom,
-  duration
-}: Pick<ServicesDetailsHeroProps, "priceFrom" | "duration">) {
+  duration,
+  description
+}: Pick<ServicesDetailsHeroProps, "priceFrom" | "duration" | "description">) {
   return (
     <div className="md:my-15.5 flex flex-col gap-6">
       <div className="flex flex-col gap-4 text-center md:text-start">
@@ -61,13 +75,10 @@ function HeroLeftSide({
           Book in Minutes
         </h1>
         <p className="text-surface-500 text-subtitle tracking-wide">
-          Perfect for special occasions or seasonal cleaning
+          {description.slice(0, 50)}
         </p>
         <p className="text-surface-500 text-subtitle tracking-wide">
-          Our most comprehensive cleaning service that tackles every corner of
-          your home with meticulous attention to detail. Ideal for spring
-          cleaning, before hosting events, or when you want that extra level of
-          sparkle.
+          {description.slice(50)}
         </p>
       </div>
       <hr className="text-black/20" />
@@ -102,12 +113,13 @@ function HeroLeftSide({
   );
 }
 function HeroRightSide({
-  coverSrc,
-  title
-}: Pick<ServicesDetailsHeroProps, "coverSrc" | "title">) {
+  coverImage: coverSrc,
+  name: title,
+  supportingImages
+}: Pick<ServicesDetailsHeroProps, "coverImage" | "name" | "supportingImages">) {
   return (
     <div className="h-full flex flex-col gap-4">
-      <div className="flex-7 flex">
+      <div className="flex-7 flex ">
         <Image
           className="rounded-lg aspect-[2/1] w-full object-cover"
           src={coverSrc}
@@ -115,21 +127,14 @@ function HeroRightSide({
         />
       </div>
       <div className="grid grid-cols-3 *:flex-1 w-full flex-2 gap-x-2 self-end ">
-        <Image
-          className="rounded-lg aspect-[2/1] w-full object-cover"
-          src={coverSrc}
-          alt={`${title}'s cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/1] w-full object-cover"
-          src={coverSrc}
-          alt={`${title}'s cover`}
-        />
-        <Image
-          className="rounded-lg aspect-[2/1] w-full object-cover"
-          src={coverSrc}
-          alt={`${title}'s cover`}
-        />
+        {supportingImages.map((image, index) => (
+          <Image
+            key={index}
+            className="rounded-lg aspect-[2/1] w-full object-cover"
+            src={image}
+            alt={`${title}'s cover`}
+          />
+        ))}
       </div>
     </div>
   );

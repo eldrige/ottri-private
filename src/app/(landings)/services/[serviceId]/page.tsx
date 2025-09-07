@@ -1,12 +1,9 @@
 import React from "react";
 import ServicesDetailsHero from "./_components/ServicesDetailsHero";
-import { servicesData } from "@/lib/sampleData";
 import ServicesDetailsSection1 from "./_components/ServicesDetailsSection1";
 import ServicesDetailsSection2 from "./_components/ServicesDetailsSection2";
-import ServicesDetailsSection3 from "./_components/ServicesDetailsSection3";
-import ServicesDetailsSection4 from "./_components/ServicesDetailsSection4";
-import ServicesDetailsSection5 from "./_components/ServicesDetailsSection5";
-import CommonQuestionsSection from "@/components/CommonQuestionsSection";
+import { getUniqueService } from "../_utils/queries";
+import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
 
 async function ServicesDetailsPage({
   params
@@ -14,31 +11,45 @@ async function ServicesDetailsPage({
   params: Promise<{ serviceId: string }>;
 }) {
   const { serviceId } = await params;
-  const service = servicesData.findLast(
-    (service) => service.id === Number(serviceId)
+  const service = await getUniqueService(serviceId);
+  const minPrice = Math.min(
+    ...service.pricingDetails.map((detail) => detail.minPrice)
   );
-  if (!service) {
-    return <></>;
-  }
+  const maxPrice = Math.min(
+    ...service.pricingDetails.map((detail) => detail.maxPrice)
+  );
+
+  const durationsArray = service.pricingDetails.map(
+    (detail) => detail.duration
+  );
+
+  const durationStart = Math.min(
+    ...durationsArray.map((elem) => Number(elem.split("-")[0]))
+  );
+
+  const durationEnd = Math.max(
+    ...durationsArray.map((elem) => Number(elem.split("-")[1].split(" ")[0]))
+  );
+  const duration = `${durationStart}-${durationEnd}`;
+  const serviceAddOn = service.serviceAddOn.map((elem) => elem.name);
+
   return (
-    <main>
-      <div className="container mx-auto px-6">
-        <ServicesDetailsHero
-          coverSrc={service.coverSrc}
-          title={service.title}
-          priceFrom={service.priceFrom}
-          duration={service.duration}
-        />
-        <ServicesDetailsSection1 includedServices={service.services} />
-        <ServicesDetailsSection2 pricingDetails={service.pricingDetails} />
-        <ServicesDetailsSection3 process={service.process} />
-        <CommonQuestionsSection />
-      </div>
-      <ServicesDetailsSection4 />
-      <div className="container mx-auto px-6">
-        <ServicesDetailsSection5 />
-      </div>
-    </main>
+    <>
+      <ServicesDetailsHero
+        description={service.description}
+        coverImage={service.coverImage || ourTeamFigure2}
+        name={service.name}
+        priceFrom={`${minPrice}-${maxPrice}`}
+        duration={duration}
+        supportingImages={
+          service.supportingImages.length > 0
+            ? service.supportingImages
+            : [ourTeamFigure2, ourTeamFigure2, ourTeamFigure2]
+        }
+      />
+      <ServicesDetailsSection1 includedServices={serviceAddOn} />
+      <ServicesDetailsSection2 pricingDetails={service.pricingDetails} />
+    </>
   );
 }
 

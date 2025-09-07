@@ -1,9 +1,10 @@
-import { Service } from "@/lib/types";
 import React from "react";
 
 export default function ServicesDetailsSection3({
   process
-}: Pick<Service, "process">) {
+}: {
+  process: string[];
+}) {
   return (
     <section className="pb-12 md:py-24 gap-16 flex flex-col">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
