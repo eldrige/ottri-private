@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import userImage from "@/assets/user-profile-figure.png";
@@ -8,9 +9,16 @@ import { Button } from "@/components/ui/Button";
 import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
+// import { revalidatePath } from "next/cache";
 type BookingCardProps = Pick<
   Booking,
-  "serviceType" | "cleaners" | "timeSlot" | "address" | "status" | "price"
+  | "id"
+  | "serviceType"
+  | "cleaners"
+  | "timeSlot"
+  | "address"
+  | "status"
+  | "price"
 >;
 
 export default function BookingCard({
@@ -18,14 +26,31 @@ export default function BookingCard({
   setIsOpen,
   setBookedServiceOnRating
 }: {
-  service: Pick<
-    Booking,
-    "serviceType" | "cleaners" | "timeSlot" | "address" | "status" | "price"
-  >;
+  service: BookingCardProps;
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (service: Partial<Booking>) => void;
 }) {
-  console.log("in the card:", service.serviceType.name);
+  const handleCancel = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`/api/bookings/cancel/${service.id}`, {
+        method: "DELETE"
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Login failed");
+      }
+
+      // Redirect to the original page or admin dashboard
+      // refresh(window.location.pathname);
+      console.log(window.location.pathname);
+    } catch (err) {
+      console.error("Error cancelling booking:", err);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col xl:hidden gap-4">
@@ -33,6 +58,7 @@ export default function BookingCard({
           {...service}
           setIsOpen={setIsOpen}
           setBookedServiceOnRating={setBookedServiceOnRating}
+          handleCancel={handleCancel}
         />
       </div>
       <div className="hidden xl:flex gap-4">
@@ -40,6 +66,7 @@ export default function BookingCard({
           {...service}
           setIsOpen={setIsOpen}
           setBookedServiceOnRating={setBookedServiceOnRating}
+          handleCancel={handleCancel}
         />
       </div>
     </>
@@ -54,10 +81,12 @@ function DesktopBookingCard({
   status,
   price,
   setIsOpen,
-  setBookedServiceOnRating
+  setBookedServiceOnRating,
+  handleCancel
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (service: Partial<Booking>) => void;
+  handleCancel?: (e: React.FormEvent) => void;
 }) {
   return (
     <div className="w-full">
@@ -91,57 +120,60 @@ function DesktopBookingCard({
               </div>
             </div>
           </div>
-          {status === "DRAFT" ? (
+          {status === "INPROGRESS" ? (
             <Badge className="bg-badge-blue-opac text-badge-blue items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-              In Progress
+              {formatName(status)}
             </Badge>
           ) : status === "PENDING" ? (
             <Badge className="bg-badge-orange-opac text-badge-orange items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-              Pending
+              {formatName(status)}
             </Badge>
           ) : status === "COMPLETED" ? (
-            <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
-              Complete
+            <Badge className="bg-badge-green-opac text-caption items-center px-4 py-1 text-badge-green rounded-lg flex border-0 gap-2">
+              {formatName(status)}
             </Badge>
           ) : (
-            <Badge className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-              Cancelled
-            </Badge>
+            status !== "CANCELLED" && (
+              <Badge className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2">
+                Cancelled
+              </Badge>
+            )
           )}
         </div>
         <div className="flex gap-2">
           <div className="flex w-full items-center gap-5">
             <p>${price}</p>
-            {status !== "COMPLETED" && status !== "FAILED" ? (
-              <Button
-                size={"xs"}
-                className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
-                variant={"outline"}
-              >
-                Cancel
-              </Button>
-            ) : (
-              setIsOpen &&
-              setBookedServiceOnRating && (
-                <Button
-                  onClick={() => {
-                    setBookedServiceOnRating({
-                      serviceType,
-                      cleaners,
-                      timeSlot,
-                      address,
-                      status,
-                      price
-                    });
-                    setIsOpen(true);
-                  }}
-                  size={"xs"}
-                  className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
-                >
-                  Rate Cleaning
-                </Button>
-              )
-            )}
+            {status !== "COMPLETED" && status !== "CANCELLED"
+              ? handleCancel && (
+                  <Button
+                    onClick={handleCancel}
+                    size={"xs"}
+                    className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
+                    variant={"outline"}
+                  >
+                    Cancel
+                  </Button>
+                )
+              : setIsOpen &&
+                setBookedServiceOnRating && (
+                  <Button
+                    onClick={() => {
+                      setBookedServiceOnRating({
+                        serviceType,
+                        cleaners,
+                        timeSlot,
+                        address,
+                        status,
+                        price
+                      });
+                      setIsOpen(true);
+                    }}
+                    size={"xs"}
+                    className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
+                  >
+                    Rate Cleaning
+                  </Button>
+                )}
           </div>
         </div>
       </div>
@@ -157,10 +189,12 @@ function MobileBookingCard({
   status,
   price,
   setIsOpen,
-  setBookedServiceOnRating
+  setBookedServiceOnRating,
+  handleCancel
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (service: Partial<Booking>) => void;
+  handleCancel?: (e: React.FormEvent) => void;
 }) {
   return (
     <div className="flex flex-col px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -171,22 +205,28 @@ function MobileBookingCard({
               <h1 className="font-medium text-body text-secondary-700">
                 {formatName(serviceType.name)}
               </h1>
-              {status === "DRAFT" ? (
+              {status === "INPROGRESS" ? (
                 <Badge className="bg-badge-blue-opac text-badge-blue items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                  In Progress
+                  {formatName(status)}
                 </Badge>
               ) : status === "PENDING" ? (
                 <Badge className="bg-badge-orange-opac text-badge-orange items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                  Pending
+                  {formatName(status)}
                 </Badge>
               ) : status === "COMPLETED" ? (
-                <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
-                  Complete
+                <Badge className="bg-badge-green-opac text-caption items-center px-4 py-1 text-badge-green rounded-lg flex border-0 gap-2">
+                  {formatName(status)}
                 </Badge>
               ) : (
-                <Badge className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                  Cancelled
-                </Badge>
+                handleCancel &&
+                status !== "CANCELLED" && (
+                  <Badge
+                    onClick={handleCancel}
+                    className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2"
+                  >
+                    Cancelled
+                  </Badge>
+                )
               )}
             </div>
             <p className="text-body font-medium text-secondary-700">${price}</p>
@@ -211,36 +251,37 @@ function MobileBookingCard({
           </div>
         </div>
       </div>
-      {status !== "COMPLETED" && status !== "FAILED" ? (
-        <Button
-          size={"xs"}
-          className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
-          variant={"outline"}
-        >
-          Cancel
-        </Button>
-      ) : (
-        setIsOpen &&
-        setBookedServiceOnRating && (
-          <Button
-            onClick={() => {
-              setBookedServiceOnRating({
-                serviceType,
-                cleaners,
-                timeSlot,
-                address,
-                status,
-                price
-              });
-              setIsOpen(true);
-            }}
-            size={"xs"}
-            className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
-          >
-            Rate Cleaning
-          </Button>
-        )
-      )}
+      {status !== "COMPLETED" && status !== "CANCELLED"
+        ? handleCancel && (
+            <Button
+              onClick={handleCancel}
+              size={"xs"}
+              className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
+              variant={"outline"}
+            >
+              Cancel
+            </Button>
+          )
+        : setIsOpen &&
+          setBookedServiceOnRating && (
+            <Button
+              onClick={() => {
+                setBookedServiceOnRating({
+                  serviceType,
+                  cleaners,
+                  timeSlot,
+                  address,
+                  status,
+                  price
+                });
+                setIsOpen(true);
+              }}
+              size={"xs"}
+              className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
+            >
+              Rate Cleaning
+            </Button>
+          )}
     </div>
   );
 }

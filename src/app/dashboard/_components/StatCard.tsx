@@ -2,7 +2,7 @@ import React, { ComponentType } from "react";
 
 type StatCardProps = {
   title: string;
-  value: string;
+  value: string | number;
   content: string;
   Icon?: ComponentType<{ className?: string }>;
 };

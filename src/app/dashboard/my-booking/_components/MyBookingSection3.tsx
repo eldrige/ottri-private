@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/Button";
 import React from "react";
 import { FilterIcon, PlusIcon } from "lucide-react";
@@ -36,17 +35,7 @@ export default function MyBookingSection3({
           </div>
           <div className="flex flex-col gap-2.5">
             {upcomingBookings.map((booking) => (
-              <BookingCard
-                key={booking.id}
-                service={{
-                  address: booking.address,
-                  cleaners: booking.cleaners,
-                  timeSlot: booking.timeSlot,
-                  serviceType: booking.serviceType,
-                  status: booking.status,
-                  price: booking.price
-                }}
-              />
+              <BookingCard key={booking.id} service={{ ...booking }} />
             ))}
           </div>
           <Button

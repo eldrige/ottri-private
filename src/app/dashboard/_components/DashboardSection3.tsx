@@ -57,8 +57,8 @@ export default function DashboardSection3({
             </div>
           </div>
           <div className="flex flex-col gap-2.5">
-            {bookings.map((service, index) => (
-              <AppointmentCard key={index} service={service} />
+            {bookings.map((service) => (
+              <AppointmentCard key={service.id} service={service} />
             ))}
           </div>
           <Button

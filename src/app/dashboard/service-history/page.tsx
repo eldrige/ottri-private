@@ -16,17 +16,28 @@ export default async function ServiceHistoryPage() {
     0
   );
 
-  let averageRating = 0;
-  for (const booking of completedBookings) {
-    try {
-      const review = await getBookingReview(booking.id);
-      if (review) {
-        averageRating += review.rating;
+  const reviews = await Promise.all(
+    completedBookings.map(async (booking) => {
+      try {
+        return await getBookingReview(booking.id);
+      } catch (error) {
+        if (
+          error &&
+          typeof error === "object" &&
+          "status" in error &&
+          error.status === 404
+        ) {
+          return undefined;
+        }
+        console.error(`Failed to get review for booking ${booking.id}:`, error);
+        return undefined;
       }
-    } catch (error) {
-      console.error(`Error fetching review for booking ${booking.id}:`, error);
-    }
-  }
+    })
+  );
+  let averageRating = reviews.reduce(
+    (total, review) => total + (review?.rating || 0),
+    0
+  );
 
   averageRating /= completedBookings.length;
 
@@ -38,7 +49,10 @@ export default async function ServiceHistoryPage() {
         averageRating={averageRating}
         totalSpent={totalSpent}
       />
-      <ServiceHistorySection3 />
+      <ServiceHistorySection3
+        reviews={reviews}
+        historyServices={completedBookings}
+      />
     </div>
   );
 }

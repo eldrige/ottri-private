@@ -1,18 +1,34 @@
-import { ServiceBooked } from "@/lib/types";
-import Image from "next/image";
-import userImage from "@/assets/user-profile-figure.png";
+import Image, { StaticImageData } from "next/image";
+import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
 import { ClockIcon, StarIcon } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
+import { Booking, Review } from "../../_utils/types";
+import { formatDate } from "@/lib/utils";
+import { formatHour24To12, formatName } from "../../_utils/helpers";
 
-type ServiceHistoryCardProps = Omit<ServiceBooked, "state">;
+type ServiceHistoryCardProps = Booking;
 
 export default function ServiceHistoryCard({
-  service
+  service,
+  review
 }: {
   service: ServiceHistoryCardProps;
+  review: Review | undefined;
 }) {
-  return <DesktopServiceHistoryCard {...service} />;
+  return (
+    <DesktopServiceHistoryCard
+      cleanerName={service.cleaners[0]?.name || "No Cleaner"}
+      date={formatDate(service.timeSlot.date)}
+      location={service.address}
+      price={service.price}
+      serviceName={formatName(service.serviceType.name)}
+      time={`${formatHour24To12(service.timeSlot.startTime)} - ${formatHour24To12(service.timeSlot.endTime)}`}
+      cleanerImage={service.cleaners[0]?.image || cleanerPlacholderImage}
+      rating={review?.rating || 0}
+      review={review?.comment || "No review provided"}
+    />
+  );
 }
 
 function DesktopServiceHistoryCard({
@@ -25,14 +41,24 @@ function DesktopServiceHistoryCard({
   price,
   rating,
   review
-}: ServiceHistoryCardProps) {
+}: {
+  serviceName: string;
+  cleanerName: string;
+  cleanerImage: string | StaticImageData;
+  date: string;
+  time: string;
+  location: string;
+  price: number;
+  rating: number;
+  review: string;
+}) {
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row p-4 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex w-full gap-4">
           <Image
             className="hidden md:flex rounded-full size-12"
-            src={cleanerImage ? cleanerImage : userImage}
+            src={cleanerImage}
             alt={"user profile"}
           />
           <div className="flex cursor-pointer w-full gap-2 flex-col">
@@ -50,12 +76,12 @@ function DesktopServiceHistoryCard({
               <p>{date}</p>
             </div>
             <div className="flex gap-1 md:gap-4 **:text-nowrap">
-              <div className="flex gap-0.25 md:gap-4 text-surface-500 items-center *:text-caption">
+              <div className="flex gap-0.25 md:gap-1 text-surface-500 items-center *:text-caption">
                 <ClockIcon className="text-surface-500/50 size-5" />
                 <p className="text-nowrap">{time}</p>
               </div>
-              <div className="flex gap-0.25 md:gap-4 text-surface-500 items-center *:text-caption">
-                <LocationIcon className="text-surface-500/50 *:size-5" />
+              <div className="flex gap-0.25 md:gap-1 text-surface-500 items-center *:text-caption">
+                <LocationIcon className="text-surface-500/50 size-5" />
                 <p className="text-nowrap">{location}</p>
               </div>
             </div>

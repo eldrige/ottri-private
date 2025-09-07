@@ -19,7 +19,25 @@ export interface Profile {
   };
 }
 
-export type User = Profile & {
+export type User = {
+  id: number;
+  email: string;
+  role: string;
+  signUpMethod: string;
+  settingsData: Record<string, string>;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  settings: {
+    language: string;
+    timezone: string;
+    currency: string;
+    bookingReminder: boolean;
+    promotionalEmails: boolean;
+    twoFactorAuth: boolean;
+    shareMyLocation: boolean;
+  };
   personalInformation: {
     id: number;
     fullName: string;
@@ -40,7 +58,7 @@ export type User = Profile & {
 export interface Booking {
   id: number;
   displayId: string;
-  status: "DRAFT" | "PENDING" | "CONFIRMED" | "COMPLETED" | "FAILED";
+  status: "PENDING" | "INPROGRESS" | "COMPLETED" | "CANCELLED";
   servicesPrice: number;
   addOnsPrice: number;
   tip: number;
