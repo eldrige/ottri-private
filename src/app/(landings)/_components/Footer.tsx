@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <div className="pt-16 pb-8 md:py-24 px-6 sm:px-0 mx-auto container flex flex-col">
+    <div className="pt-16 mt-8 md:mt-24 pb-8 md:py-24 px-6 sm:px-0 mx-auto container flex flex-col">
       <div className="flex flex-col md:flex-row gap-8">
         <FooterBrand />
         <ServicesSection />
