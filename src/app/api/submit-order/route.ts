@@ -9,11 +9,6 @@ import {
 } from "../../../utils/priceCalculation";
 import { axios } from "@/lib/axios";
 
-// Initialize Stripe with your SECRET key.
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-08-27.basil"
-});
-
 // Extend the type to include the paymentMethodId we added
 interface OrderRequest extends OrderFormValues {
   paymentMethodId: string;
@@ -21,6 +16,17 @@ interface OrderRequest extends OrderFormValues {
 
 export async function POST(request: Request) {
   try {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeSecretKey) {
+      console.error("STRIPE_SECRET_KEY is not set");
+      return NextResponse.json(
+        { error: { message: "Server configuration error." } },
+        { status: 500 }
+      );
+    }
+
+    const stripe = new Stripe(stripeSecretKey);
+
     const { paymentMethodId, ...orderData }: OrderRequest =
       await request.json();
 

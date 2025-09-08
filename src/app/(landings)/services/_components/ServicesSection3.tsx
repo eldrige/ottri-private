@@ -1,48 +1,8 @@
 import React from "react";
+import { getServiceAddOns } from "../_utils/queries";
 
-export default function ServicesSection3() {
-  const popularServices: PopularServiceCardProps[] = [
-    {
-      title: "Inside Oven",
-      price: 25,
-      subtitle: "Deep clean and degrease oven interior"
-    },
-    {
-      title: "Inside Refrigerator",
-      price: 25,
-      subtitle: "Thorough fridge cleaning and sanitizing"
-    },
-    {
-      title: "Basement Cleaning",
-      price: 25,
-      subtitle: "Complete basement cleaning and organization"
-    },
-    {
-      title: "Window Cleaning",
-      price: 25,
-      subtitle: "Interior windows and tracks"
-    },
-    {
-      title: "Garage Cleaning",
-      price: 20,
-      subtitle: "Sweep, organize, and clean garage space"
-    },
-    {
-      title: "Laundry Service",
-      price: 35,
-      subtitle: "Wash, dry, and fold one load"
-    },
-    {
-      title: "Closet Organization",
-      price: 15,
-      subtitle: "Organize and arrange closet contents"
-    },
-    {
-      title: "Plant Care",
-      price: 10,
-      subtitle: "Water and care for houseplants"
-    }
-  ];
+export default async function ServicesSection3() {
+  const popularServices = await getServiceAddOns();
   return (
     <section className="py-24 pb-36 gap-16 flex flex-col">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
@@ -54,12 +14,12 @@ export default function ServicesSection3() {
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {popularServices.map((popularService, _index) => (
+        {popularServices.map((popularService) => (
           <PopularServiceCard
-            key={_index}
-            title={popularService.title}
+            key={popularService.id}
+            title={popularService.name}
             price={popularService.price}
-            subtitle={popularService.subtitle}
+            subtitle={popularService.description}
           />
         ))}
       </div>

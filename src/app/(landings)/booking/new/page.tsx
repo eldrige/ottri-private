@@ -5,6 +5,9 @@ import { axios, serverRequest } from "@/lib/axios";
 import { PreflightType } from "./types";
 import { UserData } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function NewOrderPage() {
   const data = await Promise.all([
     axios.get("bookings/preflight"),
