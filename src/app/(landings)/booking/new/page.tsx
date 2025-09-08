@@ -4,6 +4,9 @@ import Link from "next/link";
 import { axios } from "@/lib/axios";
 import { PreflightType } from "./types";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function NewOrderPage() {
   console.log("start fetching preflight");
   const preflightData = (await axios.get("bookings/preflight"))
