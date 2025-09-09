@@ -36,7 +36,7 @@ export default function CalendarView({ bookings }: { bookings: Booking[] }) {
   // ];
 
   const myEvents = bookings.map((booking) => ({
-    title: booking.customer?.personalInformation.fullName || "Guest",
+    title: booking.customer?.personalInformation?.fullName || "Guest",
     start: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.startTime}:00:00`,
     end: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.endTime}:00:00`,
     extendedProps: {
