@@ -1,12 +1,13 @@
 "use client";
+import { cancelBooking } from "@/app/admin/_actions/bookings";
 import { Booking } from "@/app/admin/types";
 import CallIcon from "@/components/icons/CallIcon";
 import EditIcon from "@/components/icons/EditIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { Button } from "@/components/ui/Button";
-import Select from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface StatusType {
@@ -15,21 +16,21 @@ interface StatusType {
 }
 
 export default function ListItem({
-  statuses,
-  initialStatus,
+  status,
   booking,
   setEditBooking,
   setAssignCleaners
 }: {
-  statuses: StatusType[];
-  initialStatus: StatusType;
+  status: StatusType;
   booking: Booking;
   setEditBooking: (booking: Booking) => void;
   setAssignCleaners: (booking: Booking) => void;
 }) {
-  const [status, setStatus] = useState(initialStatus);
+  const router = useRouter();
+  // const [status, setStatus] = useState(initialStatus);
+  const [cancelling, setCancelling] = useState(false);
 
-  const bookingName = booking.customer?.personalInformation.fullName || "";
+  const bookingName = booking.customer?.personalInformation?.fullName || "";
   const bookingNumber = booking.id;
   const service = booking.serviceType.name;
   const dateTime = format(
@@ -38,7 +39,7 @@ export default function ListItem({
   );
   const cleaners = booking.cleaners;
   const address = booking.address;
-  const phone = booking.customer?.personalInformation.phoneNumber || "";
+  const phone = booking.customer?.personalInformation?.phoneNumber || "";
   const price = booking.price || 0;
   const notes = [
     booking.otherAddOns,
@@ -53,29 +54,22 @@ export default function ListItem({
       <div>
         <div className="flex items-center gap-3">
           <span className="font-medium">{bookingName || "Guest"}</span>
-          <Select
-            accent="secondary"
-            options={statuses}
-            buttonClassName={cn(
-              "py-1.5 px-3 gap-2",
+          <div
+            className={cn(
+              "py-1.5 px-3 text-sm rounded-md inline-flex items-center",
               status.value === "PENDING"
-                ? "bg-warning/20 *:text-warning-text"
+                ? "bg-warning/20 text-warning-text"
                 : status.value === "INPROGRESS"
-                  ? "bg-info/20 *:text-info-text"
+                  ? "bg-info/20 text-info-text"
                   : status.value === "COMPLETED"
-                    ? "bg-success/10 *:text-success"
+                    ? "bg-success/10 text-success"
                     : status.value === "CANCELLED"
-                      ? "bg-error/10 *:text-error"
+                      ? "bg-error/10 text-error"
                       : ""
             )}
-            // activeClassName='bg-black/30 text-secondary-700'
-            className="text-sm"
-            placeholder="In Progress"
-            value={status}
-            onChange={(newStatus) => {
-              setStatus(newStatus);
-            }}
-          />
+          >
+            {status.label}
+          </div>
           <span className="text-xs text-secondary-700/70">
             #{bookingNumber.toString().padStart(3, "0")}
           </span>
@@ -144,14 +138,23 @@ export default function ListItem({
             <CallIcon className="size-4" />
             Call
           </Button>
-          <Button
-            size="2xs"
-            variant={"destructive"}
-            className="text-xs flex items-center justify-center gap-1 border-black/10"
-          >
-            <TrashIcon className="size-4" />
-            Delete
-          </Button>
+          {status.value !== "CANCELLED" && (
+            <Button
+              disabled={cancelling}
+              size="2xs"
+              variant={"destructive"}
+              className="text-xs flex items-center justify-center gap-1 border-black/10"
+              onClick={async () => {
+                setCancelling(true);
+                await cancelBooking(booking.id);
+                router.refresh();
+                setCancelling(false);
+              }}
+            >
+              <TrashIcon className="size-4" />
+              {cancelling ? "Cancelling" : "Cancel"}
+            </Button>
+          )}
         </div>
         {!cleaners.length && (
           <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0">

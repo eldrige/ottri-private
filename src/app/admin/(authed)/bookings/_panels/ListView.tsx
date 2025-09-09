@@ -127,8 +127,7 @@ export default function ListView({
           {bookings.map((booking) => (
             <ListItem
               key={booking.id}
-              statuses={statuses}
-              initialStatus={
+              status={
                 statuses.find((i) => i.value === booking.status) || statuses[0]
               }
               booking={booking}

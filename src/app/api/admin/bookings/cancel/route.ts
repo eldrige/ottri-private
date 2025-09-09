@@ -1,4 +1,4 @@
-import { serverRequest } from "@/lib/axios";
+import { serverRequest } from "@/lib/serverRequest";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {

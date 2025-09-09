@@ -7,7 +7,7 @@ import {
   calculateServicesPrice,
   calculateTotal
 } from "../../../utils/priceCalculation";
-import { serverRequest } from "@/lib/axios";
+import { serverRequest } from "@/lib/serverRequest";
 
 // Extend the type to include the paymentMethodId we added
 interface OrderRequest extends OrderFormValues {

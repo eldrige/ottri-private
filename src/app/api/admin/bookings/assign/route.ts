@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { serverRequest } from "@/lib/axios";
+import { serverRequest } from "@/lib/serverRequest";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 

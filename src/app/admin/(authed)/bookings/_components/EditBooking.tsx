@@ -25,7 +25,7 @@ export default function EditBooking({
   }));
 
   const [newBookingData, setNewBookingData] = useState({
-    fullName: booking.customer?.personalInformation.fullName,
+    fullName: booking.customer?.personalInformation?.fullName,
     serviceType: booking.serviceType.serviceId,
     bedrooms: booking.bedrooms,
     bathrooms: booking.bathrooms,

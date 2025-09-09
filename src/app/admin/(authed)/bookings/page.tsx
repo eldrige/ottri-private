@@ -1,4 +1,5 @@
-import { axios, serverRequest } from "@/lib/axios";
+import { axios } from "@/lib/axios";
+import { serverRequest } from "@/lib/serverRequest";
 import ClientAdminBookingsPage from "./ClientAdminBookingsPage";
 import { BookingsResponse, Cleaner, ServiceOption } from "../../types";
 
@@ -21,7 +22,6 @@ export default async function AdminBookingsPage({
   const servicesOptions = res[1].data as ServiceOption[];
   const cleaners = res[2].data as Cleaner[];
 
-  console.log(bookings.data);
   return (
     <ClientAdminBookingsPage
       bookingsResponse={bookings}
