@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito_Sans, Poppins } from "next/font/google";
 import "./globals.css";
-import Providers from "./providers";
+import Providers from "./QueryProviders";
 
 const poppins = Poppins({
   variable: "--font-poppins",
