@@ -7,7 +7,7 @@ import {
   calculateServicesPrice,
   calculateTotal
 } from "../../../utils/priceCalculation";
-import { axios } from "@/lib/axios";
+import { serverRequest } from "@/lib/axios";
 
 // Extend the type to include the paymentMethodId we added
 interface OrderRequest extends OrderFormValues {
@@ -91,10 +91,14 @@ export async function POST(request: Request) {
     };
     console.log(bodyObj);
 
-    const apiResponse = await axios.post("bookings", bodyObj).catch((i) => {
-      console.log(i.response.data);
-      throw i;
-    });
+    console.time("time");
+    const apiResponse = await serverRequest("bookings", "POST", bodyObj).catch(
+      (i) => {
+        console.log(i.response.data);
+        throw i;
+      }
+    );
+    console.timeEnd("time");
     console.log(apiResponse);
 
     const newOrderId =
