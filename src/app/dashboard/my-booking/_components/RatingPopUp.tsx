@@ -10,7 +10,16 @@ export default function RatingPopUp({
   isOpen,
   onClose
 }: {
-  booking: Booking;
+  booking: Pick<
+    Booking,
+    | "id"
+    | "serviceType"
+    | "timeSlot"
+    | "address"
+    | "cleaners"
+    | "status"
+    | "price"
+  >;
   isOpen: boolean;
   onClose: () => void;
 }) {

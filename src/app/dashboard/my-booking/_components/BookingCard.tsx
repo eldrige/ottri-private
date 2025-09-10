@@ -28,14 +28,28 @@ export default function BookingCard({
 }: {
   service: BookingCardProps;
   setIsOpen?: (isOpen: boolean) => void;
-  setBookedServiceOnRating?: (service: Partial<Booking>) => void;
+  setBookedServiceOnRating?: (
+    service: Pick<
+      Booking,
+      | "id"
+      | "serviceType"
+      | "cleaners"
+      | "timeSlot"
+      | "address"
+      | "status"
+      | "price"
+    >
+  ) => void;
 }) {
   const handleCancel = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`/api/bookings/cancel/${service.id}`, {
-        method: "DELETE"
+      const response = await fetch(`/api/bookings/cancel`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          bookingId: service.id
+        })
       });
 
       if (!response.ok) {
@@ -74,6 +88,7 @@ export default function BookingCard({
 }
 
 function DesktopBookingCard({
+  id,
   serviceType,
   cleaners,
   timeSlot,
@@ -85,7 +100,18 @@ function DesktopBookingCard({
   handleCancel
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
-  setBookedServiceOnRating?: (service: Partial<Booking>) => void;
+  setBookedServiceOnRating?: (
+    service: Pick<
+      Booking,
+      | "id"
+      | "serviceType"
+      | "timeSlot"
+      | "address"
+      | "cleaners"
+      | "status"
+      | "price"
+    >
+  ) => void;
   handleCancel?: (e: React.FormEvent) => void;
 }) {
   return (
@@ -159,6 +185,7 @@ function DesktopBookingCard({
                   <Button
                     onClick={() => {
                       setBookedServiceOnRating({
+                        id,
                         serviceType,
                         cleaners,
                         timeSlot,
@@ -182,6 +209,7 @@ function DesktopBookingCard({
 }
 
 function MobileBookingCard({
+  id,
   serviceType,
   cleaners,
   timeSlot,
@@ -193,7 +221,18 @@ function MobileBookingCard({
   handleCancel
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
-  setBookedServiceOnRating?: (service: Partial<Booking>) => void;
+  setBookedServiceOnRating?: (
+    service: Pick<
+      Booking,
+      | "id"
+      | "serviceType"
+      | "timeSlot"
+      | "address"
+      | "cleaners"
+      | "status"
+      | "price"
+    >
+  ) => void;
   handleCancel?: (e: React.FormEvent) => void;
 }) {
   return (
@@ -267,12 +306,13 @@ function MobileBookingCard({
             <Button
               onClick={() => {
                 setBookedServiceOnRating({
+                  id,
                   serviceType,
                   cleaners,
                   timeSlot,
-                  address,
-                  status,
-                  price
+                  address: "",
+                  status: "PENDING",
+                  price: 0
                 });
                 setIsOpen(true);
               }}

@@ -4,12 +4,9 @@ import { serverRequest } from "@/lib/axios";
 import { Booking } from "@/app/dashboard/_utils/types";
 import { revalidatePath } from "next/cache";
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { bookingId: string } }
-) {
+export async function DELETE(req: NextRequest) {
   try {
-    const { bookingId } = params;
+    const { bookingId } = await req.json();
 
     // Validate inputs
     if (!bookingId) {

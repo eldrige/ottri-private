@@ -11,9 +11,20 @@ export default function MyBookingSection4({
   pastBookings: Booking[];
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [bookedServiceOnRating, setBookedServiceOnRating] = useState<Booking>(
-    pastBookings[0]
-  );
+  const [bookedServiceOnRating, setBookedServiceOnRating] = useState<
+    Pick<
+      Booking,
+      | "id"
+      | "serviceType"
+      | "timeSlot"
+      | "address"
+      | "cleaners"
+      | "status"
+      | "price"
+    >
+  >({
+    ...pastBookings[0]
+  });
   return (
     <>
       <div className="flex flex-col gap-6">
