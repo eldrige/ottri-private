@@ -1,5 +1,4 @@
 "use client";
-import { cancelBooking } from "@/app/admin/_actions/bookings";
 import { Booking } from "@/app/admin/types";
 import CallIcon from "@/components/icons/CallIcon";
 import EditIcon from "@/components/icons/EditIcon";
@@ -7,8 +6,8 @@ import TrashIcon from "@/components/icons/TrashIcon";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
+import { useCancelBookingMutation } from "../services/mutations";
 
 interface StatusType {
   label: string;
@@ -26,9 +25,8 @@ export default function ListItem({
   setEditBooking: (booking: Booking) => void;
   setAssignCleaners: (booking: Booking) => void;
 }) {
-  const router = useRouter();
-  // const [status, setStatus] = useState(initialStatus);
-  const [cancelling, setCancelling] = useState(false);
+  const { mutateAsync: mutateCancel, isPending: isCancelling } =
+    useCancelBookingMutation();
 
   const bookingName = booking.customer?.personalInformation?.fullName || "";
   const bookingNumber = booking.id;
@@ -140,19 +138,16 @@ export default function ListItem({
           </Button>
           {status.value !== "CANCELLED" && (
             <Button
-              disabled={cancelling}
+              disabled={isCancelling}
               size="2xs"
               variant={"destructive"}
               className="text-xs flex items-center justify-center gap-1 border-black/10"
               onClick={async () => {
-                setCancelling(true);
-                await cancelBooking(booking.id);
-                router.refresh();
-                setCancelling(false);
+                await mutateCancel({ bookingId: booking.id });
               }}
             >
               <TrashIcon className="size-4" />
-              {cancelling ? "Cancelling" : "Cancel"}
+              {isCancelling ? "Cancelling" : "Cancel"}
             </Button>
           )}
         </div>

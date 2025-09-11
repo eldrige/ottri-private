@@ -1,0 +1,41 @@
+"use server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { serverRequest } from "@/lib/serverRequest";
+import { Booking } from "../../types";
+// import { NextResponse } from "next/server";
+
+// export async function assignCleaner(bookingId: string, cleanerId: string) {
+export async function assignCleaner({
+  bookingId,
+  cleanerId
+}: {
+  bookingId: string;
+  cleanerId: string;
+}) {
+  console.log({ bookingId, cleanerId });
+  try {
+    const booking = await serverRequest(
+      `bookings/${bookingId}/assign`,
+      "POST",
+      {
+        cleanerId: +cleanerId
+      }
+    );
+    console.log(booking.data);
+    return booking.data as Booking;
+  } catch (err: any) {
+    console.log(err.response);
+    throw err;
+  }
+}
+
+export async function cancelBooking({ bookingId }: { bookingId: number }) {
+  console.log({ bookingId });
+  try {
+    const booking = await serverRequest(`bookings/${bookingId}`, "DELETE");
+    return booking.data;
+  } catch (err: any) {
+    console.log(err.response);
+    throw err;
+  }
+}

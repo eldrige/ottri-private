@@ -1,4 +1,3 @@
-import { assignCleaner } from "@/app/admin/_actions/bookings";
 import { Booking, Cleaner } from "@/app/admin/types";
 import ClockIcon2 from "@/components/icons/ClockIcon2";
 import StarIcon from "@/components/icons/StarIcon";
@@ -6,8 +5,8 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useAssignCleanerMutation } from "../services/mutations";
 
 export default function AssignCleaner({
   booking,
@@ -18,11 +17,11 @@ export default function AssignCleaner({
   cleaners: Cleaner[];
   onClose: () => void;
 }) {
+  const { mutateAsync: cleanerMutate, isPending } = useAssignCleanerMutation();
   const [selectedCleanerId, setSelectedCleanerId] = useState<string | null>(
     null
   );
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  // const [isLoading, setIsLoading] = useState(false);
 
   const dateTime = format(
     new Date(booking.timeSlot.date),
@@ -33,15 +32,14 @@ export default function AssignCleaner({
     if (!selectedCleanerId) return;
 
     try {
-      setIsLoading(true);
-      await assignCleaner(booking.id.toString(), selectedCleanerId);
+      await cleanerMutate({
+        bookingId: booking.id.toString(),
+        cleanerId: selectedCleanerId
+      });
 
       onClose();
-      router.refresh();
     } catch (error) {
       console.error("Error assigning cleaner:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -162,9 +160,9 @@ export default function AssignCleaner({
             variant={"secondary"}
             size={"xs"}
             onClick={handleAssignCleaner}
-            disabled={!selectedCleanerId || isLoading}
+            disabled={!selectedCleanerId || isPending}
           >
-            {isLoading ? "Assigning..." : "Assign Cleaner"}
+            {isPending ? "Assigning..." : "Assign Cleaner"}
           </Button>
         </div>
       </div>

@@ -1,20 +1,18 @@
 import { axios } from "@/lib/axios";
-import { serverRequest } from "@/lib/serverRequest";
 import ClientAdminBookingsPage from "./ClientAdminBookingsPage";
 import { BookingsResponse, Cleaner, ServiceOption } from "../../types";
+import { getBookings } from "@/lib/api/bookings";
+import { Suspense } from "react";
 
 export default async function AdminBookingsPage({
   searchParams
 }: {
   searchParams: Promise<Record<string, string>>;
 }) {
-  const filter = (await searchParams).filter;
+  // const filter = (await searchParams).filter;
 
   const res = await Promise.all([
-    serverRequest(
-      `bookings?limit=30${filter ? `&status=${filter}` : ""}`,
-      "GET"
-    ),
+    getBookings(new URLSearchParams(await searchParams)),
     axios.get("services"),
     axios.get("cleaners?limit=50")
   ]);
@@ -23,10 +21,12 @@ export default async function AdminBookingsPage({
   const cleaners = res[2].data as Cleaner[];
 
   return (
-    <ClientAdminBookingsPage
-      bookingsResponse={bookings}
-      servicesOptions={servicesOptions}
-      cleaners={cleaners}
-    />
+    <Suspense fallback={<div>Loading...</div>}>
+      <ClientAdminBookingsPage
+        initialBookingsResponse={bookings}
+        servicesOptions={servicesOptions}
+        cleaners={cleaners}
+      />
+    </Suspense>
   );
 }

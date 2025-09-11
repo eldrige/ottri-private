@@ -13,6 +13,7 @@ import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
 import { BookingsResponse, Cleaner, ServiceOption } from "../../types";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useGetBookingsQuery } from "./services/queries";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -23,18 +24,26 @@ const filterOptions = [
 ];
 
 export default function ClientAdminBookingsPage({
-  bookingsResponse,
+  initialBookingsResponse,
   servicesOptions,
   cleaners
 }: {
-  bookingsResponse: BookingsResponse;
+  initialBookingsResponse: BookingsResponse;
   servicesOptions: ServiceOption[];
   cleaners: Cleaner[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const filter = searchParams.get("filter");
+  const statusFilter = searchParams.get("status") || undefined;
   const [activeView, setActiveView] = useState<string>("calendar");
+
+  const getBookingsQuery = useGetBookingsQuery(
+    initialBookingsResponse,
+    statusFilter || ""
+  );
+  console.log(getBookingsQuery.isLoading);
+  const bookingsResponse = getBookingsQuery.data;
+  console.log(bookingsResponse);
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
@@ -50,14 +59,14 @@ export default function ClientAdminBookingsPage({
           <Select
             options={filterOptions}
             value={
-              filter
-                ? filterOptions.find((i) => i.value === filter)
+              statusFilter
+                ? filterOptions.find((i) => i.value === statusFilter)
                 : filterOptions[0]
             }
             onChange={(option) => {
               if (option.value === "all-bookings")
-                router.push("/admin/bookings");
-              else router.push(`/admin/bookings?filter=${option.value}`);
+                router.replace("/admin/bookings");
+              else router.replace(`/admin/bookings?status=${option.value}`);
             }}
             placeholder="All Bookings"
             buttonClassName="border-none gap-2 font-medium"
