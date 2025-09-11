@@ -25,7 +25,7 @@ export default function ListItem({
 }) {
   const [status, setStatus] = useState(initialStatus);
 
-  const bookingName = booking.customer?.personalInformation.fullName || "";
+  const bookingName = booking.customer?.personalInformation?.fullName || "";
   const bookingNumber = booking.id;
   const service = booking.serviceType.name;
   const dateTime = format(
@@ -34,7 +34,7 @@ export default function ListItem({
   );
   const cleaners = booking.cleaners;
   const address = booking.address;
-  const phone = booking.customer?.personalInformation.phoneNumber || "";
+  const phone = booking.customer?.personalInformation?.phoneNumber || "";
   const price = booking.price || 0;
   const notes = [
     booking.otherAddOns,
