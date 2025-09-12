@@ -1,13 +1,17 @@
 "use client";
 import { Booking } from "@/app/admin/types";
 import CallIcon from "@/components/icons/CallIcon";
-import EditIcon from "@/components/icons/EditIcon";
+// import EditIcon from "@/components/icons/EditIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { Button } from "@/components/ui/Button";
-import Select from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import React, { useState } from "react";
+import React from "react";
+import {
+  useCancelBookingMutation,
+  useCompleteBookingMutation,
+  useStartBookingMutation
+} from "../services/mutations";
 
 interface StatusType {
   label: string;
@@ -15,17 +19,24 @@ interface StatusType {
 }
 
 export default function ListItem({
-  statuses,
-  initialStatus,
-  booking
+  status,
+  booking,
+  // setEditBooking,
+  setAssignCleaners
 }: {
-  statuses: StatusType[];
-  initialStatus: StatusType;
+  status: StatusType;
   booking: Booking;
+  setEditBooking: (booking: Booking) => void;
+  setAssignCleaners: (booking: Booking) => void;
 }) {
-  const [status, setStatus] = useState(initialStatus);
+  const { mutateAsync: mutateCancel, isPending: isCancelling } =
+    useCancelBookingMutation();
+  const { mutateAsync: mutateStart, isPending: isStarting } =
+    useStartBookingMutation();
+  const { mutateAsync: mutateComplete, isPending: isCompleting } =
+    useCompleteBookingMutation();
 
-  const bookingName = booking.customer?.personalInformation.fullName || "";
+  const bookingName = booking.customer?.personalInformation?.fullName || "";
   const bookingNumber = booking.id;
   const service = booking.serviceType.name;
   const dateTime = format(
@@ -34,7 +45,7 @@ export default function ListItem({
   );
   const cleaners = booking.cleaners;
   const address = booking.address;
-  const phone = booking.customer?.personalInformation.phoneNumber || "";
+  const phone = booking.customer?.personalInformation?.phoneNumber || "";
   const price = booking.price || 0;
   const notes = [
     booking.otherAddOns,
@@ -49,29 +60,22 @@ export default function ListItem({
       <div>
         <div className="flex items-center gap-3">
           <span className="font-medium">{bookingName || "Guest"}</span>
-          <Select
-            accent="secondary"
-            options={statuses}
-            buttonClassName={cn(
-              "py-1.5 px-3 gap-2",
-              status.value === "pending"
-                ? "bg-warning/20 *:text-warning-text"
-                : status.value === "in-progress"
-                  ? "bg-info/20 *:text-info-text"
-                  : status.value === "completed"
-                    ? "bg-success/10 *:text-success"
-                    : status.value === "cancelled"
-                      ? "bg-error/10 *:text-error"
+          <div
+            className={cn(
+              "py-1.5 px-3 text-sm rounded-md inline-flex items-center",
+              status.value === "PENDING"
+                ? "bg-warning/20 text-warning-text"
+                : status.value === "INPROGRESS"
+                  ? "bg-info/20 text-info-text"
+                  : status.value === "COMPLETED"
+                    ? "bg-success/10 text-success"
+                    : status.value === "CANCELLED"
+                      ? "bg-error/10 text-error"
                       : ""
             )}
-            // activeClassName='bg-black/30 text-secondary-700'
-            className="text-sm"
-            placeholder="In Progress"
-            value={status}
-            onChange={(newStatus) => {
-              setStatus(newStatus);
-            }}
-          />
+          >
+            {status.label}
+          </div>
           <span className="text-xs text-secondary-700/70">
             #{bookingNumber.toString().padStart(3, "0")}
           </span>
@@ -90,7 +94,9 @@ export default function ListItem({
             <p>
               <span className="font-medium mr-2">Cleaners:</span>
               {cleaners?.length ? (
-                cleaners.map((cleaner) => <span key={cleaner}>{cleaners}</span>)
+                cleaners.map((cleaner) => (
+                  <span key={cleaner.id}>{cleaner.fullName}</span>
+                ))
               ) : (
                 <span className="text-error">Unassigned</span>
               )}
@@ -121,14 +127,15 @@ export default function ListItem({
 
       <div className="w-full lg:w-auto">
         <div className="flex items-start justify-end gap-3 *:flex-1 lg:*:flex-0">
-          <Button
+          {/* <Button
             size="2xs"
             variant={"secondary-outline"}
             className="text-xs flex items-center justify-center gap-1 border-black/10"
+            onClick={() => setEditBooking(booking)}
           >
             <EditIcon className="size-4" />
             Edit
-          </Button>
+          </Button> */}
           <Button
             size="2xs"
             variant={"secondary-outline"}
@@ -137,22 +144,52 @@ export default function ListItem({
             <CallIcon className="size-4" />
             Call
           </Button>
-          <Button
-            size="2xs"
-            variant={"destructive"}
-            className="text-xs flex items-center justify-center gap-1 border-black/10"
-          >
-            <TrashIcon className="size-4" />
-            Delete
-          </Button>
+          {status.value === "PENDING" && cleaners.length > 0 && (
+            <Button
+              size="2xs"
+              variant={"secondary-outline"}
+              className="text-xs flex items-center justify-center gap-1 border-black/10 bg-success/15"
+              onClick={() => mutateStart({ bookingId: booking.id })}
+              disabled={isStarting}
+            >
+              {isStarting ? "Starting" : "Start"}
+            </Button>
+          )}
+          {status.value === "INPROGRESS" && (
+            <Button
+              size="2xs"
+              variant={"secondary-outline"}
+              className="text-xs flex items-center justify-center gap-1 border-black/10 bg-success/15"
+              onClick={() => mutateComplete({ bookingId: booking.id })}
+              disabled={isCompleting}
+            >
+              {isCompleting ? "Completing" : "Complete"}
+            </Button>
+          )}
+          {status.value !== "CANCELLED" && status.value !== "COMPLETED" && (
+            <Button
+              disabled={isCancelling}
+              size="2xs"
+              variant={"destructive"}
+              className="text-xs flex items-center justify-center gap-1 border-black/10"
+              onClick={() => mutateCancel({ bookingId: booking.id })}
+            >
+              <TrashIcon className="size-4" />
+              {isCancelling ? "Cancelling" : "Cancel"}
+            </Button>
+          )}
         </div>
-        {!cleaners && (
-          <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0">
-            <Button size={"2xs"} variant={"secondary"}>
+        <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0 gap-3">
+          {!cleaners.length && status.value === "PENDING" && (
+            <Button
+              size={"2xs"}
+              variant={"secondary"}
+              onClick={() => setAssignCleaners(booking)}
+            >
               Assign Cleaner
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

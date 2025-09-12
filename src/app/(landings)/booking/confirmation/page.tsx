@@ -10,6 +10,7 @@ import { axios } from "@/lib/axios";
 import { BookingType } from "@/lib/types";
 import { format } from "date-fns";
 import { DownloadIcon, PlusIcon } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 export default async function ConfirmationPage({
@@ -199,22 +200,24 @@ export default async function ConfirmationPage({
             <div className="p-8 space-y-14 shadow-custom-light rounded-lg">
               <h4 className="text-heading-5">Quick Action</h4>
               <div className="flex flex-col gap-6">
-                <Button
-                  className="flex gap-3 items-center justify-center"
-                  size={"xs"}
-                  variant={"secondary"}
-                >
-                  <PlusIcon className="size-6" />
-                  Book Another Cleaning
-                </Button>
-                <Button
-                  className="flex gap-3 items-center justify-center"
-                  size={"xs"}
-                  variant={"default-outline"}
-                >
-                  <CalendarIcon className="size-6" />
-                  Add to calendar
-                </Button>
+                <Link href="/booking/new">
+                  <Button
+                    className="flex gap-3 items-center justify-center"
+                    size={"xs"}
+                    variant={"secondary"}
+                  >
+                    <PlusIcon className="size-6" />
+                    Book Another Cleaning
+                  </Button>
+                  <Button
+                    className="flex gap-3 items-center justify-center"
+                    size={"xs"}
+                    variant={"default-outline"}
+                  >
+                    <CalendarIcon className="size-6" />
+                    Add to calendar
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

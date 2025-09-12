@@ -56,6 +56,12 @@ export default function PropertyDetailsStep() {
           placeholder="Start typing your address"
           error={errors.serviceAddress?.message}
           required
+          onSelectedAddress={(address) => {
+            setValue("country", address.country);
+            setValue("state", address.state);
+            setValue("city", address.city);
+            setValue("zipCode", address.postcode);
+          }}
         />
         <p className="text-surface-500">
           This is where our team will provide the cleaning service

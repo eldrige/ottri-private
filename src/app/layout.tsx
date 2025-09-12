@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito_Sans, Poppins } from "next/font/google";
 import "./globals.css";
+import Providers from "./QueryProviders";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -28,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${nunitoSans.variable} antialiased font-poppins`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

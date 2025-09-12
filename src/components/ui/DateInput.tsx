@@ -91,7 +91,8 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
           {isOpen && (
             <div className="absolute z-50 mt-1 bg-white shadow-lg rounded-lg border border-gray-200">
               <DayPicker
-                timeZone="America/Kentucky/Louisville"
+                // timeZone="America/Kentucky/Louisville"
+                timeZone="UTC"
                 disabled={(date) => {
                   if (date < new Date()) return true;
 
