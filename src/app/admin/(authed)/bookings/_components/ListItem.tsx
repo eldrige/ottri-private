@@ -1,13 +1,17 @@
 "use client";
 import { Booking } from "@/app/admin/types";
 import CallIcon from "@/components/icons/CallIcon";
-import EditIcon from "@/components/icons/EditIcon";
+// import EditIcon from "@/components/icons/EditIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import React from "react";
-import { useCancelBookingMutation } from "../services/mutations";
+import {
+  useCancelBookingMutation,
+  useCompleteBookingMutation,
+  useStartBookingMutation
+} from "../services/mutations";
 
 interface StatusType {
   label: string;
@@ -17,7 +21,7 @@ interface StatusType {
 export default function ListItem({
   status,
   booking,
-  setEditBooking,
+  // setEditBooking,
   setAssignCleaners
 }: {
   status: StatusType;
@@ -27,6 +31,10 @@ export default function ListItem({
 }) {
   const { mutateAsync: mutateCancel, isPending: isCancelling } =
     useCancelBookingMutation();
+  const { mutateAsync: mutateStart, isPending: isStarting } =
+    useStartBookingMutation();
+  const { mutateAsync: mutateComplete, isPending: isCompleting } =
+    useCompleteBookingMutation();
 
   const bookingName = booking.customer?.personalInformation?.fullName || "";
   const bookingNumber = booking.id;
@@ -119,7 +127,7 @@ export default function ListItem({
 
       <div className="w-full lg:w-auto">
         <div className="flex items-start justify-end gap-3 *:flex-1 lg:*:flex-0">
-          <Button
+          {/* <Button
             size="2xs"
             variant={"secondary-outline"}
             className="text-xs flex items-center justify-center gap-1 border-black/10"
@@ -127,7 +135,7 @@ export default function ListItem({
           >
             <EditIcon className="size-4" />
             Edit
-          </Button>
+          </Button> */}
           <Button
             size="2xs"
             variant={"secondary-outline"}
@@ -136,23 +144,43 @@ export default function ListItem({
             <CallIcon className="size-4" />
             Call
           </Button>
-          {status.value !== "CANCELLED" && (
+          {status.value === "PENDING" && cleaners.length > 0 && (
+            <Button
+              size="2xs"
+              variant={"secondary-outline"}
+              className="text-xs flex items-center justify-center gap-1 border-black/10 bg-success/15"
+              onClick={() => mutateStart({ bookingId: booking.id })}
+              disabled={isStarting}
+            >
+              {isStarting ? "Starting" : "Start"}
+            </Button>
+          )}
+          {status.value === "INPROGRESS" && (
+            <Button
+              size="2xs"
+              variant={"secondary-outline"}
+              className="text-xs flex items-center justify-center gap-1 border-black/10 bg-success/15"
+              onClick={() => mutateComplete({ bookingId: booking.id })}
+              disabled={isCompleting}
+            >
+              {isCompleting ? "Completing" : "Complete"}
+            </Button>
+          )}
+          {status.value !== "CANCELLED" && status.value !== "COMPLETED" && (
             <Button
               disabled={isCancelling}
               size="2xs"
               variant={"destructive"}
               className="text-xs flex items-center justify-center gap-1 border-black/10"
-              onClick={async () => {
-                await mutateCancel({ bookingId: booking.id });
-              }}
+              onClick={() => mutateCancel({ bookingId: booking.id })}
             >
               <TrashIcon className="size-4" />
               {isCancelling ? "Cancelling" : "Cancel"}
             </Button>
           )}
         </div>
-        {!cleaners.length && (
-          <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0">
+        <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0 gap-3">
+          {!cleaners.length && status.value === "PENDING" && (
             <Button
               size={"2xs"}
               variant={"secondary"}
@@ -160,8 +188,8 @@ export default function ListItem({
             >
               Assign Cleaner
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

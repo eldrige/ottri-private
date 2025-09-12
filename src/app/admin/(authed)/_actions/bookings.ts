@@ -39,3 +39,28 @@ export async function cancelBooking({ bookingId }: { bookingId: number }) {
     throw err;
   }
 }
+
+export async function startBooking({ bookingId }: { bookingId: number }) {
+  console.log({ bookingId });
+  try {
+    const booking = await serverRequest(`bookings/${bookingId}/start`, "POST");
+    return booking.data;
+  } catch (err: any) {
+    console.log(err.response);
+    throw err;
+  }
+}
+
+export async function completeBooking({ bookingId }: { bookingId: number }) {
+  console.log({ bookingId });
+  try {
+    const booking = await serverRequest(
+      `bookings/${bookingId}/complete`,
+      "POST"
+    );
+    return booking.data;
+  } catch (err: any) {
+    console.log(err.response);
+    throw err;
+  }
+}

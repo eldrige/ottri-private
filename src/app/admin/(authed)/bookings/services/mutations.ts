@@ -3,7 +3,12 @@ import {
   useMutation,
   useQueryClient
 } from "@tanstack/react-query";
-import { assignCleaner, cancelBooking } from "../../_actions/bookings";
+import {
+  assignCleaner,
+  cancelBooking,
+  completeBooking,
+  startBooking
+} from "../../_actions/bookings";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { Booking, BookingsResponse } from "@/app/admin/types";
 
@@ -25,7 +30,29 @@ export function useCancelBookingMutation() {
   return useMutation({
     mutationFn: cancelBooking,
     onSuccess: (data) => {
-      removeBookingHelper(searchParams, queryClient, data);
+      updateBookingHelper(searchParams, queryClient, data);
+    }
+  });
+}
+
+export function useStartBookingMutation() {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  return useMutation({
+    mutationFn: startBooking,
+    onSuccess: (data) => {
+      updateBookingHelper(searchParams, queryClient, data);
+    }
+  });
+}
+
+export function useCompleteBookingMutation() {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  return useMutation({
+    mutationFn: completeBooking,
+    onSuccess: (data) => {
+      updateBookingHelper(searchParams, queryClient, data);
     }
   });
 }
@@ -52,21 +79,21 @@ function updateBookingHelper(
   queryClient.setQueryData(["bookings", statusFilter], newData);
 }
 
-function removeBookingHelper(
-  searchParams: ReadonlyURLSearchParams,
-  queryClient: QueryClient,
-  booking: Booking
-) {
-  const statusFilter = searchParams.get("status") || "";
-  const queryData = queryClient.getQueryData([
-    "bookings",
-    statusFilter
-  ]) as BookingsResponse;
-  if (!queryData) return;
+// function removeBookingHelper(
+//   searchParams: ReadonlyURLSearchParams,
+//   queryClient: QueryClient,
+//   booking: Booking
+// ) {
+//   const statusFilter = searchParams.get("status") || "";
+//   const queryData = queryClient.getQueryData([
+//     "bookings",
+//     statusFilter
+//   ]) as BookingsResponse;
+//   if (!queryData) return;
 
-  const newBookings = queryData.data.filter((i) => i.id !== booking.id);
+//   const newBookings = queryData.data.filter((i) => i.id !== booking.id);
 
-  const newData = { ...queryData, data: newBookings } as BookingsResponse;
+//   const newData = { ...queryData, data: newBookings } as BookingsResponse;
 
-  queryClient.setQueryData(["bookings", statusFilter], newData);
-}
+//   queryClient.setQueryData(["bookings", statusFilter], newData);
+// }

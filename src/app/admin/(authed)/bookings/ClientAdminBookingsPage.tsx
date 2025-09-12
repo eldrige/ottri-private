@@ -11,8 +11,8 @@ import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
 import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
-import { BookingsResponse, Cleaner, ServiceOption } from "../../types";
-import { useSearchParams, useRouter } from "next/navigation";
+import { Cleaner, ServiceOption } from "../../types";
+import { useSearchParams } from "next/navigation";
 import { useGetBookingsQuery } from "./services/queries";
 
 const filterOptions = [
@@ -24,26 +24,21 @@ const filterOptions = [
 ];
 
 export default function ClientAdminBookingsPage({
-  initialBookingsResponse,
   servicesOptions,
   cleaners
 }: {
-  initialBookingsResponse: BookingsResponse;
   servicesOptions: ServiceOption[];
   cleaners: Cleaner[];
 }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const statusFilter = searchParams.get("status") || undefined;
+  console.log(searchParams.get("status"));
+  const [statusFilter, setStatusFilter] = useState(
+    searchParams.get("status") || ""
+  );
   const [activeView, setActiveView] = useState<string>("calendar");
 
-  const getBookingsQuery = useGetBookingsQuery(
-    initialBookingsResponse,
-    statusFilter || ""
-  );
-  console.log(getBookingsQuery.isLoading);
+  const getBookingsQuery = useGetBookingsQuery(statusFilter);
   const bookingsResponse = getBookingsQuery.data;
-  console.log(bookingsResponse);
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
@@ -64,9 +59,19 @@ export default function ClientAdminBookingsPage({
                 : filterOptions[0]
             }
             onChange={(option) => {
-              if (option.value === "all-bookings")
-                router.replace("/admin/bookings");
-              else router.replace(`/admin/bookings?status=${option.value}`);
+              if (option.value === "all-bookings") {
+                // router.replace("/admin/bookings");
+                window.history.pushState({}, "", "/admin/bookings");
+                setStatusFilter("");
+              } else {
+                // router.replace(`/admin/bookings?status=${option.value}`);
+                window.history.pushState(
+                  {},
+                  "",
+                  `/admin/bookings?status=${option.value}`
+                );
+                setStatusFilter(option.value);
+              }
             }}
             placeholder="All Bookings"
             buttonClassName="border-none gap-2 font-medium"
@@ -146,7 +151,14 @@ export default function ClientAdminBookingsPage({
         setActiveView={setActiveView}
       />
 
-      {activeView === "calendar" ? (
+      {!getBookingsQuery.isSuccess || !bookingsResponse ? (
+        <div className="flex items-center justify-center w-full h-64">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-secondary-700">Loading bookings...</p>
+          </div>
+        </div>
+      ) : activeView === "calendar" ? (
         <CalendarView bookings={bookingsResponse.data} />
       ) : activeView === "list" ? (
         <ListView
