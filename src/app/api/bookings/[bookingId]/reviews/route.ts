@@ -1,4 +1,4 @@
-import { getBookingDetails } from "@/lib/api/bookings";
+import { getBookingReview } from "@/lib/api/bookings";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ bookingId: string }> }
 ) {
   const { bookingId } = await params;
-  const bookingDetails = await getBookingDetails(bookingId);
+  const bookingDetails = await getBookingReview(Number(bookingId));
 
   console.log(bookingDetails);
   return NextResponse.json(bookingDetails);

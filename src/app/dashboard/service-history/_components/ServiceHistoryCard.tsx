@@ -1,21 +1,22 @@
+"use client";
 import Image, { StaticImageData } from "next/image";
 import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
 import { ClockIcon, StarIcon } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
-import { Booking, Review } from "../../_utils/types";
+import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
+import { useGetBookingReview } from "../../_services/queries";
 
 type ServiceHistoryCardProps = Booking;
 
 export default function ServiceHistoryCard({
-  service,
-  review
+  service
 }: {
   service: ServiceHistoryCardProps;
-  review: Review | undefined;
 }) {
+  const { data: review } = useGetBookingReview(String(service.id) || "");
   return (
     <DesktopServiceHistoryCard
       cleanerName={service.cleaners[0]?.name || "No Cleaner"}

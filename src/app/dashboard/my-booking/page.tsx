@@ -1,12 +1,14 @@
+"use client";
 import React from "react";
 import MyBookingSection1 from "./_components/MyBookingSection1";
 import MyBookingSection2 from "./_components/MyBookingSection2";
 import MyBookingSection3 from "./_components/MyBookingSection3";
 import MyBookingSection4 from "./_components/MyBookingSection4";
-import { getBookings } from "../_utils/queries";
+import { useGetBookingsQuery } from "../_services/queries";
 
-export default async function MyBookingPage() {
-  const bookings = await getBookings();
+export default function MyBookingPage() {
+  const { data } = useGetBookingsQuery();
+  const bookings = data?.data || [];
   const upCommingBookings = bookings.filter(
     (booking) => booking.status !== "COMPLETED"
   );

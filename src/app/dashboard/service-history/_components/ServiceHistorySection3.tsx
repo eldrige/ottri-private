@@ -1,13 +1,11 @@
 import React from "react";
 import ServiceHistoryCard from "./ServiceHistoryCard";
-import { Booking, Review } from "../../_utils/types";
+import { Booking } from "../../_utils/types";
 
 export default function ServiceHistorySection3({
-  historyServices,
-  reviews
+  historyServices
 }: {
   historyServices: Booking[];
-  reviews: (Review | undefined)[];
 }) {
   return (
     <div className="flex flex-col gap-6">
@@ -25,14 +23,7 @@ export default function ServiceHistorySection3({
           </div>
           <div className="flex flex-col gap-2.5">
             {historyServices.map((service) => {
-              const review = reviews.find((r) => r?.bookingId === service.id);
-              return (
-                <ServiceHistoryCard
-                  review={review}
-                  key={service.id}
-                  service={service}
-                />
-              );
+              return <ServiceHistoryCard key={service.id} service={service} />;
             })}
           </div>
         </div>
