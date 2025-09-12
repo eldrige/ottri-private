@@ -29,8 +29,8 @@ export function nextCleaningDate(isoString: string) {
   const diffMs = date.getTime() - today.getTime();
   const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0) return "done"; // past cleanings
-  if (diffDays === 0) return "today";
-  if (diffDays === 1) return "tomorrow";
+  if (diffDays < 0) return "Done"; // past cleanings
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Tomorrow";
   return `In ${diffDays} days`;
 }
