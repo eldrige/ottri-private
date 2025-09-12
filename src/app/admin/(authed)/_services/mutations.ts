@@ -8,7 +8,7 @@ import {
   cancelBooking,
   completeBooking,
   startBooking
-} from "../../_actions/bookings";
+} from "../_actions/bookings";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { Booking, BookingsResponse } from "@/app/admin/types";
 
