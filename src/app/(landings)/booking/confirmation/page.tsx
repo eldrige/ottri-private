@@ -39,6 +39,13 @@ export default async function ConfirmationPage({
     "hh:mmaa"
   );
 
+  const startIso = new Date(bookingData.timeSlot.date);
+  startIso.setUTCHours(bookingData.timeSlot.startTime);
+  const urlStartIso = startIso.toISOString().replace(/[^a-z0-9]/gi, "");
+  const endIso = new Date(bookingData.timeSlot.date);
+  endIso.setUTCHours(bookingData.timeSlot.endTime);
+  const urlEndIso = endIso.toISOString().replace(/[^a-z0-9]/gi, "");
+
   return (
     <main className="text-secondary-700">
       <div className="bg-secondary-700 text-white flex flex-col items-center py-16 space-y-4">
@@ -148,9 +155,9 @@ export default async function ConfirmationPage({
             <div className="mx-6 sm:mx-0 p-4 space-y-3 bg-surface-50 rounded-lg text-surface-500 text-xs">
               <p>
                 <span className="font-bold">Estimated Arrival: </span>
-                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:20{" "}
+                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:30{" "}
                 {bookingData.timeSlot.startTime - 1 < 12 ? "AM" : "PM"} -{" "}
-                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:40{" "}
+                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:50{" "}
                 {bookingData.timeSlot.startTime - 1 < 12 ? "AM" : "PM"}
               </p>
               <p>Your cleaner will contact you 30 minutes before arrival.</p>
@@ -210,14 +217,20 @@ export default async function ConfirmationPage({
                     Book Another Cleaning
                   </Button>
                 </Link>
-                <Button
-                  className="flex gap-3 items-center justify-center"
-                  size={"xs"}
-                  variant={"default-outline"}
+                <a
+                  className="w-full"
+                  target="_blank"
+                  href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Ottri ${bookingData.serviceType.service.name} ${bookingData.serviceType.name}&dates=${urlStartIso}/${urlEndIso}&details=${"description"}&location=${bookingData.address}`}
                 >
-                  <CalendarIcon className="size-6" />
-                  Add to calendar
-                </Button>
+                  <Button
+                    className="flex gap-3 items-center justify-center w-full"
+                    size={"xs"}
+                    variant={"default-outline"}
+                  >
+                    <CalendarIcon className="size-6" />
+                    Add to calendar
+                  </Button>
+                </a>
               </div>
             </div>
           </div>
