@@ -200,24 +200,24 @@ export default async function ConfirmationPage({
             <div className="p-8 space-y-14 shadow-custom-light rounded-lg">
               <h4 className="text-heading-5">Quick Action</h4>
               <div className="flex flex-col gap-6">
-                <Link href="/booking/new">
+                <Link href="/booking/new" className="w-full">
                   <Button
-                    className="flex gap-3 items-center justify-center"
+                    className="flex gap-3 items-center justify-center w-full"
                     size={"xs"}
                     variant={"secondary"}
                   >
                     <PlusIcon className="size-6" />
                     Book Another Cleaning
                   </Button>
-                  <Button
-                    className="flex gap-3 items-center justify-center"
-                    size={"xs"}
-                    variant={"default-outline"}
-                  >
-                    <CalendarIcon className="size-6" />
-                    Add to calendar
-                  </Button>
                 </Link>
+                <Button
+                  className="flex gap-3 items-center justify-center"
+                  size={"xs"}
+                  variant={"default-outline"}
+                >
+                  <CalendarIcon className="size-6" />
+                  Add to calendar
+                </Button>
               </div>
             </div>
           </div>

@@ -59,6 +59,7 @@ export default function ClientForm({
       phoneNumber: userData?.personalInformation.phoneNumber,
       billingAddress: userData?.personalInformation.address,
       serviceAddress: userData?.personalInformation.address,
+      isServiceAreaValid: false,
       country: userData?.personalInformation.country,
       state: userData?.personalInformation.state,
       city: userData?.personalInformation.city,
@@ -96,6 +97,7 @@ export default function ClientForm({
       case 1:
         return (
           !!errors.serviceAddress ||
+          !!errors.isServiceAreaValid ||
           !!errors.bedrooms ||
           !!errors.bathrooms ||
           !!errors.squareFootage
@@ -146,6 +148,7 @@ export default function ClientForm({
       case 1:
         isValid = await trigger([
           "serviceAddress",
+          "isServiceAreaValid",
           "bedrooms",
           "bathrooms",
           "squareFootage"
@@ -197,6 +200,7 @@ export default function ClientForm({
     formValues.specificServiceType,
     formValues.frequency,
     formValues.serviceAddress,
+    formValues.isServiceAreaValid,
     formValues.bedrooms,
     formValues.bathrooms,
     formValues.squareFootage,
