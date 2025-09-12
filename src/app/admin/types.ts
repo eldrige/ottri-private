@@ -1,3 +1,5 @@
+import { UserData } from "@/lib/types";
+
 export interface BookingsResponse {
   limit: number;
   page: number;
@@ -32,9 +34,9 @@ export interface Booking {
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
-  customer: Customer | Customer2 | null;
+  customer: Customer | null;
   serviceType: ServiceType;
-  cleaners: string[];
+  cleaners: Cleaner[];
   review: null;
   timeSlot: TimeSlot;
   price: number;
@@ -63,22 +65,6 @@ interface ServiceType {
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
-}
-
-interface Customer2 {
-  id: number;
-  email: string;
-  password: string;
-  refreshToken: null;
-  passwordResetToken: null;
-  role: string;
-  signUpMethod: string;
-  settingsData: SettingsData;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: null;
-  personalInformation: PersonalInformation;
 }
 
 interface Customer {
@@ -115,4 +101,87 @@ interface PersonalInformation {
 
 interface SettingsData {
   unknown: unknown;
+}
+
+export interface ServiceOption {
+  id: number;
+  name: string;
+  description: string;
+  coverImage: null;
+  supportingImages: string[];
+  cleaningChecklist: string[];
+  popular: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  serviceTypes: ServiceType[];
+  serviceAddOn: ServiceAddOn[];
+  pricingDetails: PricingDetail[];
+}
+
+interface PricingDetail {
+  id: number;
+  criteria: string;
+  minPrice: number;
+  maxPrice: number;
+  currency: string;
+  duration: string;
+  serviceId: number;
+}
+
+interface ServiceAddOn {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  type: string;
+  serviceId: number;
+  createdAt: string;
+  updatedAt: null | string;
+  deletedAt: null;
+}
+
+interface ServiceType {
+  id: number;
+  name: string;
+  description: string;
+  basePrice: number;
+  currency: string;
+  serviceId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+}
+
+// Cleaner Type
+export interface Cleaner {
+  id: number;
+  profile: string;
+  fullName: string;
+  phoneNumber: string;
+  description: string;
+  quote: string;
+  status: "AVAILABLE" | "UNAVAILABLE";
+  experience: string;
+  address: string;
+  preference: string;
+  languages: string[];
+  mapLocation: null;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  user: UserData;
+  specialities: ServiceOption[];
+  serviceAreas: string[];
+  qualifications: string[];
+  location: null;
+  stats: Stats;
+}
+
+interface Stats {
+  totalBookings: number;
+  completedBookings: number;
+  averageCompletionRate: number;
+  averageRating: number;
 }

@@ -3,15 +3,25 @@ import ClientForm from "./_components/ClientForm";
 import Link from "next/link";
 import { axios } from "@/lib/axios";
 import { PreflightType } from "./types";
+import { UserData } from "@/lib/types";
+import { serverRequest } from "@/lib/serverRequest";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function NewOrderPage() {
-  console.log("start fetching preflight");
-  const preflightData = (await axios.get("bookings/preflight"))
-    .data as PreflightType;
-  console.log("finish fetching preflight");
+  const data = await Promise.all([
+    axios.get("bookings/preflight"),
+    serverRequest("auth/profile", "GET").catch((e) => console.log(e))
+  ]);
+
+  const preflightData = data[0].data as PreflightType;
+
+  let userData = data[1]?.data as UserData | undefined;
+
+  if (userData?.role !== "USER") {
+    userData = undefined;
+  }
 
   return (
     <main className="container max-w-5xl mx-auto px-6 mt-2.5 py-8 text-secondary-700">
@@ -22,7 +32,7 @@ export default async function NewOrderPage() {
         <ArrowLeft />
         Back to all services
       </Link>
-      <ClientForm preflight={preflightData} />
+      <ClientForm preflight={preflightData} userData={userData} />
     </main>
   );
 }

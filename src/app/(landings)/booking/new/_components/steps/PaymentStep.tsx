@@ -24,10 +24,11 @@ const stripePromise = loadStripe(
 
 interface PaymentStepProps {
   processPaymentRef: React.MutableRefObject<() => Promise<boolean | string>>;
+  isUser: boolean;
 }
 
 // This is the inner component that will be wrapped with Elements
-function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
+function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
   const stripe = useStripe();
   const elements = useElements();
   const {
@@ -275,18 +276,20 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
         <Image alt="Apple Pay Logo" src={appleLogo} />
       </div>
 
-      <label className="flex items-center gap-2">
-        <input
-          className="accent-primary-700 caret-primary-700 text-white size-4"
-          type="checkbox"
-          checked={createAccount}
-          onChange={(e) => {
-            setCreateAccount(e.target.checked);
-            setValue("createAccount", e.target.checked);
-          }}
-        />
-        Create account for easy booking next time
-      </label>
+      {!isUser && (
+        <label className="flex items-center gap-2">
+          <input
+            className="accent-primary-700 caret-primary-700 text-white size-4"
+            type="checkbox"
+            checked={createAccount}
+            onChange={(e) => {
+              setCreateAccount(e.target.checked);
+              setValue("createAccount", e.target.checked);
+            }}
+          />
+          Create account for easy booking next time
+        </label>
+      )}
 
       {createAccount && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
@@ -300,6 +303,7 @@ function CheckoutForm({ processPaymentRef }: PaymentStepProps) {
                 onChange: (e) => {
                   setPassword(e.target.value);
                   trigger("confirmPassword");
+                  trigger("password");
                 }
               })}
               error={!!errors.password?.message}

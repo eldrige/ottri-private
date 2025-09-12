@@ -4,8 +4,8 @@ import React from "react";
 
 export default function ServicesSection1() {
   return (
-    <section className="pt-12 pb-8 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-x-2.5 gap-y-8">
-      <div className="text-center flex flex-col justify-center items-center space-y-4">
+    <section className="pt-12 pb-8 lg:py-24 gap-x-2.5 gap-y-8">
+      <div className="text-center w-full flex flex-col justify-center items-center space-y-4">
         <Badge className="w-fit" variant="default" mode="outline">
           Our Services
         </Badge>
