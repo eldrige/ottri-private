@@ -11,8 +11,8 @@ import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
 import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
-import { useSearchParams } from "next/navigation";
 import { useGetBookingsQuery } from "../_services/queries";
+import { useClientSearchParams } from "@/hooks/useClientSearchParams";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -23,12 +23,9 @@ const filterOptions = [
 ];
 
 export default function ClientAdminBookingsPage() {
-  const searchParams = useSearchParams();
-  const [statusFilter, setStatusFilter] = useState(
-    searchParams.get("status") || ""
-  );
+  const { searchParams, setSearchParam } = useClientSearchParams();
   const [activeView, setActiveView] = useState<string>("calendar");
-
+  const statusFilter = searchParams.get("status") || undefined;
   const getBookingsQuery = useGetBookingsQuery(statusFilter);
   const bookingsResponse = getBookingsQuery.data;
   console.log(bookingsResponse);
@@ -52,19 +49,9 @@ export default function ClientAdminBookingsPage() {
                 : filterOptions[0]
             }
             onChange={(option) => {
-              if (option.value === "all-bookings") {
-                // router.replace("/admin/bookings");
-                window.history.pushState({}, "", "/admin/bookings");
-                setStatusFilter("");
-              } else {
-                // router.replace(`/admin/bookings?status=${option.value}`);
-                window.history.pushState(
-                  {},
-                  "",
-                  `/admin/bookings?status=${option.value}`
-                );
-                setStatusFilter(option.value);
-              }
+              const newStatus =
+                option.value === "all-bookings" ? "" : option.value;
+              setSearchParam("status", newStatus);
             }}
             placeholder="All Bookings"
             buttonClassName="border-none gap-2 font-medium"

@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import ClientAdminBookingsPage from "./ClientAdminBookingsPage";
 
 export default async function AdminBookingsPage() {
-  return <ClientAdminBookingsPage />;
+  return (
+    <Suspense>
+      <ClientAdminBookingsPage />
+    </Suspense>
+  );
 }
