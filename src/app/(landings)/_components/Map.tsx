@@ -2,7 +2,16 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 
-export default function Map() {
+interface Location {
+  id: number;
+  title: string;
+  status: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
+}
+export default function Map({ locations = [] }: { locations?: Location[] }) {
   const mapRef = useRef<HTMLDivElement>(null);
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
@@ -35,25 +44,41 @@ export default function Map() {
       .then((google) => {
         if (mapRef.current) {
           const map = new google.maps.Map(mapRef.current, mapOptions);
-
-          // Example: Add markers for the locations mentioned in LandingSection7
-          const locations = [
-            { title: "Downtown", position: { lat: 38.2527, lng: -85.7585 } },
-            {
-              title: "Suburban Hills",
-              position: { lat: 38.2794, lng: -85.6389 }
-            }, // East End area
-            { title: "Riverside", position: { lat: 38.268, lng: -85.7798 } }, // Ohio River area
-            { title: "Westside", position: { lat: 38.2484, lng: -85.8229 } }, // West Louisville
-            { title: "North Valley", position: { lat: 38.2921, lng: -85.743 } } // Clifton/Crescent Hill area
-          ];
+          const infoWindow = new google.maps.InfoWindow();
 
           // Add markers for each location
           locations.forEach((location) => {
-            new google.maps.Marker({
+            const markerColors: Record<string, string> = {
+              PENDING:
+                "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+              INPROGRESS:
+                "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+              COMPLETED:
+                "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+              CANCELLED: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+            };
+
+            const marker = new google.maps.Marker({
               position: location.position,
               map: map,
-              title: location.title
+              title: location.title,
+              icon: location.status ? markerColors[location.status] : undefined
+            });
+            marker.addListener("click", () => {
+              const content = `
+                <div style="color: black; text-transform: capitalize;">
+                  <small>#${location.id}</small>
+                  <h3 style="font-weight: 600;">${location.title.toLowerCase()}</h3>
+                  ${
+                    location.status
+                      ? `<p>${location.status.toLowerCase()}</p>`
+                      : ""
+                  }
+                </div>
+              `;
+              infoWindow.setContent(content);
+
+              infoWindow.open(map, marker);
             });
           });
         }
@@ -61,7 +86,7 @@ export default function Map() {
       .catch((e) => {
         console.error("Error loading Google Maps:", e);
       });
-  }, [apiKey]);
+  }, [apiKey, locations]);
   return (
     <div
       ref={mapRef}

@@ -143,7 +143,7 @@ export default function ClientAdminBookingsPage() {
       ) : activeView === "list" ? (
         <ListView bookingsResponse={bookingsResponse} />
       ) : (
-        <MapView />
+        <MapView bookings={bookingsResponse.data} />
       )}
     </main>
   );

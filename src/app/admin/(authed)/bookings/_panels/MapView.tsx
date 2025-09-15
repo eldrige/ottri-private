@@ -1,7 +1,20 @@
 import Map from "@/app/(landings)/_components/Map";
+import { Booking } from "@/app/admin/types";
 import React from "react";
 
-export default function MapView() {
+export default function MapView({ bookings }: { bookings: Booking[] }) {
+  const locations = bookings
+    .filter((b) => b.location)
+    .map((b) => ({
+      id: b.id,
+      title:
+        b.guest?.fullName || b.customer?.personalInformation?.fullName || "",
+      status: b.status,
+      position: {
+        lat: b.location!.coordinates[0],
+        lng: b.location!.coordinates[1]
+      }
+    }));
   return (
     <div className="mt-4 lg:mt-8 p-4 lg:p-6 border border-black/10 rounded-lg">
       <h4 className="text-heading-5 text-center lg:text-start">
@@ -9,7 +22,7 @@ export default function MapView() {
       </h4>
 
       <div className="w-full h-[540px] mt-4 lg:mt-8 flex items-center justify-center outline-2 outline-primary-700 outline-dashed outline-offset-2 rounded-lg">
-        <Map />
+        <Map locations={locations} />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4 lg:mt-8">
