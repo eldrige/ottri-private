@@ -1,4 +1,4 @@
-import { axios } from "@/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function userMiddleware(req: NextRequest) {
@@ -68,7 +68,7 @@ async function isAuthenticated(req: NextRequest): Promise<AuthResult> {
   if (accessToken) {
     try {
       // Verify the access token by making a request to a validation endpoint
-      const response = await axios.get("auth/profile", {
+      const response = await axiosInstance.get("auth/profile", {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -100,7 +100,7 @@ async function isAuthenticated(req: NextRequest): Promise<AuthResult> {
 async function refreshTokens(refreshToken: string): Promise<AuthResult> {
   try {
     // Call the refresh token endpoint
-    const response = await axios.post("auth/refresh", {
+    const response = await axiosInstance.post("auth/refresh", {
       refreshToken: refreshToken
     });
 
