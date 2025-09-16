@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { axios } from "@/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import { LoginResponse } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     // Call the authentication API
     const loginResponse: LoginResponse = (
-      await axios.post(
+      await axiosInstance.post(
         "auth/basic/login",
         { email, password },
         {

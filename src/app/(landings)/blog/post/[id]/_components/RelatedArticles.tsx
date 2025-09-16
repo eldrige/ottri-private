@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { axios } from "@/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 
 export default async function RelatedArticles({
   category,
@@ -13,7 +13,9 @@ export default async function RelatedArticles({
   category: string;
   id: number;
 }) {
-  const { data: articles } = (await axios.get(`/articles/published`)) as {
+  const { data: articles } = (await axiosInstance.get(
+    `/articles/published`
+  )) as {
     data: Article[];
   };
 

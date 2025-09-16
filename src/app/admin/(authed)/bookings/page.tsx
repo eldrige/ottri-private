@@ -1,4 +1,4 @@
-import { axios } from "@/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import ClientAdminBookingsPage from "./ClientAdminBookingsPage";
 import { BookingsResponse, Cleaner, ServiceOption } from "../../types";
 import { getBookings } from "@/lib/api/bookings";
@@ -26,8 +26,8 @@ export default async function AdminBookingsPage({
 
   const res = await Promise.all([
     prefetcher,
-    axios.get("services"),
-    axios.get("cleaners?limit=50")
+    axiosInstance.get("services"),
+    axiosInstance.get("cleaners?limit=50")
   ]);
 
   const servicesOptions = res[1].data as ServiceOption[];

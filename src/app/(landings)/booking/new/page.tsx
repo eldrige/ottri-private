@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import ClientForm from "./_components/ClientForm";
 import Link from "next/link";
-import { axios } from "@/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import { PreflightType } from "./types";
 import { UserData } from "@/lib/types";
 import { serverRequest } from "@/lib/serverRequest";
@@ -11,7 +11,7 @@ export const revalidate = 0;
 
 export default async function NewOrderPage() {
   const data = await Promise.all([
-    axios.get("bookings/preflight"),
+    axiosInstance.get("bookings/preflight"),
     serverRequest("auth/profile", "GET").catch((e) => console.log(e))
   ]);
 
