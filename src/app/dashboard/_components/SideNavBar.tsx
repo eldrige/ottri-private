@@ -38,7 +38,7 @@ export default function SideNavBar({ user }: { user: User }) {
             <HomeIcon className="size-5" />
             Dashboard
           </SideNavLink>
-          <SideNavLink href={"/dashboard/my-booking"}>
+          <SideNavLink href={"/dashboard/my-bookings"}>
             <Calendar className="size-5" />
             My Bookings
           </SideNavLink>
