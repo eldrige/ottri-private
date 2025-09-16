@@ -36,7 +36,7 @@ export default function DashboardPage() {
         nextCleaningInfo={nextCleaning}
         totalCleanings={totalCleanings}
       />
-      <DashboardSection3 bookings={bookings?.data || []} />
+      <DashboardSection3 />
       <DashboardSection4 />
     </div>
   );
