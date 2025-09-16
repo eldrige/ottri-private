@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { serverRequest } from "@/lib/axios";
+import { serverRequest } from "@/lib/serverRequest";
 import { Booking } from "@/app/dashboard/_utils/types";
 import { revalidatePath } from "next/cache";
 

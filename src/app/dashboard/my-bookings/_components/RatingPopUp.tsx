@@ -1,9 +1,11 @@
+"use client";
 import { Button } from "@/components/ui/Button";
 import { StarIcon, XIcon } from "lucide-react";
 import React, { useState } from "react";
 import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
+import { useRateBookingMutation } from "../../_services/mutations";
 
 export default function RatingPopUp({
   booking,
@@ -26,6 +28,8 @@ export default function RatingPopUp({
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [value, setValue] = useState(50);
+  const [comment, setComment] = useState("");
+  const { mutateAsync: rateBooking, isPending } = useRateBookingMutation();
   if (!isOpen) return null;
 
   return (
@@ -94,11 +98,25 @@ export default function RatingPopUp({
               className="w-full bg-[#F7F8F8] rounded-lg px-3 py-2 min-h-30 max-h-30"
               name=""
               id=""
+              onChange={(e) => setComment(e.target.value)}
             />
           </div>
         </div>
-        <Button onClick={onClose} size={"xs"} className="w-full py-3">
-          Rate Job
+        <Button
+          disabled={isPending || rating === 0 || comment.trim().length === 0}
+          onClick={async () => {
+            await rateBooking({
+              bookingId: booking.id,
+              rating,
+              comment: comment.trim(),
+              completionRate: value
+            });
+            onClose();
+          }}
+          size={"xs"}
+          className="w-full py-3"
+        >
+          {isPending ? "Rating..." : "Rate Job"}
         </Button>
       </div>
     </div>

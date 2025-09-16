@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/Button";
 import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
+import { useCancelBookingMutation } from "../../_services/mutations";
+import { useGetBookingReview } from "../../_services/queries";
 // import { revalidatePath } from "next/cache";
 type BookingCardProps = Pick<
   Booking,
@@ -41,29 +43,7 @@ export default function BookingCard({
     >
   ) => void;
 }) {
-  const handleCancel = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch(`/api/bookings/cancel`, {
-        method: "DELETE",
-        body: JSON.stringify({
-          bookingId: service.id
-        })
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Login failed");
-      }
-
-      // Redirect to the original page or admin dashboard
-      // refresh(window.location.pathname);
-      console.log(window.location.pathname);
-    } catch (err) {
-      console.error("Error cancelling booking:", err);
-    }
-  };
+  const { mutateAsync: handleCancel } = useCancelBookingMutation();
 
   return (
     <>
@@ -72,7 +52,10 @@ export default function BookingCard({
           {...service}
           setIsOpen={setIsOpen}
           setBookedServiceOnRating={setBookedServiceOnRating}
-          handleCancel={handleCancel}
+          handleCancel={(e) => {
+            e.preventDefault();
+            handleCancel(service.id);
+          }}
         />
       </div>
       <div className="hidden xl:flex gap-4">
@@ -80,7 +63,10 @@ export default function BookingCard({
           {...service}
           setIsOpen={setIsOpen}
           setBookedServiceOnRating={setBookedServiceOnRating}
-          handleCancel={handleCancel}
+          handleCancel={(e) => {
+            e.preventDefault();
+            handleCancel(service.id);
+          }}
         />
       </div>
     </>
@@ -114,6 +100,7 @@ function DesktopBookingCard({
   ) => void;
   handleCancel?: (e: React.FormEvent) => void;
 }) {
+  const { data: review, isLoading } = useGetBookingReview(String(id));
   return (
     <div className="w-full">
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -183,6 +170,7 @@ function DesktopBookingCard({
               : setIsOpen &&
                 setBookedServiceOnRating && (
                   <Button
+                    disabled={isLoading || Boolean(review)}
                     onClick={() => {
                       setBookedServiceOnRating({
                         id,
@@ -198,7 +186,7 @@ function DesktopBookingCard({
                     size={"xs"}
                     className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
                   >
-                    Rate Cleaning
+                    {isLoading ? "Loading..." : "Rate Cleaning"}
                   </Button>
                 )}
           </div>
@@ -235,6 +223,7 @@ function MobileBookingCard({
   ) => void;
   handleCancel?: (e: React.FormEvent) => void;
 }) {
+  const { data: review, isLoading } = useGetBookingReview(String(id));
   return (
     <div className="flex flex-col px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
       <div className="flex gap-4 w-full items-center">
@@ -304,6 +293,7 @@ function MobileBookingCard({
         : setIsOpen &&
           setBookedServiceOnRating && (
             <Button
+              disabled={isLoading || Boolean(review)}
               onClick={() => {
                 setBookedServiceOnRating({
                   id,
@@ -319,7 +309,7 @@ function MobileBookingCard({
               size={"xs"}
               className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
             >
-              Rate Cleaning
+              {isLoading ? "Loading..." : "Rate Cleaning"}
             </Button>
           )}
     </div>

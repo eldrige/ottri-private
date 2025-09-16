@@ -1,10 +1,25 @@
 "use client";
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 
 export default function Login() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+      <Suspense
+        fallback={
+          <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+            Loading...
+          </div>
+        }
+      >
+        <LoginForm />
+      </Suspense>
+    </div>
+  );
+}
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

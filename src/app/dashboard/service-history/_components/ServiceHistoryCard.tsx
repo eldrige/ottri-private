@@ -16,7 +16,8 @@ export default function ServiceHistoryCard({
 }: {
   service: ServiceHistoryCardProps;
 }) {
-  const { data: review } = useGetBookingReview(String(service.id) || "");
+  const { data: review } = useGetBookingReview(String(service.id));
+  console.log(review);
   return (
     <DesktopServiceHistoryCard
       cleanerName={service.cleaners[0]?.name || "No Cleaner"}

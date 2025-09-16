@@ -8,6 +8,5 @@ export async function GET(
   const { bookingId } = await params;
   const bookingDetails = await getBookingReview(Number(bookingId));
 
-  console.log(bookingDetails);
-  return NextResponse.json(bookingDetails);
+  return NextResponse.json(bookingDetails.data);
 }
