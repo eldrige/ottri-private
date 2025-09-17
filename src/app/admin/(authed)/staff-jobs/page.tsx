@@ -7,6 +7,7 @@ import PanelViewer from "../_components/PanelViewer";
 import StaffOverviewView from "./_panels/StaffOverviewView";
 import JobAssignmentView from "./_panels/JobAssignmentView";
 import PerformanceView from "./_panels/PerformanceView";
+import { useCleanersQuery } from "../_services/queries";
 
 const filterOptions = [
   { label: "All Cleaners", value: "all-cleaners" },
@@ -17,7 +18,13 @@ const filterOptions = [
 ];
 
 export default function StaffJobsPage() {
+  const cleanersQuery = useCleanersQuery();
+  console.log(cleanersQuery.data);
+
   const [activeView, setActiveView] = useState<string>("staff-overview");
+
+  if (!cleanersQuery.data) return;
+
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
       <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-2">
@@ -62,7 +69,7 @@ export default function StaffJobsPage() {
 
       <div className="mt-8">
         {activeView === "staff-overview" ? (
-          <StaffOverviewView />
+          <StaffOverviewView cleaners={cleanersQuery.data} />
         ) : activeView === "job-assignment" ? (
           <JobAssignmentView />
         ) : activeView === "performance" ? (

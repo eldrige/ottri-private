@@ -10,7 +10,8 @@ import {
   startBooking
 } from "../_actions/bookings";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
-import { Booking, BookingsResponse } from "@/app/admin/types";
+import { Booking, BookingsResponse, Cleaner } from "@/app/admin/types";
+import { cleanersChangeStatus } from "../_actions/cleaners";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -57,6 +58,17 @@ export function useCompleteBookingMutation() {
   });
 }
 
+// Cleaners
+export function useCleanersChangeStatusMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: cleanersChangeStatus,
+    onSuccess: (data) => {
+      updateCleanerHelper(queryClient, data);
+    }
+  });
+}
+
 // Helpers
 function updateBookingHelper(
   searchParams: ReadonlyURLSearchParams,
@@ -79,21 +91,15 @@ function updateBookingHelper(
   queryClient.setQueryData(["bookings", statusFilter], newData);
 }
 
-// function removeBookingHelper(
-//   searchParams: ReadonlyURLSearchParams,
-//   queryClient: QueryClient,
-//   booking: Booking
-// ) {
-//   const statusFilter = searchParams.get("status") || "";
-//   const queryData = queryClient.getQueryData([
-//     "bookings",
-//     statusFilter
-//   ]) as BookingsResponse;
-//   if (!queryData) return;
+function updateCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
+  const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
+  if (!queryData) return;
 
-//   const newBookings = queryData.data.filter((i) => i.id !== booking.id);
+  const newCleaners = queryData.map((c) =>
+    c.id === newCleaner.id ? newCleaner : c
+  );
 
-//   const newData = { ...queryData, data: newBookings } as BookingsResponse;
+  const newData = newCleaners;
 
-//   queryClient.setQueryData(["bookings", statusFilter], newData);
-// }
+  queryClient.setQueryData(["bookings"], newData);
+}
