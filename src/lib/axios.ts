@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios from "axios";
 
 // Create the base axios instance

@@ -6,7 +6,7 @@ import { FileIcon } from "@/components/icons/FileIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { axios } from "@/lib/axios";
+import { axios as axiosInstance } from "@/lib/axios";
 import { BookingType } from "@/lib/types";
 import { format } from "date-fns";
 import { DownloadIcon, PlusIcon } from "lucide-react";
@@ -20,9 +20,13 @@ export default async function ConfirmationPage({
 }) {
   const { orderId = "" } = await searchParams;
 
-  const response = await axios.get(
+  const dispId = orderId.startsWith("ORD")
+    ? orderId.split("-")[1].slice(0, 9)
+    : orderId.slice(0, 9);
+
+  const response = await axiosInstance.get(
     // `http://172.22.11.156:3000/api/v1/bookings/${orderId.split("-")[1]}`
-    `bookings/${orderId.split("-")[1]}`
+    `bookings/${dispId}`
   );
 
   const bookingData = response.data as BookingType;
@@ -38,6 +42,13 @@ export default async function ConfirmationPage({
     new Date().setHours(bookingData.timeSlot.endTime, 0, 0, 0),
     "hh:mmaa"
   );
+
+  const startIso = new Date(bookingData.timeSlot.date);
+  startIso.setUTCHours(bookingData.timeSlot.startTime);
+  const urlStartIso = startIso.toISOString().replace(/[^a-z0-9]/gi, "");
+  const endIso = new Date(bookingData.timeSlot.date);
+  endIso.setUTCHours(bookingData.timeSlot.endTime);
+  const urlEndIso = endIso.toISOString().replace(/[^a-z0-9]/gi, "");
 
   return (
     <main className="text-secondary-700">
@@ -55,7 +66,9 @@ export default async function ConfirmationPage({
 
         <div className="flex items-center gap-2">
           <p className="text-subtitle text-surface-100">Booking ID: </p>
-          <p className="bg-primary-700 rounded-lg py-2 px-6">#{orderId}</p>
+          <p className="bg-primary-700 rounded-lg py-2 px-6 uppercase">
+            #ORD-{dispId}
+          </p>
         </div>
       </div>
 
@@ -148,9 +161,9 @@ export default async function ConfirmationPage({
             <div className="mx-6 sm:mx-0 p-4 space-y-3 bg-surface-50 rounded-lg text-surface-500 text-xs">
               <p>
                 <span className="font-bold">Estimated Arrival: </span>
-                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:20{" "}
+                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:30{" "}
                 {bookingData.timeSlot.startTime - 1 < 12 ? "AM" : "PM"} -{" "}
-                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:40{" "}
+                {(bookingData.timeSlot.startTime - 1) % 12 || 12}:50{" "}
                 {bookingData.timeSlot.startTime - 1 < 12 ? "AM" : "PM"}
               </p>
               <p>Your cleaner will contact you 30 minutes before arrival.</p>
@@ -200,24 +213,30 @@ export default async function ConfirmationPage({
             <div className="p-8 space-y-14 shadow-custom-light rounded-lg">
               <h4 className="text-heading-5">Quick Action</h4>
               <div className="flex flex-col gap-6">
-                <Link href="/booking/new">
+                <Link href="/booking/new" className="w-full">
                   <Button
-                    className="flex gap-3 items-center justify-center"
+                    className="flex gap-3 items-center justify-center w-full"
                     size={"xs"}
                     variant={"secondary"}
                   >
                     <PlusIcon className="size-6" />
                     Book Another Cleaning
                   </Button>
+                </Link>
+                <a
+                  className="w-full"
+                  target="_blank"
+                  href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Ottri ${bookingData.serviceType.service.name} ${bookingData.serviceType.name}&dates=${urlStartIso}/${urlEndIso}&details=${"description"}&location=${bookingData.address}`}
+                >
                   <Button
-                    className="flex gap-3 items-center justify-center"
+                    className="flex gap-3 items-center justify-center w-full"
                     size={"xs"}
                     variant={"default-outline"}
                   >
                     <CalendarIcon className="size-6" />
                     Add to calendar
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </div>

@@ -45,7 +45,7 @@ interface Rank {
 
 interface AddressInputProps {
   value?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: string, result?: Result) => void;
   placeholder?: string;
   error?: string;
   required?: boolean;
@@ -141,7 +141,7 @@ export default function AddressInput({
     const formattedAddress = formatUSAddress(address.formatted);
     setSearchTerm(formattedAddress);
     if (onChange) {
-      onChange(formattedAddress);
+      onChange(formattedAddress, address);
     }
     if (onSelectedAddress) {
       onSelectedAddress(address);
@@ -184,7 +184,7 @@ export default function AddressInput({
               const formattedAddress = formatUSAddress(result.formatted);
               return (
                 <li
-                  key={result.place_id || index}
+                  key={index}
                   role="option"
                   aria-selected={searchTerm === formattedAddress}
                   className="px-4 py-2 hover:bg-primary-50 cursor-pointer text-sm"
