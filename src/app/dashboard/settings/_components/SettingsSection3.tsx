@@ -4,6 +4,7 @@ import { GlobeIcon, IdCard, LogOut } from "lucide-react";
 import React from "react";
 import { useGetUserProfile } from "../../_services/queries";
 import { useLogoutMutation } from "../../_services/mutations";
+import Select from "@/components/ui/Select";
 
 export default function SettingsSection3() {
   return (
@@ -16,6 +17,31 @@ export default function SettingsSection3() {
 
 function LanguageSettings() {
   const { data: userData } = useGetUserProfile();
+  const [currentLanguage, setCurrentLanguage] = React.useState<string>(
+    userData?.settings.language || "en"
+  );
+  const [currentTimeZone, setCurrentTimeZone] = React.useState<string>(
+    userData?.settings.timezone || "UTC"
+  );
+  const [currentCurrency, setCurrentCurrency] = React.useState<string>(
+    userData?.settings.currency || "USD"
+  );
+  const languageOptions = [
+    { value: "en", label: "English" },
+    { value: "es", label: "Spanish" },
+    { value: "fr", label: "French" }
+  ];
+  const timeZonesOptions = [
+    { value: "UTC", label: "Universal Time (UTC)" },
+    { value: "EST", label: "Eastern Time (EST)" },
+    { value: "CST", label: "Central Time (CST)" },
+    { value: "PST", label: "Pacific Time (PST)" }
+  ];
+  const currencyOptions = [
+    { value: "USD", label: "USD ($)" },
+    { value: "EUR", label: "EUR (€)" },
+    { value: "GBP", label: "GBP (£)" }
+  ];
   if (!userData) return null;
   const settings = userData?.settings;
   return (
@@ -37,38 +63,74 @@ function LanguageSettings() {
             <h3 className="text-secondary-700 text-caption font-medium">
               Language
             </h3>
-            <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
-              <select className="w-full" name="filter" id="">
-                <option value="all">{settings.language}</option>
-                <option value="today">Spanish</option>
-                <option value="upcoming">French</option>
-              </select>
+            <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-2 py-2 rounded-lg">
+              <Select
+                className="flex w-full"
+                options={languageOptions}
+                value={
+                  settings.language
+                    ? languageOptions.find((i) => i.value === currentLanguage)
+                    : languageOptions[0]
+                }
+                onChange={(option) => {
+                  setCurrentLanguage(option.value);
+                }}
+                placeholder="Select Language"
+                buttonClassName="border-none w-full gap-2 font-medium"
+                accent="secondary"
+              />
             </div>
           </label>
           <label className="w-full text-caption">
             <h3 className="text-secondary-700 text-caption font-medium">
               Time Zone
             </h3>
-            <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
-              <select className="w-full" name="filter" id="">
-                <option value="all">{settings.timezone}</option>
-                <option value="all">EasternTime (EST)</option>
-                <option value="today">CentralTime (CST)</option>
-                <option value="upcoming">PacificTime (PST)</option>
-              </select>
+            <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-2 py-2 rounded-lg">
+              <Select
+                className="flex w-full"
+                options={timeZonesOptions}
+                value={
+                  settings.timezone
+                    ? timeZonesOptions.find((i) => i.value === currentTimeZone)
+                    : timeZonesOptions[0]
+                }
+                onChange={(option) => {
+                  setCurrentTimeZone(option.value);
+                }}
+                placeholder="Select Language"
+                buttonClassName="border-none w-full gap-2 font-medium"
+                accent="secondary"
+              />
             </div>
           </label>
           <label className="w-full">
             <h3 className="text-secondary-700 text-caption font-medium">
               Currency
             </h3>
-            <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
+            {/* <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
               <select className="w-full" name="filter" id="">
                 <option value="all">{settings.currency}</option>
                 <option value="all">USD ($)</option>
                 <option value="today">EUR (€)</option>
                 <option value="upcoming">GBP (£)</option>
               </select>
+            </div> */}
+            <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-2 py-2 rounded-lg">
+              <Select
+                className="flex w-full"
+                options={currencyOptions}
+                value={
+                  settings.currency
+                    ? currencyOptions.find((i) => i.value === currentCurrency)
+                    : currencyOptions[0]
+                }
+                onChange={(option) => {
+                  setCurrentCurrency(option.value);
+                }}
+                placeholder="Select Currency"
+                buttonClassName="border-none w-full gap-2 font-medium"
+                accent="secondary"
+              />
             </div>
           </label>
         </div>
