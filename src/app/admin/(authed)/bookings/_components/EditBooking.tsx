@@ -3,27 +3,22 @@ import {
   bedroomOptions,
   squareFootageOptions
 } from "@/app/(landings)/booking/new/formData";
-import { Booking, ServiceOption } from "@/app/admin/types";
+import { Booking } from "@/app/admin/types";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { X } from "lucide-react";
 import React, { useState } from "react";
+import { useServicesQuery } from "../../_services/queries";
 
 export default function EditBooking({
   booking,
-  servicesOptions,
   onClose
 }: {
   booking: Booking;
-  servicesOptions: ServiceOption[];
   onClose: () => void;
 }) {
-  const serviceTypeOptions = servicesOptions.map((i) => ({
-    label: i.name.replace(/(?<=^| )\w/g, (i) => i.toUpperCase()),
-    value: i.id.toString()
-  }));
-
+  const { data: servicesOptions } = useServicesQuery();
   const [newBookingData, setNewBookingData] = useState({
     fullName: booking.customer?.personalInformation?.fullName,
     serviceType: booking.serviceType.serviceId,
@@ -32,6 +27,13 @@ export default function EditBooking({
     approximateSquareFootage: booking.approximateSquareFootage
   });
   console.log(newBookingData);
+
+  if (!servicesOptions) return;
+
+  const serviceTypeOptions = servicesOptions.map((i) => ({
+    label: i.name.replace(/(?<=^| )\w/g, (i) => i.toUpperCase()),
+    value: i.id.toString()
+  }));
 
   const setField = (key: keyof typeof newBookingData, value: string) => {
     setNewBookingData((prev) => ({ ...prev, [key]: value }));

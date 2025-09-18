@@ -1,85 +1,14 @@
 import React, { useState } from "react";
 import ListItem from "../_components/ListItem";
-import {
-  Booking,
-  BookingsResponse,
-  Cleaner,
-  ServiceOption
-} from "@/app/admin/types";
+import { Booking, BookingsResponse } from "@/app/admin/types";
 import { cn } from "@/lib/utils";
 import EditBooking from "../_components/EditBooking";
 import AssignCleaner from "../_components/AssignCleaner";
 
-// const statuses = [
-//   { label: "Pending", value: "pending" },
-//   { label: "In Progress", value: "in-progress" },
-//   { label: "Completed", value: "completed" },
-//   { label: "Cancelled", value: "cancelled" }
-// ];
-
-// Booking data array
-// const bookingsData = [
-//   {
-//     id: 1,
-//     status: statuses[1], // In Progress
-//     name: "Sara Johnson",
-//     bookingNumber: 1,
-//     service: "Deep Cleaning",
-//     dateTime: "25-07-2025 at 9:00 AM",
-//     cleaners: "Maria Gracia",
-//     address: "123 Oak Street",
-//     phone: "(555) 123-4567",
-//     price: 150,
-//     notes: "Pet-friendly cleaning request"
-//   },
-//   {
-//     id: 2,
-//     status: statuses[0], // Pending
-//     name: "Sara Johnson",
-//     bookingNumber: 2,
-//     service: "Deep Cleaning",
-//     dateTime: "25-07-2025 at 9:00 AM",
-//     cleaners: undefined, // This was commented out in the original
-//     address: "123 Oak Street",
-//     phone: "(555) 123-4567",
-//     price: 150,
-//     notes: "Key under Mat"
-//   },
-//   {
-//     id: 3,
-//     status: statuses[2], // Completed
-//     name: "Sara Johnson",
-//     bookingNumber: 3,
-//     service: "Deep Cleaning",
-//     dateTime: "25-07-2025 at 9:00 AM",
-//     cleaners: "Maria Gracia",
-//     address: "123 Oak Street",
-//     phone: "(555) 123-4567",
-//     price: 150,
-//     notes: "Complete apartment cleaning"
-//   },
-//   {
-//     id: 4,
-//     status: statuses[3], // Cancelled
-//     name: "Sara Johnson",
-//     bookingNumber: 4,
-//     service: "Deep Cleaning",
-//     dateTime: "25-07-2025 at 9:00 AM",
-//     cleaners: "Maria Gracia",
-//     address: "123 Oak Street",
-//     phone: "(555) 123-4567",
-//     price: 150
-//   }
-// ];
-
 export default function ListView({
-  bookingsResponse,
-  servicesOptions,
-  cleaners
+  bookingsResponse
 }: {
   bookingsResponse: BookingsResponse;
-  servicesOptions: ServiceOption[];
-  cleaners: Cleaner[];
 }) {
   const bookings = bookingsResponse.data;
   const [editBooking, setEditBooking] = useState<Booking | null>(null);
@@ -98,7 +27,6 @@ export default function ListView({
         <div className="sticky left-0 top-0 flex flex-col items-center pt-4">
           <EditBooking
             booking={editBooking}
-            servicesOptions={servicesOptions}
             onClose={() => setEditBooking(null)}
           />
         </div>
@@ -107,7 +35,6 @@ export default function ListView({
         <div className="sticky left-0 top-0 flex flex-col items-center pt-4">
           <AssignCleaner
             booking={assignCleaners}
-            cleaners={cleaners}
             onClose={() => setAssignCleaners(null)}
           />
         </div>

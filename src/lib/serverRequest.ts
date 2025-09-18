@@ -1,7 +1,7 @@
 "use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cookies } from "next/headers";
-import { axios } from "./axios";
+import { axiosInstance } from "./axios";
 
 // Create a function for server-side requests that automatically adds auth headers
 
@@ -16,7 +16,7 @@ export async function serverRequest(
   const accessToken = cookieStore.get("accessToken")?.value;
 
   // Make the request with auth header if token exists
-  return axios({
+  return axiosInstance({
     url,
     method,
     data,

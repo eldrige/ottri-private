@@ -8,7 +8,7 @@ import {
 } from "../../formData";
 import AddressInput from "../AddressInput";
 import { useEffect, useState } from "react";
-import { axios } from "@/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 
 export default function PropertyDetailsStep() {
   const {
@@ -37,7 +37,7 @@ export default function PropertyDetailsStep() {
 
       setIsValidating(true);
       try {
-        const res = await axios.get(`service-areas/${lat}/${lng}`);
+        const res = await axiosInstance.get(`service-areas/${lat}/${lng}`);
         const isValid = res.data.length > 0;
         setValue("isServiceAreaValid", isValid);
 

@@ -6,7 +6,7 @@ import { FileIcon } from "@/components/icons/FileIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { axios as axiosInstance } from "@/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import { BookingType } from "@/lib/types";
 import { format } from "date-fns";
 import { DownloadIcon, PlusIcon } from "lucide-react";
