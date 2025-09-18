@@ -28,7 +28,7 @@ export default function ClientAdminBookingsPage() {
   const statusFilter = searchParams.get("status") || undefined;
   const getBookingsQuery = useGetBookingsQuery(statusFilter);
   const bookingsResponse = getBookingsQuery.data;
-  console.log(bookingsResponse);
+  // console.log(bookingsResponse);
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">

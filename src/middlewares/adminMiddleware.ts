@@ -36,7 +36,7 @@ export async function adminMiddleware(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 15 * 60, // 15 minutes in seconds
+      maxAge: 30 * 60, // 30 minutes in seconds
       path: "/"
     });
 
@@ -45,6 +45,15 @@ export async function adminMiddleware(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+      path: "/"
+    });
+
+    // Set a validation timestamp to reduce validation frequency
+    response.cookies.set("adminValidated", Date.now().toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60, // 15 minutes validation window
       path: "/"
     });
   }
@@ -63,6 +72,17 @@ async function isAuthenticated(req: NextRequest): Promise<AuthResult> {
   // First try to get tokens from cookies
   const accessToken = req.cookies.get("accessToken")?.value;
   const refreshToken = req.cookies.get("refreshToken")?.value;
+  const adminValidated = req.cookies.get("adminValidated")?.value;
+
+  // If we recently validated the admin status, trust it
+  if (accessToken && adminValidated) {
+    const validatedTime = parseInt(adminValidated);
+    const fiveMinutesAgo = Date.now() - 15 * 60 * 1000;
+
+    if (validatedTime && validatedTime > fiveMinutesAgo) {
+      return { isAuth: true, accessToken, refreshToken };
+    }
+  }
 
   // If we have an access token, try to validate it
   if (accessToken) {
@@ -80,7 +100,7 @@ async function isAuthenticated(req: NextRequest): Promise<AuthResult> {
 
         // Check if the user has admin role
         if (userData.data.role === "ADMIN") {
-          return { isAuth: true, accessToken, refreshToken };
+          return { isAuth: true, accessToken, refreshToken, refreshed: true };
         }
       }
     } catch {
