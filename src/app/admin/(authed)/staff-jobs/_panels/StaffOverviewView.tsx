@@ -6,13 +6,14 @@ import Select from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Cleaner } from "@/app/admin/types";
-import { useCleanersChangeStatusMutation } from "../../_services/mutations";
+import { useUpdateCleanerMutation } from "../../_services/mutations";
 
 export default function StaffOverviewView({
   cleaners
 }: {
   cleaners: Cleaner[];
 }) {
+  console.log(cleaners);
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
       {cleaners.map((cleaner) => (
@@ -58,19 +59,20 @@ export default function StaffOverviewView({
   );
 }
 
-function StaffBox({ cleaner }: { cleaner: Cleaner }) {
-  const { mutateAsync, isPending: isStatusChanging } =
-    useCleanersChangeStatusMutation();
+const options = [
+  { value: "AVAILABLE", label: "Available" },
+  { value: "UNAVAILABLE", label: "Unavailable" }
+];
 
-  const options = [
-    { value: "AVAILABLE", label: "Available" },
-    { value: "UNAVAILABLE", label: "Unavailable" }
-  ];
+function StaffBox({ cleaner }: { cleaner: Cleaner }) {
+  const { mutateAsync, isPending: isUpdating } = useUpdateCleanerMutation();
+
   const [status, setStatus] = useState(
     options.find((i) => i.value === cleaner.status) || options[0]
   );
 
   useEffect(() => {
+    console.log(status.value, cleaner.status);
     if (status.value !== cleaner.status) {
       mutateAsync(
         {
@@ -103,7 +105,7 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
         <Select
           options={options}
           value={status}
-          disabled={isStatusChanging}
+          disabled={isUpdating}
           onChange={(status) => {
             setStatus(status);
           }}

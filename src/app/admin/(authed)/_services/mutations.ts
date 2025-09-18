@@ -11,7 +11,7 @@ import {
 } from "../_actions/bookings";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { Booking, BookingsResponse, Cleaner } from "@/app/admin/types";
-import { cleanersChangeStatus } from "../_actions/cleaners";
+import { updateCleaner } from "../_actions/cleaners";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -59,10 +59,10 @@ export function useCompleteBookingMutation() {
 }
 
 // Cleaners
-export function useCleanersChangeStatusMutation() {
+export function useUpdateCleanerMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: cleanersChangeStatus,
+    mutationFn: updateCleaner,
     onSuccess: (data) => {
       updateCleanerHelper(queryClient, data);
     }
@@ -101,5 +101,5 @@ function updateCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
 
   const newData = newCleaners;
 
-  queryClient.setQueryData(["bookings"], newData);
+  queryClient.setQueryData(["cleaners"], newData);
 }
