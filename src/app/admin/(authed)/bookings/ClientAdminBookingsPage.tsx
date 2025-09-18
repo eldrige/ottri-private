@@ -11,9 +11,8 @@ import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
 import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
-import { Cleaner, ServiceOption } from "../../types";
-import { useSearchParams } from "next/navigation";
-import { useGetBookingsQuery } from "./services/queries";
+import { useGetBookingsQuery } from "../_services/queries";
+import { useClientSearchParams } from "@/hooks/useClientSearchParams";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -23,22 +22,13 @@ const filterOptions = [
   { label: "Cancelled", value: "CANCELLED" }
 ];
 
-export default function ClientAdminBookingsPage({
-  servicesOptions,
-  cleaners
-}: {
-  servicesOptions: ServiceOption[];
-  cleaners: Cleaner[];
-}) {
-  const searchParams = useSearchParams();
-  console.log(searchParams.get("status"));
-  const [statusFilter, setStatusFilter] = useState(
-    searchParams.get("status") || ""
-  );
+export default function ClientAdminBookingsPage() {
+  const { searchParams, setSearchParam } = useClientSearchParams();
   const [activeView, setActiveView] = useState<string>("calendar");
-
+  const statusFilter = searchParams.get("status") || undefined;
   const getBookingsQuery = useGetBookingsQuery(statusFilter);
   const bookingsResponse = getBookingsQuery.data;
+  // console.log(bookingsResponse);
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
@@ -59,19 +49,9 @@ export default function ClientAdminBookingsPage({
                 : filterOptions[0]
             }
             onChange={(option) => {
-              if (option.value === "all-bookings") {
-                // router.replace("/admin/bookings");
-                window.history.pushState({}, "", "/admin/bookings");
-                setStatusFilter("");
-              } else {
-                // router.replace(`/admin/bookings?status=${option.value}`);
-                window.history.pushState(
-                  {},
-                  "",
-                  `/admin/bookings?status=${option.value}`
-                );
-                setStatusFilter(option.value);
-              }
+              const newStatus =
+                option.value === "all-bookings" ? "" : option.value;
+              setSearchParam("status", newStatus);
             }}
             placeholder="All Bookings"
             buttonClassName="border-none gap-2 font-medium"
@@ -79,7 +59,7 @@ export default function ClientAdminBookingsPage({
           />
         </div>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-          <Link href={"/admin/bookings/manage/new"}>
+          <Link href={"#"}>
             <Button
               size={"2xs"}
               variant={"secondary"}
@@ -161,11 +141,7 @@ export default function ClientAdminBookingsPage({
       ) : activeView === "calendar" ? (
         <CalendarView bookings={bookingsResponse.data} />
       ) : activeView === "list" ? (
-        <ListView
-          bookingsResponse={bookingsResponse}
-          servicesOptions={servicesOptions}
-          cleaners={cleaners}
-        />
+        <ListView bookingsResponse={bookingsResponse} />
       ) : (
         <MapView />
       )}

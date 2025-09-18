@@ -1,4 +1,4 @@
-import { Booking, Cleaner } from "@/app/admin/types";
+import { Booking } from "@/app/admin/types";
 import ClockIcon2 from "@/components/icons/ClockIcon2";
 import StarIcon from "@/components/icons/StarIcon";
 import { Button } from "@/components/ui/Button";
@@ -6,22 +6,23 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { X } from "lucide-react";
 import React, { useState } from "react";
-import { useAssignCleanerMutation } from "../services/mutations";
+import { useAssignCleanerMutation } from "../../_services/mutations";
+import { useCleanersQuery } from "../../_services/queries";
 
 export default function AssignCleaner({
   booking,
-  cleaners,
   onClose
 }: {
   booking: Booking;
-  cleaners: Cleaner[];
   onClose: () => void;
 }) {
+  const { data: cleaners } = useCleanersQuery();
   const { mutateAsync: cleanerMutate, isPending } = useAssignCleanerMutation();
   const [selectedCleanerId, setSelectedCleanerId] = useState<string | null>(
     null
   );
-  // const [isLoading, setIsLoading] = useState(false);
+
+  if (!cleaners) return;
 
   const dateTime = format(
     new Date(booking.timeSlot.date),

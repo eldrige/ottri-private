@@ -87,7 +87,9 @@ export async function POST(request: Request) {
       city: orderData.city,
       currency: "USD",
       createAccount: orderData.createAccount,
-      password: orderData.password
+      password: orderData.password || null,
+      lng: orderData.lng,
+      lat: orderData.lat
     };
     console.log(bodyObj);
 

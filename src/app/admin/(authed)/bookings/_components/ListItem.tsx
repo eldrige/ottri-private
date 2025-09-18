@@ -11,7 +11,7 @@ import {
   useCancelBookingMutation,
   useCompleteBookingMutation,
   useStartBookingMutation
-} from "../services/mutations";
+} from "../../_services/mutations";
 
 interface StatusType {
   label: string;

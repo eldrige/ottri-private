@@ -42,6 +42,9 @@ export const orderFormSchema = z
     frequency: z.string().min(1, "Frequency is required"),
     // Step 2
     serviceAddress: z.string().min(1, "Service address is required"),
+    lng: z.number().nullable(),
+    lat: z.number().nullable(),
+    isServiceAreaValid: z.boolean(),
     useSameForBilling: z.boolean().optional(),
     bedrooms: z.string().min(1, "Number of bedrooms is required"),
     bathrooms: z.string().min(1, "Number of bathrooms is required"),
