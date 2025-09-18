@@ -20,9 +20,13 @@ export default async function ConfirmationPage({
 }) {
   const { orderId = "" } = await searchParams;
 
+  const dispId = orderId.startsWith("ORD")
+    ? orderId.split("-")[1].slice(0, 9)
+    : orderId.slice(0, 9);
+
   const response = await axiosInstance.get(
     // `http://172.22.11.156:3000/api/v1/bookings/${orderId.split("-")[1]}`
-    `bookings/${orderId.split("-")[1]}`
+    `bookings/${dispId}`
   );
 
   const bookingData = response.data as BookingType;
@@ -62,7 +66,9 @@ export default async function ConfirmationPage({
 
         <div className="flex items-center gap-2">
           <p className="text-subtitle text-surface-100">Booking ID: </p>
-          <p className="bg-primary-700 rounded-lg py-2 px-6">#{orderId}</p>
+          <p className="bg-primary-700 rounded-lg py-2 px-6 uppercase">
+            #ORD-{dispId}
+          </p>
         </div>
       </div>
 
