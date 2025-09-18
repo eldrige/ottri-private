@@ -11,7 +11,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { data: profile, isLoading: isProfileLoading } = useGetUserProfile();
-  console.log(`profile is here: ${profile}`);
+  // console.log(`profile is here: ${profile}`);
 
   if (isProfileLoading || !profile) {
     return <Loader2 className="animate-spin h-6 w-6" />;

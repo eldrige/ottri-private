@@ -1,7 +1,12 @@
+"use client";
 import { Button } from "@/components/ui/Button";
 import React from "react";
+import { useGetBookingsQuery } from "../../_services/queries";
+import { formatDate } from "@/lib/utils";
+import { formatName } from "../../_utils/helpers";
 
 export default function BillingSection4() {
+  const { data: bookings, isLoading } = useGetBookingsQuery();
   return (
     <div className="flex flex-col gap-6">
       <div className="lg:p-6 lg:border border-surface-500/30 rounded-lg flex flex-col gap-6">
@@ -16,20 +21,20 @@ export default function BillingSection4() {
           </div>
         </div>
         <div className="space-y-8">
-          <TransactionCard
-            service="Standard Cleaning"
-            cleaner="Eddie Legaspi"
-            amount={75}
-            date="May 16, 2025"
-            state="Completed"
-          />
-          <TransactionCard
-            service="Deep Cleaning"
-            cleaner="Xandra Claire"
-            amount={85}
-            date="May 16, 2025"
-            state="Completed"
-          />
+          {isLoading ? (
+            <p>Loading Bookings...</p>
+          ) : (
+            bookings?.data.map((booking) => (
+              <TransactionCard
+                key={booking.id}
+                service={formatName(booking.serviceType.name)}
+                cleaner={booking.cleaners[0]?.name || "No Cleaner"}
+                amount={booking.price}
+                date={formatDate(booking.timeSlot.date)}
+                state={formatName(booking.status)}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>

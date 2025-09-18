@@ -7,6 +7,7 @@ import LocationIcon from "@/components/icons/LocationIcon";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { User } from "../../_utils/types";
+import { useUpdateProfileMutation } from "../../_services/mutations";
 
 export default function ProfileSection2({ user }: { user: User }) {
   return (
@@ -56,6 +57,9 @@ function PersonalInfoForm({ user }: { user: User }) {
     yearJoined: new Date(user.createdAt).getFullYear()
   });
 
+  const { mutateAsync: updateProfile, isPending: isUpdating } =
+    useUpdateProfileMutation();
+
   function handleOnchange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     setFormData((prev) => {
@@ -76,10 +80,7 @@ function PersonalInfoForm({ user }: { user: User }) {
           update your personal details
         </p>
       </div>
-      <form
-        action=""
-        className="flex *:flex *:flex-col *:gap-2 text-secondary-700 flex-col gap-3"
-      >
+      <form className="flex *:flex *:flex-col *:gap-2 text-secondary-700 flex-col gap-3">
         <label>
           Fullname
           <Input
@@ -113,11 +114,20 @@ function PersonalInfoForm({ user }: { user: User }) {
           />
         </label>
         <Button
-          type="submit"
+          disabled={isUpdating}
+          onClick={async (e) => {
+            e.preventDefault();
+            await updateProfile({
+              userId: String(user.id),
+              fullName: formData.fullName,
+              phoneNumber: formData.phone,
+              address: formData.address
+            });
+          }}
           size={"xs"}
           className="hover:border-secondary-700 my-3 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
         >
-          Save Changes
+          {isUpdating ? "Saving Changes..." : "Save Changes"}
         </Button>
       </form>
     </div>

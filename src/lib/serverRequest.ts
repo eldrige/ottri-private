@@ -7,7 +7,7 @@ import { axiosInstance } from "./axios";
 
 export async function serverRequest(
   url: string,
-  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
   data?: any,
   headers?: Record<string, string>
 ) {
