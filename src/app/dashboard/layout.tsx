@@ -11,17 +11,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { data: profile, isLoading: isProfileLoading } = useGetUserProfile();
-  // console.log(`profile is here: ${profile}`);
-
   if (isProfileLoading || !profile) {
-    return <Loader2 className="animate-spin h-6 w-6" />;
+    return (
+      <div className="h-screen flex gap-2 w-full justify-center items-center">
+        <Loader2 className="animate-spin h-6 w-6" />
+        <p>Loading...</p>
+      </div>
+    );
   }
   return (
     <main className=" relative">
       <DashboardNavbar />
       <div className="flex px-4">
         <section className="hidden md:block flex-15/100 h-full">
-          <SideNavBar user={profile} />
+          <SideNavBar user={profile!} />
         </section>
         <section className="flex-85/100 ">{children}</section>
       </div>

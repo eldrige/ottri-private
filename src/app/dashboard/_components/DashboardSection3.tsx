@@ -1,20 +1,15 @@
 import { Button } from "@/components/ui/Button";
 import React from "react";
 import ServiceCard, { AppointmentCard } from "./ServiceCard";
-import { PlusIcon } from "lucide-react";
+import { Loader2, PlusIcon } from "lucide-react";
 import { useGetBookingsQuery } from "../_services/queries";
 import Link from "next/link";
 
 export default function DashboardSection3() {
-  const { data: pastBookings } = useGetBookingsQuery("COMPLETED");
-  const { data: upcomingBookings } = useGetBookingsQuery("");
-  if (
-    !pastBookings ||
-    pastBookings.data.length === 0 ||
-    !upcomingBookings ||
-    upcomingBookings.data.length === 0
-  )
-    return null;
+  const { data: recentBookings, isLoading: recentBookingsLoading } =
+    useGetBookingsQuery("COMPLETED");
+  const { data: upcomingBookings, isLoading: upcomingBookingsLoading } =
+    useGetBookingsQuery("");
 
   return (
     <div className="flex flex-col gap-6">
@@ -41,9 +36,21 @@ export default function DashboardSection3() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {pastBookings.data.map((booking, index) => (
-              <ServiceCard key={index} service={booking} />
-            ))}
+            {recentBookings &&
+              recentBookings.data.length > 0 &&
+              recentBookings.data.map((booking, index) => (
+                <ServiceCard key={index} service={booking} />
+              ))}
+            {!recentBookingsLoading && recentBookings?.data.length === 0 && (
+              <div className="text-caption w-full text-center text-secondary-800">
+                No recent appointments
+              </div>
+            )}
+            {recentBookingsLoading && (
+              <div className="text-caption w-full flex items-center justify-center text-center text-secondary-800">
+                <Loader2 className="animate-spin w-4 h-4" />
+              </div>
+            )}
           </div>
         </div>
         <div className=" lg:p-6 lg:border border-surface-500/30 rounded-lg flex flex-col gap-6">
@@ -68,9 +75,21 @@ export default function DashboardSection3() {
             </div>
           </div>
           <div className="flex flex-col gap-2.5">
-            {upcomingBookings.data.map((service) => (
-              <AppointmentCard key={service.id} service={service} />
-            ))}
+            {!upcomingBookingsLoading &&
+              upcomingBookings?.data.length === 0 && (
+                <div className="text-caption w-full text-center text-secondary-800">
+                  No upcoming appointments
+                </div>
+              )}
+            {upcomingBookings &&
+              upcomingBookings.data.map((service) => (
+                <AppointmentCard key={service.id} service={service} />
+              ))}
+            {upcomingBookingsLoading && (
+              <div className="text-caption w-full flex items-center justify-center text-center text-secondary-800">
+                <Loader2 className="animate-spin w-4 h-4" />
+              </div>
+            )}
           </div>
           <Link href="/booking/new">
             <Button

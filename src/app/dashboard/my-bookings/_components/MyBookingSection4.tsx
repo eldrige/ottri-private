@@ -56,7 +56,7 @@ export default function MyBookingSection4() {
                 </h3>
               </div>
               <div className="justify-end">
-                <div className="flex h-fit text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 rounded-lg">
+                <div className="flex h-fit text-caption text-secondary-700 items-center bg-surface-50 px-3 rounded-lg">
                   <Filter className="size-4" />
                   <Select
                     options={filterOptions}
@@ -83,7 +83,7 @@ export default function MyBookingSection4() {
                       }
                     }}
                     placeholder="All Bookings"
-                    buttonClassName="border-none gap-2 font-medium"
+                    buttonClassName="border-none gap-0 font-medium"
                     accent="secondary"
                   />
                 </div>
@@ -106,8 +106,8 @@ export default function MyBookingSection4() {
                     </div>
                   )}
               {isLoading && (
-                <div className="text-caption w-full text-center text-secondary-800">
-                  <Loader2 className="animate-spin " />
+                <div className="text-caption w-full flex items-center justify-center text-center text-secondary-800">
+                  <Loader2 className="animate-spin w-4 h-4" />
                 </div>
               )}
             </div>

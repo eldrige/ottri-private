@@ -53,7 +53,7 @@ export default function MyBookingSection3() {
               </h3>
             </div>
             <div className="md:justify-end">
-              <div className="flex h-fit text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 rounded-lg">
+              <div className="flex h-fit text-caption text-secondary-700 items-center bg-surface-50 pl-4 rounded-lg">
                 <Filter className="size-4" />
                 <Select
                   options={filterOptions}

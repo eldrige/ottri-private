@@ -209,7 +209,11 @@ function AppointmentCardDesktop({
         </div>
         <div className="flex gap-2">
           <Button
-            disabled={status === "COMPLETED"}
+            disabled={
+              status === "COMPLETED" ||
+              status === "CANCELLED" ||
+              status === "INPROGRESS"
+            }
             size={"xs"}
             className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
             variant={"outline"}
@@ -265,7 +269,11 @@ function AppointmentCardMobile({
           </div>
           <div className="flex flex-row-reverse md:flex-row items-center gap-2">
             <Button
-              disabled={status === "COMPLETED"}
+              disabled={
+                status === "COMPLETED" ||
+                status === "CANCELLED" ||
+                status === "INPROGRESS"
+              }
               size={"xs"}
               className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
               variant={"outline"}
