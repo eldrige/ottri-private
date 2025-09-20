@@ -1,46 +1,12 @@
 import React from "react";
-import { ServiceBooked } from "@/lib/types";
 import ServiceHistoryCard from "./ServiceHistoryCard";
+import { Booking } from "../../_utils/types";
 
-export default function ServiceHistorySection3() {
-  const historyServices: ServiceBooked[] = [
-    {
-      serviceName: "Deep Cleaning",
-      cleanerName: "John Doe",
-      cleanerImage: undefined,
-      price: 75,
-      date: "May 16, 2025",
-      time: "2:00 PM - 4:00 PM",
-      review: "“Excellent service, very thoughtful”",
-      location: "123 Main St, City, Country",
-      state: "complete",
-      rating: 3
-    },
-    {
-      serviceName: "Deep Cleaning",
-      cleanerName: "John Doe",
-      cleanerImage: undefined,
-      price: 75,
-      date: "May 16, 2025",
-      time: "2:00 PM - 4:00 PM",
-      review: "“Excellent service, very thoughtful”",
-      location: "123 Main St, City, Country",
-      state: "complete",
-      rating: 5
-    },
-    {
-      serviceName: "Deep Cleaning",
-      cleanerName: "John Doe",
-      cleanerImage: undefined,
-      price: 75,
-      date: "May 16, 2025",
-      time: "2:00 PM - 4:00 PM",
-      review: "“Excellent service, very thoughtful”",
-      location: "123 Main St, City, Country",
-      state: "complete",
-      rating: 5
-    }
-  ];
+export default function ServiceHistorySection3({
+  historyServices
+}: {
+  historyServices: Booking[];
+}) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-8">
@@ -56,9 +22,9 @@ export default function ServiceHistorySection3() {
             </div>
           </div>
           <div className="flex flex-col gap-2.5">
-            {historyServices.map((service, index) => (
-              <ServiceHistoryCard key={index} service={service} />
-            ))}
+            {historyServices.map((service) => {
+              return <ServiceHistoryCard key={service.id} service={service} />;
+            })}
           </div>
         </div>
       </div>

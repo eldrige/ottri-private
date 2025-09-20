@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function MyBookingSection1() {
   return (
@@ -12,13 +13,15 @@ export default function MyBookingSection1() {
           Manage your upcoming cleaning appointments
         </h3>
       </div>
-      <Button
-        className="md:flex hidden text-white gap-2 px-3 items-center h-fit"
-        size={"xs"}
-      >
-        <PlusIcon />
-        Add Booking
-      </Button>
+      <Link href="/booking/new">
+        <Button
+          className="md:flex hidden text-white gap-2 px-3 items-center h-fit"
+          size={"xs"}
+        >
+          <PlusIcon />
+          Add Booking
+        </Button>
+      </Link>
     </section>
   );
 }

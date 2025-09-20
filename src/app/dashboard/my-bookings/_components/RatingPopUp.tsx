@@ -1,20 +1,35 @@
+"use client";
 import { Button } from "@/components/ui/Button";
-import { ServiceBooked } from "@/lib/types";
 import { StarIcon, XIcon } from "lucide-react";
 import React, { useState } from "react";
+import { Booking } from "../../_utils/types";
+import { formatDate } from "@/lib/utils";
+import { formatHour24To12, formatName } from "../../_utils/helpers";
+import { useRateBookingMutation } from "../../_services/mutations";
 
 export default function RatingPopUp({
   booking,
   isOpen,
   onClose
 }: {
-  booking: Omit<ServiceBooked, "rating">;
+  booking: Pick<
+    Booking,
+    | "id"
+    | "serviceType"
+    | "timeSlot"
+    | "address"
+    | "cleaners"
+    | "status"
+    | "price"
+  >;
   isOpen: boolean;
   onClose: () => void;
 }) {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [value, setValue] = useState(50);
+  const [comment, setComment] = useState("");
+  const { mutateAsync: rateBooking, isPending } = useRateBookingMutation();
   if (!isOpen) return null;
 
   return (
@@ -31,14 +46,16 @@ export default function RatingPopUp({
         </div>
         <div className="bg-[#F7F8F8] flex flex-col gap-1 text-secondary-700 md:text-nowrap rounded-lg p-4 mt-4">
           <h3>
-            <span className="font-medium">Date & Time:</span> {booking.date} at{" "}
-            {booking.time}
+            <span className="font-medium">Date & Time:</span>{" "}
+            {formatDate(booking.timeSlot.date)} at{" "}
+            {formatHour24To12(booking.timeSlot.startTime)}
           </h3>
           <h3>
-            <span className="font-medium">Address:</span> {booking.location}
+            <span className="font-medium">Address:</span> {booking.address}
           </h3>
           <h3>
-            <span className="font-medium">Service:</span> {booking.serviceName}
+            <span className="font-medium">Service:</span>{" "}
+            {formatName(booking.serviceType.name)}
           </h3>
         </div>
         <div className="flex text-secondary-700 items-center flex-col gap-4 my-4">
@@ -81,11 +98,25 @@ export default function RatingPopUp({
               className="w-full bg-[#F7F8F8] rounded-lg px-3 py-2 min-h-30 max-h-30"
               name=""
               id=""
+              onChange={(e) => setComment(e.target.value)}
             />
           </div>
         </div>
-        <Button onClick={onClose} size={"xs"} className="w-full py-3">
-          Rate Job
+        <Button
+          disabled={isPending || rating === 0 || comment.trim().length === 0}
+          onClick={async () => {
+            await rateBooking({
+              bookingId: booking.id,
+              rating,
+              comment: comment.trim(),
+              completionRate: value
+            });
+            onClose();
+          }}
+          size={"xs"}
+          className="w-full py-3"
+        >
+          {isPending ? "Rating..." : "Rate Job"}
         </Button>
       </div>
     </div>

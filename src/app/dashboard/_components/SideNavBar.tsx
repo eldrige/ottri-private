@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { ComponentProps } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
-import userImage from "@/assets/user-profile-figure.png";
+import userImage from "@/assets/cleaner-placeholder.png";
 import {
   Calendar,
   CreditCard,
@@ -14,8 +14,9 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { User } from "../_utils/types";
 
-export default function SideNavBar() {
+export default function SideNavBar({ user }: { user: User }) {
   return (
     <nav className="flex h-screen flex-col gap-8 px-4 py-5">
       <div className="flex border-b border-secondary-800/25 py-5 justify-between items-center container mx-auto">
@@ -37,7 +38,7 @@ export default function SideNavBar() {
             <HomeIcon className="size-5" />
             Dashboard
           </SideNavLink>
-          <SideNavLink href={"/dashboard/my-booking"}>
+          <SideNavLink href={"/dashboard/my-bookings"}>
             <Calendar className="size-5" />
             My Bookings
           </SideNavLink>
@@ -71,9 +72,9 @@ export default function SideNavBar() {
             className="flex cursor-pointer flex-col"
           >
             <h1 className="font-medium text-caption text-black">
-              Jenny Murphy
+              {user.personalInformation.fullName}
             </h1>
-            <p className="text-surface-500 text-xs">jennymurphy@gmail.com</p>
+            <p className="text-surface-500 text-xs">{user.email}</p>
           </Link>
         </div>
       </div>

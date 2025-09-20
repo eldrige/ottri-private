@@ -5,25 +5,35 @@ import MoneyIcon from "@/components/icons/MoneyIcon";
 import { CalendarIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-export default function DashboardSection2() {
+export default function DashboardSection2({
+  nextCleaningInfo,
+  totalCleanings,
+  amountSpent
+}: {
+  nextCleaningInfo?: { date: string; time: string };
+  totalCleanings?: number;
+  amountSpent?: number;
+}) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <StatCard
         title="Next Cleaning"
-        content="2:00PM - 4:00PM"
-        value="Tomorrow"
+        content={nextCleaningInfo ? nextCleaningInfo.time : "Not scheduled"}
+        value={
+          nextCleaningInfo ? nextCleaningInfo.date : "No upcoming cleaning"
+        }
         Icon={CalendarIcon}
       />
       <StatCard
         title="Total Cleanings"
-        value="24"
-        content="+3 this month"
+        value={(totalCleanings || 0).toString()}
+        content={`+${(totalCleanings || 0).toString()} this month`}
         Icon={BroomSparkleIcon}
       />
       <StatCard
         title="Amount Spent"
-        value="$567.00"
-        content="+24.67 this month"
+        value={`$${(amountSpent || 0).toFixed(2)}`}
+        content={`+${(amountSpent || 0).toFixed(2)} this month`}
         Icon={MoneyIcon}
       />
       <Button

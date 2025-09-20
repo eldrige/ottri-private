@@ -81,7 +81,11 @@ export interface HowWeWork {
     | React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
       >
-    | (() => React.JSX.Element);
+    | (({
+        className
+      }: {
+        className?: string | undefined;
+      }) => React.JSX.Element);
   content: string;
   steps: string[];
 }

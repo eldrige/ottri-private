@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 export default function BillingSection1() {
@@ -13,13 +14,15 @@ export default function BillingSection1() {
           Manage your payments and view transaction history
         </h3>
       </div>
-      <Button
-        className="md:flex hidden text-body text-white gap-2 px-3 items-center h-fit"
-        size={"xs"}
-      >
-        <PlusIcon />
-        Add Booking
-      </Button>
+      <Link href="/booking/new">
+        <Button
+          className="md:flex hidden text-body text-white gap-2 px-3 items-center h-fit"
+          size={"xs"}
+        >
+          <PlusIcon />
+          Add Booking
+        </Button>
+      </Link>
     </section>
   );
 }

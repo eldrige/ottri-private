@@ -1,4 +1,4 @@
-"use server";
+"use client";
 import { Badge } from "@/components/ui/Badge";
 import React from "react";
 import Image from "next/image";
@@ -8,11 +8,12 @@ import { ArrowRight, RotateCwIcon, Sparkle } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { Service } from "../_utils/types";
 import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
-import { getServices } from "../_utils/queries";
 import BoxIcon from "@/components/icons/BoxIcon";
+import { useGetServices } from "../_services/queries";
 
-export default async function ServicesSection2() {
-  const services = await getServices();
+export default function ServicesSection2() {
+  const { data: services } = useGetServices();
+  if (!services || services.length === 0) return null;
   return (
     <section className=" md:px-26 pb-10 space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

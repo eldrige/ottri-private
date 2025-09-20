@@ -3,24 +3,40 @@ import ToggleSwitchOff from "@/components/icons/ToggleSwitchOff";
 import ToggleSwitchOn from "@/components/icons/ToggleSwitchOn";
 import { BellIcon, Shield } from "lucide-react";
 import React, { useState } from "react";
+import { useGetUserProfile } from "../../_services/queries";
 
 export default function SettingsSection2() {
+  const { data: userData } = useGetUserProfile();
+  if (!userData) return null;
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <NotificationSettings />
-      <PrivacySecuritySettings />
+      <NotificationSettings
+        bookingReminders={userData.settings.bookingReminder}
+        promotionalEmails={userData.settings.promotionalEmails}
+      />
+      <PrivacySecuritySettings
+        twoFactorAuth={userData.settings.twoFactorAuth}
+        locationSharing={userData.settings.shareMyLocation}
+      />
     </section>
   );
 }
 
-function NotificationSettings() {
+function NotificationSettings({
+  bookingReminders,
+  promotionalEmails
+}: {
+  bookingReminders: boolean;
+  promotionalEmails: boolean;
+}) {
   const [toggle, setToggle] = useState<{
     bookingReminders: boolean;
     promotionalEmails: boolean;
   }>({
-    bookingReminders: false,
-    promotionalEmails: true
+    bookingReminders,
+    promotionalEmails
   });
+
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
       <div>
@@ -86,10 +102,16 @@ function NotificationSettings() {
   );
 }
 
-function PrivacySecuritySettings() {
+function PrivacySecuritySettings({
+  twoFactorAuth,
+  locationSharing
+}: {
+  twoFactorAuth: boolean;
+  locationSharing: boolean;
+}) {
   const [toggle, setToggle] = useState({
-    twoFactorAuth: false,
-    locationSharing: false
+    twoFactorAuth,
+    locationSharing
   });
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
