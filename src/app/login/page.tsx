@@ -113,7 +113,7 @@ function LoginForm() {
                 value={email}
                 placeholder="Email"
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none block w-full py-2 border-b text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <MailIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
@@ -130,7 +130,7 @@ function LoginForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none block w-full py-2 border-b text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <LockIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
