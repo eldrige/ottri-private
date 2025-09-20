@@ -3,10 +3,14 @@
 import React, { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { LockIcon, MailIcon } from "lucide-react";
+import logo from "@/assets/logo.png";
+import Sparkles from "@/components/icons/Sparkles";
+import Image from "next/image";
 
 export default function Login() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div className="flex">
       <Suspense
         fallback={
           <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
@@ -14,6 +18,7 @@ export default function Login() {
           </div>
         }
       >
+        <DesktopLeftSection />
         <LoginForm />
       </Suspense>
     </div>
@@ -59,12 +64,14 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <section className="flex flex-2 justify-center items-center w-full h-screen bg-white">
+      <div className="w-full max-w-md p-8 space-y-8 ">
+        <Sparkles className=" mx-auto" />
         <div>
-          <h1 className="text-3xl font-bold text-center">User Login</h1>
-          <p className="mt-2 text-center text-gray-600">
-            Sign in to access the your dashboard
+          <h1 className="text-3xl font-medium text-center">Welcome Back!</h1>
+          <p className="mt-2 text-center text-secondary-800">
+            Please input your email and password in the field provided below to
+            continue with your account.
           </p>
         </div>
 
@@ -79,13 +86,7 @@ function LoginForm() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email address
-            </label>
-            <div className="mt-1">
+            <div className="mt-1 relative">
               <input
                 id="email"
                 name="email"
@@ -93,30 +94,28 @@ function LoginForm() {
                 autoComplete="email"
                 required
                 value={email}
+                placeholder="Email"
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 border-b border-secondary-800 placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
+              <MailIcon className="absolute right-0 top-3 h-4 w-4 text-secondary-800" />
             </div>
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <div className="mt-1">
+            <div className="mt-1 relative">
               <input
                 id="password"
                 name="password"
                 type="password"
+                placeholder="Password"
                 autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 border-b border-secondary-800 placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
+              <LockIcon className="absolute right-0 top-3 h-4 w-4 text-secondary-800" />
             </div>
           </div>
 
@@ -126,11 +125,31 @@ function LoginForm() {
               disabled={loading}
               className="w-full flex justify-center py-2 px-4"
             >
-              {loading ? "Signing in..." : "Sign in"}
+              {loading ? "Signing in..." : "Login"}
             </Button>
           </div>
         </form>
       </div>
-    </div>
+    </section>
+  );
+}
+
+function DesktopLeftSection() {
+  return (
+    <section className="hidden flex-3 md:flex relative flex-col justify-between items-center w-96 h-screen p-8">
+      <div className="absolute top-0 left-0">
+        <Image
+          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+          alt="Login Image"
+          className="hidden md:block h-screen w-96 object-cover"
+          width={500}
+          height={500}
+        />
+      </div>
+      <div className="flex justify-center items-center gap-4">
+        <Image src={logo} alt="Ottri Logo" width={40} height={40} />
+        <h3 className="text-white font-medium text-2xl">Ottri</h3>
+      </div>
+    </section>
   );
 }
