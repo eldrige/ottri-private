@@ -9,6 +9,7 @@ import Hero from "@/assets/hero-login.jpg";
 import Reviewer from "@/assets/reviewer.png";
 import Sparkles from "@/components/icons/Sparkles";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Login() {
   return (
@@ -146,6 +147,17 @@ function LoginForm() {
             </Button>
           </div>
         </form>
+        <div className="text-center">
+          <p className="text-white/80 md:text-secondary-800 text-sm">
+            {"Don't have an account yet? "}
+            <Link
+              href={`/register${redirectPath ? `?from=${redirectPath}` : ""}`}
+              className="text-primary-700 hover:text-primary-600 font-medium"
+            >
+              Register here
+            </Link>
+          </p>
+        </div>
       </div>
     </section>
   );
