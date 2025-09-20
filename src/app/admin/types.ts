@@ -22,7 +22,6 @@ export interface Booking {
   bathrooms: string;
   approximateSquareFootage: string;
   address: string;
-  mapLocation: null;
   stripePaymentIntentId: string;
   pets: string;
   petsInstructions: string;
@@ -40,6 +39,11 @@ export interface Booking {
   review: null;
   timeSlot: TimeSlot;
   price: number;
+  location?: {
+    type: string;
+    coordinates: number[];
+  };
+  guest?: Omit<PersonalInformation, "stripeCustomerId" | "userId">;
 }
 
 interface TimeSlot {
