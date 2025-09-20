@@ -3,8 +3,9 @@
 import React, { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { LockIcon, MailIcon } from "lucide-react";
+import { LockIcon, MailIcon, StarIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
+import Hero from "@/assets/hero-login.jpg";
 import Sparkles from "@/components/icons/Sparkles";
 import Image from "next/image";
 
@@ -64,12 +65,27 @@ function LoginForm() {
   };
 
   return (
-    <section className="flex flex-2 justify-center items-center w-full h-screen bg-white">
+    <section className="flex flex-2 justify-center relative z-10 items-center w-full h-screen">
+      <div className="absolute md:hidden -z-10 w-full h-full top-0 left-0">
+        <div className="bg-black/80  absolute w-full h-full" />
+        <Image
+          alt="Login Image"
+          src={Hero}
+          className=" rounded-r-4xl h-screen w-full object-cover"
+          width={1000}
+          height={1000}
+        />
+      </div>
       <div className="w-full max-w-md p-8 space-y-8 ">
-        <Sparkles className=" mx-auto" />
+        <Sparkles className="hidden md:block mx-auto" />
+        <div className="md:hidden flex items-center justify-center w-full">
+          <LogoComponent />
+        </div>
         <div>
-          <h1 className="text-3xl font-medium text-center">Welcome Back!</h1>
-          <p className="mt-2 text-center text-secondary-800">
+          <h1 className="text-3xl text-white md:text-secondary-900 font-medium text-center">
+            Welcome Back!
+          </h1>
+          <p className="mt-2 text-center text-white/80 md:text-secondary-800">
             Please input your email and password in the field provided below to
             continue with your account.
           </p>
@@ -96,9 +112,9 @@ function LoginForm() {
                 value={email}
                 placeholder="Email"
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none block w-full py-2 border-b border-secondary-800 placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 border-b text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
-              <MailIcon className="absolute right-0 top-3 h-4 w-4 text-secondary-800" />
+              <MailIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
           </div>
 
@@ -113,9 +129,9 @@ function LoginForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none block w-full py-2 border-b border-secondary-800 placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 border-b text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
-              <LockIcon className="absolute right-0 top-3 h-4 w-4 text-secondary-800" />
+              <LockIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
           </div>
 
@@ -123,7 +139,7 @@ function LoginForm() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4"
+              className="w-full text-[16px] text-[#FFFFFF] flex justify-center py-2 px-4"
             >
               {loading ? "Signing in..." : "Login"}
             </Button>
@@ -136,20 +152,55 @@ function LoginForm() {
 
 function DesktopLeftSection() {
   return (
-    <section className="hidden flex-3 md:flex relative flex-col justify-between items-center w-96 h-screen p-8">
-      <div className="absolute top-0 left-0">
+    <section
+      // style={{ clipPath: "polygon(0% 0%, 0% 300%, 105% 0%)" }}
+      className="hidden flex-3 md:flex relative flex-col h-screen p-8"
+    >
+      <LogoComponent />
+      <div className="absolute -z-10 top-0 left-0">
+        <div className="bg-black/70 rounded-r-4xl absolute w-full h-full" />
         <Image
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
           alt="Login Image"
-          className="hidden md:block h-screen w-96 object-cover"
-          width={500}
-          height={500}
+          src={Hero}
+          className="hidden rounded-r-4xl md:block h-screen w-full object-cover"
+          width={1000}
+          height={1000}
         />
       </div>
-      <div className="flex justify-center items-center gap-4">
-        <Image src={logo} alt="Ottri Logo" width={40} height={40} />
-        <h3 className="text-white font-medium text-2xl">Ottri</h3>
+      <div className="absolute w-[45%] bottom-20 left-10 bg-white/5 backdrop-blur-sm p-4 rounded-2xl text-white gap-4 flex">
+        <div className="">
+          <Image
+            className="w-fit rounded-full size-10 object-cover"
+            alt="Reviewer Image"
+            src={logo}
+            width={1000}
+            height={1000}
+          />
+        </div>
+        <div className="w-fit flex flex-col ">
+          <div className="w-fit flex">
+            {[0, 0, 0, 0, 0].map((_, i) => (
+              <StarIcon
+                key={i}
+                className="h-5 w-5 fill-[#FBC503] text-[#FBC503]"
+              />
+            ))}
+          </div>
+          <div className="">
+            <p>{'"Amazing service! My house has never been cleaner."'}</p>
+            <p className="text-sm w-fit">- Sarah M.</p>
+          </div>
+        </div>
       </div>
     </section>
+  );
+}
+
+function LogoComponent() {
+  return (
+    <div className="flex gap-2.5 items-center">
+      <Image src={logo} alt="Ottri Logo" width={40} height={40} />
+      <h3 className="text-white font-medium text-2xl">Ottri</h3>
+    </div>
   );
 }
