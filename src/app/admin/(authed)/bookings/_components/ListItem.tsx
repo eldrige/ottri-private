@@ -36,7 +36,10 @@ export default function ListItem({
   const { mutateAsync: mutateComplete, isPending: isCompleting } =
     useCompleteBookingMutation();
 
-  const bookingName = booking.customer?.personalInformation?.fullName || "";
+  const bookingName =
+    booking.guest?.fullName ||
+    booking.customer?.personalInformation?.fullName ||
+    "";
   const bookingNumber = booking.id;
   const service = booking.serviceType.name;
   const dateTime = format(

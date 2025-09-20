@@ -35,13 +35,15 @@ export default function Navbar() {
             <NavLink href="/blog">Blog</NavLink>
           </Nav>
           <div className="h-10 hidden xl:flex items-center gap-2.5">
-            <span className="whitespace-nowrap flex text-surface-500 px-6">
+            <span className="whitespace-nowrap flex items-center gap-1 text-surface-500 px-6">
               <CallIcon />
               (555) 123-4567
             </span>
-            <Button className="whitespace-nowrap" size="xs">
-              Book Now
-            </Button>
+            <Link href={"/booking/new"}>
+              <Button className="whitespace-nowrap" size="xs">
+                Book Now
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile hamburger */}
@@ -113,9 +115,11 @@ function MobileNav({
             <CallIcon />
             (555) 123-4567
           </p>
-          <Button className="whitespace-nowrap w-full mt-2.5" size="xs">
-            Book Now
-          </Button>
+          <Link href={"/booking/new"}>
+            <Button className="whitespace-nowrap w-full mt-2.5" size="xs">
+              Book Now
+            </Button>
+          </Link>
         </div>
       </div>
       <div

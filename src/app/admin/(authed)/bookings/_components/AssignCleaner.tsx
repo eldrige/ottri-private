@@ -45,7 +45,7 @@ export default function AssignCleaner({
   };
 
   return (
-    <div className="border border-black/10 rounded-lg p-4 w-full max-w-2xl space-y-4">
+    <div className="border border-black/10 rounded-lg p-4 w-full max-w-2xl space-y-4 max-h-[95dvh] overflow-y-auto">
       <div className="flex justify-between items-center">
         <p className="text-heading-5 font-bold">Assign Cleaner</p>
         <button onClick={onClose}>
@@ -63,7 +63,8 @@ export default function AssignCleaner({
           <p>
             <span className="font-medium mr-2">Client:</span>
             <span className="capitalize">
-              {booking.customer?.personalInformation?.fullName}
+              {booking.guest?.fullName ||
+                booking.customer?.personalInformation?.fullName}
             </span>
           </p>
           <p>
@@ -99,13 +100,14 @@ export default function AssignCleaner({
 
       <p className="font-semibold">Available Cleaners</p>
 
-      <div className="space-y-4 max-h-[400px] overflow-y-auto">
+      <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
         {!!cleaners.length &&
           cleaners.map((cleaner) => (
-            <div
+            <button
               key={cleaner.id}
+              disabled={cleaner.status === "UNAVAILABLE"}
               className={cn(
-                "p-4 border rounded-lg cursor-pointer transition-colors",
+                "p-4 border rounded-lg cursor-pointer transition-colors disabled:opacity-50",
                 selectedCleanerId === cleaner.id.toString()
                   ? "border-secondary-700 bg-secondary-700/5"
                   : "border-black/10 hover:border-secondary-700/50"
@@ -148,7 +150,7 @@ export default function AssignCleaner({
                   ))}
                 </div>
               )}
-            </div>
+            </button>
           ))}
       </div>
 
