@@ -67,7 +67,7 @@ function LoginForm() {
   };
 
   return (
-    <section className="flex flex-2 justify-center relative z-10 items-center w-full h-screen">
+    <section className="flex flex-3 justify-center relative z-10 items-center w-full h-screen">
       <div className="absolute md:hidden -z-10 w-full h-full top-0 left-0">
         <div className="bg-black/80  absolute w-full h-full" />
         <Image
@@ -165,7 +165,7 @@ function LoginForm() {
 
 function DesktopLeftSection() {
   return (
-    <section className="hidden flex-3 md:flex relative flex-col h-screen p-8">
+    <section className="hidden flex-4 md:flex relative flex-col h-screen p-8">
       <LogoComponent />
 
       {/* Main background with rounded corners */}
