@@ -152,11 +152,10 @@ function LoginForm() {
 
 function DesktopLeftSection() {
   return (
-    <section
-      // style={{ clipPath: "polygon(0% 0%, 0% 300%, 105% 0%)" }}
-      className="hidden flex-3 md:flex relative flex-col h-screen p-8"
-    >
+    <section className="hidden flex-3 md:flex relative flex-col h-screen p-8">
       <LogoComponent />
+
+      {/* Main background with rounded corners */}
       <div className="absolute -z-10 top-0 left-0">
         <div className="bg-black/70 rounded-r-4xl absolute w-full h-full" />
         <Image
@@ -167,6 +166,16 @@ function DesktopLeftSection() {
           height={1000}
         />
       </div>
+
+      {/* White triangle overlay to create diagonal cut effect */}
+      <div
+        className="absolute top-0 -right-1 w-0 h-0 z-10"
+        style={{
+          borderLeft: "130px solid transparent",
+          borderBottom: "100vh solid white"
+        }}
+      />
+
       <div className="absolute w-[45%] bottom-20 left-10 bg-white/5 backdrop-blur-sm p-4 rounded-2xl text-white gap-4 flex">
         <div className="">
           <Image
