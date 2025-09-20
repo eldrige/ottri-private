@@ -76,7 +76,7 @@ function LoginForm() {
           height={1000}
         />
       </div>
-      <div className="w-full max-w-md p-8 space-y-8 ">
+      <div className="w-full max-w-md p-6 space-y-8 ">
         <Sparkles className="hidden md:block mx-auto" />
         <div className="md:hidden flex items-center justify-center w-full">
           <LogoComponent />
@@ -100,7 +100,7 @@ function LoginForm() {
           </div>
         )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <div className="mt-1 relative">
               <input
