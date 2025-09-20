@@ -287,7 +287,7 @@ function SignupForm() {
             Already have an account?{" "}
             <Link
               href={`/login${redirectPath ? `?from=${redirectPath}` : ""}`}
-              className="text-primary-700 hover:text-primary-600 font-medium"
+              className="text-primary-700 hover:text-primary-800 font-medium"
             >
               Sign in here
             </Link>

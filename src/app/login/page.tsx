@@ -152,7 +152,7 @@ function LoginForm() {
             {"Don't have an account yet? "}
             <Link
               href={`/register${redirectPath ? `?from=${redirectPath}` : ""}`}
-              className="text-primary-700 hover:text-primary-600 font-medium"
+              className="text-primary-700 hover:text-primary-800 font-medium"
             >
               Register here
             </Link>
