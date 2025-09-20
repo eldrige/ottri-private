@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { LockIcon, MailIcon, StarIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import Hero from "@/assets/hero-login.jpg";
+import Reviewer from "@/assets/reviewer.png";
 import Sparkles from "@/components/icons/Sparkles";
 import Image from "next/image";
 
@@ -177,11 +178,11 @@ function DesktopLeftSection() {
       />
 
       <div className="absolute w-[45%] bottom-20 left-10 bg-white/5 backdrop-blur-sm p-4 rounded-2xl text-white gap-4 flex">
-        <div className="">
+        <div className="size-14">
           <Image
-            className="w-fit rounded-full size-10 object-cover"
+            className=" rounded-full  object-cover"
             alt="Reviewer Image"
-            src={logo}
+            src={Reviewer}
             width={1000}
             height={1000}
           />
