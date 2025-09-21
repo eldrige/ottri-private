@@ -92,7 +92,7 @@ function SignupForm() {
   };
 
   return (
-    <section className="flex flex-2 justify-center relative z-10 items-center w-full min-h-screen py-8">
+    <section className="flex flex-1 justify-center relative z-10 items-center w-full min-h-screen py-8">
       <div className="absolute md:hidden -z-10 w-full h-full top-0 left-0">
         <div className="bg-black/80 absolute w-full h-full" />
         <Image
@@ -300,7 +300,7 @@ function SignupForm() {
 
 function DesktopLeftSection() {
   return (
-    <section className="hidden flex-3 md:flex relative flex-col h-screen p-8">
+    <section className="hidden flex-1 md:flex relative flex-col h-screen p-8">
       <LogoComponent />
 
       {/* Main background with rounded corners */}
