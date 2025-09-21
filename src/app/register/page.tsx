@@ -68,7 +68,7 @@ function SignupForm() {
     setError("");
 
     try {
-      const response = await fetch("/api/user/signup", {
+      const response = await fetch("/api/user/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -205,7 +205,6 @@ function SignupForm() {
                 id="address"
                 name="address"
                 type="text"
-                required
                 value={formData.address}
                 placeholder="Street Address"
                 onChange={handleInputChange}
