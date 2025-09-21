@@ -4,23 +4,43 @@ import BroomSparkleIcon from "@/components/icons/BroomSparkleIcon";
 import MoneyIcon from "@/components/icons/MoneyIcon";
 import { CalendarIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useGetBookingsQuery } from "../_services/queries";
+import { formatHour24To12, nextCleaningDate } from "../_utils/helpers";
 
-export default function DashboardSection2({
-  nextCleaningInfo,
-  totalCleanings,
-  amountSpent
-}: {
-  nextCleaningInfo?: { date: string; time: string };
-  totalCleanings?: number;
-  amountSpent?: number;
-}) {
+export default function DashboardSection2() {
+  // const { data: userInfo } = useGetUserProfile();
+  // const { data: user } = useGetUserDetails(userInfo.id);
+  const { data: bookings, isLoading } = useGetBookingsQuery();
+  const amountSpent = bookings
+    ? bookings.data.reduce((acc, booking) => acc + booking.price, 0)
+    : 0;
+  const totalCleanings = bookings?.data.length;
+  const nextCleaning = bookings &&
+    bookings.data.length > 0 && {
+      date: nextCleaningDate(bookings?.data[0].timeSlot.date),
+      time:
+        formatHour24To12(bookings?.data[0].timeSlot.startTime) +
+        " - " +
+        formatHour24To12(bookings?.data[0].timeSlot.endTime)
+    };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <StatCard
         title="Next Cleaning"
-        content={nextCleaningInfo ? nextCleaningInfo.time : "Not scheduled"}
+        content={
+          isLoading && !bookings
+            ? "Loading..."
+            : nextCleaning
+              ? nextCleaning.time
+              : "Not scheduled"
+        }
         value={
-          nextCleaningInfo ? nextCleaningInfo.date : "No upcoming cleaning"
+          isLoading && !bookings
+            ? "Loading..."
+            : nextCleaning
+              ? nextCleaning.date
+              : "No upcoming cleaning"
         }
         Icon={CalendarIcon}
       />
