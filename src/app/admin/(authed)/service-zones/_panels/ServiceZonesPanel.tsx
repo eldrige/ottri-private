@@ -3,100 +3,37 @@ import { AlertTriangle, MapPin } from "lucide-react";
 import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
 import EditIcon from "@/components/icons/EditIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
+import { ServiceArea } from "@/app/admin/types";
+import { useDeleteServiceAreaMutation } from "../../_services/mutations";
 
-// Define the type for a service zone
-type ServiceZone = {
-  name: string;
-  status: "active" | "limited";
-  areaType: "Custom Area" | "Circular Zone";
-  areaSqMi: number;
-  activeBookings: number;
-  totalBookings: number;
-  zipcodes: string[];
-  restrictions: {
-    maxDistance: number;
-    minBooking: number;
-    services: string;
-  };
-};
-
-// Data representing the service zones from the image
-const zones: ServiceZone[] = [
-  {
-    name: "Downtown Core",
-    status: "active",
-    areaType: "Custom Area",
-    areaSqMi: 12.5,
-    activeBookings: 8,
-    totalBookings: 156,
-    zipcodes: ["1001", "1002", "1003"],
-    restrictions: {
-      maxDistance: 15,
-      minBooking: 50,
-      services: "All Services"
-    }
-  },
-  {
-    name: "Midtown Area",
-    status: "active",
-    areaType: "Circular Zone",
-    areaSqMi: 8.7,
-    activeBookings: 8,
-    totalBookings: 156,
-    zipcodes: ["10017", "10018", "10019"],
-    restrictions: {
-      maxDistance: 12,
-      minBooking: 60,
-      services: "Deep Clean, Regular Clean"
-    }
-  },
-  {
-    name: "Uptown District",
-    status: "active",
-    areaType: "Custom Area",
-    areaSqMi: 15.2,
-    activeBookings: 8,
-    totalBookings: 156,
-    zipcodes: ["10025", "10026", "10027"],
-    restrictions: {
-      maxDistance: 15,
-      minBooking: 50,
-      services: "All Services"
-    }
-  },
-  {
-    name: "Suburban Extension",
-    status: "limited",
-    areaType: "Circular Zone",
-    areaSqMi: 25.8,
-    activeBookings: 8,
-    totalBookings: 156,
-    zipcodes: ["10301", "10302", "10303"],
-    restrictions: {
-      maxDistance: 15,
-      minBooking: 50,
-      services: "All Services"
-    }
-  }
-];
-
-export default function ServiceZonesPanel() {
+export default function ServiceZonesPanel({
+  serviceAreas
+}: {
+  serviceAreas: ServiceArea[];
+}) {
   return (
     <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-      {zones.map((zone, index) => (
-        <ZoneCard key={index} zone={zone} />
+      {serviceAreas.map((serviceArea, index) => (
+        <ZoneCard key={index} serviceArea={serviceArea} />
       ))}
     </div>
   );
 }
 
-function ZoneCard({ zone }: { zone: ServiceZone }) {
+function ZoneCard({ serviceArea }: { serviceArea: ServiceArea }) {
+  const { mutate: deleteSA, isPending: isDeleting } =
+    useDeleteServiceAreaMutation();
+
+  const handleDelete = () => {
+    deleteSA({ serviceAreaId: serviceArea.id });
+  };
+
   return (
     <div className="border border-black/10 rounded-lg p-4 relative">
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-center gap-2">
-          <h4 className="font-medium">{zone.name}</h4>
-          {zone.status === "active" ? (
+          <h4 className="font-medium capitalize">{serviceArea.name}</h4>
+          {true ? ( // NOTE: should be dynamic later
             <CheckBrokenIcon className="text-success size-4" />
           ) : (
             <AlertTriangle className="text-primary-700 size-5" />
@@ -104,34 +41,40 @@ function ZoneCard({ zone }: { zone: ServiceZone }) {
         </div>
         <span
           className={`text-sm px-3 py-1 rounded-lg ${
-            zone.status === "active"
+            true // NOTE: should be dynamic later
               ? "bg-success/10 text-success"
               : "bg-warning/6 text-warning-text"
           }`}
         >
-          {zone.status}
+          {"Active"} {/* // NOTE: should be dynamic later */}
         </span>
       </div>
 
       <div className="text-xs text-secondary-700/70 mb-4">
-        {zone.areaType} • {zone.areaSqMi} sq mi
+        {serviceArea.location.coordinates.length > 60
+          ? "Circular Zone"
+          : "Custom Area"}
+        {/* NOTE: Ignore for now 
+        • {serviceArea.areaSqMi} sq mi  */}
       </div>
 
+      {/* NOTE: ignore for now 
       <div className="flex items-start gap-10 mb-4">
         <div>
           <div className="text-xs text-secondary-700/50">Active Bookings</div>
-          <div className="mt-1 text-sm">{zone.activeBookings}</div>
+          <div className="mt-1 text-sm">{serviceArea.activeBookings}</div>
         </div>
         <div>
           <div className="text-xs text-secondary-700/50">Total Bookings</div>
-          <div className="mt-1 text-sm">{zone.totalBookings}</div>
+          <div className="mt-1 text-sm">{serviceArea.totalBookings}</div>
         </div>
-      </div>
+      </div> */}
 
+      {/* NOTE: Ignore for now 
       <div className="mb-4">
         <div className="text-sm mb-2">Zipcodes</div>
         <div className="flex flex-wrap gap-2">
-          {zone.zipcodes.map((zipcode, i) => (
+          {serviceArea.zipcodes.map((zipcode, i) => (
             <span
               key={i}
               className="px-4 py-1 rounded-lg text-xs border border-black/10"
@@ -140,14 +83,13 @@ function ZoneCard({ zone }: { zone: ServiceZone }) {
             </span>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <div className="mb-4">
         <div className="text-sm mb-2">Restrictions</div>
         <ul className="text-xs space-y-2 text-secondary-700/70">
-          <li>• Max distance: {zone.restrictions.maxDistance} miles</li>
-          <li>• Min booking: ${zone.restrictions.minBooking}</li>
-          <li>• Services: {zone.restrictions.services}</li>
+          <li>• Min booking: ${serviceArea.basePrice}</li>
+          {/* <li>• Services: {zone.restrictions.services}</li> */}
         </ul>
       </div>
 
@@ -158,8 +100,13 @@ function ZoneCard({ zone }: { zone: ServiceZone }) {
         <button className="text-xs flex items-center gap-1 border border-black/10 rounded-lg px-4 py-2 flex-1 justify-center">
           <EditIcon className="size-4" /> Edit
         </button>
-        <button className="text-xs flex items-center gap-1 bg-error text-white rounded-lg px-4 py-2 flex-1 justify-center">
-          <TrashIcon className="size-4" /> Delete
+        <button
+          className="text-xs flex items-center gap-1 bg-error text-white rounded-lg px-4 py-2 flex-1 justify-center disabled:opacity-50"
+          onClick={handleDelete}
+          disabled={isDeleting}
+        >
+          <TrashIcon className="size-4" />{" "}
+          {isDeleting ? "Deleting..." : "Delete"}
         </button>
       </div>
     </div>

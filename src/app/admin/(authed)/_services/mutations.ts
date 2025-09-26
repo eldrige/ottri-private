@@ -10,7 +10,8 @@ import {
   startBooking
 } from "../_actions/bookings";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
-import { Booking, BookingsResponse } from "@/app/admin/types";
+import { Booking as serviceArea, BookingsResponse } from "@/app/admin/types";
+import { deleteServiceArea } from "../_actions/ServiceAreas";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -57,11 +58,32 @@ export function useCompleteBookingMutation() {
   });
 }
 
+// Service Areas
+export function useDeleteServiceAreaMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteServiceArea,
+    onSuccess: (data) => {
+      deleteSAHelper(queryClient, data);
+    }
+  });
+}
+
+export function useCreateServiceAreaMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteServiceArea,
+    onSuccess: (data) => {
+      deleteSAHelper(queryClient, data);
+    }
+  });
+}
+
 // Helpers
 function updateBookingHelper(
   searchParams: ReadonlyURLSearchParams,
   queryClient: QueryClient,
-  newBooking: Booking
+  newBooking: serviceArea
 ) {
   const statusFilter = searchParams.get("status") || "";
   const queryData = queryClient.getQueryData([
@@ -77,6 +99,20 @@ function updateBookingHelper(
   const newData = { ...queryData, data: newBookings } as BookingsResponse;
 
   queryClient.setQueryData(["bookings", statusFilter], newData);
+}
+
+// ServiceAreas
+function deleteSAHelper(queryClient: QueryClient, serviceAreaId: number) {
+  const queryData = queryClient.getQueryData([
+    "service-areas"
+  ]) as BookingsResponse;
+  if (!queryData) return;
+
+  const newBookings = queryData.data.filter((i) => i.id !== serviceAreaId);
+
+  const newData = { ...queryData, data: newBookings } as BookingsResponse;
+
+  queryClient.setQueryData(["service-areas"], newData);
 }
 
 // function removeBookingHelper(

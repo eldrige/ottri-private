@@ -80,7 +80,9 @@ export default function ServiceZonesPage() {
           setActiveView={setActiveView}
         />
       </div>
-      {activeView === "service-zones" && <ServiceZonesPanel />}
+      {activeView === "service-zones" && (
+        <ServiceZonesPanel serviceAreas={serviceAreas} />
+      )}
       {activeView === "map-editor" && (
         <MapEditorPanel serviceAreas={serviceAreas} />
       )}
