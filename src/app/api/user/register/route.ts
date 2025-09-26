@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { axiosInstance } from "@/lib/axios";
+import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,6 +26,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Initialize Stripe
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeSecretKey) {
+      console.error("STRIPE_SECRET_KEY is not set");
+      return NextResponse.json(
+        { error: { message: "Server configuration error." } },
+        { status: 500 }
+      );
+    }
+
+    const stripe = new Stripe(stripeSecretKey);
+    const customer = await stripe.customers.create({
+      email: email,
+      name: fullName
+    });
+
     // Call the authentication API
     console.log("Registering user:", {
       email,
@@ -48,7 +65,8 @@ export async function POST(req: NextRequest) {
         password,
         address,
         zipCode,
-        city
+        city,
+        stripeCustomerId: customer.id
       },
       {
         headers: {
