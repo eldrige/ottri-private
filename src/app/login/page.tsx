@@ -73,7 +73,7 @@ function LoginForm() {
         <Image
           alt="Login Image"
           src={Hero}
-          className=" rounded-r-4xl h-full w-full object-cover"
+          className="h-full w-full object-cover"
           width={1000}
           height={1000}
         />
