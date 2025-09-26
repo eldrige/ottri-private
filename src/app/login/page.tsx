@@ -69,11 +69,11 @@ function LoginForm() {
   return (
     <section className="flex flex-1 justify-center relative z-10 items-center w-full h-screen">
       <div className="absolute md:hidden -z-10 w-full h-full top-0 left-0">
-        <div className="bg-black/80  absolute w-full h-full" />
+        <div className="bg-black/80 absolute w-full h-full" />
         <Image
           alt="Login Image"
           src={Hero}
-          className=" rounded-r-4xl h-screen w-full object-cover"
+          className=" rounded-r-4xl h-full w-full object-cover"
           width={1000}
           height={1000}
         />

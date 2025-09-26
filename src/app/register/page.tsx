@@ -98,7 +98,7 @@ function SignupForm() {
         <Image
           alt="Signup Image"
           src={Hero}
-          className="rounded-r-4xl h-screen w-full object-cover"
+          className="rounded-r-4xl h-full w-full object-cover"
           width={1000}
           height={1000}
         />
