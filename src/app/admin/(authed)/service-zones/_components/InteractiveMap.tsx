@@ -292,7 +292,7 @@ function DrawingManagerBridge({
     features?.forEach((f: any) => {
       if (!f) return;
 
-      const id = f.properties?.id || f.id;
+      const id = f.properties?.id;
       const kind = f.properties?.kind;
       const geom = f.geometry;
 
