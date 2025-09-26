@@ -11,6 +11,7 @@ import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
 import { useCancelBookingMutation } from "../../_services/mutations";
 import { useGetBookingReview } from "../../_services/queries";
+import { useSearchParams } from "next/navigation";
 // import { revalidatePath } from "next/cache";
 type BookingCardProps = Pick<
   Booking,
@@ -43,7 +44,10 @@ export default function BookingCard({
     >
   ) => void;
 }) {
-  const { mutateAsync: handleCancel } = useCancelBookingMutation();
+  const searchParams = useSearchParams();
+  const { mutateAsync: handleCancel, isPending } = useCancelBookingMutation(
+    searchParams.get("status")
+  );
 
   return (
     <>
@@ -56,6 +60,7 @@ export default function BookingCard({
             e.preventDefault();
             handleCancel(service.id);
           }}
+          isPendingCancel={isPending}
         />
       </div>
       <div className="hidden xl:flex gap-4">
@@ -67,6 +72,7 @@ export default function BookingCard({
             e.preventDefault();
             handleCancel(service.id);
           }}
+          isPendingCancel={isPending}
         />
       </div>
     </>
@@ -83,7 +89,8 @@ function DesktopBookingCard({
   price,
   setIsOpen,
   setBookedServiceOnRating,
-  handleCancel
+  handleCancel,
+  isPendingCancel
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (
@@ -99,6 +106,7 @@ function DesktopBookingCard({
     >
   ) => void;
   handleCancel?: (e: React.FormEvent) => void;
+  isPendingCancel?: boolean;
 }) {
   const { data: review, isLoading } = useGetBookingReview(String(id));
   return (
@@ -160,11 +168,12 @@ function DesktopBookingCard({
               ? handleCancel && (
                   <Button
                     onClick={handleCancel}
+                    disabled={isPendingCancel}
                     size={"xs"}
                     className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
                     variant={"outline"}
                   >
-                    Cancel
+                    {isPendingCancel ? "Cancelling..." : "Cancel"}
                   </Button>
                 )
               : setIsOpen &&
@@ -206,7 +215,8 @@ function MobileBookingCard({
   price,
   setIsOpen,
   setBookedServiceOnRating,
-  handleCancel
+  handleCancel,
+  isPendingCancel
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (
@@ -222,6 +232,7 @@ function MobileBookingCard({
     >
   ) => void;
   handleCancel?: (e: React.FormEvent) => void;
+  isPendingCancel?: boolean;
 }) {
   const { data: review, isLoading } = useGetBookingReview(String(id));
   return (
@@ -246,12 +257,8 @@ function MobileBookingCard({
                   {formatName(status)}
                 </Badge>
               ) : (
-                handleCancel &&
                 status === "CANCELLED" && (
-                  <Badge
-                    onClick={handleCancel}
-                    className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2"
-                  >
+                  <Badge className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2">
                     Cancelled
                   </Badge>
                 )
@@ -283,11 +290,12 @@ function MobileBookingCard({
         ? handleCancel && (
             <Button
               onClick={handleCancel}
+              disabled={isPendingCancel}
               size={"xs"}
               className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
               variant={"outline"}
             >
-              Cancel
+              {isPendingCancel ? "Cancelling..." : "Cancel"}
             </Button>
           )
         : setIsOpen &&
@@ -300,9 +308,9 @@ function MobileBookingCard({
                   serviceType,
                   cleaners,
                   timeSlot,
-                  address: "",
-                  status: "PENDING",
-                  price: 0
+                  address,
+                  status,
+                  price
                 });
                 setIsOpen(true);
               }}
