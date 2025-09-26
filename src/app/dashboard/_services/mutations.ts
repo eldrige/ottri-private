@@ -1,21 +1,19 @@
 import { serverRequest } from "@/lib/serverRequest";
 import { Booking, Review, User } from "../_utils/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
 
 async function cancelBooking(bookingId: number) {
   const response = await serverRequest(`/bookings/${bookingId}`, "DELETE");
   return response.data as Booking;
 }
 
-export function useCancelBookingMutation() {
+export function useCancelBookingMutation(status?: string | null) {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: cancelBooking,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["bookings", searchParams.get("status") || ""]
+        queryKey: ["bookings", status || ""]
       });
     }
   });
