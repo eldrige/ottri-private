@@ -308,7 +308,7 @@ function DesktopLeftSection() {
         <Image
           alt="Signup Image"
           src={Hero}
-          className="hidden rounded-r-4xl md:block h-screen w-full object-cover"
+          className="hidden rounded-r-4xl md:block h-svh w-full object-cover"
           width={1000}
           height={1000}
         />
