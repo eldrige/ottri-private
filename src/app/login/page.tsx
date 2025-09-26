@@ -165,7 +165,7 @@ function LoginForm() {
 
 function DesktopLeftSection() {
   return (
-    <section className="hidden flex-1 md:flex relative flex-col h-screen p-8">
+    <section className="hidden flex-1 md:flex relative flex-col h-svh p-8">
       <LogoComponent />
 
       {/* Main background with rounded corners */}
