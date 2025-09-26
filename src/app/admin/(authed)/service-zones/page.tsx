@@ -6,6 +6,9 @@ import Link from "next/link";
 import React, { useState } from "react";
 import PanelViewer from "../_components/PanelViewer";
 import ServiceZonesPanel from "./_panels/ServiceZonesPanel";
+import MapEditorPanel from "./_panels/MapEditorPanel";
+import { useServiceAreasQuery } from "../_services/queries";
+import Loading from "../loading";
 
 const filterOptions = [
   { label: "All Zones", value: "all-zones" },
@@ -17,6 +20,10 @@ const filterOptions = [
 
 export default function ServiceZonesPage() {
   const [activeView, setActiveView] = useState<string>("service-zones");
+
+  const { data: serviceAreas } = useServiceAreasQuery();
+
+  if (!serviceAreas) return <Loading />;
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
@@ -74,6 +81,9 @@ export default function ServiceZonesPage() {
         />
       </div>
       {activeView === "service-zones" && <ServiceZonesPanel />}
+      {activeView === "map-editor" && (
+        <MapEditorPanel serviceAreas={serviceAreas} />
+      )}
     </main>
   );
 }
