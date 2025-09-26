@@ -25,6 +25,13 @@ export default function ServiceHistorySection3({
             {historyServices.map((service) => {
               return <ServiceHistoryCard key={service.id} service={service} />;
             })}
+            {historyServices.length === 0 && (
+              <div className="w-full flex justify-center">
+                <h3 className="text-caption text-secondary-800">
+                  No completed services found.
+                </h3>
+              </div>
+            )}
           </div>
         </div>
       </div>
