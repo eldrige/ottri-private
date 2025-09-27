@@ -42,14 +42,14 @@ export default function ExpenseHistory() {
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      <div className="col-span-2 p-6 border border-black/10 rounded-lg">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="lg:col-span-2 lg:p-6 lg:border border-black/10 rounded-lg">
         <h5 className="text-subtitle font-medium">Purchase History</h5>
         <div className="mt-4 space-y-4">
           {inventoryItems.map((item, index) => (
             <div
               key={index}
-              className="p-4 border border-black/10 rounded-lg flex gap-8"
+              className="p-4 border border-black/10 rounded-lg flex flex-col lg:flex-row gap-x-8 gap-y-4"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2">
@@ -58,7 +58,7 @@ export default function ExpenseHistory() {
                     {item.category}
                   </p>
                 </div>
-                <div className="mt-4 flex text-sm gap-8">
+                <div className="mt-4 flex text-sm gap-x-4 lg:gap-x-8 gap-y-4 flex-wrap">
                   <p className="flex items-center gap-2">
                     <span className="text-xs text-secondary-700/50">
                       Quantity:
@@ -83,7 +83,7 @@ export default function ExpenseHistory() {
                   </p>
                 </div>
               </div>
-              <p className="text-right font-medium text-red-500">
+              <p className="lg:text-right font-medium text-red-500">
                 ${item.totalPrice.toFixed(2)}
               </p>
             </div>

@@ -79,7 +79,7 @@ function AlertItem({ item }: { item: InventoryItem }) {
   return (
     <div
       className={cn(
-        "flex flex-col lg:flex-row gap-8 items-start justify-between p-6 rounded-lg border border-black/10",
+        "flex flex-col lg:flex-row gap-8 items-start justify-between p-4 lg:p-6 rounded-lg border border-black/10",
         item.stockStatus === "Critical Stock"
           ? "bg-error/7 shadow-[0px_0px_4px_0px] shadow-error"
           : "bg-warning/7"
