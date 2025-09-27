@@ -24,7 +24,7 @@ export default function RootLayout({
       <DashboardNavbar />
       <div className="flex px-4">
         <section className="hidden md:block flex-15/100 h-full">
-          <SideNavBar user={profile!} />
+          <SideNavBar user={profile || {}} />
         </section>
         <section className="flex-85/100 ">{children}</section>
       </div>
