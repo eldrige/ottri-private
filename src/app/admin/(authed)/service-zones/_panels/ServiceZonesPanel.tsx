@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { AlertTriangle, MapPin } from "lucide-react";
 import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
 import EditIcon from "@/components/icons/EditIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { ServiceArea } from "@/app/admin/types";
 import { useDeleteServiceAreaMutation } from "../../_services/mutations";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 export default function ServiceZonesPanel({
   serviceAreas
@@ -23,6 +24,8 @@ export default function ServiceZonesPanel({
 function ZoneCard({ serviceArea }: { serviceArea: ServiceArea }) {
   const { mutate: deleteSA, isPending: isDeleting } =
     useDeleteServiceAreaMutation();
+
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const handleDelete = () => {
     deleteSA({ serviceAreaId: serviceArea.id });
@@ -102,13 +105,27 @@ function ZoneCard({ serviceArea }: { serviceArea: ServiceArea }) {
         </button>
         <button
           className="text-xs flex items-center gap-1 bg-error text-white rounded-lg px-4 py-2 flex-1 justify-center disabled:opacity-50"
-          onClick={handleDelete}
+          onClick={() => setConfirmDelete(true)}
           disabled={isDeleting}
         >
           <TrashIcon className="size-4" />{" "}
           {isDeleting ? "Deleting..." : "Delete"}
         </button>
       </div>
+      {confirmDelete && (
+        <ConfirmModal
+          open={confirmDelete}
+          onCancel={() => setConfirmDelete(false)}
+          onConfirm={() => {
+            handleDelete();
+            setConfirmDelete(false);
+          }}
+          title="Delete Service Zone"
+          description="This action cannot be undone. Are you sure you want to delete this service zone?"
+          confirmText="Delete"
+          accent="distructive"
+        />
+      )}
     </div>
   );
 }

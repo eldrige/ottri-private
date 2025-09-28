@@ -13,6 +13,7 @@ import TrashIcon from "@/components/icons/TrashIcon";
 import { ServiceArea } from "@/app/admin/types";
 import { useCreateServiceAreaMutation } from "../../_services/mutations";
 import CreateSAModal from "./CreateSAModal";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 const tools = [
   {
@@ -54,17 +55,26 @@ const determineShapeKind = (serviceArea: ServiceArea) => {
   if (!serviceArea.location || !serviceArea.location.coordinates)
     return "polygon";
 
-  // If no explicit type, try to infer from coordinates
-  // Circles typically have many points forming a near-perfect circle (we use 60+ points as heuristic)
-  if (serviceArea.location.coordinates?.[0]?.length >= 60) {
-    return "circle";
-  }
+  const coords = serviceArea.location.coordinates?.[0];
+  if (!coords || coords.length < 3) return "polygon";
 
-  // Rectangles have exactly 5 points (last point same as first to close the shape)
-  if (serviceArea.location.coordinates?.[0]?.length === 5) {
+  const first = coords[0];
+  const last = coords[coords.length - 1];
+  const isClosed =
+    first.length === last.length &&
+    first.every((val: number, idx: number) => val === last[idx]);
+
+  // Rectangle: exactly 5 points, closed shape
+  if (coords.length === 5 && isClosed) {
     return "rectangle";
   }
 
+  // Circle: many points (heuristic: 60+), closed shape
+  if (coords.length >= 60 && isClosed) {
+    return "circle";
+  }
+
+  // Polygon: not closed or doesn't match rectangle/circle heuristics
   return "polygon";
 };
 
@@ -87,6 +97,7 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
   const [createModal, setCreateModal] = useState<Feature | undefined>(
     undefined
   );
+  const [confirmSave, setConfirmSave] = useState(false);
   const [drawingMode, setDrawingMode] = useState<any>(null);
   const [isReady, setIsReady] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -207,6 +218,20 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
           onClose={() => setCreateModal(undefined)}
         />
       )}
+      {confirmSave && (
+        <ConfirmModal
+          open={confirmSave}
+          onCancel={() => setConfirmSave(false)}
+          onConfirm={() => {
+            saveFeatures();
+            setConfirmSave(false);
+          }}
+          title="Save Changes?"
+          description="Are you sure you want to save all changes to the service zones?"
+          confirmText="Save"
+          accent="secondary"
+        />
+      )}
       <div className="z-10 bg-surface-50 p-4 rounded-lg flex gap-2 items-center overflow-y-hidden">
         <span className="mr-4 text-sm">Drawing Tools:</span>
         {tools.map((tool) => {
@@ -244,8 +269,8 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
         </button>
         <button
           className="py-2 px-4 bg-secondary-700 min-w-fit text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-primary/80 transition-colors disabled:opacity-50 disabled:hover:bg-primary disabled:cursor-not-allowed"
-          onClick={saveFeatures}
-          disabled={features.length === 0 || isSaving}
+          onClick={() => setConfirmSave(true)}
+          disabled={history.length === 1 || isSaving}
         >
           {isSaving ? "Saving..." : "Save Changes"}
         </button>
