@@ -10,8 +10,12 @@ import {
   startBooking
 } from "../_actions/bookings";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
-import { Booking as serviceArea, BookingsResponse } from "@/app/admin/types";
-import { deleteServiceArea } from "../_actions/ServiceAreas";
+import {
+  Booking as serviceArea,
+  BookingsResponse,
+  ServiceArea
+} from "@/app/admin/types";
+import { createServiceArea, deleteServiceArea } from "../_actions/ServiceAreas";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -63,7 +67,11 @@ export function useDeleteServiceAreaMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteServiceArea,
+    onSettled: (data) => {
+      console.log(data);
+    },
     onSuccess: (data) => {
+      console.log(data);
       deleteSAHelper(queryClient, data);
     }
   });
@@ -72,9 +80,9 @@ export function useDeleteServiceAreaMutation() {
 export function useCreateServiceAreaMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: deleteServiceArea,
+    mutationFn: createServiceArea,
     onSuccess: (data) => {
-      deleteSAHelper(queryClient, data);
+      createSAHelper(queryClient, data);
     }
   });
 }
@@ -102,17 +110,26 @@ function updateBookingHelper(
 }
 
 // ServiceAreas
-function deleteSAHelper(queryClient: QueryClient, serviceAreaId: number) {
+function deleteSAHelper(queryClient: QueryClient, { id }: { id: number }) {
   const queryData = queryClient.getQueryData([
     "service-areas"
-  ]) as BookingsResponse;
+  ]) as ServiceArea[];
   if (!queryData) return;
 
-  const newBookings = queryData.data.filter((i) => i.id !== serviceAreaId);
+  const newServiceAreas = queryData.filter((i) => i.id !== id);
 
-  const newData = { ...queryData, data: newBookings } as BookingsResponse;
+  queryClient.setQueryData(["service-areas"], newServiceAreas);
+}
 
-  queryClient.setQueryData(["service-areas"], newData);
+function createSAHelper(queryClient: QueryClient, newServiceArea: ServiceArea) {
+  const queryData = queryClient.getQueryData([
+    "service-areas"
+  ]) as ServiceArea[];
+  if (!queryData) return;
+
+  const newServiceAreas = [...queryData, newServiceArea];
+
+  queryClient.setQueryData(["service-areas"], newServiceAreas);
 }
 
 // function removeBookingHelper(

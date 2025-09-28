@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import InteractiveMap from "./InteractiveMap";
 import {
   CircleIcon,
@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { ServiceArea } from "@/app/admin/types";
+import { useCreateServiceAreaMutation } from "../../_services/mutations";
+import CreateSAModal from "./CreateSAModal";
 
 const tools = [
   {
@@ -66,38 +68,73 @@ const determineShapeKind = (serviceArea: ServiceArea) => {
   return "polygon";
 };
 
+interface Feature {
+  id?: number;
+  type: string;
+  properties: {
+    id: string | number;
+    kind: string;
+  };
+  geometry: {
+    type: string;
+    coordinates: number[][][];
+  };
+  name?: string;
+}
+
 function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
+  const { mutateAsync: createSA } = useCreateServiceAreaMutation();
+  const [createModal, setCreateModal] = useState<Feature | undefined>(
+    undefined
+  );
   const [drawingMode, setDrawingMode] = useState<any>(null);
   const [isReady, setIsReady] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Initialize features from service areas
-  const initialFeatures = serviceAreas.map((s) => {
-    const kind = determineShapeKind(s);
-    return {
-      type: "Feature",
-      properties: {
-        id: s.id,
-        kind: kind
-      },
-      geometry: s.location
-    };
-  });
+  const initialFeatures = useMemo(
+    () =>
+      serviceAreas.map((s) => {
+        const kind = determineShapeKind(s);
+        return {
+          id: s.id,
+          type: "Feature",
+          properties: {
+            id: s.id,
+            kind: kind
+          },
+          geometry: s.location
+        };
+      }),
+    [serviceAreas]
+  );
 
-  const [features, setFeatures] = useState<any[]>(initialFeatures);
+  const [features, setFeatures] = useState<Feature[]>(initialFeatures);
 
   // Simplified history tracking - just a stack of previous states
   const [history, setHistory] = useState<any[][]>([initialFeatures]);
 
+  useEffect(() => {
+    setFeatures(initialFeatures);
+    setHistory([initialFeatures]);
+  }, [initialFeatures]);
+
   console.log(history);
   const handleButtonClick = (mode: any) => setDrawingMode(mode);
 
-  const handleShapeChange = (payload: any) => {
+  const handleShapeChange = (payload: Feature) => {
     // payload: {id, properties: { kind, geometry }}
     const idx = features.findIndex((f) => f.id === payload.properties.id);
     let newFeatures;
 
     if (idx === -1) {
       newFeatures = [...features, payload];
+      console.log(payload);
+      // createSA({newServiceArea: {location: payload.geometry}})
+      if (!payload.name) {
+        setCreateModal(payload);
+        return;
+      }
     } else {
       const copy = features.slice();
       copy[idx] = { ...features[idx], ...payload };
@@ -136,8 +173,40 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
   // Can undo if we have more than one state in history
   const canUndo = history.length > 1;
 
+  const saveFeatures = async () => {
+    setIsSaving(true);
+    const toCreate = features.filter(
+      (i) => !initialFeatures.some((j) => i.id === j.id)
+    );
+    // const toDelete = initialFeatures.filter(i => !features.some(j => i.id === j.id));
+    await Promise.all(
+      toCreate.map((feat) =>
+        createSA({
+          newServiceArea: {
+            location: feat.geometry,
+            name: feat.name!,
+            nickName: feat.name!,
+            popular: false
+          }
+        })
+      )
+    );
+
+    setIsSaving(false);
+  };
+
   return (
     <div className="w-full h-screen flex flex-col p-4">
+      {createModal && (
+        <CreateSAModal
+          onSave={async ({ zoneName }) => {
+            handleShapeChange({ ...createModal, name: zoneName });
+          }}
+          feature={createModal}
+          open={!!createModal}
+          onClose={() => setCreateModal(undefined)}
+        />
+      )}
       <div className="z-10 bg-surface-50 p-4 rounded-lg flex gap-2 items-center overflow-y-hidden">
         <span className="mr-4 text-sm">Drawing Tools:</span>
         {tools.map((tool) => {
@@ -172,6 +241,13 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
         >
           <TrashIcon className="stroke-1 size-5" />
           Clear
+        </button>
+        <button
+          className="py-2 px-4 bg-secondary-700 min-w-fit text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-primary/80 transition-colors disabled:opacity-50 disabled:hover:bg-primary disabled:cursor-not-allowed"
+          onClick={saveFeatures}
+          disabled={features.length === 0 || isSaving}
+        >
+          {isSaving ? "Saving..." : "Save Changes"}
         </button>
       </div>
 
