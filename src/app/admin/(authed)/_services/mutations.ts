@@ -15,7 +15,11 @@ import {
   BookingsResponse,
   ServiceArea
 } from "@/app/admin/types";
-import { createServiceArea, deleteServiceArea } from "../_actions/ServiceAreas";
+import {
+  createServiceArea,
+  deleteServiceArea,
+  updateServiceArea
+} from "../_actions/ServiceAreas";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -87,6 +91,16 @@ export function useCreateServiceAreaMutation() {
   });
 }
 
+export function useUpdateServiceAreaMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateServiceArea,
+    onSuccess: (data) => {
+      updateSAHelper(queryClient, data);
+    }
+  });
+}
+
 // Helpers
 function updateBookingHelper(
   searchParams: ReadonlyURLSearchParams,
@@ -128,6 +142,19 @@ function createSAHelper(queryClient: QueryClient, newServiceArea: ServiceArea) {
   if (!queryData) return;
 
   const newServiceAreas = [...queryData, newServiceArea];
+
+  queryClient.setQueryData(["service-areas"], newServiceAreas);
+}
+
+function updateSAHelper(queryClient: QueryClient, newServiceArea: ServiceArea) {
+  const queryData = queryClient.getQueryData([
+    "service-areas"
+  ]) as ServiceArea[];
+  if (!queryData) return;
+
+  const newServiceAreas = queryData.map((i) =>
+    i.id === newServiceArea.id ? newServiceArea : i
+  );
 
   queryClient.setQueryData(["service-areas"], newServiceAreas);
 }

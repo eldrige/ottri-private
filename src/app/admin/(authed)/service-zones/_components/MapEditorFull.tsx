@@ -11,7 +11,10 @@ import {
 } from "lucide-react";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { ServiceArea } from "@/app/admin/types";
-import { useCreateServiceAreaMutation } from "../../_services/mutations";
+import {
+  useCreateServiceAreaMutation,
+  useUpdateServiceAreaMutation
+} from "../../_services/mutations";
 import CreateSAModal from "./CreateSAModal";
 import ConfirmModal from "@/components/common/ConfirmModal";
 
@@ -93,14 +96,17 @@ interface Feature {
 }
 
 function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
-  const { mutateAsync: createSA } = useCreateServiceAreaMutation();
+  const { mutateAsync: createSA, isPending: createPending } =
+    useCreateServiceAreaMutation();
+  const { mutateAsync: updateSA, isPending: updatePending } =
+    useUpdateServiceAreaMutation();
   const [createModal, setCreateModal] = useState<Feature | undefined>(
     undefined
   );
   const [confirmSave, setConfirmSave] = useState(false);
   const [drawingMode, setDrawingMode] = useState<any>(null);
   const [isReady, setIsReady] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const isSaving = createPending || updatePending;
 
   // Initialize features from service areas
   const initialFeatures = useMemo(
@@ -130,7 +136,6 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
     setHistory([initialFeatures]);
   }, [initialFeatures]);
 
-  console.log(history);
   const handleButtonClick = (mode: any) => setDrawingMode(mode);
 
   const handleShapeChange = (payload: Feature) => {
@@ -184,26 +189,68 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
   // Can undo if we have more than one state in history
   const canUndo = history.length > 1;
 
+  // Helper function to compare coordinates between features
+  const areCoordinatesEqual = (coords1: any, coords2: any): boolean => {
+    if (!coords1 || !coords2) return false;
+
+    // Check if arrays have the same structure
+    if (coords1.length !== coords2.length) return false;
+
+    // Deep comparison of coordinate arrays
+    return JSON.stringify(coords1) === JSON.stringify(coords2);
+  };
+
   const saveFeatures = async () => {
-    setIsSaving(true);
+    // Find completely new features (not in initialFeatures)
     const toCreate = features.filter(
-      (i) => !initialFeatures.some((j) => i.id === j.id)
+      (feature) => !initialFeatures.some((initial) => initial.id === feature.id)
     );
-    // const toDelete = initialFeatures.filter(i => !features.some(j => i.id === j.id));
-    await Promise.all(
-      toCreate.map((feat) =>
+
+    // Find features that exist but have been updated (coordinates changed)
+    const toUpdate = features.filter((feature) => {
+      // Must have an ID to be considered for update
+      if (!feature.id) return false;
+
+      // Find the corresponding initial feature
+      const initialFeature = initialFeatures.find(
+        (initial) => initial.id === feature.id
+      );
+      if (!initialFeature) return false;
+
+      // Check if coordinates have changed
+      return !areCoordinatesEqual(
+        feature.geometry.coordinates,
+        initialFeature.geometry.coordinates
+      );
+    });
+
+    console.log(
+      `Creating ${toCreate.length} new zones, updating ${toUpdate.length} zones`
+    );
+
+    // Process new features
+    for (const feat of toCreate) {
+      if (feat.name) {
         createSA({
           newServiceArea: {
             location: feat.geometry,
-            name: feat.name!,
+            name: feat.name,
             nickName: feat.name!,
             popular: false
           }
-        })
-      )
-    );
+        });
+      }
+    }
 
-    setIsSaving(false);
+    // Process updated features
+    for (const feat of toUpdate) {
+      if (feat.id) {
+        updateSA({
+          id: feat.id!,
+          serviceAreaData: { location: feat.geometry }
+        });
+      }
+    }
   };
 
   return (

@@ -37,3 +37,24 @@ export async function createServiceArea({
     throw err;
   }
 }
+
+export async function updateServiceArea({
+  serviceAreaData,
+  id
+}: {
+  id: number;
+  serviceAreaData: Partial<
+    Pick<ServiceArea, "location" | "name" | "popular" | "nickName">
+  >;
+}) {
+  try {
+    console.log(serviceAreaData);
+    const res = await serverRequest(`service-areas/${id}`, "PATCH", {
+      ...serviceAreaData
+    });
+    return res.data as ServiceArea;
+  } catch (err: any) {
+    console.log(err.response);
+    throw err;
+  }
+}
