@@ -16,9 +16,9 @@ import {
   ServiceArea
 } from "@/app/admin/types";
 import {
-  createServiceArea,
-  deleteServiceArea,
-  updateServiceArea
+  createServiceAreas,
+  deleteServiceAreas,
+  updateServiceAreas
 } from "../_actions/ServiceAreas";
 
 // Assign cleaner
@@ -70,7 +70,7 @@ export function useCompleteBookingMutation() {
 export function useDeleteServiceAreaMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: deleteServiceArea,
+    mutationFn: deleteServiceAreas,
     onSettled: (data) => {
       console.log(data);
     },
@@ -84,7 +84,7 @@ export function useDeleteServiceAreaMutation() {
 export function useCreateServiceAreaMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: createServiceArea,
+    mutationFn: createServiceAreas,
     onSuccess: (data) => {
       createSAHelper(queryClient, data);
     }
@@ -94,7 +94,7 @@ export function useCreateServiceAreaMutation() {
 export function useUpdateServiceAreaMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: updateServiceArea,
+    mutationFn: updateServiceAreas,
     onSuccess: (data) => {
       updateSAHelper(queryClient, data);
     }
@@ -124,36 +124,38 @@ function updateBookingHelper(
 }
 
 // ServiceAreas
-function deleteSAHelper(queryClient: QueryClient, { id }: { id: number }) {
+function deleteSAHelper(queryClient: QueryClient, SAs: { id: number }[]) {
   const queryData = queryClient.getQueryData([
     "service-areas"
   ]) as ServiceArea[];
   if (!queryData) return;
 
-  const newServiceAreas = queryData.filter((i) => i.id !== id);
+  const ids = SAs.map((i) => i.id);
+
+  const newServiceAreas = queryData.filter((i) => !ids.includes(i.id));
 
   queryClient.setQueryData(["service-areas"], newServiceAreas);
 }
 
-function createSAHelper(queryClient: QueryClient, newServiceArea: ServiceArea) {
+function createSAHelper(queryClient: QueryClient, newSAs: ServiceArea[]) {
   const queryData = queryClient.getQueryData([
     "service-areas"
   ]) as ServiceArea[];
   if (!queryData) return;
 
-  const newServiceAreas = [...queryData, newServiceArea];
+  const newServiceAreas = [...queryData, ...newSAs];
 
   queryClient.setQueryData(["service-areas"], newServiceAreas);
 }
 
-function updateSAHelper(queryClient: QueryClient, newServiceArea: ServiceArea) {
+function updateSAHelper(queryClient: QueryClient, newSAs: ServiceArea[]) {
   const queryData = queryClient.getQueryData([
     "service-areas"
   ]) as ServiceArea[];
   if (!queryData) return;
 
-  const newServiceAreas = queryData.map((i) =>
-    i.id === newServiceArea.id ? newServiceArea : i
+  const newServiceAreas = queryData.map(
+    (i) => newSAs.find((j) => j.id === i.id) || i
   );
 
   queryClient.setQueryData(["service-areas"], newServiceAreas);

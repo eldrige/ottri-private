@@ -28,7 +28,7 @@ function ZoneCard({ serviceArea }: { serviceArea: ServiceArea }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const handleDelete = () => {
-    deleteSA({ serviceAreaId: serviceArea.id });
+    deleteSA({ serviceAreaIds: [serviceArea.id] });
   };
 
   return (

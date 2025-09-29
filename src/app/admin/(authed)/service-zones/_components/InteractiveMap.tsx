@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useCallback } from "react";
 import {
@@ -28,7 +29,9 @@ function InteractiveMap({
   googleMapsApiKey,
   mapContainerClassName,
   center,
-  features = []
+  features = [],
+  onSelectFeature, // New prop to handle selection
+  selectedFeatureId // New prop to track selected feature
 }: any) {
   return (
     <APIProvider apiKey={googleMapsApiKey} libraries={scriptLibraries}>
@@ -48,6 +51,8 @@ function InteractiveMap({
             onDrawingModeChange={onDrawingModeChange}
             onReady={onReady}
             features={features}
+            onSelectFeature={onSelectFeature}
+            selectedFeatureId={selectedFeatureId}
           />
         </GoogleMap>
       </div>
@@ -60,7 +65,9 @@ function DrawingManagerBridge({
   onChange,
   onDrawingModeChange,
   onReady,
-  features
+  features,
+  onSelectFeature,
+  selectedFeatureId
 }: any) {
   const map = useMap();
   const drawing = useMapsLibrary("drawing");
@@ -69,6 +76,48 @@ function DrawingManagerBridge({
   const managerRef = useRef<any>(null);
   const overlayByIdRef = useRef(new Map()); // id -> overlay
   const idByOverlayRef = useRef(new WeakMap()); // overlay -> id
+
+  // Define colors for normal and selected states
+  const shapeColors = {
+    normal: {
+      polyline: {
+        strokeColor: "#FF0000"
+      },
+      polygon: {
+        strokeColor: "#00FF00",
+        fillColor: "#00FF00"
+      },
+      circle: {
+        strokeColor: "#0000FF",
+        fillColor: "#0000FF"
+      },
+      rectangle: {
+        strokeColor: "#FFA500",
+        fillColor: "#FFA500"
+      }
+    },
+    selected: {
+      polyline: {
+        strokeColor: "#FF6666",
+        strokeWeight: 3
+      },
+      polygon: {
+        strokeColor: "#66FF66",
+        fillColor: "#66FF66",
+        strokeWeight: 3
+      },
+      circle: {
+        strokeColor: "#6666FF",
+        fillColor: "#6666FF",
+        strokeWeight: 3
+      },
+      rectangle: {
+        strokeColor: "#FFCC66",
+        fillColor: "#FFCC66",
+        strokeWeight: 3
+      }
+    }
+  };
 
   const toGeoJSON = useCallback(
     (shape: any, type: any) => {
@@ -145,6 +194,14 @@ function DrawingManagerBridge({
   const wireOverlayListeners = useCallback(
     (overlay: any, type: string, id: any) => {
       idByOverlayRef.current.set(overlay, id);
+
+      // Add click listener for selection
+      overlay.addListener("click", () => {
+        if (onSelectFeature) {
+          onSelectFeature(id);
+        }
+      });
+
       if (type === "polygon" || type === "polyline") {
         const path = overlay.getPath();
         path.addListener("set_at", () => emitChange(overlay, type));
@@ -156,7 +213,7 @@ function DrawingManagerBridge({
         overlay.addListener("bounds_changed", () => emitChange(overlay, type));
       }
     },
-    [emitChange]
+    [emitChange, onSelectFeature]
   );
 
   useEffect(() => {
@@ -278,6 +335,35 @@ function DrawingManagerBridge({
     []
   );
 
+  // Update style of shape when selected
+  useEffect(() => {
+    if (!map || !selectedFeatureId) return;
+
+    // Update styles for all shapes based on selection status
+    overlayByIdRef.current.forEach((overlay, id) => {
+      const isSelected = id === selectedFeatureId;
+      const type = idByOverlayRef.current.get(overlay)
+        ? features.find((f: any) => f.properties?.id === id)?.properties?.kind
+        : null;
+
+      if (!type) return;
+      const styles = isSelected
+        ? shapeColors.selected[type as "polyline"]
+        : shapeColors.normal[type as "polyline"];
+
+      // Apply style changes based on shape type
+      if (type === "polyline") {
+        overlay.setOptions(styles);
+      } else if (
+        type === "polygon" ||
+        type === "rectangle" ||
+        type === "circle"
+      ) {
+        overlay.setOptions(styles);
+      }
+    });
+  }, [selectedFeatureId, map, features]);
+
   // Render initial features (e.g., polygons/lines) when provided
   useEffect(() => {
     if (!map || !window.google) return;
@@ -295,6 +381,7 @@ function DrawingManagerBridge({
       const id = f.properties?.id;
       const kind = f.properties?.kind;
       const geom = f.geometry;
+      const isSelected = id === selectedFeatureId;
 
       if (!id || !geom || !geom.type) return;
 
@@ -304,6 +391,11 @@ function DrawingManagerBridge({
         if (existingOverlay) existingOverlay.setMap(null);
         overlayByIdRef.current.delete(id);
       }
+
+      // Apply correct styling based on selection state
+      const styleOptions = isSelected
+        ? shapeColors.selected
+        : shapeColors.normal;
 
       if (kind === "circle" || geom.properties?.type === "circle") {
         // Handle circle
@@ -318,14 +410,14 @@ function DrawingManagerBridge({
             map,
             center,
             radius,
-            fillColor: "#0000FF",
+            fillColor: styleOptions.circle.fillColor,
             fillOpacity: 0.35,
-            strokeColor: "#0000FF",
+            strokeColor: styleOptions.circle.strokeColor,
             strokeOpacity: 0.8,
-            strokeWeight: 2,
+            strokeWeight: isSelected ? 3 : 2,
             editable: true,
             clickable: true,
-            zIndex: 1
+            zIndex: isSelected ? 2 : 1
           });
 
           overlayByIdRef.current.set(id, circle);
@@ -364,14 +456,14 @@ function DrawingManagerBridge({
           const rectangle = new gmaps.Rectangle({
             map,
             bounds,
-            fillColor: "#FFA500",
+            fillColor: styleOptions.rectangle.fillColor,
             fillOpacity: 0.35,
-            strokeColor: "#FFA500",
+            strokeColor: styleOptions.rectangle.strokeColor,
             strokeOpacity: 0.8,
-            strokeWeight: 2,
+            strokeWeight: isSelected ? 3 : 2,
             editable: true,
             clickable: true,
-            zIndex: 1
+            zIndex: isSelected ? 2 : 1
           });
 
           overlayByIdRef.current.set(id, rectangle);
@@ -390,14 +482,14 @@ function DrawingManagerBridge({
         const polygon = new gmaps.Polygon({
           paths: path,
           map,
-          fillColor: "#00FF00",
+          fillColor: styleOptions.polygon.fillColor,
           fillOpacity: 0.35,
-          strokeColor: "#00FF00",
+          strokeColor: styleOptions.polygon.strokeColor,
           strokeOpacity: 0.8,
-          strokeWeight: 2,
+          strokeWeight: isSelected ? 3 : 2,
           editable: true,
           clickable: true,
-          zIndex: 1
+          zIndex: isSelected ? 2 : 1
         });
         overlayByIdRef.current.set(id, polygon);
         idByOverlayRef.current.set(polygon, id);
@@ -411,19 +503,25 @@ function DrawingManagerBridge({
         const polyline = new gmaps.Polyline({
           path,
           map,
-          strokeColor: "#FF0000",
+          strokeColor: styleOptions.polyline.strokeColor,
           strokeOpacity: 0.8,
-          strokeWeight: 2,
+          strokeWeight: isSelected ? 3 : 2,
           editable: true,
           clickable: true,
-          zIndex: 1
+          zIndex: isSelected ? 2 : 1
         });
         overlayByIdRef.current.set(id, polyline);
         idByOverlayRef.current.set(polyline, id);
         wireOverlayListeners(polyline, "polyline", id);
       }
     });
-  }, [features, map, wireOverlayListeners, calculateCircleFromPolygonCoords]);
+  }, [
+    features,
+    map,
+    wireOverlayListeners,
+    calculateCircleFromPolygonCoords,
+    selectedFeatureId
+  ]);
 
   return null;
 }

@@ -3,56 +3,61 @@
 import { serverRequest } from "@/lib/serverRequest";
 import { ServiceArea } from "../../types";
 
-export async function deleteServiceArea({
-  serviceAreaId
+export async function deleteServiceAreas({
+  serviceAreaIds
 }: {
-  serviceAreaId: number;
+  serviceAreaIds: number[];
 }) {
-  console.log({ serviceAreaId });
+  console.log({ serviceAreaIds });
   try {
-    const res = await serverRequest(`service-areas/${serviceAreaId}`, "DELETE");
-    return res.data as ServiceArea;
+    const res = await Promise.all(
+      serviceAreaIds.map((id) => serverRequest(`service-areas/${id}`, "DELETE"))
+    );
+    return res.map((i) => i.data) as ServiceArea[];
   } catch (err: any) {
     console.log(err.response);
     throw err;
   }
 }
 
-export async function createServiceArea({
-  newServiceArea
+export async function createServiceAreas({
+  newServiceAreas
 }: {
-  newServiceArea: Pick<
+  newServiceAreas: Pick<
     ServiceArea,
     "location" | "name" | "popular" | "nickName"
-  >;
+  >[];
 }) {
   try {
-    console.log(newServiceArea);
-    const res = await serverRequest(`service-areas`, "POST", {
-      ...newServiceArea
-    });
-    return res.data as ServiceArea;
+    console.log(newServiceAreas);
+    const res = await Promise.all(
+      newServiceAreas.map((newSA) =>
+        serverRequest(`service-areas`, "POST", newSA)
+      )
+    );
+    return res.map((i) => i.data) as ServiceArea[];
   } catch (err: any) {
     console.log(err.response);
     throw err;
   }
 }
 
-export async function updateServiceArea({
-  serviceAreaData,
-  id
+export async function updateServiceAreas({
+  serviceAreasData: serviceAreaData
 }: {
-  id: number;
-  serviceAreaData: Partial<
-    Pick<ServiceArea, "location" | "name" | "popular" | "nickName">
-  >;
+  serviceAreasData: Partial<
+    Pick<ServiceArea, "id" | "location" | "name" | "popular" | "nickName">
+  >[];
 }) {
   try {
     console.log(serviceAreaData);
-    const res = await serverRequest(`service-areas/${id}`, "PATCH", {
-      ...serviceAreaData
-    });
-    return res.data as ServiceArea;
+    const res = await Promise.all(
+      serviceAreaData.map(({ id, ...sa }) =>
+        serverRequest(`service-areas/${id}`, "PATCH", sa)
+      )
+    );
+
+    return res.map((i) => i.data) as ServiceArea[];
   } catch (err: any) {
     console.log(err.response);
     throw err;

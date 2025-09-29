@@ -7,16 +7,19 @@ import {
   HandIcon,
   SquareIcon,
   TriangleIcon,
-  UndoIcon
+  UndoIcon,
+  XIcon
 } from "lucide-react";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { ServiceArea } from "@/app/admin/types";
 import {
   useCreateServiceAreaMutation,
+  useDeleteServiceAreaMutation,
   useUpdateServiceAreaMutation
 } from "../../_services/mutations";
 import CreateSAModal from "./CreateSAModal";
 import ConfirmModal from "@/components/common/ConfirmModal";
+import { cn } from "@/lib/utils";
 
 const tools = [
   {
@@ -100,13 +103,18 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
     useCreateServiceAreaMutation();
   const { mutateAsync: updateSA, isPending: updatePending } =
     useUpdateServiceAreaMutation();
+  const { mutateAsync: deleteSA, isPending: deletePending } =
+    useDeleteServiceAreaMutation();
   const [createModal, setCreateModal] = useState<Feature | undefined>(
     undefined
   );
   const [confirmSave, setConfirmSave] = useState(false);
   const [drawingMode, setDrawingMode] = useState<any>(null);
   const [isReady, setIsReady] = useState(false);
-  const isSaving = createPending || updatePending;
+  const [selectedFeatureId, setSelectedFeatureId] = useState<
+    string | number | null
+  >(null);
+  const isSaving = createPending || updatePending || deletePending;
 
   // Initialize features from service areas
   const initialFeatures = useMemo(
@@ -115,6 +123,7 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
         const kind = determineShapeKind(s);
         return {
           id: s.id,
+          name: s.name,
           type: "Feature",
           properties: {
             id: s.id,
@@ -200,7 +209,7 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
     return JSON.stringify(coords1) === JSON.stringify(coords2);
   };
 
-  const saveFeatures = async () => {
+  const saveChanges = async () => {
     // Find completely new features (not in initialFeatures)
     const toCreate = features.filter(
       (feature) => !initialFeatures.some((initial) => initial.id === feature.id)
@@ -224,34 +233,67 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
       );
     });
 
+    // Find features that were in initialFeatures but are no longer in features
+    const toDelete = initialFeatures.filter(
+      (initialFeature) =>
+        !features.some((feature) => feature.id === initialFeature.id)
+    );
+
     console.log(
-      `Creating ${toCreate.length} new zones, updating ${toUpdate.length} zones`
+      `Creating ${toCreate.length} new zones, updating ${toUpdate.length} zones, deleting ${toDelete.length} zones`
     );
 
     // Process new features
-    for (const feat of toCreate) {
-      if (feat.name) {
-        createSA({
-          newServiceArea: {
-            location: feat.geometry,
-            name: feat.name,
-            nickName: feat.name!,
-            popular: false
-          }
-        });
-      }
-    }
+    createSA({
+      newServiceAreas: toCreate.map((feat) => ({
+        location: feat.geometry,
+        name: feat.name!,
+        nickName: feat.name!,
+        popular: false
+      }))
+    });
 
     // Process updated features
-    for (const feat of toUpdate) {
-      if (feat.id) {
-        updateSA({
-          id: feat.id!,
-          serviceAreaData: { location: feat.geometry }
-        });
-      }
-    }
+    updateSA({
+      serviceAreasData: toUpdate.map((feat) => ({
+        id: feat.id,
+        location: feat.geometry
+      }))
+    });
+
+    // Process deleted features
+    deleteSA({
+      serviceAreaIds: toDelete.map((i) => i.id)
+    });
   };
+
+  const handleSelectFeature = (id: string | number) => {
+    // Toggle selection
+    setSelectedFeatureId((currentId) => (currentId === id ? null : id));
+    // Set drawing mode to null when selecting a shape
+    setDrawingMode(null);
+  };
+
+  const handleDeleteSelected = () => {
+    if (!selectedFeatureId) return;
+
+    // Filter out the selected feature
+    const newFeatures = features.filter(
+      (f) => f.properties.id !== selectedFeatureId
+    );
+
+    // Update features and history
+    setFeatures(newFeatures);
+    setHistory((prevHistory) => [...prevHistory, newFeatures]);
+
+    // Clear selection
+    setSelectedFeatureId(null);
+  };
+
+  // Find selected feature for info display
+  const selectedFeature = features.find(
+    (f) => f.properties.id === selectedFeatureId
+  );
 
   return (
     <div className="w-full h-screen flex flex-col p-4">
@@ -270,7 +312,7 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
           open={confirmSave}
           onCancel={() => setConfirmSave(false)}
           onConfirm={() => {
-            saveFeatures();
+            saveChanges();
             setConfirmSave(false);
           }}
           title="Save Changes?"
@@ -279,7 +321,7 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
           accent="secondary"
         />
       )}
-      <div className="z-10 bg-surface-50 p-4 rounded-lg flex gap-2 items-center overflow-y-hidden">
+      <div className="z-10 bg-surface-50 p-4 rounded-lg flex gap-2 items-center overflow-y-hidden flex-wrap">
         <span className="mr-4 text-sm">Drawing Tools:</span>
         {tools.map((tool) => {
           const selected = drawingMode === tool.value;
@@ -298,29 +340,46 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
             </button>
           );
         })}
-        <button
-          className="ml-auto py-2 px-4 bg-white border border-black/10 rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:hover:bg-white disabled:cursor-not-allowed"
-          onClick={handleUndo}
-          disabled={!canUndo}
-        >
-          <UndoIcon className="stroke-1 size-5" />
-          Undo
-        </button>
-        <button
-          className="py-2 px-4 bg-error text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-error/80 transition-colors disabled:opacity-50 disabled:hover:bg-error disabled:cursor-not-allowed"
-          onClick={handleClearAll}
-          disabled={features.length === 0}
-        >
-          <TrashIcon className="stroke-1 size-5" />
-          Clear
-        </button>
-        <button
-          className="py-2 px-4 bg-secondary-700 min-w-fit text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-primary/80 transition-colors disabled:opacity-50 disabled:hover:bg-primary disabled:cursor-not-allowed"
-          onClick={() => setConfirmSave(true)}
-          disabled={history.length === 1 || isSaving}
-        >
-          {isSaving ? "Saving..." : "Save Changes"}
-        </button>
+
+        <div className="ml-auto flex gap-2 items-center">
+          {selectedFeatureId && (
+            <div className="flex items-center">
+              <span className="text-xs font-medium mr-2">
+                {selectedFeature?.name || `Shape ${selectedFeatureId}`}
+              </span>
+              <button
+                className="py-2 px-3 bg-error text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-error/80 transition-colors"
+                onClick={handleDeleteSelected}
+              >
+                <XIcon className="stroke-1 size-4" />
+              </button>
+            </div>
+          )}
+
+          <button
+            className="py-2 px-4 bg-white border border-black/10 rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:hover:bg-white disabled:cursor-not-allowed"
+            onClick={handleUndo}
+            disabled={!canUndo}
+          >
+            <UndoIcon className="stroke-1 size-5" />
+            Undo
+          </button>
+          <button
+            className="py-2 px-4 bg-error text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-error/80 transition-colors disabled:opacity-50 disabled:hover:bg-error disabled:cursor-not-allowed"
+            onClick={handleClearAll}
+            disabled={features.length === 0}
+          >
+            <TrashIcon className="stroke-1 size-5" />
+            Clear
+          </button>
+          <button
+            className="py-2 px-4 bg-secondary-700 min-w-fit text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-primary/80 transition-colors disabled:opacity-50 disabled:hover:bg-primary disabled:cursor-not-allowed"
+            onClick={() => setConfirmSave(true)}
+            disabled={history.length === 1 || isSaving}
+          >
+            {isSaving ? "Saving..." : "Save Changes"}
+          </button>
+        </div>
       </div>
 
       <InteractiveMap
@@ -329,9 +388,14 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
         onReady={() => setIsReady(true)}
         onChange={handleShapeChange}
         onDrawingModeChange={(mode: any) => setDrawingMode(mode)}
-        mapContainerClassName="h-full w-full mt-4 rounded-lg overflow-hidden"
+        mapContainerClassName={cn(
+          "h-full w-full mt-4 rounded-lg overflow-hidden",
+          isSaving && "opacity-40 pointer-events-none"
+        )}
         center={{ lat: 38.231917, lng: -85.757639 }}
-        features={features} // If this state starts with polygons, they render immediately
+        features={features}
+        onSelectFeature={handleSelectFeature}
+        selectedFeatureId={selectedFeatureId}
       />
     </div>
   );
