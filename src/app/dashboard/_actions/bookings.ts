@@ -1,7 +1,7 @@
 "use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { serverRequest } from "@/lib/serverRequest";
-import { Review, User } from "../_utils/types";
+import { Review } from "../_utils/types";
 
 export async function cancelBooking({
   bookingId
@@ -38,29 +38,5 @@ export async function rateBooking({
     return response.data as Review;
   } catch (error) {
     console.error("Error rating booking:", error);
-  }
-}
-
-export async function updateProfile({
-  fullName,
-  phoneNumber,
-  address,
-  userId
-}: {
-  fullName: string;
-  phoneNumber: string;
-  address: string;
-  userId: string;
-}) {
-  try {
-    console.log("there is something going on here");
-    const response = await serverRequest(`/users/profile/${userId}`, "PATCH", {
-      fullName,
-      phoneNumber,
-      address
-    });
-    return response.data as User;
-  } catch (error) {
-    console.error("Error updating user profile", error);
   }
 }

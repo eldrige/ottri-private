@@ -1,9 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  cancelBooking,
-  rateBooking,
-  updateProfile
-} from "../_actions/bookings";
+import { cancelBooking, rateBooking } from "../_actions/bookings";
+import { updateProfile } from "../_actions/users";
 
 export function useCancelBookingMutation(status?: string | null) {
   const queryClient = useQueryClient();
