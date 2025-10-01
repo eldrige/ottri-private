@@ -77,7 +77,7 @@ function LanguageSettings() {
                   setCurrentLanguage(option.value);
                 }}
                 placeholder="Select Language"
-                buttonClassName="border-none w-full gap-2 font-medium"
+                buttonClassName="border-none w-full gap-2"
                 accent="secondary"
               />
             </div>
@@ -99,7 +99,7 @@ function LanguageSettings() {
                   setCurrentTimeZone(option.value);
                 }}
                 placeholder="Select Language"
-                buttonClassName="border-none w-full gap-2 font-medium"
+                buttonClassName="border-none w-full gap-2"
                 accent="secondary"
               />
             </div>
@@ -108,14 +108,6 @@ function LanguageSettings() {
             <h3 className="text-secondary-700 text-caption font-medium">
               Currency
             </h3>
-            {/* <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
-              <select className="w-full" name="filter" id="">
-                <option value="all">{settings.currency}</option>
-                <option value="all">USD ($)</option>
-                <option value="today">EUR (€)</option>
-                <option value="upcoming">GBP (£)</option>
-              </select>
-            </div> */}
             <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-2 py-2 rounded-lg">
               <Select
                 className="flex w-full"
@@ -129,7 +121,7 @@ function LanguageSettings() {
                   setCurrentCurrency(option.value);
                 }}
                 placeholder="Select Currency"
-                buttonClassName="border-none w-full gap-2 font-medium"
+                buttonClassName="border-none w-full gap-2"
                 accent="secondary"
               />
             </div>
