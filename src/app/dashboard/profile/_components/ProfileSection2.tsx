@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { User } from "../../_utils/types";
 import { useUpdateProfileMutation } from "../../_services/mutations";
+import { BasicConfirmationModal } from "./BasicConfirmationModal";
 
 export default function ProfileSection2({ user }: { user: User }) {
   return (
@@ -30,15 +31,15 @@ export default function ProfileSection2({ user }: { user: User }) {
         </div>
         <div className="flex gap-4 text-surface-500 *:items-center *:flex *:gap-2 flex-col">
           <div>
-            <MailIcon />
+            <MailIcon className="size-5" />
             <p>{user.email}</p>
           </div>
           <div>
-            <Phone />
+            <Phone className="size-5" />
             <p>{user.personalInformation.phoneNumber}</p>
           </div>
           <div>
-            <LocationIcon />
+            <LocationIcon className="size-5" />
             <p>{user.personalInformation.address}</p>
           </div>
         </div>
@@ -57,6 +58,8 @@ function PersonalInfoForm({ user }: { user: User }) {
     yearJoined: new Date(user.createdAt).getFullYear()
   });
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const { mutateAsync: updateProfile, isPending: isUpdating } =
     useUpdateProfileMutation();
 
@@ -70,66 +73,85 @@ function PersonalInfoForm({ user }: { user: User }) {
     });
   }
 
+  async function handleSaveChanges() {
+    await updateProfile({
+      userId: String(user.id),
+      fullName: formData.fullName,
+      phoneNumber: formData.phone,
+      address: formData.address
+    });
+    setShowConfirmModal(false);
+  }
+
   return (
-    <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col justify-between gap-8">
-      <div>
-        <h1 className="font-medium text-2xl text-secondary-700">
-          Personal Information
-        </h1>
-        <p className="text-surface-500 text-body">
-          update your personal details
-        </p>
+    <>
+      <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col justify-between gap-8">
+        <div>
+          <h1 className="font-medium text-2xl text-secondary-700">
+            Personal Information
+          </h1>
+          <p className="text-surface-500 text-body">
+            update your personal details
+          </p>
+        </div>
+        <form className="flex *:flex *:flex-col *:gap-2 text-secondary-700 flex-col gap-3">
+          <label>
+            Fullname
+            <Input
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleOnchange}
+            />
+          </label>
+          <label>
+            Email
+            <Input
+              name="email"
+              value={formData.email}
+              onChange={handleOnchange}
+              disabled
+            />
+          </label>
+          <label>
+            Phone
+            <Input
+              name="phone"
+              value={formData.phone}
+              onChange={handleOnchange}
+            />
+          </label>
+          <label>
+            Address
+            <Input
+              name="address"
+              value={formData.address}
+              onChange={handleOnchange}
+            />
+          </label>
+          <Button
+            disabled={isUpdating}
+            onClick={(e) => {
+              e.preventDefault();
+              setShowConfirmModal(true);
+            }}
+            size={"xs"}
+            className="hover:border-secondary-700 my-3 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
+          >
+            Save Changes
+          </Button>
+        </form>
       </div>
-      <form className="flex *:flex *:flex-col *:gap-2 text-secondary-700 flex-col gap-3">
-        <label>
-          Fullname
-          <Input
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleOnchange}
-          />
-        </label>
-        <label>
-          Email
-          <Input
-            name="email"
-            value={formData.email}
-            onChange={handleOnchange}
-          />
-        </label>
-        <label>
-          Phone
-          <Input
-            name="phone"
-            value={formData.phone}
-            onChange={handleOnchange}
-          />
-        </label>
-        <label>
-          Address
-          <Input
-            name="address"
-            value={formData.address}
-            onChange={handleOnchange}
-          />
-        </label>
-        <Button
-          disabled={isUpdating}
-          onClick={async (e) => {
-            e.preventDefault();
-            await updateProfile({
-              userId: String(user.id),
-              fullName: formData.fullName,
-              phoneNumber: formData.phone,
-              address: formData.address
-            });
-          }}
-          size={"xs"}
-          className="hover:border-secondary-700 my-3 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
-        >
-          {isUpdating ? "Saving Changes..." : "Save Changes"}
-        </Button>
-      </form>
-    </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <BasicConfirmationModal
+          setShowConfirmModal={setShowConfirmModal}
+          isUpdating={isUpdating}
+          handleSaveChanges={handleSaveChanges}
+          title="Confirm Changes"
+          message="Are you sure you want to save these changes to your profile?"
+        />
+      )}
+    </>
   );
 }
