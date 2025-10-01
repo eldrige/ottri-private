@@ -58,7 +58,7 @@ export default function BookingCard({
           setBookedServiceOnRating={setBookedServiceOnRating}
           handleCancel={(e) => {
             e.preventDefault();
-            handleCancel(service.id);
+            handleCancel({ bookingId: service.id });
           }}
           isPendingCancel={isPending}
         />
@@ -70,7 +70,7 @@ export default function BookingCard({
           setBookedServiceOnRating={setBookedServiceOnRating}
           handleCancel={(e) => {
             e.preventDefault();
-            handleCancel(service.id);
+            handleCancel({ bookingId: service.id });
           }}
           isPendingCancel={isPending}
         />

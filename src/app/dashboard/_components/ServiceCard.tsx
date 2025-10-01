@@ -163,7 +163,7 @@ export function AppointmentCard({
 
   const handleCancelClick = (e: React.FormEvent) => {
     e.preventDefault();
-    handleCancel(service.id);
+    handleCancel({ bookingId: service.id });
   };
 
   return (

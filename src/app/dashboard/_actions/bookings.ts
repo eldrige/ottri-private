@@ -3,7 +3,11 @@
 import { serverRequest } from "@/lib/serverRequest";
 import { Review, User } from "../_utils/types";
 
-export async function cancelBooking({ bookingId }: { bookingId: number }) {
+export async function cancelBooking({
+  bookingId
+}: {
+  bookingId: number | string;
+}) {
   console.log({ bookingId });
   try {
     const booking = await serverRequest(`bookings/${bookingId}`, "DELETE");
