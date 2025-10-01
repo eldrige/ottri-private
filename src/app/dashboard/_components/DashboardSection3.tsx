@@ -2,14 +2,25 @@ import { Button } from "@/components/ui/Button";
 import React from "react";
 import ServiceCard, { AppointmentCard } from "./ServiceCard";
 import { Loader2, PlusIcon } from "lucide-react";
-import { useGetBookingsQuery } from "../_services/queries";
+import { useGetInfiniteBookingsQuery } from "../_services/queries";
 import Link from "next/link";
 
 export default function DashboardSection3() {
-  const { data: recentBookings, isLoading: recentBookingsLoading } =
-    useGetBookingsQuery("COMPLETED");
-  const { data: upcomingBookings, isLoading: upcomingBookingsLoading } =
-    useGetBookingsQuery("");
+  const {
+    data: recentBookings,
+    isLoading: recentBookingsLoading,
+    fetchNextPage: fetchNextRecent,
+    hasNextPage: hasNextRecent,
+    isFetchingNextPage: isFetchingNextRecent
+  } = useGetInfiniteBookingsQuery("COMPLETED", 5);
+
+  const {
+    data: upcomingBookings,
+    isLoading: upcomingBookingsLoading,
+    fetchNextPage: fetchNextUpcoming,
+    hasNextPage: hasNextUpcoming,
+    isFetchingNextPage: isFetchingNextUpcoming
+  } = useGetInfiniteBookingsQuery("", 5);
 
   return (
     <div className="flex flex-col gap-6">
@@ -36,22 +47,44 @@ export default function DashboardSection3() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {recentBookings &&
-              recentBookings.data.length > 0 &&
-              recentBookings.data.map((booking, index) => (
-                <ServiceCard key={index} service={booking} />
-              ))}
-            {!recentBookingsLoading && recentBookings?.data.length === 0 && (
-              <div className="text-caption w-full text-center text-secondary-800">
-                No recent appointments
-              </div>
+            {recentBookings?.pages.map((page, pageIndex) =>
+              page.data.map((booking, index) => (
+                <ServiceCard
+                  key={booking.id || `${pageIndex}-${index}`}
+                  service={booking}
+                />
+              ))
             )}
+            {!recentBookingsLoading &&
+              recentBookings?.pages[0]?.data.length === 0 && (
+                <div className="text-caption w-full text-center text-secondary-800">
+                  No recent appointments
+                </div>
+              )}
             {recentBookingsLoading && (
               <div className="text-caption w-full flex items-center justify-center text-center text-secondary-800">
                 <Loader2 className="animate-spin w-4 h-4" />
               </div>
             )}
           </div>
+          {hasNextRecent && (
+            <Button
+              onClick={() => fetchNextRecent()}
+              disabled={isFetchingNextRecent}
+              variant="outline"
+              size="xs"
+              className="w-full"
+            >
+              {isFetchingNextRecent ? (
+                <>
+                  <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                  Loading...
+                </>
+              ) : (
+                "Load More"
+              )}
+            </Button>
+          )}
         </div>
         <div className=" lg:p-6 lg:border border-surface-500/30 rounded-lg flex flex-col gap-6">
           <div className="flex flex-col lg:flex-row justify-between lg:items-center w-full">
@@ -76,21 +109,43 @@ export default function DashboardSection3() {
           </div>
           <div className="flex flex-col gap-2.5">
             {!upcomingBookingsLoading &&
-              upcomingBookings?.data.length === 0 && (
+              upcomingBookings?.pages[0]?.data.length === 0 && (
                 <div className="text-caption w-full text-center text-secondary-800">
                   No upcoming appointments
                 </div>
               )}
-            {upcomingBookings &&
-              upcomingBookings.data.map((service) => (
-                <AppointmentCard key={service.id} service={service} />
-              ))}
+            {upcomingBookings?.pages.map((page, pageIndex) =>
+              page.data.map((service, index) => (
+                <AppointmentCard
+                  key={service.id || `${pageIndex}-${index}`}
+                  service={service}
+                />
+              ))
+            )}
             {upcomingBookingsLoading && (
               <div className="text-caption w-full flex items-center justify-center text-center text-secondary-800">
                 <Loader2 className="animate-spin w-4 h-4" />
               </div>
             )}
           </div>
+          {hasNextUpcoming && (
+            <Button
+              onClick={() => fetchNextUpcoming()}
+              disabled={isFetchingNextUpcoming}
+              variant="outline"
+              size="xs"
+              className="w-full"
+            >
+              {isFetchingNextUpcoming ? (
+                <>
+                  <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                  Loading...
+                </>
+              ) : (
+                "Load More"
+              )}
+            </Button>
+          )}
           <Link href="/booking/new">
             <Button
               size={"xs"}
