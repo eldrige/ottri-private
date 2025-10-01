@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
@@ -13,6 +14,12 @@ interface ErrorPageProps {
 export default function ErrorComponent({ error, reset }: ErrorPageProps) {
   const [showDetails, setShowDetails] = useState(false);
   const isDevelopment = process.env.NODE_ENV === "development";
+  const pathname = usePathname();
+  const homeUrl = pathname.startsWith("/admin")
+    ? "/admin"
+    : pathname.startsWith("/dashboard")
+      ? "/dashboard"
+      : "/";
 
   useEffect(() => {
     // Log the error to an error reporting service
@@ -31,7 +38,7 @@ export default function ErrorComponent({ error, reset }: ErrorPageProps) {
           encountered an unexpected error.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href={"/"}>
+          <Link href={homeUrl}>
             <Button
               variant="outline"
               className="gap-2 flex items-center justify-center"
@@ -60,9 +67,9 @@ export default function ErrorComponent({ error, reset }: ErrorPageProps) {
                 </>
               )}
             </Button>
-
+            {/* TODO: FINISH PR!!!! */}
             {showDetails && (
-              <div className="mt-4 p-4 bg-muted rounded-md text-left overflow-auto max-h-64">
+              <div className="mt-4 p-4 bg-muted rounded-md text-left overflow-auto max-h-64 text-error">
                 <p className="font-medium mb-2">Error message:</p>
                 <p className="text-sm font-mono mb-4">{error.message}</p>
 
