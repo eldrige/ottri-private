@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { User } from "../../_utils/types";
 import { useUpdateProfileMutation } from "../../_services/mutations";
-import { BasicConfirmationModal } from "./BasicConfirmationModal";
+import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
 
 export default function ProfileSection2({ user }: { user: User }) {
   return (

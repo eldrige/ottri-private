@@ -6,13 +6,19 @@ export function BasicConfirmationModal({
   isUpdating,
   handleSaveChanges,
   title,
-  message
+  message,
+  confirmationText = "Confirm",
+  cancellationText = "Decline",
+  isUpdatingText = "Precessing..."
 }: {
   setShowConfirmModal: React.Dispatch<React.SetStateAction<boolean>>;
   isUpdating: boolean;
   handleSaveChanges: () => Promise<void>;
   title: string;
   message: string;
+  confirmationText?: string;
+  cancellationText?: string;
+  isUpdatingText?: string;
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -33,8 +39,10 @@ export function BasicConfirmationModal({
         </button>
 
         <div className="mb-4">
-          <h2 className="text-xl font-semibold text-secondary-700">{title}</h2>
-          <p className="text-surface-500 text-sm mt-2">{message}</p>
+          <h3 className="text-2xl font-medium text-secondary-700">{title}</h3>
+          <p className="text-caption text-secondary-500 text-sm mt-2">
+            {message}
+          </p>
         </div>
 
         <div className="flex gap-3 justify-end">
@@ -42,17 +50,21 @@ export function BasicConfirmationModal({
             variant="destructive"
             onClick={() => setShowConfirmModal(false)}
             disabled={isUpdating}
-            size="xs"
+            // size="sm"
+            className=" flex items-center justify-center py-2 px-4 gap-3"
           >
-            Cancel
+            <p className="text-body">{cancellationText}</p>
           </Button>
           <Button
             onClick={handleSaveChanges}
             disabled={isUpdating}
             size="xs"
-            className="bg-secondary-700 text-white"
+            variant="secondary"
+            className="flex items-center justify-center py-2 px-4 gap-3"
           >
-            {isUpdating ? "Saving..." : "Confirm"}
+            <p className="text-body">
+              {isUpdating ? isUpdatingText : confirmationText}
+            </p>
           </Button>
         </div>
       </div>
