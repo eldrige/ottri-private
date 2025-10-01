@@ -18,13 +18,13 @@ export default function SettingsSection3() {
 
 function LanguageSettings() {
   const { data: userData } = useGetUserProfile();
-  const [currentLanguage, setCurrentLanguage] = React.useState<string>(
+  const [currentLanguage, setCurrentLanguage] = useState<string>(
     userData?.settings.language || "en"
   );
-  const [currentTimeZone, setCurrentTimeZone] = React.useState<string>(
+  const [currentTimeZone, setCurrentTimeZone] = useState<string>(
     userData?.settings.timezone || "UTC"
   );
-  const [currentCurrency, setCurrentCurrency] = React.useState<string>(
+  const [currentCurrency, setCurrentCurrency] = useState<string>(
     userData?.settings.currency || "USD"
   );
   const languageOptions = [
