@@ -195,12 +195,14 @@ interface Stats {
 export interface ServiceArea {
   id: number;
   popular: boolean;
+  isActive: boolean;
   name: string;
   nickName: string;
   basePrice: number;
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
+  services: unknown[];
   location: SALocation;
 }
 

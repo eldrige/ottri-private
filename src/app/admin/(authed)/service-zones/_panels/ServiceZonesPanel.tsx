@@ -44,12 +44,13 @@ function ZoneCard({ serviceArea }: { serviceArea: ServiceArea }) {
         </div>
         <span
           className={`text-sm px-3 py-1 rounded-lg ${
-            true // NOTE: should be dynamic later
+            serviceArea.isActive // NOTE: should be dynamic later
               ? "bg-success/10 text-success"
               : "bg-warning/6 text-warning-text"
           }`}
         >
-          {"Active"} {/* // NOTE: should be dynamic later */}
+          {serviceArea.isActive ? "Active" : "Inactive"}{" "}
+          {/* // NOTE: should be dynamic later */}
         </span>
       </div>
 
@@ -92,7 +93,9 @@ function ZoneCard({ serviceArea }: { serviceArea: ServiceArea }) {
         <div className="text-sm mb-2">Restrictions</div>
         <ul className="text-xs space-y-2 text-secondary-700/70">
           <li>• Min booking: ${serviceArea.basePrice}</li>
-          {/* <li>• Services: {zone.restrictions.services}</li> */}
+          <li>
+            • Services: {serviceArea.services.join(", ") || "All Services"}
+          </li>
         </ul>
       </div>
 
