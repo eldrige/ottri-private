@@ -1,3 +1,4 @@
+"use server";
 import { serverRequest } from "@/lib/serverRequest";
 import { User } from "../_utils/types";
 
