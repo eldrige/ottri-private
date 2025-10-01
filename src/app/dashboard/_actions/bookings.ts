@@ -1,7 +1,7 @@
 "use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { serverRequest } from "@/lib/serverRequest";
-import { Review } from "../_utils/types";
+import { Booking, Review } from "../_utils/types";
 
 export async function cancelBooking({
   bookingId
@@ -10,8 +10,8 @@ export async function cancelBooking({
 }) {
   console.log({ bookingId });
   try {
-    const booking = await serverRequest(`bookings/${bookingId}`, "DELETE");
-    return booking.data;
+    const response = await serverRequest(`bookings/${bookingId}`, "DELETE");
+    return response.data as Booking;
   } catch (err: any) {
     console.log(err.response);
     throw err;
