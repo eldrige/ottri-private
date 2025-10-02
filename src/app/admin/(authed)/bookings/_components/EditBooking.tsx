@@ -3,7 +3,7 @@ import {
   bedroomOptions,
   squareFootageOptions
 } from "@/app/(landings)/booking/new/formData";
-import { Booking } from "@/app/admin/types";
+import { Booking, UpdateBookingPayload } from "@/app/admin/types";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
@@ -11,7 +11,7 @@ import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useServicesQuery } from "../../_services/queries";
-// import { useUpdateBookingMutation } from "../../_services/mutations";
+import { useUpdateBookingMutation } from "../../_services/mutations";
 
 export default function EditBooking({
   booking,
@@ -21,8 +21,12 @@ export default function EditBooking({
   onClose: () => void;
 }) {
   const { data: servicesOptions } = useServicesQuery();
-  // const {isPending} = useUpdateBookingMutation()
-  const isPending = false;
+  const {
+    isPending,
+    mutateAsync: updateBooking,
+    error
+  } = useUpdateBookingMutation();
+  console.log({ error: error });
   const [newBookingData, setNewBookingData] = useState({
     fullName:
       booking.guest?.fullName ||
@@ -90,18 +94,51 @@ export default function EditBooking({
     e.preventDefault();
 
     try {
-      // await updateBooking({
-      //   bookingId: booking.id,
-      //   bedrooms: newBookingData.bedrooms,
-      //   bathrooms: newBookingData.bathrooms,
-      //   approximateSquareFootage: newBookingData.approximateSquareFootage,
-      //   serviceType: {
-      //     serviceId: +newBookingData.serviceType
-      //   },
-      //   guest: {
-      //     fullName: newBookingData.fullName
-      //   }
-      // });
+      // Define a properly typed payload with only the necessary properties
+
+      const payload: UpdateBookingPayload = { bookingId: booking.id };
+
+      // Compare and add bedrooms if changed
+      if (newBookingData.bedrooms !== booking.bedrooms) {
+        payload.bedrooms = newBookingData.bedrooms;
+      }
+
+      // Compare and add bathrooms if changed
+      if (newBookingData.bathrooms !== booking.bathrooms) {
+        payload.bathrooms = newBookingData.bathrooms;
+      }
+
+      // Compare and add square footage if changed
+      if (
+        newBookingData.approximateSquareFootage !==
+        booking.approximateSquareFootage
+      ) {
+        payload.approximateSquareFootage =
+          newBookingData.approximateSquareFootage;
+      }
+
+      // Compare and add service type if changed
+      if (+newBookingData.serviceType !== booking.serviceType.serviceId) {
+        payload.serviceType = {
+          serviceId: +newBookingData.serviceType
+        };
+      }
+
+      // Compare and add guest name if changed
+      const originalName =
+        booking.guest?.fullName ||
+        booking.customer?.personalInformation?.fullName;
+      if (newBookingData.fullName && newBookingData.fullName !== originalName) {
+        payload.guest = {
+          fullName: newBookingData.fullName
+        };
+      }
+
+      // Only call update if there are changes
+      if (Object.keys(payload).length > 1) {
+        // More than just bookingId
+        await updateBooking(payload);
+      }
 
       // Close the modal on successful update
       onClose();
