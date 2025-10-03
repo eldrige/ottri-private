@@ -26,7 +26,10 @@ export default function EditBooking({
     mutateAsync: updateBooking,
     error
   } = useUpdateBookingMutation();
-  console.log({ error: error });
+
+  // State for form errors
+  const [formError, setFormError] = useState<string | null>(null);
+
   const [newBookingData, setNewBookingData] = useState({
     fullName:
       booking.guest?.fullName ||
@@ -41,6 +44,12 @@ export default function EditBooking({
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
     null
   );
+
+  // Clear form error when any field changes
+  useEffect(() => {
+    if (formError) setFormError(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newBookingData]);
 
   // Set up the portal container on mount
   useEffect(() => {
@@ -92,6 +101,13 @@ export default function EditBooking({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
+    // Form validation
+    if (!newBookingData.fullName?.trim()) {
+      setFormError("Client's name is required");
+      return;
+    }
 
     try {
       // Define a properly typed payload with only the necessary properties
@@ -138,13 +154,17 @@ export default function EditBooking({
       if (Object.keys(payload).length > 1) {
         // More than just bookingId
         await updateBooking(payload);
+        // Close the modal on successful update
+        onClose();
+      } else {
+        // No changes were made
+        setFormError("No changes were made to update");
       }
-
-      // Close the modal on successful update
-      onClose();
-    } catch (error) {
-      console.error("Failed to update booking:", error);
-      // Optionally add error handling UI here
+    } catch (err) {
+      console.error("Failed to update booking:", err);
+      setFormError(
+        error?.message || "Failed to update booking. Please try again later."
+      );
     }
   };
 
@@ -165,6 +185,13 @@ export default function EditBooking({
           </button>
         </div>
         <form onSubmit={handleSubmit}>
+          {/* Display error message if exists */}
+          {formError && (
+            <div className="mt-4 p-3 bg-red-50 text-red-600 border border-red-200 rounded-md">
+              {formError}
+            </div>
+          )}
+
           <div className="mt-4 space-y-4">
             <Input
               label="Client's Name *"
@@ -172,6 +199,7 @@ export default function EditBooking({
               onChange={(e) => setField("fullName", e.target.value)}
             />
             <Select
+              accent="secondary"
               label="Service Type *"
               options={serviceTypeOptions}
               value={serviceTypeOptions.find(
@@ -182,6 +210,7 @@ export default function EditBooking({
           </div>
           <div className="mt-6 space-y-4">
             <Select
+              accent="secondary"
               label="Bedrooms"
               options={bedroomOptions}
               value={bedroomOptions.find(
@@ -190,6 +219,7 @@ export default function EditBooking({
               onChange={(option) => setField("bedrooms", option.value)}
             />
             <Select
+              accent="secondary"
               label="Bathrooms"
               options={bathroomOptions}
               value={bathroomOptions.find(
@@ -198,6 +228,7 @@ export default function EditBooking({
               onChange={(option) => setField("bathrooms", option.value)}
             />
             <Select
+              accent="secondary"
               label="Approximate Square Footage"
               options={squareFootageOptions}
               value={squareFootageOptions.find(
