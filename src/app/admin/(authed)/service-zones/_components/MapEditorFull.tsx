@@ -85,7 +85,7 @@ const determineShapeKind = (serviceArea: ServiceArea) => {
 };
 
 interface Feature {
-  id?: number;
+  id?: number | string;
   type: string;
   properties: {
     id: string | number;
@@ -148,12 +148,11 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
   const handleButtonClick = (mode: any) => setDrawingMode(mode);
 
   const handleShapeChange = (payload: Feature) => {
-    // payload: {id, properties: { kind, geometry }}
     const idx = features.findIndex((f) => f.id === payload.properties.id);
-    let newFeatures;
+    let newFeatures: typeof features = [];
 
     if (idx === -1) {
-      newFeatures = [...features, payload];
+      newFeatures = [...features, { ...payload, id: payload.properties.id }];
       console.log(payload);
       // createSA({newServiceArea: {location: payload.geometry}})
       if (!payload.name) {
@@ -256,7 +255,7 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
     // Process updated features
     updateSA({
       serviceAreasData: toUpdate.map((feat) => ({
-        id: feat.id,
+        id: Number(feat.id),
         location: feat.geometry
       }))
     });

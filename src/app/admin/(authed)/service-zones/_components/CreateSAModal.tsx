@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 interface Feature {
-  id?: number;
+  id?: number | string;
   type: string;
   properties: {
     id: string | number;
