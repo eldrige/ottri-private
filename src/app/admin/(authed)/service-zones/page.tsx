@@ -10,6 +10,7 @@ import MapEditorPanel from "./_panels/MapEditorPanel";
 import { useServiceAreasQuery } from "../_services/queries";
 import Loading from "../loading";
 import RestrictedPanel from "./_panels/RestrictedPanel";
+import ZoneSettingsPanel from "./_panels/ZoneSettingsPanel";
 
 const filterOptions = [
   { label: "All Zones", value: "all-zones" },
@@ -88,6 +89,7 @@ export default function ServiceZonesPage() {
         <MapEditorPanel serviceAreas={serviceAreas} />
       )}
       {activeView === "restricted-log" && <RestrictedPanel />}
+      {activeView === "zone-settings" && <ZoneSettingsPanel />}
     </main>
   );
 }

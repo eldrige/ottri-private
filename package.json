@@ -25,6 +25,7 @@
     "@fullcalendar/react": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
     "@googlemaps/js-api-loader": "^1.16.10",
+    "@headlessui/react": "^2.2.9",
     "@hookform/resolvers": "^5.2.0",
     "@stripe/react-stripe-js": "^3.8.1",
     "@stripe/stripe-js": "^7.7.0",
