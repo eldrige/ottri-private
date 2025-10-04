@@ -23,8 +23,8 @@ export default function QAndA({
         !show ? "bg-white text-secondary-700" : "bg-secondary-700 text-white"
       )}
     >
-      <div className="">
-        <p className="font-medium">{question}</p>
+      <div className="flex-1">
+        <p className="font-medium cursor-pointer">{question}</p>
         <div
           className={cn(
             "overflow-hidden transition-[max-height] duration-200",
@@ -43,7 +43,9 @@ export default function QAndA({
           </div>
         </div>
       </div>
-      <div className={show ? "text-white" : "text-surface-500"}>
+      <div
+        className={`cursor-pointer ${show ? "text-white" : "text-surface-500"}`}
+      >
         {show ? <Minus size={24} /> : <Plus size={24} />}
       </div>
     </div>

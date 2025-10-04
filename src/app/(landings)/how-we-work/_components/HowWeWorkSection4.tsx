@@ -21,11 +21,7 @@ export default function HowWeWorkSection4() {
           </Button>
         </Link>
         <Link href="/services">
-          <Button
-            size="xs"
-            className="text-primary-700 bg-white"
-            variant="secondary-outline"
-          >
+          <Button size="xs" className="" variant="default-outline">
             Explore our services
           </Button>
         </Link>
