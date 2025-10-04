@@ -72,7 +72,8 @@ export default function ClientAdminBookingsPage() {
           {showAddBooking && (
             <AddBooking onClose={() => setShowAddBooking(false)} />
           )}
-          <Link href={"/admin/bookings/manage"}>
+          {/* <Link href={"/admin/bookings/manage"}> */}
+          <Link href={"#"}>
             <Button
               size={"2xs"}
               variant={"secondary-outline"}
