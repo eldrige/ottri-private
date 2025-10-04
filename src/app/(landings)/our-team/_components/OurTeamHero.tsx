@@ -7,7 +7,7 @@ export default function OurTeamHero() {
     <section className="py-8 lg:py-24 space-y-8">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
         <Badge className="w-fit" variant="default" mode="outline">
-          our Team
+          Our Team
         </Badge>
         <h2 className="text-heading-3 md:text-heading-2 font-semibold">
           Meet Our Professional Cleaning Team
