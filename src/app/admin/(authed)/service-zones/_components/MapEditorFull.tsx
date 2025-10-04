@@ -5,6 +5,7 @@ import InteractiveMap from "./InteractiveMap";
 import {
   CircleIcon,
   HandIcon,
+  SmartphoneIcon,
   SquareIcon,
   TriangleIcon,
   UndoIcon,
@@ -20,6 +21,7 @@ import {
 import CreateSAModal from "./CreateSAModal";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import { cn } from "@/lib/utils";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 const tools = [
   {
@@ -105,6 +107,9 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
     useUpdateServiceAreaMutation();
   const { mutateAsync: deleteSA, isPending: deletePending } =
     useDeleteServiceAreaMutation();
+
+  const isMobile = useWindowSize().width < 768;
+
   const [createModal, setCreateModal] = useState<Feature | undefined>(
     undefined
   );
@@ -295,7 +300,7 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
   );
 
   return (
-    <div className="w-full h-screen flex flex-col p-4">
+    <div className="flex flex-col w-full h-screen md:p-4">
       {createModal && (
         <CreateSAModal
           onSave={async ({ zoneName }) => {
@@ -320,75 +325,103 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
           accent="secondary"
         />
       )}
-      <div className="z-10 bg-surface-50 p-4 rounded-lg flex gap-2 items-center overflow-y-hidden flex-wrap">
-        <span className="mr-4 text-sm">Drawing Tools:</span>
-        {tools.map((tool) => {
-          const selected = drawingMode === tool.value;
-          return (
-            <button
-              key={String(tool.value)}
-              onClick={() => isReady && handleButtonClick(tool.value)}
-              className={[
-                "px-4 py-2 rounded-lg border flex items-center gap-1 text-xs",
-                selected
-                  ? "bg-secondary-700 text-white"
-                  : "bg-white border-gray-300 hover:bg-gray-100"
-              ].join(" ")}
-            >
-              {tool.label}
-            </button>
-          );
-        })}
-
-        <div className="ml-auto flex gap-2 items-center">
-          {selectedFeatureId && (
-            <div className="flex items-center">
-              <span className="text-xs font-medium mr-2">
-                {selectedFeature?.name || `Shape ${selectedFeatureId}`}
-              </span>
+      {!isMobile && (
+        <div className="z-10 flex flex-wrap items-center gap-2 p-4 mb-4 overflow-y-hidden rounded-lg bg-surface-50">
+          <span className="mr-4 text-sm">Drawing Tools:</span>
+          {tools.map((tool) => {
+            const selected = drawingMode === tool.value;
+            return (
               <button
-                className="py-2 px-3 bg-error text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-error/80 transition-colors"
-                onClick={handleDeleteSelected}
+                key={String(tool.value)}
+                onClick={() => isReady && handleButtonClick(tool.value)}
+                className={[
+                  "px-4 py-2 rounded-lg border flex items-center gap-1 text-xs",
+                  selected
+                    ? "bg-secondary-700 text-white"
+                    : "bg-white border-gray-300 hover:bg-gray-100"
+                ].join(" ")}
               >
-                <XIcon className="stroke-1 size-4" />
+                {tool.label}
               </button>
-            </div>
-          )}
+            );
+          })}
 
-          <button
-            className="py-2 px-4 bg-white border border-black/10 rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:hover:bg-white disabled:cursor-not-allowed"
-            onClick={handleUndo}
-            disabled={!canUndo}
-          >
-            <UndoIcon className="stroke-1 size-5" />
-            Undo
-          </button>
-          <button
-            className="py-2 px-4 bg-error text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-error/80 transition-colors disabled:opacity-50 disabled:hover:bg-error disabled:cursor-not-allowed"
-            onClick={handleClearAll}
-            disabled={features.length === 0}
-          >
-            <TrashIcon className="stroke-1 size-5" />
-            Clear
-          </button>
-          <button
-            className="py-2 px-4 bg-secondary-700 min-w-fit text-white rounded-lg text-xs flex items-center justify-center gap-1 hover:bg-primary/80 transition-colors disabled:opacity-50 disabled:hover:bg-primary disabled:cursor-not-allowed"
-            onClick={() => setConfirmSave(true)}
-            disabled={history.length === 1 || isSaving}
-          >
-            {isSaving ? "Saving..." : "Save Changes"}
-          </button>
+          <div className="flex items-center gap-2 ml-auto">
+            {selectedFeatureId && (
+              <div className="flex items-center">
+                <span className="mr-2 text-xs font-medium">
+                  {selectedFeature?.name || `Shape ${selectedFeatureId}`}
+                </span>
+                <button
+                  className="flex items-center justify-center gap-1 px-3 py-2 text-xs text-white transition-colors rounded-lg bg-error hover:bg-error/80"
+                  onClick={handleDeleteSelected}
+                >
+                  <XIcon className="stroke-1 size-4" />
+                </button>
+              </div>
+            )}
+
+            <button
+              className="flex items-center justify-center gap-1 px-4 py-2 text-xs transition-colors bg-white border rounded-lg border-black/10 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white disabled:cursor-not-allowed"
+              onClick={handleUndo}
+              disabled={!canUndo}
+            >
+              <UndoIcon className="stroke-1 size-5" />
+              Undo
+            </button>
+            <button
+              className="flex items-center justify-center gap-1 px-4 py-2 text-xs text-white transition-colors rounded-lg bg-error hover:bg-error/80 disabled:opacity-50 disabled:hover:bg-error disabled:cursor-not-allowed"
+              onClick={handleClearAll}
+              disabled={features.length === 0}
+            >
+              <TrashIcon className="stroke-1 size-5" />
+              Clear
+            </button>
+            <button
+              className="flex items-center justify-center gap-1 px-4 py-2 text-xs text-white transition-colors rounded-lg bg-secondary-700 min-w-fit hover:bg-primary/80 disabled:opacity-50 disabled:hover:bg-primary disabled:cursor-not-allowed"
+              onClick={() => setConfirmSave(true)}
+              disabled={history.length === 1 || isSaving}
+            >
+              {isSaving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
         </div>
-      </div>
+      )}
+      {!isMobile ? (
+        <div className="flex items-start flex-col gap-2 p-3 border rounded-lg border-success bg-success/6 text-success">
+          <h4 className="text-sm font-medium">Welcome to Zone Creation!</h4>
+          <p className="mt-1 text-xs">
+            Get started by selecting a drawing tool above (Rectangle or Circle)
+            and then click & drag on the canvas to create your service zone.
+          </p>
+        </div>
+      ) : (
+        <div className="flex items-start gap-2 p-3 border rounded-lg border-warning bg-warning/7 text-warning-text">
+          <div>
+            <SmartphoneIcon className="size-4" />
+          </div>
+          <div>
+            <h4 className="text-sm font-medium">
+              Drawing mode not available on mobile devices.
+            </h4>
+            <p className="mt-1 text-xs">
+              For the best zone creation experience, please use a desktop or
+              tablet device with a larger screen. You can still view existing
+              zones and access all other features.
+            </p>
+          </div>
+        </div>
+      )}
 
       <InteractiveMap
+        readOnly={isMobile}
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
         drawingMode={drawingMode}
         onReady={() => setIsReady(true)}
         onChange={handleShapeChange}
         onDrawingModeChange={(mode: any) => setDrawingMode(mode)}
         mapContainerClassName={cn(
-          "h-full w-full mt-4 rounded-lg overflow-hidden",
+          "h-full w-full mt-4 rounded-lg overflow-hidden outline-2 outline-primary-700 outline-dashed outline-offset-2",
           isSaving && "opacity-40 pointer-events-none"
         )}
         center={{ lat: 38.231917, lng: -85.757639 }}

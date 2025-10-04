@@ -31,7 +31,8 @@ function InteractiveMap({
   center,
   features = [],
   onSelectFeature, // New prop to handle selection
-  selectedFeatureId // New prop to track selected feature
+  selectedFeatureId, // New prop to track selected feature
+  readOnly = false // New prop to make the map view-only
 }: any) {
   return (
     <APIProvider apiKey={googleMapsApiKey} libraries={scriptLibraries}>
@@ -46,13 +47,14 @@ function InteractiveMap({
           className="w-full h-full"
         >
           <DrawingManagerBridge
-            drawingMode={drawingMode}
+            drawingMode={readOnly ? null : drawingMode}
             onChange={onChange}
             onDrawingModeChange={onDrawingModeChange}
             onReady={onReady}
             features={features}
-            onSelectFeature={onSelectFeature}
+            onSelectFeature={readOnly ? null : onSelectFeature}
             selectedFeatureId={selectedFeatureId}
+            readOnly={readOnly}
           />
         </GoogleMap>
       </div>
@@ -67,7 +69,8 @@ function DrawingManagerBridge({
   onReady,
   features,
   onSelectFeature,
-  selectedFeatureId
+  selectedFeatureId,
+  readOnly = false // Add readOnly prop here too
 }: any) {
   const map = useMap();
   const drawing = useMapsLibrary("drawing");
@@ -195,29 +198,44 @@ function DrawingManagerBridge({
     (overlay: any, type: string, id: any) => {
       idByOverlayRef.current.set(overlay, id);
 
-      // Add click listener for selection
-      overlay.addListener("click", () => {
-        if (onSelectFeature) {
+      // Add click listener for selection only if not readOnly
+      if (!readOnly && onSelectFeature) {
+        overlay.addListener("click", () => {
           onSelectFeature(id);
-        }
-      });
+        });
+      }
 
-      if (type === "polygon" || type === "polyline") {
-        const path = overlay.getPath();
-        path.addListener("set_at", () => emitChange(overlay, type));
-        path.addListener("insert_at", () => emitChange(overlay, type));
-      } else if (type === "circle") {
-        overlay.addListener("center_changed", () => emitChange(overlay, type));
-        overlay.addListener("radius_changed", () => emitChange(overlay, type));
-      } else if (type === "rectangle") {
-        overlay.addListener("bounds_changed", () => emitChange(overlay, type));
+      // Only add editing listeners if not in readOnly mode
+      if (!readOnly) {
+        if (type === "polygon" || type === "polyline") {
+          const path = overlay.getPath();
+          path.addListener("set_at", () => emitChange(overlay, type));
+          path.addListener("insert_at", () => emitChange(overlay, type));
+        } else if (type === "circle") {
+          overlay.addListener("center_changed", () =>
+            emitChange(overlay, type)
+          );
+          overlay.addListener("radius_changed", () =>
+            emitChange(overlay, type)
+          );
+        } else if (type === "rectangle") {
+          overlay.addListener("bounds_changed", () =>
+            emitChange(overlay, type)
+          );
+        }
       }
     },
-    [emitChange, onSelectFeature]
+    [emitChange, onSelectFeature, readOnly]
   );
 
   useEffect(() => {
     if (!map || !drawing) return;
+
+    // If in readOnly mode, don't initialize the drawing manager
+    if (readOnly) {
+      if (onReady) onReady();
+      return;
+    }
 
     const manager = new drawing.DrawingManager({
       drawingMode: drawingMode ?? null,
@@ -295,13 +313,14 @@ function DrawingManagerBridge({
     onDrawingModeChange,
     onReady,
     wireOverlayListeners,
-    emitChange
+    emitChange,
+    readOnly
   ]);
 
   useEffect(() => {
-    if (!managerRef.current) return;
+    if (!managerRef.current || readOnly) return;
     managerRef.current.setDrawingMode(drawingMode ?? null);
-  }, [drawingMode]);
+  }, [drawingMode, readOnly]);
 
   // Helper function to calculate circle center and radius from polygon coordinates
   const calculateCircleFromPolygonCoords = useCallback(
@@ -397,6 +416,9 @@ function DrawingManagerBridge({
         ? shapeColors.selected
         : shapeColors.normal;
 
+      // Set editable to false if in readOnly mode
+      const editable = !readOnly;
+
       if (kind === "circle" || geom.properties?.type === "circle") {
         // Handle circle
         if (geom.type === "Polygon" && Array.isArray(geom.coordinates?.[0])) {
@@ -415,7 +437,7 @@ function DrawingManagerBridge({
             strokeColor: styleOptions.circle.strokeColor,
             strokeOpacity: 0.8,
             strokeWeight: isSelected ? 3 : 2,
-            editable: true,
+            editable: editable,
             clickable: true,
             zIndex: isSelected ? 2 : 1
           });
@@ -461,7 +483,7 @@ function DrawingManagerBridge({
             strokeColor: styleOptions.rectangle.strokeColor,
             strokeOpacity: 0.8,
             strokeWeight: isSelected ? 3 : 2,
-            editable: true,
+            editable: editable,
             clickable: true,
             zIndex: isSelected ? 2 : 1
           });
@@ -487,7 +509,7 @@ function DrawingManagerBridge({
           strokeColor: styleOptions.polygon.strokeColor,
           strokeOpacity: 0.8,
           strokeWeight: isSelected ? 3 : 2,
-          editable: true,
+          editable: editable,
           clickable: true,
           zIndex: isSelected ? 2 : 1
         });
@@ -506,7 +528,7 @@ function DrawingManagerBridge({
           strokeColor: styleOptions.polyline.strokeColor,
           strokeOpacity: 0.8,
           strokeWeight: isSelected ? 3 : 2,
-          editable: true,
+          editable: editable,
           clickable: true,
           zIndex: isSelected ? 2 : 1
         });
@@ -520,7 +542,8 @@ function DrawingManagerBridge({
     map,
     wireOverlayListeners,
     calculateCircleFromPolygonCoords,
-    selectedFeatureId
+    selectedFeatureId,
+    readOnly
   ]);
 
   return null;
