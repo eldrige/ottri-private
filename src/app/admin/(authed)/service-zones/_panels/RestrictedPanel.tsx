@@ -4,7 +4,7 @@ import React from "react";
 
 export default function RestrictedPanel() {
   return (
-    <div className="p-4 mt-4 border rounded-lg border-black/10">
+    <div className="mt-4 rounded-lg md:p-4 md:border border-black/10">
       <h3 className="font-medium">Restricted Log</h3>
       <div className="mt-6 space-y-4">
         {[
@@ -32,7 +32,7 @@ export default function RestrictedPanel() {
         ].map((entry, index) => (
           <div
             key={index}
-            className="flex p-4 border rounded-lg border-black/10"
+            className="flex flex-col p-4 border rounded-lg gap-y-4 md:flex-row border-black/10"
           >
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export default function RestrictedPanel() {
                   {entry.zipCode}
                 </p>
               </div>
-              <div className="flex mt-4 gap-16">
+              <div className="flex flex-col mt-4 md:flex-row gap-y-2 gap-x-16">
                 <div className="space-y-2">
                   <p className="text-xs">
                     <span className="text-sm font-medium">Service: </span>
@@ -65,7 +65,7 @@ export default function RestrictedPanel() {
                 </div>
               </div>
             </div>
-            <div className="flex items-start justify-end flex-1 gap-2">
+            <div className="flex *:flex-1 md:*:flex-initial items-start justify-end flex-1 gap-2">
               <Button
                 size={"2xs"}
                 variant={"secondary-outline"}
