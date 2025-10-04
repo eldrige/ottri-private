@@ -221,20 +221,43 @@ export default function ClientForm({
     validateCurrentStep
   ]);
 
+  // Calculate discount based on frequency
+  const getDiscountPercentage = (frequency: string | null): number => {
+    switch (frequency) {
+      case "MONTHLY":
+        return 0.1; // 10%
+      case "BIWEEKLY":
+        return 0.15; // 15%
+      case "WEEKLY":
+        return 0.1; // 10%
+      default:
+        return 0; // No discount
+    }
+  };
+
   // Calculate price based on form values
   const calculatePrice = () => {
     return calculateBasePrice(formValues);
   };
 
-  // Calculate the total with tip included
+  // Calculate the discount amount
+  const calculateDiscount = () => {
+    const basePrice = calculatePrice();
+    const discountPercentage = getDiscountPercentage(formValues.frequency);
+    return basePrice * discountPercentage;
+  };
+
+  // Calculate the total with tip and discount included
   const calculateTotal = () => {
     const basePrice = calculatePrice();
     const tipAmount = formValues.tipAmount || 0;
+    const discountAmount = calculateDiscount();
 
-    return basePrice + tipAmount;
+    return basePrice - discountAmount + tipAmount;
   };
 
   const estimatedPrice = calculatePrice();
+  const discountAmount = calculateDiscount();
   const totalWithTip = calculateTotal();
 
   // Navigation functions
@@ -480,7 +503,17 @@ export default function ClientForm({
               {formValues.frequency && (
                 <p className="text-caption flex justify-between">
                   Frequency:
-                  <span className="capitalize">{formValues.frequency}</span>
+                  <span className="capitalize">
+                    {formValues.frequency.toLowerCase()}
+                    <span className="text-xs text-success">
+                      {" "}
+                      (-
+                      {(
+                        getDiscountPercentage(formValues.frequency) * 100
+                      ).toFixed(0)}
+                      %)
+                    </span>
+                  </span>
                 </p>
               )}
               {formValues.bedrooms && (
@@ -535,10 +568,25 @@ export default function ClientForm({
             </div>
 
             <hr className="text-surface-500/10" />
-            <p className="text-caption flex justify-between">
-              Subtotal:{" "}
-              <span>${estimatedPrice.toString().padStart(2, "0")}</span>
-            </p>
+            <div className="space-y-2">
+              <p className="text-caption flex justify-between items-end">
+                Subtotal:
+                {discountAmount > 0 ? (
+                  <span className="flex flex-col items-end">
+                    <span className="line-through text-xs text-gray-500">
+                      ${estimatedPrice}
+                    </span>
+                    <span className="text-success-700 font-medium">
+                      ${(estimatedPrice - discountAmount).toFixed(2)}
+                    </span>
+                  </span>
+                ) : (
+                  <span className="font-medium">
+                    ${estimatedPrice.toFixed(2)}
+                  </span>
+                )}
+              </p>
+            </div>
             <hr className="text-surface-500/10" />
             <p className="text-caption font-medium flex justify-between">
               Total:{" "}

@@ -8,6 +8,7 @@ import { Building2, HomeIcon, Shield, Trees } from "lucide-react";
 import React from "react";
 import { OrderFormValues } from "../../schema";
 import Select from "@/components/ui/Select";
+import { frequencies } from "../../formData";
 
 const iconsObj: Record<string, React.ReactNode> = {
   "residential cleaning": <HomeIcon />,
@@ -15,13 +16,6 @@ const iconsObj: Record<string, React.ReactNode> = {
   "outdoor cleaning": <Trees />,
   "specialized services": <Shield />
 };
-
-const frequencies = [
-  { label: "One-time", value: "" },
-  { label: "Monthly (Save 10%)", value: "monthly" },
-  { label: "Bi-weekly (Save 15%)", value: "bi-weekly" },
-  { label: "Weekly (Save 10%)", value: "weekly" }
-];
 
 export default function ServiceTypeStep({
   services
