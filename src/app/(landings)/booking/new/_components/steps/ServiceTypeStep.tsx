@@ -17,6 +17,7 @@ const iconsObj: Record<string, React.ReactNode> = {
 };
 
 const frequencies = [
+  { label: "One-time", value: "" },
   { label: "Monthly (Save 10%)", value: "monthly" },
   { label: "Bi-weekly (Save 15%)", value: "bi-weekly" },
   { label: "Weekly (Save 10%)", value: "weekly" }
@@ -38,7 +39,7 @@ export default function ServiceTypeStep({
   const selectedFrequency = watch("frequency");
 
   const handleFrequencyChange = (option: { value: string; label: string }) => {
-    setValue("frequency", option.value, { shouldValidate: true });
+    setValue("frequency", option.value || null, { shouldValidate: true });
   };
 
   return (
@@ -141,7 +142,7 @@ export default function ServiceTypeStep({
             value={
               selectedFrequency
                 ? frequencies.find((i) => i.value === selectedFrequency)
-                : undefined
+                : frequencies[0]
             }
             onChange={handleFrequencyChange}
             buttonClassName="border-0 text-secondary-700/70"
