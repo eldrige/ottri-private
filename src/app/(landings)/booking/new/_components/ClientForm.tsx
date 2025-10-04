@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import StepsViewer from "./StepsViewer";
+import axios from "axios";
 
 // Step components
 import ServiceTypeStep from "./steps/ServiceTypeStep";
@@ -22,6 +23,8 @@ import { PreflightType } from "../types";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { UserData } from "@/lib/types";
+import AlertLineIcon from "@/components/icons/AlertLineIcon";
+import { X } from "lucide-react";
 
 export default function ClientForm({
   preflight,
@@ -74,7 +77,8 @@ export default function ClientForm({
     handleSubmit,
     trigger,
     formState: { errors },
-    setError
+    setError,
+    clearErrors
   } = methods;
   const processPaymentRef = useRef(() => Promise.resolve(""));
 
@@ -276,35 +280,77 @@ export default function ClientForm({
       paymentMethodId = result.toString();
     }
 
-    // Process the final form submission
+    // Process the final form submission using axios
     try {
-      const response = await fetch("/api/submit-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, paymentMethodId })
+      const response = await axios.post("/api/submit-order", {
+        ...data,
+        paymentMethodId
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        // Handle successful submission
-        // e.g., redirect to confirmation page
-        // window.location.href = `/booking/confirmation?orderId=${result.orderId}`;
-        router.push(`/booking/confirmation?orderId=${result.orderId}`);
-      } else {
-        // Handle error
-        // if (response.status === 409) {
-        //   setError("email")
-        // }
-        console.log(response.status);
-        setProcessing(false);
-        alert(result.error?.message || "An error occurred");
-      }
+      // If we get here, request was successful
+      router.push(`/booking/confirmation?orderId=${response.data.orderId}`);
     } catch (error) {
-      console.error("Error submitting form:", error);
       setProcessing(false);
-      alert("Failed to submit form. Please try again.");
+
+      // With axios, we can directly access the error response data
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.error.message ||
+          "An unexpected error occurred during booking";
+        console.log({ errorMessage });
+
+        // Handle specific error cases based on status code
+        if (error.response.status === 409) {
+          // Conflict error - likely email already exists
+          setError(errorMessage.includes("email") ? "email" : "phoneNumber", {
+            type: "server",
+            message: errorMessage
+          });
+        }
+        // Generic error
+        setError("root.serverError", {
+          type: "server",
+          message: errorMessage
+        });
+      } else {
+        // Handle network errors or other unexpected errors
+        console.error("Error submitting form:", error);
+        setError("root.serverError", {
+          type: "server",
+          message: "Network error. Please check your connection and try again."
+        });
+      }
     }
+  };
+
+  // A component to display root-level server errors
+  const ServerErrorMessage = () => {
+    const rootServerError = errors.root?.serverError;
+
+    if (!rootServerError) return null;
+
+    return (
+      <div
+        className="bg-red-50 border border-error text-error px-4 py-3 rounded-md mb-4"
+        role="alert"
+      >
+        <div className="flex gap-2 items-start">
+          <div className="py-1">
+            <AlertLineIcon className="size-6" />
+          </div>
+          <div>
+            <p className="font-bold">Error</p>
+            <p className="text-sm">{rootServerError.message}</p>
+          </div>
+          <button
+            className="ml-auto pl-3"
+            onClick={() => clearErrors("root.serverError")}
+          >
+            <X className="size-6 cursor-pointer" />
+          </button>
+        </div>
+      </div>
+    );
   };
 
   // Render the current step
@@ -340,6 +386,8 @@ export default function ClientForm({
     }
   };
 
+  console.log({ errors });
+
   return (
     <div className="mt-8 space-y-8 w-full">
       <h1 className="text-heading-3 lg:text-heading-2.5 text-center lg:text-start">
@@ -362,6 +410,8 @@ export default function ClientForm({
             {/* Current step content */}
             {renderCurrentStep()}
 
+            <ServerErrorMessage />
+
             <hr className="text-surface-500/10" />
 
             {/* Desktop step buttons */}
@@ -381,7 +431,7 @@ export default function ClientForm({
                 <Button
                   type="button"
                   size="xs"
-                  disabled={currStep >= 7}
+                  disabled={currStep >= 7 || currentStepHasErrors()}
                   onClick={goToNextStep}
                   className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
                     currentStepHasErrors()
@@ -393,11 +443,11 @@ export default function ClientForm({
                 </Button>
               ) : (
                 <Button
-                  disabled={processing}
-                  type="button" // Changed from "submit" to "button"
+                  disabled={processing || currentStepHasErrors()}
+                  type="button"
                   size="xs"
                   onClick={handleSubmit(onSubmit)} // Explicitly handle submission
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""}`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25`}
                 >
                   Complete Booking
                 </Button>
@@ -528,23 +578,19 @@ export default function ClientForm({
                 <Button
                   type="button"
                   size="xs"
-                  disabled={currStep >= 7}
+                  disabled={currStep >= 7 || currentStepHasErrors()}
                   onClick={goToNextStep}
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
-                    currentStepHasErrors()
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : ""
-                  }`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25`}
                 >
                   Next
                 </Button>
               ) : (
                 <Button
-                  disabled={processing}
-                  type="button" // Changed from "submit" to "button"
+                  disabled={processing || currentStepHasErrors()}
+                  type="button"
                   size="xs"
-                  onClick={handleSubmit(onSubmit)} // Explicitly handle submission
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""}`}
+                  onClick={handleSubmit(onSubmit)}
+                  className={`disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25`}
                 >
                   Complete Booking
                 </Button>
