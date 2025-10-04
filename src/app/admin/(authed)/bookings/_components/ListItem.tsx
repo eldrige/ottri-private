@@ -15,6 +15,7 @@ import {
 import EditIcon from "@/components/icons/EditIcon";
 import EditBooking from "./EditBooking";
 import AssignCleaner from "./AssignCleaner";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 interface StatusType {
   label: string;
@@ -37,6 +38,7 @@ export default function ListItem({
 
   const [editBooking, setEditBooking] = useState(false);
   const [assignCleaners, setAssignCleaners] = useState<Booking | null>(null);
+  const [confirmCancel, setConfirmCancel] = useState(false);
 
   const bookingName =
     booking.guest?.fullName ||
@@ -183,7 +185,7 @@ export default function ListItem({
                 size="2xs"
                 variant={"destructive"}
                 className="text-xs flex items-center justify-center gap-1 border-black/10"
-                onClick={() => mutateCancel({ bookingId: booking.id })}
+                onClick={() => setConfirmCancel(true)}
               >
                 <TrashIcon className="size-4" />
                 {isCancelling ? "Cancelling" : "Cancel"}
@@ -210,6 +212,17 @@ export default function ListItem({
         <AssignCleaner
           booking={booking}
           onClose={() => setAssignCleaners(null)}
+        />
+      )}
+      {confirmCancel && (
+        <ConfirmModal
+          accent="distructive"
+          title="Cancel Booking"
+          description={`Are you sure you want to cancel booking #${bookingNumber.toString().padStart(3, "0")}? This action cannot be undone.`}
+          onCancel={() => setConfirmCancel(false)}
+          onConfirm={() => mutateCancel({ bookingId: booking.id })}
+          loading={isCancelling}
+          open={confirmCancel}
         />
       )}
     </>
