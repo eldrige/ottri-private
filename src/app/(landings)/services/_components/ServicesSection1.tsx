@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import React from "react";
 
 export default function ServicesSection1() {
@@ -17,7 +18,9 @@ export default function ServicesSection1() {
           comprehensive cleaning solutions tailored to your specific
           requirements.
         </p>
-        <Button className="py-3 px-5 text-md">Book a cleaning now</Button>
+        <Link href="/booking/new">
+          <Button className="py-3 px-5 text-md">Book a cleaning now</Button>
+        </Link>
       </div>
     </section>
   );

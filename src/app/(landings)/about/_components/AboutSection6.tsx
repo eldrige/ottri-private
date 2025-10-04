@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 
 export default function AboutSection6() {
   return (
@@ -13,12 +14,16 @@ export default function AboutSection6() {
         </p>
 
         <div className="mt-4 flex justify-center gap-4 flex-wrap *:w-full *:sm:w-auto">
-          <Button variant="secondary" size="xs">
-            Book your first cleaning
-          </Button>
-          <Button variant="ghost" size="xs">
-            Explore our services
-          </Button>
+          <Link href="/booking/new">
+            <Button variant="secondary" size="xs">
+              Book your first cleaning
+            </Button>
+          </Link>
+          <Link href="/services">
+            <Button variant="ghost" size="xs">
+              Explore our services
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import React from "react";
 
 export default function OurTeamHero() {
@@ -18,16 +19,20 @@ export default function OurTeamHero() {
           professionals who make your home sparkle.
         </p>
         <div className="flex w-full md:w-fit flex-col *:text-nowrap *:flex-1 sm:flex-row gap-4">
-          <Button className="border-primary-700 border-2" size="xs">
-            Book a clenaing
-          </Button>
-          <Button
-            size="xs"
-            className="text-secondary-700 border-secondary-700"
-            variant="secondary-outline"
-          >
-            How we hire
-          </Button>
+          <Link href="/booking/new">
+            <Button className="border-primary-700 border-2" size="xs">
+              Book a cleaning
+            </Button>
+          </Link>
+          <Link href="#hiring-standards">
+            <Button
+              size="xs"
+              className="text-secondary-700 border-secondary-700"
+              variant="secondary-outline"
+            >
+              How we hire
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import RewardStars from "@/components/icons/RewardStars";
 import { Check, HomeIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function LandingSection8() {
   const [squareFootage, setSquareFootage] = useState(1500);
@@ -82,9 +83,11 @@ export default function LandingSection8() {
                   $140
                 </p>
               </div>
-              <Button size="xs" className="w-full mt-4">
-                Book this cleaning
-              </Button>
+              <Link href="/booking/new" className="w-full mt-4">
+                <Button size="xs" className="w-full">
+                  Book this cleaning
+                </Button>
+              </Link>
             </div>
 
             <p className="text-caption text-secondary-700/90 text-center lg:px-4">

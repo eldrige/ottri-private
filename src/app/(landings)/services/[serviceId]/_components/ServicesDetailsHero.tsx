@@ -102,9 +102,11 @@ function HeroLeftSide({
       </div>
       <hr className="text-black/20" />
       <div className="flex flex-col sm:flex-row gap-x-8 gap-y-4">
-        <Button className="border-primary-700 border-2" size="xs">
-          Book this service
-        </Button>
+        <Link href="/booking/new">
+          <Button className="border-primary-700 border-2" size="xs">
+            Book this service
+          </Button>
+        </Link>
         <Button size="xs" variant="secondary-outline">
           Get custom quote
         </Button>
