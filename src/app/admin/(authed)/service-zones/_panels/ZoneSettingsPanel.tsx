@@ -6,8 +6,8 @@ import Select from "@/components/ui/Select";
 
 export default function ZoneSettingsPanel() {
   return (
-    <div className="grid grid-cols-2 gap-6 p-6 mt-4">
-      <div className="p-6 border rounded-lg shadow border-black/10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6 md:p-6 mt-4">
+      <div className="p-4 md:p-6 border rounded-lg shadow border-black/10">
         <h3 className="text-lg font-medium">Global Zone Settings</h3>
         <div className="mt-8 space-y-6">
           {[
@@ -32,7 +32,7 @@ export default function ZoneSettingsPanel() {
               key={setting.title}
               className="flex items-center justify-between gap-1"
             >
-              <div className="space-y-2">
+              <div className="space-y-1 md:space-y-2">
                 <p className="font-medium">{setting.title}</p>
                 <p className="text-sm text-secondary-700/70">
                   {setting.subtitle}
@@ -48,11 +48,11 @@ export default function ZoneSettingsPanel() {
           ))}
         </div>
       </div>
-      <div className="p-6 border rounded-lg shadow border-black/10">
+      <div className="p-4 md:p-6 border rounded-lg shadow border-black/10">
         <h3 className="text-lg font-medium">Zone Management</h3>
         <div className="mt-8">
           <p className="font-medium">Add ZIP Code to Zone</p>
-          <div className="flex gap-2 mt-4">
+          <div className="flex flex-col md:flex-row gap-2 mt-4">
             <div className="flex-1">
               <Input
                 placeholder="Enter Zipcode"
