@@ -85,7 +85,6 @@ export default function AddressInput({
         const res = await axios.get(
           `https://api.geoapify.com/v1/geocode/autocomplete?text=${searchTerm}&filter=countrycode:us&apiKey=${apiKey}&format=json`
         );
-        console.log(res.data);
         const data = res.data as ApiResType;
         setApiResults(data.results);
       } catch (error) {

@@ -87,7 +87,6 @@ export const orderFormSchema = z
     // stripePaymentId: string
   })
   .superRefine((data, ctx) => {
-    console.log(data);
     if (!data.createAccount) return;
 
     if (!data.password) {

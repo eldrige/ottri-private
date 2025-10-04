@@ -87,8 +87,6 @@ export default function ClientForm({
   // Watch form values for summary display
   const formValues = watch();
 
-  console.log({ preflight, formValues });
-
   // Check if current step has validation errors
   const currentStepHasErrors = () => {
     switch (currStep) {
@@ -120,7 +118,6 @@ export default function ClientForm({
         // Tip step - no required fields by default
         return false;
       case 7:
-        console.log(errors);
         return (
           !!errors.fullName ||
           !!errors.phoneNumber ||
@@ -263,7 +260,6 @@ export default function ClientForm({
   // Navigation functions
   const goToNextStep = async () => {
     const isValid = await validateCurrentStep();
-    console.log(errors, formValues);
     if (isValid && currStep < 7) {
       setCurrStep((prev) => prev + 1);
     }
@@ -320,7 +316,6 @@ export default function ClientForm({
         const errorMessage =
           error.response.data?.error.message ||
           "An unexpected error occurred during booking";
-        console.log({ errorMessage });
 
         // Handle specific error cases based on status code
         if (error.response.status === 409) {
@@ -408,8 +403,6 @@ export default function ClientForm({
         return <ServiceTypeStep services={preflight.services} />;
     }
   };
-
-  console.log({ errors });
 
   return (
     <div className="mt-8 space-y-8 w-full">

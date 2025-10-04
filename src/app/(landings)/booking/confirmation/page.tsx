@@ -30,7 +30,6 @@ export default async function ConfirmationPage({
   );
 
   const bookingData = response.data as BookingType;
-  console.log(bookingData);
 
   const formattedDate = format(bookingData.timeSlot.date, "PP");
 
