@@ -42,6 +42,7 @@ export default function ClientForm({
     defaultValues: {
       serviceType: null,
       specificServiceType: null,
+      frequency: null,
       bedrooms: "",
       bathrooms: "",
       squareFootage: "",
