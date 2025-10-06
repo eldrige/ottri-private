@@ -58,7 +58,8 @@ export async function POST(request: Request) {
     const addOnsPrice = calculateAddOnsPrice(orderData);
     console.log(paymentIntent);
     const bodyObj = {
-      cleaningFrequency: orderData.frequency,
+      // TODO: get rid of empty string later
+      cleaningFrequency: orderData.frequency || "",
       servicesPrice: servicesPrice,
       addOnsPrice: addOnsPrice,
       tax: (servicesPrice + addOnsPrice) * 0.08,
