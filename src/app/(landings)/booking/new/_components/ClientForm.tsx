@@ -321,10 +321,17 @@ export default function ClientForm({
         // Handle specific error cases based on status code
         if (error.response.status === 409) {
           // Conflict error - likely email already exists
-          setError(errorMessage.includes("email") ? "email" : "phoneNumber", {
-            type: "server",
-            message: errorMessage
-          });
+          setError(
+            errorMessage.includes("email")
+              ? "email"
+              : errorMessage.includes("phone")
+                ? "phoneNumber"
+                : "timeWindow",
+            {
+              type: "server",
+              message: errorMessage
+            }
+          );
         }
         // Generic error
         setError("root.serverError", {
