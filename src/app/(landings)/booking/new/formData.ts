@@ -59,6 +59,12 @@ export const specificTypes = [
   }
 ];
 
+export const frequencies = [
+  { label: "Monthly (Save 10%)", value: "MONTHLY" },
+  { label: "Bi-weekly (Save 15%)", value: "BIWEEKLY" },
+  { label: "Weekly (Save 10%)", value: "WEEKLY" }
+];
+
 // Step 2
 
 export const bedroomOptions = [
