@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import React from "react";
 
 export default function HowWeWorkHero() {
@@ -16,7 +17,11 @@ export default function HowWeWorkHero() {
           Our streamlined process makes getting professional cleaning service as
           easy as ordering takeout. Here&apos;s exactly how it works.
         </p>
-        <Button className="py-3 px-5 text-md">Start your first booking</Button>
+        <Link href="/booking/new">
+          <Button className="py-3 px-5 text-md">
+            Start your first booking
+          </Button>
+        </Link>
       </div>
     </section>
   );

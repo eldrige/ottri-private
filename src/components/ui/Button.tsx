@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 // Define button variants using class-variance-authority
 const buttonVariants = cva(
-  "text-white rounded-lg font-normal hover:bg-transparent transition border border-transparent disabled:border-transparent cursor-pointer disabled:cursor-default disabled:bg-surface-500/20 disabled:text-white min-w-fit",
+  "text-white rounded-lg font-normal hover:bg-white transition border border-transparent disabled:border-transparent cursor-pointer bg-white disabled:cursor-default disabled:bg-surface-500/20 disabled:text-white min-w-fit",
   {
     variants: {
       variant: {

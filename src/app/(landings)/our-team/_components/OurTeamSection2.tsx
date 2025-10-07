@@ -3,7 +3,10 @@ import React from "react";
 
 export default function OurTeamSection2() {
   return (
-    <section className="py-8 px-6 my-8 md:my-24 bg-secondary-700 lg:py-24 flex flex-col gap-8">
+    <section
+      id="hiring-standards"
+      className="py-8 px-6 my-8 md:my-24 bg-secondary-700 lg:py-24 flex flex-col gap-8"
+    >
       <div className="text-center flex flex-col justify-center items-center space-y-4">
         <h2 className="text-heading-3 text-white md:text-heading-2 font-semibold">
           Our Hiring Standards

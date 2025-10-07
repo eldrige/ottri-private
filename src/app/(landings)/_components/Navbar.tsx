@@ -27,7 +27,9 @@ export default function Navbar() {
             <span>Ottri</span>
           </Link>
           <Nav className="hidden xl:flex">
-            <NavLink href="/">Home</NavLink>
+            <NavLink href="/" end>
+              Home
+            </NavLink>
             <NavLink href="/about">About</NavLink>
             <NavLink href="/services">Services</NavLink>
             <NavLink href="/how-we-work">How we work</NavLink>

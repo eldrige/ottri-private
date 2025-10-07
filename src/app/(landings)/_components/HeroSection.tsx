@@ -5,6 +5,7 @@ import { Shield } from "lucide-react";
 import figure1 from "@/assets/landing-hero-figure1.png";
 import figure1Mobile from "@/assets/landing-hero-figure1Mobile.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -39,7 +40,9 @@ export default function HeroSection() {
           </span>
         </div>
         <div className="flex flex-col sm:flex-row gap-x-8 gap-y-4">
-          <Button size="xs">Book a cleaning now</Button>
+          <Link href="/booking/new">
+            <Button size="xs">Book a cleaning now</Button>
+          </Link>
           <Button size="xs" variant="secondary-outline">
             Get a free quote
           </Button>

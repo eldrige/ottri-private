@@ -104,9 +104,11 @@ const CTASection = () => (
       Get your home professionally cleaned in just a few clicks.
     </p>
     <div className="flex flex-col gap-4">
-      <Button className="whitespace-nowrap border-primary-700" size="xs">
-        Book a cleaning now
-      </Button>
+      <Link href="/booking/new">
+        <Button className="whitespace-nowrap border-primary-700" size="xs">
+          Book a cleaning now
+        </Button>
+      </Link>
       <LiveChatButton />
     </div>
     <div className="flex flex-col items-center md:items-start gap-1">
