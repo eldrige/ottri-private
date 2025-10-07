@@ -68,7 +68,7 @@ interface TimeSlot {
   templateId: number;
 }
 
-interface ServiceType {
+export interface ServiceType {
   id: number;
   name: string;
   description: string;
@@ -151,18 +151,6 @@ interface ServiceAddOn {
   serviceId: number;
   createdAt: string;
   updatedAt: null | string;
-  deletedAt: null;
-}
-
-interface ServiceType {
-  id: number;
-  name: string;
-  description: string;
-  basePrice: number;
-  currency: string;
-  serviceId: number;
-  createdAt: string;
-  updatedAt: string;
   deletedAt: null;
 }
 
