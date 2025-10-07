@@ -24,12 +24,14 @@ export default async function ConfirmationPage({
     ? orderId.split("-")[1].slice(0, 9)
     : orderId.slice(0, 9);
 
-  const response = await axiosInstance.get(
-    // `http://172.22.11.156:3000/api/v1/bookings/${orderId.split("-")[1]}`
-    `bookings/${dispId}`
-  );
+  const [response, pdfRes] = await Promise.all([
+    axiosInstance.get(`bookings/${dispId}`),
+    axiosInstance.get(`bookings/${dispId}/document`)
+  ]);
 
   const bookingData = response.data as BookingType;
+
+  const pdfData = pdfRes.data;
 
   const formattedDate = format(bookingData.timeSlot.date, "PP");
 
@@ -147,14 +149,21 @@ export default async function ConfirmationPage({
                   <FileIcon className="size-6" />
                   Preview Email
                 </Button>
-                <Button
-                  className="flex gap-3 justify-center"
-                  size={"xs"}
-                  variant={"default-outline"}
+                <a
+                  href={pdfData.signedUrl}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <DownloadIcon className="size-6" />
-                  Download PDF
-                </Button>
+                  <Button
+                    className="flex gap-3 justify-center"
+                    size={"xs"}
+                    variant={"default-outline"}
+                  >
+                    <DownloadIcon className="size-6" />
+                    Download PDF
+                  </Button>
+                </a>
               </div>
             </div>
             <div className="mx-6 sm:mx-0 p-4 space-y-3 bg-surface-50 rounded-lg text-surface-500 text-xs">

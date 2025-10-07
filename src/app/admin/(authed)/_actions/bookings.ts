@@ -1,7 +1,7 @@
 "use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { serverRequest } from "@/lib/serverRequest";
-import { Booking } from "../../types";
+import { Booking, UpdateBookingPayload } from "../../types";
 // import { NextResponse } from "next/server";
 
 // export async function assignCleaner(bookingId: string, cleanerId: string) {
@@ -62,5 +62,19 @@ export async function completeBooking({ bookingId }: { bookingId: number }) {
   } catch (err: any) {
     console.log(err.response);
     throw err;
+  }
+}
+
+export async function updateBooking({
+  bookingId,
+  ...data
+}: UpdateBookingPayload) {
+  console.log({ bookingId });
+  try {
+    const booking = await serverRequest(`bookings/${bookingId}`, "PATCH", data);
+    return booking.data;
+  } catch (err: any) {
+    console.log(err.response);
+    throw err.response.data;
   }
 }
