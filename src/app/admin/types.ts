@@ -189,3 +189,24 @@ interface Stats {
   averageCompletionRate: number;
   averageRating: number;
 }
+
+// Service Areas
+
+export interface ServiceArea {
+  id: number;
+  popular: boolean;
+  isActive: boolean;
+  name: string;
+  nickName: string;
+  basePrice: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  services: unknown[];
+  location: SALocation;
+}
+
+interface SALocation {
+  type: string;
+  coordinates: number[][][];
+}
