@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { NextResponse } from "next/server";
 import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
@@ -57,7 +58,8 @@ export async function POST(request: Request) {
     const addOnsPrice = calculateAddOnsPrice(orderData);
     console.log(paymentIntent);
     const bodyObj = {
-      cleaningFrequency: orderData.frequency,
+      // TODO: get rid of empty string later
+      cleaningFrequency: orderData.frequency || "",
       servicesPrice: servicesPrice,
       addOnsPrice: addOnsPrice,
       tax: (servicesPrice + addOnsPrice) * 0.08,
@@ -127,7 +129,7 @@ export async function POST(request: Request) {
     }
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
     // Handle different types of errors
     let errorMessage = "An unknown error occurred.";
     let errorCode = 400;
@@ -135,9 +137,11 @@ export async function POST(request: Request) {
       // Card was declined
       errorMessage = error.message;
       errorCode = error.statusCode || 400;
-    } else if (error instanceof Error) {
+    } else {
       console.error("Error submitting order:", error);
-      errorMessage = "Order submission failed due to a server error.";
+
+      errorMessage = error.response.data.message;
+      errorCode = error.response.data.statusCode;
     }
 
     return NextResponse.json(

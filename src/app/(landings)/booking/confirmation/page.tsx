@@ -30,7 +30,6 @@ export default async function ConfirmationPage({
   ]);
 
   const bookingData = response.data as BookingType;
-  console.log(bookingData);
 
   const pdfData = pdfRes.data;
 

@@ -17,7 +17,6 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
   const selectedTimeWindow = watch("timeWindow");
 
   const handleDateChange = (date: Date | undefined) => {
-    console.log({ date });
     setValue("preferredDate", date || null, { shouldValidate: true });
 
     setValue("timeWindow", null);
@@ -48,7 +47,6 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
 
     return { unavailableDates, availableWeekdays };
   }, [timeSlots]);
-  console.log(processedData);
 
   const availableWindows = useMemo(() => {
     if (!selectedDate) return [];
@@ -58,7 +56,6 @@ export default function ScheduleStep({ timeSlots }: { timeSlots: TimeSlot[] }) {
         if (!i.weekDays.includes(dateDay)) return false;
 
         const slotCount = i.slots[selectedDate.toISOString().split("T")[0]];
-        console.log({ slotCount, i });
         return typeof slotCount !== "number" || slotCount > 0;
       })
       .sort((a, b) => a.startTime - b.startTime)
