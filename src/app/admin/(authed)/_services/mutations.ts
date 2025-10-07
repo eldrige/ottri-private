@@ -7,7 +7,8 @@ import {
   assignCleaner,
   cancelBooking,
   completeBooking,
-  startBooking
+  startBooking,
+  updateBooking
 } from "../_actions/bookings";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import {
@@ -33,6 +34,7 @@ export function useAssignCleanerMutation() {
   });
 }
 
+// Bookings
 export function useCancelBookingMutation() {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
@@ -60,6 +62,17 @@ export function useCompleteBookingMutation() {
   const searchParams = useSearchParams();
   return useMutation({
     mutationFn: completeBooking,
+    onSuccess: (data) => {
+      updateBookingHelper(searchParams, queryClient, data);
+    }
+  });
+}
+
+export function useUpdateBookingMutation() {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  return useMutation({
+    mutationFn: updateBooking,
     onSuccess: (data) => {
       updateBookingHelper(searchParams, queryClient, data);
     }

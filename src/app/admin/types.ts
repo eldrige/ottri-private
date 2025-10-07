@@ -46,6 +46,15 @@ export interface Booking {
   guest?: Omit<PersonalInformation, "stripeCustomerId" | "userId">;
 }
 
+export interface UpdateBookingPayload {
+  bookingId: number;
+  bedrooms?: string;
+  bathrooms?: string;
+  approximateSquareFootage?: string;
+  serviceType?: { serviceId: number };
+  guest?: { fullName: string };
+}
+
 interface TimeSlot {
   id: number;
   date: string;
