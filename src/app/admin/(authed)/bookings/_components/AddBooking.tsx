@@ -10,13 +10,14 @@ import Select from "@/components/ui/Select";
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useServicesQuery } from "../../_services/queries";
+import { useServicesQuery, useTimeSlotsQuery } from "../../_services/queries";
 import AddressInput, {
   AddressDetails
 } from "@/app/(landings)/booking/new/_components/AddressInput";
 import { Textarea } from "@/components/ui/Textarea";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import DateTimeSlotsFields from "@/components/common/DateTimeSlotsFIelds";
 
 // Frequency options based on the client form
 const frequencyOptions = [
@@ -46,6 +47,8 @@ const petOptions = [
 
 export default function AddBooking({ onClose }: { onClose: () => void }) {
   const { data: servicesOptions } = useServicesQuery();
+  const { data: timeSlots } = useTimeSlotsQuery();
+  console.log(timeSlots);
 
   const [newBookingData, setNewBookingData] = useState({
     // Client Info
@@ -76,20 +79,16 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     accessInstructions: "",
 
     // Scheduling
-    preferredDate: "",
+    preferredDate: null as Date | null,
     timeWindow: "",
 
     // Other
     addOns: [] as { id: number; name: string; price: number }[],
-    specialInstructions: "",
-
-    // Admin fields
-    internalNotes: ""
+    specialInstructions: ""
   });
   const [isPending, setIsPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [specificServices, setSpecificServices] = useState<any[]>([]);
-  const [timeSlots, setTimeSlots] = useState<any[]>([]);
 
   // Create a state to track if the portal container is ready
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
@@ -155,21 +154,6 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     }
   }, [servicesOptions, newBookingData.serviceType]);
 
-  // Fetch time slots when date changes
-  useEffect(() => {
-    if (newBookingData.preferredDate) {
-      // For now, we'll use hardcoded time slots
-      // In a real app, this would be an API call to get available times for the selected date
-      setTimeSlots([
-        { label: "8:00 AM - 10:00 AM", value: "1" },
-        { label: "10:00 AM - 12:00 PM", value: "2" },
-        { label: "12:00 PM - 2:00 PM", value: "3" },
-        { label: "2:00 PM - 4:00 PM", value: "4" },
-        { label: "4:00 PM - 6:00 PM", value: "5" }
-      ]);
-    }
-  }, [newBookingData.preferredDate]);
-
   if (!servicesOptions || !portalContainer) return null;
 
   const serviceTypeOptions = servicesOptions.map((i) => ({
@@ -200,6 +184,16 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       setField("state", details.state);
       setField("zipCode", details.postcode);
     }
+  };
+
+  const handleSelectedDate = (date: Date | null) => {
+    setField("preferredDate", date);
+
+    setField("timeWindow", null);
+  };
+
+  const handleSelectedTimeWindow = (value: string | null) => {
+    setField("timeWindow", value);
   };
 
   const validateForm = () => {
@@ -294,7 +288,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
         accessMethod: newBookingData.accessMethod,
         accessInstructions: newBookingData.accessInstructions,
 
-        preferredDate: new Date(newBookingData.preferredDate),
+        preferredDate: newBookingData.preferredDate,
         timeWindow: newBookingData.timeWindow,
 
         addOns: newBookingData.addOns,
@@ -318,7 +312,10 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
         setErrors((prev) => ({
           ...prev,
           form:
-            error.response?.data?.error?.message || "Failed to create booking"
+            error.response?.data?.error?.message || "Failed to create booking",
+          serviceAddress:
+            error.response?.data?.error?.message?.includes("area") &&
+            error.response.data.error.message
         }));
         toast.error(
           error.response?.data?.error?.message || "Failed to create booking"
@@ -372,12 +369,8 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   value={newBookingData.clientName}
                   onChange={(e) => setField("clientName", e.target.value)}
                   className={`w-full p-4 rounded-lg ${errors.clientName ? "border-red-500" : "bg-gray-50"}`}
+                  error={errors.clientName}
                 />
-                {errors.clientName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.clientName}
-                  </p>
-                )}
               </div>
               <div>
                 <label className="block mb-2 font-medium">
@@ -389,12 +382,8 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   value={newBookingData.clientEmail}
                   onChange={(e) => setField("clientEmail", e.target.value)}
                   className={`w-full p-4 rounded-lg ${errors.clientEmail ? "border-red-500" : "bg-gray-50"}`}
+                  error={errors.clientEmail}
                 />
-                {errors.clientEmail && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.clientEmail}
-                  </p>
-                )}
               </div>
               <div>
                 <label className="block mb-2 font-medium">
@@ -406,12 +395,8 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   value={newBookingData.clientPhone}
                   onChange={(e) => setField("clientPhone", e.target.value)}
                   className={`w-full p-4 rounded-lg ${errors.clientPhone ? "border-red-500" : "bg-gray-50"}`}
+                  error={errors.clientPhone}
                 />
-                {errors.clientPhone && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.clientPhone}
-                  </p>
-                )}
               </div>
             </div>
           </div>
@@ -432,13 +417,9 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                     setField("serviceType", value.value);
                     setField("specificServiceType", ""); // Reset specific type when main type changes
                   }}
-                  className={`w-full ${errors.serviceType ? "border-red-500" : ""}`}
+                  className={`w-full`}
+                  error={errors.serviceType}
                 />
-                {errors.serviceType && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.serviceType}
-                  </p>
-                )}
               </div>
 
               {specificServices.length > 0 && (
@@ -455,13 +436,9 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                     onChange={(value) =>
                       setField("specificServiceType", value.value)
                     }
-                    className={`w-full ${errors.specificServiceType ? "border-red-500" : ""}`}
+                    className={`w-full`}
+                    error={errors.specificServiceType}
                   />
-                  {errors.specificServiceType && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.specificServiceType}
-                    </p>
-                  )}
                 </div>
               )}
 
@@ -474,13 +451,9 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                     (i) => i.value === newBookingData.frequency
                   )}
                   onChange={(value) => setField("frequency", value.value)}
-                  className={`w-full ${errors.frequency ? "border-red-500" : ""}`}
+                  className={`w-full`}
+                  error={errors.frequency}
                 />
-                {errors.frequency && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.frequency}
-                  </p>
-                )}
               </div>
 
               <div>
@@ -492,11 +465,9 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                     (i) => i.value === newBookingData.bedrooms
                   )}
                   onChange={(value) => setField("bedrooms", value.value)}
-                  className={`w-full ${errors.bedrooms ? "border-red-500" : ""}`}
+                  className={`w-full`}
+                  error={errors.bedrooms}
                 />
-                {errors.bedrooms && (
-                  <p className="text-red-500 text-sm mt-1">{errors.bedrooms}</p>
-                )}
               </div>
 
               <div>
@@ -508,13 +479,9 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                     (i) => i.value === newBookingData.bathrooms
                   )}
                   onChange={(value) => setField("bathrooms", value.value)}
-                  className={`w-full ${errors.bathrooms ? "border-red-500" : ""}`}
+                  className={`w-full`}
+                  error={errors.bathrooms}
                 />
-                {errors.bathrooms && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.bathrooms}
-                  </p>
-                )}
               </div>
 
               <div>
@@ -543,11 +510,6 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                 }
                 error={errors.serviceAddress}
               />
-              {errors.serviceAddress && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.serviceAddress}
-                </p>
-              )}
             </div>
           </div>
 
@@ -605,69 +567,37 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   className="w-full"
                 />
               </div>
-
-              <div className="md:col-span-2">
-                <label className="block mb-2 font-medium">
-                  Access Instructions
-                </label>
-                <Textarea
-                  placeholder="Provide specific instructions for accessing the property..."
-                  value={newBookingData.accessInstructions}
-                  onChange={(e) =>
-                    setField("accessInstructions", e.target.value)
-                  }
-                  className="w-full p-4 rounded-lg bg-gray-50"
-                  rows={3}
-                />
-              </div>
+              {newBookingData.accessMethod !== "home" && (
+                <div className="md:col-span-2">
+                  <label className="block mb-2 font-medium">
+                    Access Instructions
+                  </label>
+                  <Textarea
+                    placeholder="Provide specific instructions for accessing the property..."
+                    value={newBookingData.accessInstructions}
+                    onChange={(e) =>
+                      setField("accessInstructions", e.target.value)
+                    }
+                    className="w-full p-4 rounded-lg bg-gray-50"
+                    rows={3}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
           {/* Scheduling Section */}
           <div className="mb-6">
             <h3 className="text-xl font-semibold mb-4">Scheduling</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              <div>
-                <label className="block mb-2 font-medium">
-                  Preferred Date *
-                </label>
-                <Input
-                  type="date"
-                  value={newBookingData.preferredDate}
-                  onChange={(e) => setField("preferredDate", e.target.value)}
-                  className={`w-full p-4 rounded-lg ${errors.preferredDate ? "border-red-500" : "bg-gray-50"}`}
-                />
-                {errors.preferredDate && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.preferredDate}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block mb-2 font-medium">Time Window *</label>
-                <Select
-                  placeholder="Select a time window"
-                  options={timeSlots}
-                  value={timeSlots.find(
-                    (i) => i.value === newBookingData.timeWindow
-                  )}
-                  onChange={(value) => setField("timeWindow", value.value)}
-                  className={`w-full ${errors.timeWindow ? "border-red-500" : ""}`}
-                  disabled={!newBookingData.preferredDate}
-                />
-                {errors.timeWindow && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.timeWindow}
-                  </p>
-                )}
-                {!newBookingData.preferredDate && (
-                  <p className="text-gray-500 text-sm mt-1">
-                    Select a date first
-                  </p>
-                )}
-              </div>
-            </div>
+            {timeSlots && (
+              <DateTimeSlotsFields
+                timeSlots={timeSlots}
+                selectedDate={newBookingData.preferredDate}
+                selectedTimeWindow={newBookingData.timeWindow}
+                handleSelectedDate={handleSelectedDate}
+                handleSelectedTimeWindow={handleSelectedTimeWindow}
+              />
+            )}
           </div>
 
           {/* Additional Information */}
@@ -686,19 +616,6 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   onChange={(e) =>
                     setField("specialInstructions", e.target.value)
                   }
-                  className="w-full p-4 rounded-lg bg-gray-50"
-                  rows={3}
-                />
-              </div>
-
-              <div>
-                <label className="block mb-2 font-medium">
-                  Internal Notes (Admin Only)
-                </label>
-                <Textarea
-                  placeholder="Add notes visible to admin staff only..."
-                  value={newBookingData.internalNotes}
-                  onChange={(e) => setField("internalNotes", e.target.value)}
                   className="w-full p-4 rounded-lg bg-gray-50"
                   rows={3}
                 />
