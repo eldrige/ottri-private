@@ -12,7 +12,11 @@ import { Input } from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { useServicesQuery, useTimeSlotsQuery } from "../../_services/queries";
+import {
+  useServiceAddOnsQuery,
+  useServicesQuery,
+  useTimeSlotsQuery
+} from "../../_services/queries";
 import AddressInput, {
   AddressDetails
 } from "@/app/(landings)/booking/new/_components/AddressInput";
@@ -22,6 +26,8 @@ import { toast } from "react-hot-toast";
 import DateTimeSlotsFields from "@/components/common/DateTimeSlotsFIelds";
 import { useAddBookingMutation } from "../../_services/mutations";
 import ModalWrapper from "@/components/common/ModalWrapper";
+import Checkbox from "@/components/ui/Checkbox";
+import { ServiceAddOn } from "@/app/(landings)/booking/new/types";
 
 const accessMethodOptions = accessOptions.map((i) => ({
   label: i.name,
@@ -32,8 +38,8 @@ const petOptions = petTypeOptions.map((i) => ({ label: i.name, value: i.id }));
 export default function AddBooking({ onClose }: { onClose: () => void }) {
   const { data: servicesOptions } = useServicesQuery();
   const { data: timeSlots } = useTimeSlotsQuery();
+  const { data: addOns } = useServiceAddOnsQuery();
   const { mutateAsync } = useAddBookingMutation();
-  console.log(timeSlots);
 
   const [newBookingData, setNewBookingData] = useState({
     // Client Info
@@ -44,7 +50,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     // Service Details
     serviceType: "",
     specificServiceType: "",
-    frequency: "ONCE", // Default to one-time service
+    frequency: "", // Default to one-time service
     bedrooms: "",
     bathrooms: "",
     squareFootage: "",
@@ -68,7 +74,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     timeWindow: "",
 
     // Other
-    addOns: [] as { id: number; name: string; price: number }[]
+    addOns: [] as ServiceAddOn[]
   });
   const [isPending, setIsPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -240,13 +246,9 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       };
 
       // Send data to the API
-      // await axios.post("/api/submit-order", formData);
       await mutateAsync({ formData });
 
       onClose();
-
-      // Refresh the bookings list if needed
-      // queryClient.invalidateQueries(['bookings']);
     } catch (error) {
       console.error("Failed to add booking:", error);
 
@@ -272,6 +274,32 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     } finally {
       setIsPending(false);
     }
+  };
+
+  // Add-on selection handling
+  const handleAddOnToggle = (addon: ServiceAddOn) => {
+    setNewBookingData((prev) => {
+      const existingAddOnIndex = prev.addOns.findIndex(
+        (item) => item.id === addon.id
+      );
+
+      if (existingAddOnIndex >= 0) {
+        // Remove the add-on if it's already selected
+        const updatedAddOns = [...prev.addOns];
+        updatedAddOns.splice(existingAddOnIndex, 1);
+        return { ...prev, addOns: updatedAddOns };
+      } else {
+        // Add the add-on
+        return {
+          ...prev,
+          addOns: [...prev.addOns, addon]
+        };
+      }
+    });
+  };
+
+  const isAddOnSelected = (addonId: number) => {
+    return newBookingData.addOns.some((item) => item.id === addonId);
   };
 
   return (
@@ -447,6 +475,43 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               />
             </div>
           </div>
+
+          {/* Add-ons Section */}
+          {addOns && addOns.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold mb-4">Add-on Services</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {addOns.map((addon) => (
+                  <div
+                    key={addon.id}
+                    className={`flex items-start gap-2 p-2 border rounded-md transition-colors ${
+                      isAddOnSelected(addon.id)
+                        ? "border-secondary-700/70 bg-secondary-50/30"
+                        : "border-gray-200 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Checkbox
+                      id={`addon-${addon.id}`}
+                      checked={isAddOnSelected(addon.id)}
+                      onChange={() => handleAddOnToggle(addon)}
+                      className="mt-0.5"
+                    />
+                    <div className="flex-1">
+                      <label
+                        htmlFor={`addon-${addon.id}`}
+                        className="text-sm font-medium text-gray-900 cursor-pointer capitalize"
+                      >
+                        {addon.name}
+                        <span className="ml-1 text-gray-600 text-xs">
+                          (${addon.price})
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Scheduling Section */}
           <div className="mb-6">
