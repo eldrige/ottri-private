@@ -89,7 +89,7 @@ export async function POST(request: Request) {
       approximateSquareFootage: orderData.squareFootage,
       stripePaymentIntentId: paymentIntent?.id || null,
       stripeCustomerId: customerId,
-      // TODO: add accessMethod
+      entryMethod: orderData.accessMethod,
       entryInstructions: orderData.accessInstructions || "",
       country: orderData.country || "US", // Default values for admin bookings
       state: orderData.state || "",

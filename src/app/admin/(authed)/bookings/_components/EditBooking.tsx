@@ -73,7 +73,7 @@ export default function EditBooking({
     // Additional Details
     petType: booking.pets,
     petInstructions: booking.petsInstructions,
-    accessMethod: "other", // TODO: add accessMethod later
+    accessMethod: booking.entryMethod || "other",
     accessInstructions: booking.entryInstructions,
 
     // Scheduling
@@ -240,8 +240,7 @@ export default function EditBooking({
 
         pets: newBookingData.petType,
         petsInstructions: newBookingData.petInstructions,
-        // TODO: add accessMethod later
-        // accessMethod: newBookingData.accessMethod,
+        entryMethod: newBookingData.accessMethod,
         entryInstructions: newBookingData.accessInstructions,
 
         // preferredDate: newBookingData.preferredDate,

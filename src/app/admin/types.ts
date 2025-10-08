@@ -48,6 +48,7 @@ export interface Booking {
     email: string;
   };
   addOns: ServiceAddOn[];
+  entryMethod: string;
 }
 
 interface TimeSlot {
