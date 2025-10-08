@@ -25,3 +25,38 @@ export async function updateProfile({
     console.error("Error updating user profile", error);
   }
 }
+
+export async function updateUserSettings({
+  userId,
+  bookingReminder,
+  currency,
+  language,
+  promotionalEmails,
+  shareMyLocation,
+  timezone,
+  twoFactorAuth
+}: {
+  userId: string;
+  bookingReminder: boolean;
+  currency: string;
+  language: string;
+  promotionalEmails: boolean;
+  shareMyLocation: boolean;
+  timezone: string;
+  twoFactorAuth: boolean;
+}) {
+  try {
+    const response = await serverRequest(`/users/${userId}/settings`, "PATCH", {
+      bookingReminder,
+      currency,
+      language,
+      promotionalEmails,
+      shareMyLocation,
+      timezone,
+      twoFactorAuth
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating user settings", error);
+  }
+}
