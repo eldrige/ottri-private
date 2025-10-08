@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
 import { useServicesQuery, useTimeSlotsQuery } from "../../_services/queries";
 import AddressInput, {
   AddressDetails
@@ -22,6 +21,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import DateTimeSlotsFields from "@/components/common/DateTimeSlotsFIelds";
 import { useAddBookingMutation } from "../../_services/mutations";
+import ModalWrapper from "@/components/common/ModalWrapper";
 
 const accessMethodOptions = accessOptions.map((i) => ({
   label: i.name,
@@ -74,48 +74,6 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [specificServices, setSpecificServices] = useState<any[]>([]);
 
-  // Create a state to track if the portal container is ready
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
-    null
-  );
-
-  // Set up the portal container on mount
-  useEffect(() => {
-    // Find existing portal container or create a new one
-    let container = document.getElementById("booking-edit-portal");
-    if (!container) {
-      container = document.createElement("div");
-      container.id = "booking-edit-portal";
-      document.body.appendChild(container);
-    }
-    setPortalContainer(container);
-
-    // Cleanup function to remove the portal container when unmounted
-    return () => {
-      if (
-        container &&
-        container.parentElement &&
-        !container.childElementCount
-      ) {
-        document.body.removeChild(container);
-      }
-    };
-  }, []);
-
-  // Block scrolling while the modal is open
-  useEffect(() => {
-    // Store the original overflow style
-    const originalOverflow = document.body.style.overflow;
-
-    // Prevent scrolling
-    document.body.style.overflow = "hidden";
-
-    // Re-enable scrolling on cleanup
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-
   // Update specific service types when a service type is selected
   useEffect(() => {
     if (servicesOptions && newBookingData.serviceType) {
@@ -138,7 +96,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     }
   }, [servicesOptions, newBookingData.serviceType]);
 
-  if (!servicesOptions || !portalContainer) return null;
+  if (!servicesOptions) return null;
 
   const serviceTypeOptions = servicesOptions.map((i) => ({
     label: i.name.replace(/(?<=^| )\w/g, (i) => i.toUpperCase()),
@@ -316,15 +274,8 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     }
   };
 
-  // Content to render in the portal
-  const modalContent = (
-    <div
-      className="fixed inset-0 bg-black/30 text-secondary-700 flex items-center justify-center z-50 p-4"
-      onClick={(e) => {
-        // Close modal when clicking on the backdrop
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+  return (
+    <ModalWrapper onClose={onClose}>
       <div className="border border-black/10 text-secondary-700 rounded-lg p-8 w-full max-w-2xl bg-white max-h-[90vh] overflow-auto">
         <div className="flex justify-between items-center mb-6">
           <p className="text-heading-5 font-bold text-3xl">Add Booking</p>
@@ -612,8 +563,6 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
           </div>
         </form>
       </div>
-    </div>
+    </ModalWrapper>
   );
-
-  return createPortal(modalContent, portalContainer);
 }

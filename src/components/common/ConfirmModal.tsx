@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import ModalWrapper from "./ModalWrapper";
 
 type ConfirmModalProps = {
   open: boolean;
@@ -25,22 +24,10 @@ export default function ConfirmModal({
   loading = false,
   accent = "primary"
 }: ConfirmModalProps) {
-  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
+  if (!open) return null;
 
-  useEffect(() => {
-    let root = document.getElementById("modal-root");
-    if (!root) {
-      root = document.createElement("div");
-      root.id = "modal-root";
-      document.body.appendChild(root);
-    }
-    setModalRoot(root);
-  }, []);
-
-  if (!open || !modalRoot) return null;
-
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 bg-opacity-40">
+  return (
+    <ModalWrapper onClose={onCancel}>
       <div className="text-secondary-700 bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <h2 className="text-lg font-semibold mb-2">{title}</h2>
         {description && (
@@ -69,7 +56,6 @@ export default function ConfirmModal({
           </button>
         </div>
       </div>
-    </div>,
-    modalRoot
+    </ModalWrapper>
   );
 }
