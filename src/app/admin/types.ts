@@ -1,4 +1,5 @@
 import { UserData } from "@/lib/types";
+import { ServiceAddOn } from "../(landings)/booking/new/types";
 
 export interface BookingsResponse {
   limit: number;
@@ -43,16 +44,10 @@ export interface Booking {
     type: string;
     coordinates: number[];
   };
-  guest?: Omit<PersonalInformation, "stripeCustomerId" | "userId">;
-}
-
-export interface UpdateBookingPayload {
-  bookingId: number;
-  bedrooms?: string;
-  bathrooms?: string;
-  approximateSquareFootage?: string;
-  serviceType?: { serviceId: number };
-  guest?: { fullName: string };
+  guest?: Omit<PersonalInformation, "stripeCustomerId" | "userId"> & {
+    email: string;
+  };
+  addOns: ServiceAddOn[];
 }
 
 interface TimeSlot {
@@ -140,18 +135,6 @@ interface PricingDetail {
   currency: string;
   duration: string;
   serviceId: number;
-}
-
-interface ServiceAddOn {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  type: string;
-  serviceId: number;
-  createdAt: string;
-  updatedAt: null | string;
-  deletedAt: null;
 }
 
 // Cleaner Type

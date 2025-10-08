@@ -1,7 +1,8 @@
 "use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { serverRequest } from "@/lib/serverRequest";
-import { Booking, UpdateBookingPayload } from "../../types";
+import { Booking } from "../../types";
+import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
 // import { NextResponse } from "next/server";
 
 // export async function assignCleaner(bookingId: string, cleanerId: string) {
@@ -68,7 +69,7 @@ export async function completeBooking({ bookingId }: { bookingId: number }) {
 export async function updateBooking({
   bookingId,
   ...data
-}: UpdateBookingPayload) {
+}: { bookingId: number } & Partial<OrderFormValues>) {
   console.log({ bookingId });
   try {
     const booking = await serverRequest(`bookings/${bookingId}`, "PATCH", data);
