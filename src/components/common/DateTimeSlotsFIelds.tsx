@@ -12,6 +12,7 @@ interface DateTimeSlotsProps {
   handleSelectedTimeWindow: (date: string | null) => void;
   errorSelectedDate?: string;
   errorSelectedTimeWindow?: string;
+  accent?: "primary" | "secondary";
 }
 
 export default function DateTimeSlotsFields({
@@ -21,7 +22,8 @@ export default function DateTimeSlotsFields({
   handleSelectedDate,
   handleSelectedTimeWindow,
   errorSelectedDate,
-  errorSelectedTimeWindow
+  errorSelectedTimeWindow,
+  accent = "primary"
 }: DateTimeSlotsProps) {
   const handleDateChange = (date: Date | undefined) => {
     // setValue("preferredDate", date || null, { shouldValidate: true });
@@ -87,6 +89,7 @@ export default function DateTimeSlotsFields({
           value={selectedDate}
           onChange={handleDateChange}
           error={errorSelectedDate}
+          accent={accent}
         />
       </div>
       <div>
@@ -103,6 +106,7 @@ export default function DateTimeSlotsFields({
           onChange={handleTimeWindowChange}
           disabled={!selectedDate}
           error={errorSelectedTimeWindow}
+          accent={accent}
         />
       </div>
     </div>
