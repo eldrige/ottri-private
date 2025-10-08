@@ -46,6 +46,15 @@ export interface Booking {
   guest?: Omit<PersonalInformation, "stripeCustomerId" | "userId">;
 }
 
+export interface UpdateBookingPayload {
+  bookingId: number;
+  bedrooms?: string;
+  bathrooms?: string;
+  approximateSquareFootage?: string;
+  serviceType?: { serviceId: number };
+  guest?: { fullName: string };
+}
+
 interface TimeSlot {
   id: number;
   date: string;
@@ -188,4 +197,25 @@ interface Stats {
   completedBookings: number;
   averageCompletionRate: number;
   averageRating: number;
+}
+
+// Service Areas
+
+export interface ServiceArea {
+  id: number;
+  popular: boolean;
+  isActive: boolean;
+  name: string;
+  nickName: string;
+  basePrice: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  services: unknown[];
+  location: SALocation;
+}
+
+interface SALocation {
+  type: string;
+  coordinates: number[][][];
 }

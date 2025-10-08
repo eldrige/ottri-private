@@ -57,7 +57,7 @@ function HeroTop({ name }: Pick<ServicesDetailsHeroProps, "name">) {
       >
         <ArrowLeft size={24} /> Back to all services
       </Link>
-      <h1 className="text-heading-3 text-primary-700 md:text-heading-1 text-center md:text-start">
+      <h1 className="text-heading-3 text-primary-700 md:text-heading-1 text-center md:text-start capitalize">
         {name}
       </h1>
     </>
@@ -102,9 +102,11 @@ function HeroLeftSide({
       </div>
       <hr className="text-black/20" />
       <div className="flex flex-col sm:flex-row gap-x-8 gap-y-4">
-        <Button className="border-primary-700 border-2" size="xs">
-          Book this service
-        </Button>
+        <Link href="/booking/new">
+          <Button className="border-primary-700 border-2" size="xs">
+            Book this service
+          </Button>
+        </Link>
         <Button size="xs" variant="secondary-outline">
           Get custom quote
         </Button>
@@ -124,6 +126,8 @@ function HeroRightSide({
           className="rounded-lg aspect-[2/1] w-full object-cover"
           src={coverSrc}
           alt={`${title}'s cover`}
+          width={680}
+          height={445}
         />
       </div>
       <div className="grid grid-cols-3 *:flex-1 w-full flex-2 gap-x-2 self-end ">
@@ -133,6 +137,8 @@ function HeroRightSide({
             className="rounded-lg aspect-[2/1] w-full object-cover"
             src={image}
             alt={`${title}'s cover`}
+            width={680}
+            height={445}
           />
         ))}
       </div>

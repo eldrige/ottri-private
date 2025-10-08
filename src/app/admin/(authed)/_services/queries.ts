@@ -22,6 +22,8 @@ export function useServicesQuery() {
       >
   });
 }
+
+// Cleaners
 export function useCleanersQuery() {
   return useQuery({
     queryKey: ["cleaners"],
@@ -29,5 +31,13 @@ export function useCleanersQuery() {
       axiosInstance.get(`cleaners?limit=50`).then((i) => i.data) as Promise<
         Cleaner[]
       >
+  });
+}
+
+// Service Areas
+export function useServiceAreasQuery() {
+  return useQuery({
+    queryKey: ["service-areas"],
+    queryFn: () => axiosInstance.get("service-areas").then((i) => i.data)
   });
 }

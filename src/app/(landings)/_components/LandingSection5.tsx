@@ -237,13 +237,15 @@ function ServiceCard({
             {duration} Hours
           </p>
         </div>
-        <Button
-          size="xs"
-          variant={mostPopular ? "default" : "default-outline"}
-          className="w-full px-2"
-        >
-          {buttonText}
-        </Button>
+        <Link href="/booking/new">
+          <Button
+            size="xs"
+            variant={mostPopular ? "default" : "default-outline"}
+            className="w-full px-2"
+          >
+            {buttonText}
+          </Button>
+        </Link>
       </div>
     </div>
   );
