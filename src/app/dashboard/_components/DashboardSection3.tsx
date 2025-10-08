@@ -69,10 +69,9 @@ export default function DashboardSection3() {
               <Button
                 onClick={() => setRecentPage((old) => Math.max(old - 1, 0))}
                 disabled={recentPage === 0}
-                variant="outline"
-                size="xs"
+                size="2xs"
               >
-                Previous
+                <ChevronRight className="size-4" />
               </Button>
               <span className="text-sm text-secondary-700">
                 Page {recentPage + 1} of {recentTotalPages}
@@ -80,10 +79,9 @@ export default function DashboardSection3() {
               <Button
                 onClick={() => setRecentPage((old) => old + 1)}
                 disabled={recentPage >= recentTotalPages - 1}
-                variant="outline"
-                size="xs"
+                size="2xs"
               >
-                Next
+                <ChevronRight className="size-4" />
               </Button>
             </div>
           )}
