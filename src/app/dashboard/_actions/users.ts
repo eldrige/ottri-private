@@ -37,13 +37,13 @@ export async function updateUserSettings({
   twoFactorAuth
 }: {
   userId: string;
-  bookingReminder: boolean;
-  currency: string;
-  language: string;
-  promotionalEmails: boolean;
-  shareMyLocation: boolean;
-  timezone: string;
-  twoFactorAuth: boolean;
+  bookingReminder?: boolean;
+  currency?: string;
+  language?: string;
+  promotionalEmails?: boolean;
+  shareMyLocation?: boolean;
+  timezone?: string;
+  twoFactorAuth?: boolean;
 }) {
   try {
     const response = await serverRequest(`/users/${userId}/settings`, "PATCH", {

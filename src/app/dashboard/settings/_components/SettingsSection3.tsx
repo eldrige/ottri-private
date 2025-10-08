@@ -3,7 +3,10 @@ import { Button } from "@/components/ui/Button";
 import { GlobeIcon, IdCard, LogOut } from "lucide-react";
 import React, { useState } from "react";
 import { useGetUserProfile } from "../../_services/queries";
-import { useLogoutMutation } from "../../_services/mutations";
+import {
+  useLogoutMutation,
+  useUpdateSettingMutation
+} from "../../_services/mutations";
 import Select from "@/components/ui/Select";
 import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
 
@@ -18,6 +21,9 @@ export default function SettingsSection3() {
 
 function LanguageSettings() {
   const { data: userData } = useGetUserProfile();
+  const { mutateAsync: updateSettings, isPending: isUpdating } =
+    useUpdateSettingMutation();
+
   const [currentLanguage, setCurrentLanguage] = useState<string>(
     userData?.settings.language || "en"
   );
@@ -27,6 +33,9 @@ function LanguageSettings() {
   const [currentCurrency, setCurrentCurrency] = useState<string>(
     userData?.settings.currency || "USD"
   );
+
+  // toggles - update immediately when toggled
+
   const languageOptions = [
     { value: "en", label: "English" },
     { value: "es", label: "Spanish" },
@@ -45,6 +54,21 @@ function LanguageSettings() {
   ];
   if (!userData) return null;
   const settings = userData?.settings;
+
+  const handleSave = async () => {
+    try {
+      await updateSettings({
+        language: currentLanguage,
+        timezone: currentTimeZone,
+        currency: currentCurrency,
+        userId: String(userData.id)
+      });
+      // server will refetch user profile via onSuccess in mutation
+    } catch (err) {
+      console.error("Save settings failed", err);
+    }
+  };
+
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
       <div>
@@ -98,7 +122,7 @@ function LanguageSettings() {
                 onChange={(option) => {
                   setCurrentTimeZone(option.value);
                 }}
-                placeholder="Select Language"
+                placeholder="Select Timezone"
                 buttonClassName="border-none w-full gap-2"
                 accent="secondary"
               />
@@ -126,6 +150,12 @@ function LanguageSettings() {
               />
             </div>
           </label>
+
+          <div className="w-full flex justify-end">
+            <Button onClick={handleSave} disabled={isUpdating} size="xs">
+              Save settings
+            </Button>
+          </div>
         </div>
       </div>
     </div>

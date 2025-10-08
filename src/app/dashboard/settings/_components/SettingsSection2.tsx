@@ -4,6 +4,7 @@ import ToggleSwitchOn from "@/components/icons/ToggleSwitchOn";
 import { BellIcon, Shield } from "lucide-react";
 import React, { useState } from "react";
 import { useGetUserProfile } from "../../_services/queries";
+import { useUpdateSettingMutation } from "../../_services/mutations";
 
 export default function SettingsSection2() {
   const { data: userData } = useGetUserProfile();
@@ -13,29 +14,59 @@ export default function SettingsSection2() {
       <NotificationSettings
         bookingReminders={userData.settings.bookingReminder}
         promotionalEmails={userData.settings.promotionalEmails}
+        userId={String(userData.id)}
       />
       <PrivacySecuritySettings
         twoFactorAuth={userData.settings.twoFactorAuth}
         locationSharing={userData.settings.shareMyLocation}
+        userId={String(userData.id)}
       />
     </section>
   );
 }
-
 function NotificationSettings({
   bookingReminders,
-  promotionalEmails
+  promotionalEmails,
+  userId
 }: {
   bookingReminders: boolean;
   promotionalEmails: boolean;
+  userId: string;
 }) {
+  const { mutateAsync: updateSettings, isPending: isUpdating } =
+    useUpdateSettingMutation();
+
   const [toggle, setToggle] = useState<{
     bookingReminders: boolean;
     promotionalEmails: boolean;
   }>({
-    bookingReminders,
-    promotionalEmails
+    bookingReminders: bookingReminders ?? false,
+    promotionalEmails: promotionalEmails ?? false
   });
+
+  const togglePromotionalEmails = async (value: boolean) => {
+    setToggle((prev) => ({ ...prev, promotionalEmails: value }));
+    try {
+      await updateSettings({
+        promotionalEmails: value,
+        userId: String(userId)
+      });
+    } catch (err) {
+      console.error("Update email notification failed", err);
+    }
+  };
+
+  const toggleBookingReminders = async (value: boolean) => {
+    setToggle((prev) => ({ ...prev, bookingReminders: value }));
+    try {
+      await updateSettings({
+        bookingReminder: value,
+        userId: String(userId)
+      });
+    } catch (err) {
+      console.error("Update sms notification failed", err);
+    }
+  };
 
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
@@ -62,12 +93,10 @@ function NotificationSettings({
           </div>
           <button
             className="cursor-pointer transform transition-all ease-in-out duration-200"
-            onClick={() =>
-              setToggle({
-                ...toggle,
-                bookingReminders: !toggle.bookingReminders
-              })
-            }
+            onClick={() => {
+              toggleBookingReminders(!toggle.bookingReminders);
+            }}
+            disabled={isUpdating}
           >
             {toggle.bookingReminders ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
           </button>
@@ -83,12 +112,10 @@ function NotificationSettings({
           </div>
           <button
             className="cursor-pointer transform transition-all ease-in-out duration-200"
-            onClick={() =>
-              setToggle({
-                ...toggle,
-                promotionalEmails: !toggle.promotionalEmails
-              })
-            }
+            onClick={() => {
+              togglePromotionalEmails(!toggle.promotionalEmails);
+            }}
+            disabled={isUpdating}
           >
             {toggle.promotionalEmails ? (
               <ToggleSwitchOn />
@@ -104,15 +131,44 @@ function NotificationSettings({
 
 function PrivacySecuritySettings({
   twoFactorAuth,
-  locationSharing
+  locationSharing,
+  userId
 }: {
   twoFactorAuth: boolean;
   locationSharing: boolean;
+  userId: string;
 }) {
   const [toggle, setToggle] = useState({
     twoFactorAuth,
     locationSharing
   });
+
+  const { mutateAsync: updateSettings, isPending: isUpdating } =
+    useUpdateSettingMutation();
+  const toggleTwoFactorAuth = async (value: boolean) => {
+    setToggle((prev) => ({ ...prev, twoFactorAuth: value }));
+    try {
+      await updateSettings({
+        twoFactorAuth: value,
+        userId
+      });
+    } catch (err) {
+      console.error("Update two-factor authentication failed", err);
+    }
+  };
+
+  const toggleLocationSharing = async (value: boolean) => {
+    setToggle((prev) => ({ ...prev, locationSharing: value }));
+    try {
+      await updateSettings({
+        shareMyLocation: value,
+        userId
+      });
+    } catch (err) {
+      console.error("Update location sharing failed", err);
+    }
+  };
+
   return (
     <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col text-lg font-semibold">
       <div>
@@ -138,12 +194,8 @@ function PrivacySecuritySettings({
           </div>
           <button
             className="cursor-pointer transform transition-all ease-in-out duration-200"
-            onClick={() =>
-              setToggle({
-                ...toggle,
-                twoFactorAuth: !toggle.twoFactorAuth
-              })
-            }
+            disabled={isUpdating}
+            onClick={() => toggleTwoFactorAuth(!toggle.twoFactorAuth)}
           >
             {toggle.twoFactorAuth ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
           </button>
@@ -159,12 +211,8 @@ function PrivacySecuritySettings({
           </div>
           <button
             className="cursor-pointer transform transition-all ease-in-out duration-200"
-            onClick={() =>
-              setToggle({
-                ...toggle,
-                locationSharing: !toggle.locationSharing
-              })
-            }
+            disabled={isUpdating}
+            onClick={() => toggleLocationSharing(!toggle.locationSharing)}
           >
             {toggle.locationSharing ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
           </button>
