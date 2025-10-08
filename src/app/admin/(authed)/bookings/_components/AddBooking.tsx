@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  accessOptions,
   bathroomOptions,
   bedroomOptions,
+  frequencies,
+  petTypeOptions,
   squareFootageOptions
 } from "@/app/(landings)/booking/new/formData";
 import { Button } from "@/components/ui/Button";
@@ -18,36 +21,18 @@ import { Textarea } from "@/components/ui/Textarea";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import DateTimeSlotsFields from "@/components/common/DateTimeSlotsFIelds";
+import { useAddBookingMutation } from "../../_services/mutations";
 
-// Frequency options based on the client form
-const frequencyOptions = [
-  { label: "One-time", value: "ONCE" },
-  { label: "Weekly", value: "WEEKLY" },
-  { label: "Biweekly", value: "BIWEEKLY" },
-  { label: "Monthly", value: "MONTHLY" }
-];
-
-// Access method options
-const accessMethodOptions = [
-  { label: "Client will be home", value: "home" },
-  { label: "Key provided", value: "key" },
-  { label: "Smart lock", value: "smartlock" },
-  { label: "Concierge", value: "concierge" },
-  { label: "Other", value: "other" }
-];
-
-// Pet options
-const petOptions = [
-  { label: "No pets", value: "no-pets" },
-  { label: "Dog(s)", value: "dogs" },
-  { label: "Cat(s)", value: "cats" },
-  { label: "Both dogs and cats", value: "both" },
-  { label: "Other pets", value: "other" }
-];
+const accessMethodOptions = accessOptions.map((i) => ({
+  label: i.name,
+  value: i.id
+}));
+const petOptions = petTypeOptions.map((i) => ({ label: i.name, value: i.id }));
 
 export default function AddBooking({ onClose }: { onClose: () => void }) {
   const { data: servicesOptions } = useServicesQuery();
   const { data: timeSlots } = useTimeSlotsQuery();
+  const { mutateAsync } = useAddBookingMutation();
   console.log(timeSlots);
 
   const [newBookingData, setNewBookingData] = useState({
@@ -83,8 +68,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     timeWindow: "",
 
     // Other
-    addOns: [] as { id: number; name: string; price: number }[],
-    specialInstructions: ""
+    addOns: [] as { id: number; name: string; price: number }[]
   });
   const [isPending, setIsPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -292,14 +276,14 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
         timeWindow: newBookingData.timeWindow,
 
         addOns: newBookingData.addOns,
-        specialInstructions: newBookingData.specialInstructions,
 
         // Flag to identify this is an admin booking
         isAdminBooking: true
       };
 
       // Send data to the API
-      await axios.post("/api/submit-order", formData);
+      // await axios.post("/api/submit-order", formData);
+      await mutateAsync({ formData });
 
       onClose();
 
@@ -348,12 +332,6 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
             <X className="size-8 text-secondary-700/70" />
           </button>
         </div>
-
-        {errors.form && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-md text-red-600">
-            {errors.form}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit}>
           {/* Client Information Section */}
@@ -408,6 +386,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               <div>
                 <label className="block mb-2 font-medium">Service Type *</label>
                 <Select
+                  accent="secondary"
                   placeholder="Service Type"
                   options={serviceTypeOptions}
                   value={serviceTypeOptions.find(
@@ -428,6 +407,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                     Specific Service Type *
                   </label>
                   <Select
+                    accent="secondary"
                     placeholder="Select specific type"
                     options={specificServices}
                     value={specificServices.find(
@@ -445,9 +425,10 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               <div>
                 <label className="block mb-2 font-medium">Frequency *</label>
                 <Select
+                  accent="secondary"
                   placeholder="Select frequency"
-                  options={frequencyOptions}
-                  value={frequencyOptions.find(
+                  options={frequencies}
+                  value={frequencies.find(
                     (i) => i.value === newBookingData.frequency
                   )}
                   onChange={(value) => setField("frequency", value.value)}
@@ -459,6 +440,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               <div>
                 <label className="block mb-2 font-medium">Bedrooms *</label>
                 <Select
+                  accent="secondary"
                   placeholder="Select bedrooms"
                   options={bedroomOptions}
                   value={bedroomOptions.find(
@@ -473,6 +455,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               <div>
                 <label className="block mb-2 font-medium">Bathrooms *</label>
                 <Select
+                  accent="secondary"
                   placeholder="Select bathrooms"
                   options={bathroomOptions}
                   value={bathroomOptions.find(
@@ -487,6 +470,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               <div>
                 <label className="block mb-2 font-medium">Square Footage</label>
                 <Select
+                  accent="secondary"
                   placeholder="Select square footage"
                   options={squareFootageOptions}
                   value={squareFootageOptions.find(
@@ -513,6 +497,21 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
+          {/* Scheduling Section */}
+          <div className="mb-6">
+            <h3 className="text-xl font-semibold mb-4">Scheduling</h3>
+            {timeSlots && (
+              <DateTimeSlotsFields
+                accent="secondary"
+                timeSlots={timeSlots}
+                selectedDate={newBookingData.preferredDate}
+                selectedTimeWindow={newBookingData.timeWindow}
+                handleSelectedDate={handleSelectedDate}
+                handleSelectedTimeWindow={handleSelectedTimeWindow}
+              />
+            )}
+          </div>
+
           {/* Pet Information Section */}
           <div className="mb-6">
             <h3 className="text-xl font-semibold mb-4">Pet Information</h3>
@@ -522,6 +521,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   Pets at Property
                 </label>
                 <Select
+                  accent="secondary"
                   placeholder="Select pet type"
                   options={petOptions}
                   value={petOptions.find(
@@ -558,6 +558,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               <div>
                 <label className="block mb-2 font-medium">Access Method</label>
                 <Select
+                  accent="secondary"
                   placeholder="How will cleaners access the property?"
                   options={accessMethodOptions}
                   value={accessMethodOptions.find(
@@ -586,43 +587,11 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          {/* Scheduling Section */}
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-4">Scheduling</h3>
-            {timeSlots && (
-              <DateTimeSlotsFields
-                timeSlots={timeSlots}
-                selectedDate={newBookingData.preferredDate}
-                selectedTimeWindow={newBookingData.timeWindow}
-                handleSelectedDate={handleSelectedDate}
-                handleSelectedTimeWindow={handleSelectedTimeWindow}
-              />
-            )}
-          </div>
-
-          {/* Additional Information */}
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-4">
-              Additional Information
-            </h3>
-            <div className="grid grid-cols-1 gap-y-4">
-              <div>
-                <label className="block mb-2 font-medium">
-                  Special Instructions
-                </label>
-                <Textarea
-                  placeholder="Any special requests or instructions for the service..."
-                  value={newBookingData.specialInstructions}
-                  onChange={(e) =>
-                    setField("specialInstructions", e.target.value)
-                  }
-                  className="w-full p-4 rounded-lg bg-gray-50"
-                  rows={3}
-                />
-              </div>
+          {errors.form && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-md text-red-600">
+              {errors.form}
             </div>
-          </div>
-
+          )}
           <div className="mt-10 grid grid-cols-2 gap-6">
             <Button
               type="button"

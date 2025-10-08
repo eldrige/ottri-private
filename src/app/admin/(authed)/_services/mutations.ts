@@ -21,6 +21,7 @@ import {
   deleteServiceAreas,
   updateServiceAreas
 } from "../_actions/ServiceAreas";
+import axios from "axios";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -75,6 +76,18 @@ export function useUpdateBookingMutation() {
     mutationFn: updateBooking,
     onSuccess: (data) => {
       updateBookingHelper(searchParams, queryClient, data);
+    }
+  });
+}
+
+export function useAddBookingMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mutationFn: ({ formData }: any) =>
+      axios.post("/api/submit-order", formData),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["bookings"] });
     }
   });
 }
