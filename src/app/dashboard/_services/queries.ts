@@ -1,44 +1,23 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Booking, Review, User } from "../_utils/types";
 
-export function useGetBookingsQuery(statusFilter: string = "", limit = 50) {
+export function useGetBookingsQuery(
+  statusFilter: string = "",
+  limit = 4,
+  page = 0
+) {
   return useQuery({
-    queryKey: ["bookings", statusFilter],
+    queryKey: ["bookings", statusFilter, limit, page],
     queryFn: () =>
       axios
-        .get(`/api/bookings?limit=${limit}&status=${statusFilter}`)
+        .get(`/api/bookings?limit=${limit}&status=${statusFilter}&page=${page}`)
         .then((i) => i.data) as Promise<{
         limit: number;
         page: number;
         total: number;
         data: Booking[];
       }>
-  });
-}
-
-export function useGetInfiniteBookingsQuery(
-  statusFilter: string = "",
-  limit = 5
-) {
-  return useInfiniteQuery({
-    queryKey: ["bookings-infinite", statusFilter, limit],
-    queryFn: ({ pageParam }) =>
-      axios
-        .get(
-          `/api/bookings?limit=${limit}&page=${pageParam}&status=${statusFilter}`
-        )
-        .then((i) => i.data) as Promise<{
-        limit: number;
-        page: number;
-        total: number;
-        data: Booking[];
-      }>,
-    getNextPageParam: (lastPage) => {
-      const hasMore = lastPage.page * lastPage.limit < lastPage.total;
-      return hasMore ? lastPage.page + 1 : undefined;
-    },
-    initialPageParam: 0
   });
 }
 
