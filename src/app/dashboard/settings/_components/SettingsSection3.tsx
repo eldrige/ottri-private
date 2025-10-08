@@ -152,8 +152,14 @@ function LanguageSettings() {
           </label>
 
           <div className="w-full flex justify-end">
-            <Button onClick={handleSave} disabled={isUpdating} size="xs">
-              Save settings
+            <Button
+              onClick={handleSave}
+              disabled={isUpdating}
+              size="xs"
+              variant={"secondary"}
+              className=" text-[14px] text-white"
+            >
+              {isUpdating ? "Saving..." : "Save settings"}
             </Button>
           </div>
         </div>
