@@ -3,25 +3,19 @@ import React, { useState } from "react";
 import SlotForm from "./SlotForm";
 import { FormDataType } from "../types";
 import ModalWrapper from "@/components/common/ModalWrapper";
-import { TimeSlot } from "@/app/(landings)/booking/new/types";
-import { useUpdateTimeSlotMutation } from "../../../_services/mutations";
+import { useAddTimeSlotMutation } from "../../../_services/mutations";
 import { toast } from "react-hot-toast";
 
-export default function EditSlot({
-  onClose,
-  timeSlot
-}: {
-  onClose: () => void;
-  timeSlot: TimeSlot;
-}) {
-  const { mutateAsync, isPending } = useUpdateTimeSlotMutation();
+export default function AddSlot({ onClose }: { onClose: () => void }) {
+  const { mutateAsync, isPending } = useAddTimeSlotMutation();
   const [formData, setFormData] = useState<FormDataType>(() => ({
-    startTime: `${timeSlot.startTime.toString().padStart(2, "0")}:00`,
-    maxCapacity: timeSlot.instances,
-    serviceIds: timeSlot.services.map((i) => i.id),
-    daysOfWeek: timeSlot.weekDays,
-    isActive: timeSlot.isActive
+    startTime: null,
+    maxCapacity: null,
+    serviceIds: [],
+    daysOfWeek: [],
+    isActive: false
   }));
+  console.log({ formData });
 
   const setField = (field: keyof FormDataType, value: unknown) => {
     setFormData((prev) => ({
@@ -33,7 +27,7 @@ export default function EditSlot({
   const onSubmit = async () => {
     try {
       // Call the mutation with timeSlotId and body
-      await mutateAsync({ timeSlotId: timeSlot.id, ...formData });
+      await mutateAsync(formData);
 
       // Show success message
       toast.success("Time slot updated successfully", {
@@ -60,7 +54,7 @@ export default function EditSlot({
   return (
     <ModalWrapper onClose={onClose}>
       <div className="p-4 flex flex-col gap-6 w-full bg-white rounded-lg max-w-xl">
-        <h4 className="text-heading-5">Edit Slot</h4>
+        <h4 className="text-heading-5">Add Slot</h4>
         <SlotForm formData={formData} setField={setField} />
         <div className="flex gap-8 *:flex-1 mt-auto">
           <Button onClick={onClose} variant={"secondary-outline"} size={"xs"}>
@@ -72,7 +66,7 @@ export default function EditSlot({
             onClick={onSubmit}
             disabled={isPending}
           >
-            {isPending ? "Updating..." : "Update Slot"}
+            {isPending ? "Adding..." : "Add Slot"}
           </Button>
         </div>
       </div>

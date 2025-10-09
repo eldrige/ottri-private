@@ -3,14 +3,16 @@ import CalendarIcon from "@/components/icons/CalendarIcon";
 import DollarIcon2 from "@/components/icons/DollarIcon2";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeftIcon, PlusIcon, UsersIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useTimeSlotsQuery } from "../../_services/queries";
 import Loading from "../../loading";
 import ErrorComponent from "@/app/_components/ErrorComponent";
 import SlotItem from "./_components/SlotItem";
+import AddSlot from "./_components/AddSlot";
 
 export default function ManageSlotsPage() {
+  const [showAddBooking, setShowAddBooking] = useState(false);
   const {
     data: timeSlots,
     isLoading,
@@ -29,6 +31,7 @@ export default function ManageSlotsPage() {
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
+      {showAddBooking && <AddSlot onClose={() => setShowAddBooking(false)} />}
       <div className="hidden lg:flex flex-col lg:flex-row justify-between lg:items-center gap-2">
         <h3 className="text-heading-4">Bookings</h3>
         <p className="text-secondary-700/70">Welcome back Admin</p>
@@ -44,15 +47,14 @@ export default function ManageSlotsPage() {
             <ArrowLeftIcon className="text-secondary-700 size-5" />
             Back to booking
           </Link>
-          <Link href={"/admin/bookings/manage/new"}>
-            <Button
-              size={"2xs"}
-              variant={"secondary"}
-              className="flex gap-2 items-center text-base justify-center"
-            >
-              <PlusIcon className="size-5" /> Create new slot
-            </Button>
-          </Link>
+          <Button
+            onClick={() => setShowAddBooking(true)}
+            size={"2xs"}
+            variant={"secondary"}
+            className="flex gap-2 items-center text-base justify-center"
+          >
+            <PlusIcon className="size-5" /> Create new slot
+          </Button>
         </div>
       </div>
 

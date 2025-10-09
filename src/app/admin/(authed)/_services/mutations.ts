@@ -22,7 +22,7 @@ import {
   updateServiceAreas
 } from "../_actions/ServiceAreas";
 import axios from "axios";
-import { updateTimeSlot } from "../_actions/timeSlots";
+import { addTimeSlot, updateTimeSlot } from "../_actions/timeSlots";
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
 
 // Assign cleaner
@@ -139,6 +139,15 @@ export function useUpdateTimeSlotMutation() {
     }
   });
 }
+export function useAddTimeSlotMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: addTimeSlot,
+    onSuccess: (data) => {
+      addTimeSlotHelper(queryClient, data);
+    }
+  });
+}
 
 // Helpers
 function updateBookingHelper(
@@ -207,6 +216,15 @@ function updateTimeSlotHelper(queryClient: QueryClient, newTimeSlot: TimeSlot) {
   const newTimeSlots = queryData.map((b) =>
     b.id === newTimeSlot.id ? newTimeSlot : b
   );
+
+  queryClient.setQueryData(["timeslots"], newTimeSlots);
+}
+
+function addTimeSlotHelper(queryClient: QueryClient, newTimeSlot: TimeSlot) {
+  const queryData = queryClient.getQueryData(["timeslots"]) as TimeSlot[];
+  if (!queryData) return;
+
+  const newTimeSlots = [newTimeSlot, ...queryData];
 
   queryClient.setQueryData(["timeslots"], newTimeSlots);
 }
