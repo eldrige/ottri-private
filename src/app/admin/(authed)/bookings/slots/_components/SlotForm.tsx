@@ -35,7 +35,7 @@ export default function SlotForm({ formData, setField }: SlotFormProps) {
   ];
 
   const toggleCheckbox = (key: keyof FormDataType, value: number) => {
-    if (key === "services" || key === "daysOfWeek") {
+    if (key === "serviceIds" || key === "daysOfWeek") {
       const newArr = formData[key].includes(value)
         ? formData[key].filter((i) => i !== value)
         : [...formData[key], value];
@@ -47,11 +47,11 @@ export default function SlotForm({ formData, setField }: SlotFormProps) {
   const handleCheckAll = () => {
     if (checkAll) {
       setCheckAll(false);
-      setField("services", []);
+      setField("serviceIds", []);
     } else {
       setCheckAll(true);
       setField(
-        "services",
+        "serviceIds",
         services.map((i) => i.id)
       );
     }
@@ -104,8 +104,8 @@ export default function SlotForm({ formData, setField }: SlotFormProps) {
                 className={`capitalize ${checkAll ? "opacity-50" : ""}`}
               >
                 <Checkbox
-                  onChange={() => toggleCheckbox("services", op.value)}
-                  checked={formData.services.includes(Number(op.value))}
+                  onChange={() => toggleCheckbox("serviceIds", op.value)}
+                  checked={formData.serviceIds.includes(Number(op.value))}
                   label={op.label}
                   accent="secondary"
                   disabled={checkAll}

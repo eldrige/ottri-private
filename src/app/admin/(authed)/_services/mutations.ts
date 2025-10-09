@@ -22,6 +22,8 @@ import {
   updateServiceAreas
 } from "../_actions/ServiceAreas";
 import axios from "axios";
+import { updateTimeSlot } from "../_actions/timeSlots";
+import { TimeSlot } from "@/app/(landings)/booking/new/types";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -127,6 +129,17 @@ export function useUpdateServiceAreaMutation() {
   });
 }
 
+// TimeSlots
+export function useUpdateTimeSlotMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateTimeSlot,
+    onSuccess: (data) => {
+      updateTimeSlotHelper(queryClient, data);
+    }
+  });
+}
+
 // Helpers
 function updateBookingHelper(
   searchParams: ReadonlyURLSearchParams,
@@ -185,6 +198,17 @@ function updateSAHelper(queryClient: QueryClient, newSAs: ServiceArea[]) {
   );
 
   queryClient.setQueryData(["service-areas"], newServiceAreas);
+}
+
+function updateTimeSlotHelper(queryClient: QueryClient, newTimeSlot: TimeSlot) {
+  const queryData = queryClient.getQueryData(["timeslots"]) as TimeSlot[];
+  if (!queryData) return;
+
+  const newTimeSlots = queryData.map((b) =>
+    b.id === newTimeSlot.id ? newTimeSlot : b
+  );
+
+  queryClient.setQueryData(["timeslots"], newTimeSlots);
 }
 
 // function removeBookingHelper(

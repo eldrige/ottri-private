@@ -10,7 +10,7 @@ export default function NewSlotPage() {
   const [formData, setFormData] = useState<FormDataType>(() => ({
     startTime: null,
     maxCapacity: null,
-    services: [],
+    serviceIds: [],
     daysOfWeek: [],
     isActive: false
   }));
