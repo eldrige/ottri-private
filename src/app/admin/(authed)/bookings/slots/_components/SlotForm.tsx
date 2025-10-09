@@ -1,28 +1,41 @@
 import Checkbox from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
-import React from "react";
+import React, { useState } from "react";
 import { FormDataType } from "../types";
 import { cn } from "@/lib/utils";
+import { useServicesQuery } from "../../../_services/queries";
 
 interface SlotFormProps {
   formData: FormDataType;
   setField: (field: keyof FormDataType, value: unknown) => void;
 }
 
-const serviceTypesOptions = [
-  "All Services",
-  "Deep Clean",
-  "Office Clean",
-  "Regular Clean",
-  "Move-in/Move-out Clean",
-  "Post-construction Clean"
+const daysOfWeekOptions = [
+  { label: "Mon", value: 1 },
+  { label: "Tue", value: 2 },
+  { label: "Wed", value: 3 },
+  { label: "Thu", value: 4 },
+  { label: "Fri", value: 5 },
+  { label: "Sat", value: 6 },
+  { label: "Sun", value: 0 }
 ];
 
-const daysOfWeekOptions = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
 export default function SlotForm({ formData, setField }: SlotFormProps) {
-  const toggleCheckbox = (key: keyof FormDataType, value: string) => {
-    if (key === "serviceTypes" || key === "daysOfWeek") {
+  const { data: services } = useServicesQuery();
+  const [checkAll, setCheckAll] = useState(false);
+
+  if (!services) return null;
+
+  const serviceTypesOptions = [
+    // {label: "All Services", value: "all"},
+    ...services.map((ser) => ({
+      label: ser.name,
+      value: ser.id
+    }))
+  ];
+
+  const toggleCheckbox = (key: keyof FormDataType, value: number) => {
+    if (key === "services" || key === "daysOfWeek") {
       const newArr = formData[key].includes(value)
         ? formData[key].filter((i) => i !== value)
         : [...formData[key], value];
@@ -30,17 +43,33 @@ export default function SlotForm({ formData, setField }: SlotFormProps) {
       setField(key, newArr);
     }
   };
+
+  const handleCheckAll = () => {
+    if (checkAll) {
+      setCheckAll(false);
+      setField("services", []);
+    } else {
+      setCheckAll(true);
+      setField(
+        "services",
+        services.map((i) => i.id)
+      );
+    }
+  };
+
   return (
     <div className="space-y-8 text-secondary-900">
       <div className="grid grid-cols-2 gap-8">
         <div>
           <Input
             label="Start Time*"
-            type="number"
+            type="time"
             placeholder="--/--"
-            className="py-2.5"
+            className="py-2.5 selection:text-secondary-700"
             value={formData.startTime || ""}
-            onChange={(e) => setField("startTime", e.target.value)}
+            onChange={(e) =>
+              setField("startTime", e.target.value.replace(/\d+$/, "00"))
+            }
           />
           <p className="mt-2 text-tiny text-secondary-700/70">
             Slot will be 9:00 AM - 11:00 AM
@@ -60,18 +89,26 @@ export default function SlotForm({ formData, setField }: SlotFormProps) {
       <div>
         <p className="text-caption">Service Type*</p>
         <div className="mt-3 flex items-start gap-4 flex-wrap flex-col md:flex-row">
+          <span>
+            <Checkbox
+              onChange={handleCheckAll}
+              checked={checkAll}
+              label={"All Services"}
+              accent="secondary"
+            />
+          </span>
           {serviceTypesOptions.map((op) => {
-            const isDis =
-              op !== "All Services" &&
-              formData.serviceTypes.includes("All Services");
             return (
-              <span key={op} className={isDis ? "opacity-50" : ""}>
+              <span
+                key={op.value}
+                className={`capitalize ${checkAll ? "opacity-50" : ""}`}
+              >
                 <Checkbox
-                  onChange={() => toggleCheckbox("serviceTypes", op)}
-                  checked={formData.serviceTypes.includes(op)}
-                  label={op}
+                  onChange={() => toggleCheckbox("services", op.value)}
+                  checked={formData.services.includes(Number(op.value))}
+                  label={op.label}
                   accent="secondary"
-                  disabled={isDis}
+                  disabled={checkAll}
                 />
               </span>
             );
@@ -83,23 +120,23 @@ export default function SlotForm({ formData, setField }: SlotFormProps) {
         <div className="mt-3 flex items-start gap-4 flex-wrap">
           {daysOfWeekOptions.map((option) => (
             <Checkbox
-              key={option}
-              label={option}
+              key={option.value}
+              label={option.label}
               accent="secondary"
-              onChange={() => toggleCheckbox("daysOfWeek", option)}
-              checked={formData.daysOfWeek.includes(option)}
+              onChange={() => toggleCheckbox("daysOfWeek", option.value)}
+              checked={formData.daysOfWeek.includes(option.value)}
             />
           ))}
         </div>
       </div>
       <button
-        onClick={() => setField("activeSlot", !formData.activeSlot)}
+        onClick={() => setField("isActive", !formData.isActive)}
         className="flex items-center gap-4"
       >
         <div
           className={cn(
             "w-8 h-4.5 p-0.5 rounded-full flex transition-all *:transition-all relative box-content",
-            formData.activeSlot
+            formData.isActive
               ? "bg-secondary-700 *:left-full *:-translate-x-full"
               : "bg-secondary-700/15 *:left-0 *:translate-x-0"
           )}

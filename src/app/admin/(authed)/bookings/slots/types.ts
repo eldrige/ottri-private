@@ -1,7 +1,7 @@
 export interface FormDataType {
-  startTime: number | null;
+  startTime: string | null;
   maxCapacity: number | null;
-  serviceTypes: string[];
-  daysOfWeek: string[];
-  activeSlot: boolean;
+  services: number[];
+  daysOfWeek: number[];
+  isActive: boolean;
 }

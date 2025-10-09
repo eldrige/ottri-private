@@ -1,26 +1,36 @@
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
 import EditIcon from "@/components/icons/EditIcon";
 import { Button } from "@/components/ui/Button";
-import React from "react";
+import React, { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import { TrashIcon, UsersIcon } from "lucide-react";
+import { useServicesQuery } from "../../../_services/queries";
+import EditSlots from "./EditSlots";
 
 function formatHour(hour: number): string {
   const period = hour >= 12 ? "PM" : "AM";
-  const displayHour = hour % 12 || 12; // Convert 0 to 12 for 12 AM
+  const displayHour = hour % 12 || 12;
 
   return `${displayHour}:00 ${period}`;
 }
 
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export default function SlotItem({ timeSlot }: { timeSlot: TimeSlot }) {
+  const { data: services } = useServicesQuery();
+  const [editSlot, setEditSlot] = useState(false);
+
+  if (!services) return null;
+
   return (
     <div
       key={timeSlot.id}
       className="p-4 rounded-lg border border-black/10 flex justify-between gap-1 flex-wrap"
     >
+      {editSlot && (
+        <EditSlots timeSlot={timeSlot} onClose={() => setEditSlot(false)} />
+      )}
       <div>
         <div className="flex items-center gap-3">
           <p className="font-medium min-w-fit">
@@ -38,10 +48,12 @@ export default function SlotItem({ timeSlot }: { timeSlot: TimeSlot }) {
             {timeSlot.instances}
           </span>
         </div>
-        <div className="mt-4 text-xs space-y-1">
+        <div className="mt-4 text-xs space-y-1 capitalize">
           <p>
             <span className="font-medium mr-2">Service:</span>
-            {timeSlot.services?.map((i) => i.name).join(", ") || "All Services"}
+            {timeSlot.services?.length < services.length
+              ? timeSlot.services?.map((i) => i.name).join(", ") || "N/A"
+              : "All Services"}
           </p>
           <p>
             <span className="font-medium mr-2">Days:</span>
@@ -51,7 +63,7 @@ export default function SlotItem({ timeSlot }: { timeSlot: TimeSlot }) {
       </div>
       <div className="flex items-start justify-end gap-x-3 gap-y-1 ml-auto w-full lg:w-auto">
         <Button
-          // onClick={() => setEditSlot(!editSlot)}
+          onClick={() => setEditSlot(true)}
           size={"2xs"}
           variant={"secondary-outline"}
           className="py-2 px-3 text-xs border-black/10 flex-1 md:flex-0 flex justify-center gap-1"

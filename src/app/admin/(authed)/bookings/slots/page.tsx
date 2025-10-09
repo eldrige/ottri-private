@@ -2,10 +2,8 @@
 import CalendarIcon from "@/components/icons/CalendarIcon";
 import DollarIcon2 from "@/components/icons/DollarIcon2";
 import { Button } from "@/components/ui/Button";
-import { cn } from "@/lib/utils";
 import { ArrowLeftIcon, PlusIcon, UsersIcon } from "lucide-react";
-import React, { useState } from "react";
-import EditSlots from "./_components/EditSlots";
+import React from "react";
 import Link from "next/link";
 import { useTimeSlotsQuery } from "../../_services/queries";
 import Loading from "../../loading";
@@ -13,7 +11,6 @@ import ErrorComponent from "@/app/_components/ErrorComponent";
 import SlotItem from "./_components/SlotItem";
 
 export default function ManageSlotsPage() {
-  const [editSlot, setEditSlot] = useState(false);
   const {
     data: timeSlots,
     isLoading,
@@ -60,18 +57,7 @@ export default function ManageSlotsPage() {
       </div>
 
       <div className="mt-6 relative">
-        {editSlot && (
-          <div
-            className={cn(
-              "bg-white z-10 visible md:hidden",
-              !editSlot && "invisible md:visible bg-transparent"
-            )}
-          >
-            <EditSlots onClose={() => setEditSlot(false)} />
-          </div>
-        )}
-
-        <div className={cn("", editSlot && "hidden md:block")}>
+        <div>
           <h3 className="text-heading-4">Available slots management</h3>
           <p className="mt-3 text-sm lg:text-base">
             Manage time slots for bookings. Each slot is 2 hours long with 1
@@ -109,21 +95,11 @@ export default function ManageSlotsPage() {
           </div>
           <div className="mt-6">
             <h4 className="text-heading-5">Current Availability Slots</h4>
-            <div
-              className={cn("mt-4 flex transition-all", editSlot && "gap-8")}
-            >
+            <div className={"mt-4 flex transition-all"}>
               <div className="flex flex-col gap-2 flex-1">
                 {timeSlots?.map((timeSlot) => (
                   <SlotItem key={timeSlot.id} timeSlot={timeSlot} />
                 ))}
-              </div>
-              <div
-                className={cn(
-                  "hidden md:block border border-[#0D81F7] rounded-lg transition-all [box-shadow:0px_0px_8px_0px_#0D81F799]",
-                  editSlot ? "flex-1" : "w-0 invisible"
-                )}
-              >
-                {editSlot && <EditSlots onClose={() => setEditSlot(false)} />}
               </div>
             </div>
           </div>
