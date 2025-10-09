@@ -64,8 +64,8 @@ export default function EditBooking({
     serviceAddress: booking.address,
 
     // Location coordinates
-    lng: booking.location?.coordinates[0] as number | null,
-    lat: booking.location?.coordinates[1] as number | null,
+    lng: booking.location?.coordinates[1] as number | null,
+    lat: booking.location?.coordinates[0] as number | null,
     state: booking.guest?.state,
     city: booking.guest?.city,
     zipCode: booking.guest?.zipCode,
@@ -83,6 +83,7 @@ export default function EditBooking({
     // Other
     addOns: booking.addOns || ([] as ServiceAddOn[])
   });
+  console.log(newBookingData);
   const [isPending, setIsPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [specificServices, setSpecificServices] = useState<any[]>([]);
