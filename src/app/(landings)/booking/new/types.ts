@@ -16,6 +16,7 @@ export interface TimeSlot {
   isActive: boolean;
   weekDays: number[];
   slots: Record<string, number>;
+  services: Pick<ServiceType, "id" | "name">[];
 }
 
 export interface ServiceType {
