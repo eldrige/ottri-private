@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import { TrashIcon, UsersIcon } from "lucide-react";
 import { useServicesQuery } from "../../../_services/queries";
-import EditSlots from "./EditSlots";
+import EditSlot from "./EditSlot";
 
 function formatHour(hour: number): string {
   const period = hour >= 12 ? "PM" : "AM";
@@ -29,7 +29,7 @@ export default function SlotItem({ timeSlot }: { timeSlot: TimeSlot }) {
       className="p-4 rounded-lg border border-black/10 flex justify-between gap-1 flex-wrap"
     >
       {editSlot && (
-        <EditSlots timeSlot={timeSlot} onClose={() => setEditSlot(false)} />
+        <EditSlot timeSlot={timeSlot} onClose={() => setEditSlot(false)} />
       )}
       <div>
         <div className="flex items-center gap-3">

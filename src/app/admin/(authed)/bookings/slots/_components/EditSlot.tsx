@@ -7,7 +7,7 @@ import { TimeSlot } from "@/app/(landings)/booking/new/types";
 import { useUpdateTimeSlotMutation } from "../../../_services/mutations";
 import { toast } from "react-hot-toast";
 
-export default function EditSlots({
+export default function EditSlot({
   onClose,
   timeSlot
 }: {
@@ -69,7 +69,7 @@ export default function EditSlots({
   return (
     <ModalWrapper onClose={onClose}>
       <div className="p-4 flex flex-col gap-6 w-full bg-white rounded-lg max-w-xl">
-        <h4 className="text-heading-5">Edit Slots</h4>
+        <h4 className="text-heading-5">Edit Slot</h4>
         <SlotForm formData={formData} setField={setField} />
         <div className="flex gap-8 *:flex-1 mt-auto">
           <Button onClick={onClose} variant={"secondary-outline"} size={"xs"}>
