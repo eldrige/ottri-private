@@ -60,7 +60,7 @@ export function useUpdateSettingMutation() {
   return useMutation({
     mutationFn: updateUserSettings,
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: ["user-profile"]
       });
     }

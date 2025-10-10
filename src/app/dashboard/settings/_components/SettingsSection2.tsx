@@ -7,42 +7,24 @@ import { useGetUserProfile } from "../../_services/queries";
 import { useUpdateSettingMutation } from "../../_services/mutations";
 
 export default function SettingsSection2() {
-  const { data: userData } = useGetUserProfile();
-  if (!userData) return null;
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <NotificationSettings
-        bookingReminders={userData.settings.bookingReminder}
-        promotionalEmails={userData.settings.promotionalEmails}
-        userId={String(userData.id)}
-      />
-      <PrivacySecuritySettings
-        twoFactorAuth={userData.settings.twoFactorAuth}
-        locationSharing={userData.settings.shareMyLocation}
-        userId={String(userData.id)}
-      />
+      <NotificationSettings />
+      <PrivacySecuritySettings />
     </section>
   );
 }
-function NotificationSettings({
-  bookingReminders,
-  promotionalEmails,
-  userId
-}: {
-  bookingReminders: boolean;
-  promotionalEmails: boolean;
-  userId: string;
-}) {
+function NotificationSettings() {
+  const { data: userData } = useGetUserProfile();
+  const userId = userData?.id;
+  const [toggle, setToggle] = useState({
+    bookingReminder: userData?.settings.bookingReminder ?? false,
+    promotionalEmails: userData?.settings.promotionalEmails ?? false
+  });
   const { mutateAsync: updateSettings, isPending: isUpdating } =
     useUpdateSettingMutation();
 
-  const [toggle, setToggle] = useState<{
-    bookingReminders: boolean;
-    promotionalEmails: boolean;
-  }>({
-    bookingReminders: bookingReminders ?? false,
-    promotionalEmails: promotionalEmails ?? false
-  });
+  if (!userData) return null;
 
   const togglePromotionalEmails = async (value: boolean) => {
     setToggle((prev) => ({ ...prev, promotionalEmails: value }));
@@ -56,8 +38,8 @@ function NotificationSettings({
     }
   };
 
-  const toggleBookingReminders = async (value: boolean) => {
-    setToggle((prev) => ({ ...prev, bookingReminders: value }));
+  const toggleBookingReminder = async (value: boolean) => {
+    setToggle((prev) => ({ ...prev, bookingReminder: value }));
     try {
       await updateSettings({
         bookingReminder: value,
@@ -94,11 +76,11 @@ function NotificationSettings({
           <button
             className="cursor-pointer transform transition-all ease-in-out duration-200"
             onClick={() => {
-              toggleBookingReminders(!toggle.bookingReminders);
+              toggleBookingReminder(!toggle.bookingReminder);
             }}
             disabled={isUpdating}
           >
-            {toggle.bookingReminders ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
+            {toggle.bookingReminder ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
           </button>
         </div>
         <div className="flex items-center justify-between">
@@ -129,22 +111,17 @@ function NotificationSettings({
   );
 }
 
-function PrivacySecuritySettings({
-  twoFactorAuth,
-  locationSharing,
-  userId
-}: {
-  twoFactorAuth: boolean;
-  locationSharing: boolean;
-  userId: string;
-}) {
+function PrivacySecuritySettings() {
+  const { data: userData } = useGetUserProfile();
+  const userId = String(userData?.id);
   const [toggle, setToggle] = useState({
-    twoFactorAuth,
-    locationSharing
+    twoFactorAuth: userData?.settings.twoFactorAuth,
+    locationSharing: userData?.settings.shareMyLocation
   });
-
   const { mutateAsync: updateSettings, isPending: isUpdating } =
     useUpdateSettingMutation();
+
+  if (!userData) return null;
   const toggleTwoFactorAuth = async (value: boolean) => {
     setToggle((prev) => ({ ...prev, twoFactorAuth: value }));
     try {
