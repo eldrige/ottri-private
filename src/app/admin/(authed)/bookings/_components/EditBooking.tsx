@@ -48,6 +48,7 @@ export default function EditBooking({
   const { data: addOns } = useServiceAddOnsQuery();
   const { mutateAsync } = useUpdateBookingMutation();
 
+  console.log(booking.timeSlot);
   const [newBookingData, setNewBookingData] = useState({
     // Client Info
     clientName: booking.guest?.fullName,
@@ -78,7 +79,7 @@ export default function EditBooking({
 
     // Scheduling
     preferredDate: new Date(booking.timeSlot.date) as Date | null,
-    timeWindow: booking.timeSlot.id.toString(),
+    timeWindow: booking.timeSlot.templateId.toString(),
 
     // Other
     addOns: booking.addOns || ([] as ServiceAddOn[])
@@ -245,7 +246,7 @@ export default function EditBooking({
         entryInstructions: newBookingData.accessInstructions,
 
         // preferredDate: newBookingData.preferredDate,
-        // timeWindow: newBookingData.timeWindow,
+        // timeWindow: newBookingData.timeWindow, // FIX
 
         addOnIds: newBookingData.addOns.map((i) => i.id)
       };
@@ -529,6 +530,7 @@ export default function EditBooking({
                 selectedTimeWindow={newBookingData.timeWindow}
                 handleSelectedDate={handleSelectedDate}
                 handleSelectedTimeWindow={handleSelectedTimeWindow}
+                initialTimeWindow={newBookingData.timeWindow}
               />
             )}
           </div>

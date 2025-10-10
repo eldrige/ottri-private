@@ -13,6 +13,7 @@ interface DateTimeSlotsProps {
   errorSelectedDate?: string;
   errorSelectedTimeWindow?: string;
   accent?: "primary" | "secondary";
+  initialTimeWindow?: string;
 }
 
 export default function DateTimeSlotsFields({
@@ -23,8 +24,16 @@ export default function DateTimeSlotsFields({
   handleSelectedTimeWindow,
   errorSelectedDate,
   errorSelectedTimeWindow,
-  accent = "primary"
+  accent = "primary",
+  initialTimeWindow
 }: DateTimeSlotsProps) {
+  const initialTWSlot = timeSlots.find(
+    (i) => String(i.id) === initialTimeWindow
+  );
+  const initilaTWOption = initialTWSlot && {
+    label: `${initialTWSlot.startTime % 12 || 12}:00 ${initialTWSlot.startTime < 12 ? "AM" : "PM"} - ${initialTWSlot.endTime % 12 || 12}:00 ${initialTWSlot.endTime < 12 ? "AM" : "PM"}`,
+    value: initialTWSlot.id.toString()
+  };
   const handleDateChange = (date: Date | undefined) => {
     // setValue("preferredDate", date || null, { shouldValidate: true });
     handleSelectedDate(date || null);
@@ -103,6 +112,7 @@ export default function DateTimeSlotsFields({
               ? availableWindows.find((opt) => opt.value === selectedTimeWindow)
               : undefined
           }
+          initialValue={initilaTWOption}
           onChange={handleTimeWindowChange}
           disabled={!selectedDate}
           error={errorSelectedTimeWindow}
