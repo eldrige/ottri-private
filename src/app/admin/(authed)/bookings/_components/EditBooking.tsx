@@ -22,7 +22,6 @@ import AddressInput, {
 } from "@/app/(landings)/booking/new/_components/AddressInput";
 import { Textarea } from "@/components/ui/Textarea";
 import axios from "axios";
-import { toast } from "react-hot-toast";
 import DateTimeSlotsFields from "@/components/common/DateTimeSlotsFIelds";
 import {
   useRescheduleBookingMutation,
@@ -52,7 +51,8 @@ export default function EditBooking({
   const { mutateAsync: updateAsync } = useUpdateBookingMutation();
   const { mutateAsync: rescheduleAsync } = useRescheduleBookingMutation();
 
-  const [newBookingData, setNewBookingData] = useState({
+  // Store initial booking data to compare against changes
+  const initialBookingData = {
     // Client Info
     clientName: booking.guest?.fullName,
     clientPhone: booking.guest?.phoneNumber,
@@ -81,11 +81,15 @@ export default function EditBooking({
     accessInstructions: booking.entryInstructions,
 
     // Scheduling
-    preferredDate: new Date(booking.timeSlot.date) as Date | null,
+    preferredDate: new Date(booking.timeSlot.date),
     timeWindow: booking.timeSlot.templateId.toString(),
 
     // Other
     addOns: booking.addOns || ([] as ServiceAddOn[])
+  };
+
+  const [newBookingData, setNewBookingData] = useState({
+    ...initialBookingData
   });
   const [isPending, setIsPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -200,6 +204,51 @@ export default function EditBooking({
     return Object.keys(newErrors).length === 0;
   };
 
+  // Helper function to check if a field has been changed
+  const isFieldChanged = (field: keyof typeof newBookingData): boolean => {
+    // Special handling for dates
+    if (field === "preferredDate") {
+      if (!newBookingData.preferredDate && !initialBookingData.preferredDate)
+        return false;
+      if (!newBookingData.preferredDate || !initialBookingData.preferredDate)
+        return true;
+      return (
+        newBookingData.preferredDate.getTime() !==
+        initialBookingData.preferredDate.getTime()
+      );
+    }
+
+    // Special handling for addOns array
+    if (field === "addOns") {
+      if (newBookingData.addOns.length !== initialBookingData.addOns.length)
+        return true;
+
+      // Check if all add-ons in newBookingData exist in initialBookingData
+      return (
+        newBookingData.addOns.some(
+          (addon) =>
+            !initialBookingData.addOns.some(
+              (initialAddon) => initialAddon.id === addon.id
+            )
+        ) ||
+        initialBookingData.addOns.some(
+          (initialAddon) =>
+            !newBookingData.addOns.some((addon) => addon.id === initialAddon.id)
+        )
+      );
+    }
+
+    // Default comparison for other fields
+    return newBookingData[field] !== initialBookingData[field];
+  };
+
+  // Function to check if any field has changed
+  const hasChanges = (): boolean => {
+    return Object.keys(newBookingData).some((key) =>
+      isFieldChanged(key as keyof typeof newBookingData)
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -217,46 +266,70 @@ export default function EditBooking({
         (type) => type.id.toString() === newBookingData.specificServiceType
       );
 
-      // Format the data according to the structure expected by the API
-      const formData = {
-        // Format to match schema.ts and route.ts
-        fullName: newBookingData.clientName,
-        phoneNumber: newBookingData.clientPhone,
-        email: newBookingData.clientEmail,
+      // Initialize an empty object for formData
+      const formData: Record<string, any> = {};
 
-        serviceId: selectedService?.id,
-        serviceTypeId: selectedSpecificService?.id,
-        cleaningFrequency: newBookingData.frequency,
-        bedrooms: newBookingData.bedrooms,
-        bathrooms: newBookingData.bathrooms,
-        approximateSquareFootage: newBookingData.squareFootage,
-        address: newBookingData.serviceAddress,
+      // Only add fields that have changed to the formData object
+      if (isFieldChanged("clientName"))
+        formData.fullName = newBookingData.clientName;
+      if (isFieldChanged("clientPhone"))
+        formData.phoneNumber = newBookingData.clientPhone;
+      if (isFieldChanged("clientEmail"))
+        formData.email = newBookingData.clientEmail;
 
-        lat: newBookingData.lat,
-        lng: newBookingData.lng,
+      if (isFieldChanged("serviceType"))
+        formData.serviceId = selectedService?.id;
+      if (isFieldChanged("specificServiceType"))
+        formData.serviceTypeId = selectedSpecificService?.id;
+      if (isFieldChanged("frequency"))
+        formData.cleaningFrequency = newBookingData.frequency;
+      if (isFieldChanged("bedrooms"))
+        formData.bedrooms = newBookingData.bedrooms;
+      if (isFieldChanged("bathrooms"))
+        formData.bathrooms = newBookingData.bathrooms;
+      if (isFieldChanged("squareFootage"))
+        formData.approximateSquareFootage = newBookingData.squareFootage;
+      if (isFieldChanged("serviceAddress"))
+        formData.address = newBookingData.serviceAddress;
 
-        // Make the API happy with the required fields
-        state: newBookingData.state,
-        city: newBookingData.city,
-        zipCode: newBookingData.zipCode,
+      // Location fields - include them if any coordinate or address changed
+      if (isFieldChanged("lat") || isFieldChanged("serviceAddress"))
+        formData.lat = newBookingData.lat;
+      if (isFieldChanged("lng") || isFieldChanged("serviceAddress"))
+        formData.lng = newBookingData.lng;
 
-        pets: newBookingData.petType,
-        petsInstructions: newBookingData.petInstructions,
-        entryMethod: newBookingData.accessMethod,
-        entryInstructions: newBookingData.accessInstructions,
+      // Include these fields if address changed since they're related
+      if (isFieldChanged("serviceAddress") || isFieldChanged("state"))
+        formData.state = newBookingData.state;
+      if (isFieldChanged("serviceAddress") || isFieldChanged("city"))
+        formData.city = newBookingData.city;
+      if (isFieldChanged("serviceAddress") || isFieldChanged("zipCode"))
+        formData.zipCode = newBookingData.zipCode;
 
-        addOnIds: newBookingData.addOns.map((i) => i.id)
-      };
+      if (isFieldChanged("petType")) formData.pets = newBookingData.petType;
+      if (isFieldChanged("petInstructions"))
+        formData.petsInstructions = newBookingData.petInstructions;
+      if (isFieldChanged("accessMethod"))
+        formData.entryMethod = newBookingData.accessMethod;
+      if (isFieldChanged("accessInstructions"))
+        formData.entryInstructions = newBookingData.accessInstructions;
 
-      // Send data to the API
-      const updatePromise = updateAsync({ bookingId: booking.id, ...formData });
+      // Add addOnIds only if the add-ons have changed
+      if (isFieldChanged("addOns"))
+        formData.addOnIds = newBookingData.addOns.map((i) => i.id);
 
+      // Only update if there are changes to the booking details
+      let updatePromise = null as null | Promise<any>;
+      if (Object.keys(formData).length > 0) {
+        updatePromise = updateAsync({
+          bookingId: booking.id,
+          ...formData
+        });
+      }
+
+      // Check specifically for scheduling changes
       let reschedulePromise = null as null | Promise<any>;
-
-      if (
-        newBookingData.preferredDate?.toISOString() !== booking.timeSlot.date ||
-        newBookingData.timeWindow !== String(booking.timeSlot.templateId)
-      ) {
+      if (isFieldChanged("preferredDate") || isFieldChanged("timeWindow")) {
         reschedulePromise = rescheduleAsync({
           bookingId: booking.id,
           timeSlotId: Number(newBookingData.timeWindow),
@@ -264,7 +337,13 @@ export default function EditBooking({
         });
       }
 
-      await Promise.all([updatePromise, reschedulePromise]);
+      // Wait for both promises to resolve (if they exist)
+      const promises = [updatePromise, reschedulePromise].filter(
+        (p) => p !== null
+      );
+      if (promises.length > 0) {
+        await Promise.all(promises);
+      }
 
       onClose();
     } catch (error) {
@@ -279,15 +358,11 @@ export default function EditBooking({
             error.response?.data?.error?.message?.includes("area") &&
             error.response.data.error.message
         }));
-        toast.error(
-          error.response?.data?.error?.message || "Failed to create booking"
-        );
       } else {
         setErrors((prev) => ({
           ...prev,
           form: "Network error. Please try again."
         }));
-        toast.error("Network error. Please try again.");
       }
     } finally {
       setIsPending(false);
@@ -640,9 +715,13 @@ export default function EditBooking({
               type="submit"
               variant="secondary"
               className="w-full py-3 bg-[#2D3648] text-white rounded-lg"
-              disabled={isPending}
+              disabled={isPending || !hasChanges()}
             >
-              {isPending ? "Editing..." : "Edit Booking"}
+              {isPending
+                ? "Editing..."
+                : hasChanges()
+                  ? "Save Changes"
+                  : "No Changes"}
             </Button>
           </div>
         </form>
