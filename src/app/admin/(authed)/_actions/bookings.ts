@@ -79,3 +79,25 @@ export async function updateBooking({
     throw err.response.data;
   }
 }
+
+export async function rescheduleBooking({
+  bookingId,
+  ...data
+}: {
+  bookingId: number;
+  timeSlotId: number;
+  date: string;
+}) {
+  console.log({ bookingId });
+  try {
+    const booking = await serverRequest(
+      `bookings/${bookingId}/reschedule`,
+      "PATCH",
+      data
+    );
+    return booking.data;
+  } catch (err: any) {
+    console.log(err.response);
+    throw err.response.data;
+  }
+}

@@ -24,7 +24,10 @@ import { Textarea } from "@/components/ui/Textarea";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import DateTimeSlotsFields from "@/components/common/DateTimeSlotsFIelds";
-import { useUpdateBookingMutation } from "../../_services/mutations";
+import {
+  useRescheduleBookingMutation,
+  useUpdateBookingMutation
+} from "../../_services/mutations";
 import ModalWrapper from "@/components/common/ModalWrapper";
 import Checkbox from "@/components/ui/Checkbox";
 import { ServiceAddOn } from "@/app/(landings)/booking/new/types";
@@ -46,9 +49,9 @@ export default function EditBooking({
   const { data: servicesOptions } = useServicesQuery();
   const { data: timeSlots } = useTimeSlotsQuery();
   const { data: addOns } = useServiceAddOnsQuery();
-  const { mutateAsync } = useUpdateBookingMutation();
+  const { mutateAsync: updateAsync } = useUpdateBookingMutation();
+  const { mutateAsync: rescheduleAsync } = useRescheduleBookingMutation();
 
-  console.log(booking.timeSlot);
   const [newBookingData, setNewBookingData] = useState({
     // Client Info
     clientName: booking.guest?.fullName,
@@ -84,7 +87,6 @@ export default function EditBooking({
     // Other
     addOns: booking.addOns || ([] as ServiceAddOn[])
   });
-  console.log(newBookingData);
   const [isPending, setIsPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [specificServices, setSpecificServices] = useState<any[]>([]);
@@ -133,7 +135,6 @@ export default function EditBooking({
   // Handle address selection with coordinates
   const handleAddressSelected = (address: string, details?: AddressDetails) => {
     setField("serviceAddress", address);
-    console.log(details);
     if (details) {
       setField("lat", details.lat);
       setField("lng", details.lon);
@@ -235,7 +236,6 @@ export default function EditBooking({
         lng: newBookingData.lng,
 
         // Make the API happy with the required fields
-        country: "US",
         state: newBookingData.state,
         city: newBookingData.city,
         zipCode: newBookingData.zipCode,
@@ -245,14 +245,26 @@ export default function EditBooking({
         entryMethod: newBookingData.accessMethod,
         entryInstructions: newBookingData.accessInstructions,
 
-        // preferredDate: newBookingData.preferredDate,
-        // timeWindow: newBookingData.timeWindow, // FIX
-
         addOnIds: newBookingData.addOns.map((i) => i.id)
       };
 
       // Send data to the API
-      await mutateAsync({ bookingId: booking.id, ...formData });
+      const updatePromise = updateAsync({ bookingId: booking.id, ...formData });
+
+      let reschedulePromise = null as null | Promise<any>;
+
+      if (
+        newBookingData.preferredDate?.toISOString() !== booking.timeSlot.date ||
+        newBookingData.timeWindow !== String(booking.timeSlot.templateId)
+      ) {
+        reschedulePromise = rescheduleAsync({
+          bookingId: booking.id,
+          timeSlotId: Number(newBookingData.timeWindow),
+          date: newBookingData.preferredDate?.toISOString() || ""
+        });
+      }
+
+      await Promise.all([updatePromise, reschedulePromise]);
 
       onClose();
     } catch (error) {

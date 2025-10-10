@@ -7,6 +7,7 @@ import {
   assignCleaner,
   cancelBooking,
   completeBooking,
+  rescheduleBooking,
   startBooking,
   updateBooking
 } from "../_actions/bookings";
@@ -94,6 +95,17 @@ export function useAddBookingMutation() {
       axios.post("/api/submit-order", formData),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["bookings"] });
+    }
+  });
+}
+
+export function useRescheduleBookingMutation() {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  return useMutation({
+    mutationFn: rescheduleBooking,
+    onSuccess: (data) => {
+      updateBookingHelper(searchParams, queryClient, data);
     }
   });
 }
