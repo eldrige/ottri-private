@@ -140,6 +140,7 @@ export function useUpdateTimeSlotMutation() {
     mutationFn: updateTimeSlot,
     onSuccess: (data) => {
       updateTimeSlotHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["timeslots"] });
     }
   });
 }
@@ -149,6 +150,7 @@ export function useAddTimeSlotMutation() {
     mutationFn: addTimeSlot,
     onSuccess: (data) => {
       addTimeSlotHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["timeslots"] });
     }
   });
 }
