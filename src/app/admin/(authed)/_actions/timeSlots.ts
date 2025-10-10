@@ -31,11 +31,22 @@ export async function updateTimeSlot({
     throw err.response.data;
   }
 }
+
 export async function addTimeSlot(data: FormDataType) {
   try {
     const body = getSlotBody(data);
     const timeSlot = await serverRequest(`timeslots`, "POST", body);
     return timeSlot.data as TimeSlot;
+  } catch (err: any) {
+    console.log(err.response);
+    throw err.response.data;
+  }
+}
+
+export async function deleteTimeSlot({ timeSlotId }: { timeSlotId: number }) {
+  try {
+    await serverRequest(`timeslots/${timeSlotId}`, "DELETE");
+    return { id: timeSlotId };
   } catch (err: any) {
     console.log(err.response);
     throw err.response.data;

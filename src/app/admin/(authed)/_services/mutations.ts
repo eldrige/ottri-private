@@ -22,7 +22,11 @@ import {
   updateServiceAreas
 } from "../_actions/ServiceAreas";
 import axios from "axios";
-import { addTimeSlot, updateTimeSlot } from "../_actions/timeSlots";
+import {
+  addTimeSlot,
+  deleteTimeSlot,
+  updateTimeSlot
+} from "../_actions/timeSlots";
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
 
 // Assign cleaner
@@ -148,8 +152,17 @@ export function useAddTimeSlotMutation() {
     }
   });
 }
+export function useDeleteTimeSlotMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteTimeSlot,
+    onSuccess: (data) => {
+      deleteTimeSlotHelper(queryClient, data);
+    }
+  });
+}
 
-// Helpers
+// Bookings Helpers
 function updateBookingHelper(
   searchParams: ReadonlyURLSearchParams,
   queryClient: QueryClient,
@@ -171,7 +184,7 @@ function updateBookingHelper(
   queryClient.setQueryData(["bookings", statusFilter], newData);
 }
 
-// ServiceAreas
+// ServiceAreas helpers
 function deleteSAHelper(queryClient: QueryClient, SAs: { id: number }[]) {
   const queryData = queryClient.getQueryData([
     "service-areas"
@@ -209,6 +222,7 @@ function updateSAHelper(queryClient: QueryClient, newSAs: ServiceArea[]) {
   queryClient.setQueryData(["service-areas"], newServiceAreas);
 }
 
+// TimeSlots Helpers
 function updateTimeSlotHelper(queryClient: QueryClient, newTimeSlot: TimeSlot) {
   const queryData = queryClient.getQueryData(["timeslots"]) as TimeSlot[];
   if (!queryData) return;
@@ -225,6 +239,18 @@ function addTimeSlotHelper(queryClient: QueryClient, newTimeSlot: TimeSlot) {
   if (!queryData) return;
 
   const newTimeSlots = [newTimeSlot, ...queryData];
+
+  queryClient.setQueryData(["timeslots"], newTimeSlots);
+}
+
+function deleteTimeSlotHelper(
+  queryClient: QueryClient,
+  { id }: { id: number }
+) {
+  const queryData = queryClient.getQueryData(["timeslots"]) as TimeSlot[];
+  if (!queryData) return;
+
+  const newTimeSlots = queryData.filter((i) => i.id !== id);
 
   queryClient.setQueryData(["timeslots"], newTimeSlots);
 }

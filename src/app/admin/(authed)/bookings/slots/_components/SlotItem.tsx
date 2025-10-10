@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import { TrashIcon, UsersIcon } from "lucide-react";
 import { useServicesQuery } from "../../../_services/queries";
 import EditSlot from "./EditSlot";
+import { useDeleteTimeSlotMutation } from "../../../_services/mutations";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 function formatHour(hour: number): string {
   const period = hour >= 12 ? "PM" : "AM";
@@ -19,7 +21,19 @@ const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export default function SlotItem({ timeSlot }: { timeSlot: TimeSlot }) {
   const { data: services } = useServicesQuery();
+  const { mutateAsync: deleteTS, isPending: isDeleting } =
+    useDeleteTimeSlotMutation();
   const [editSlot, setEditSlot] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      await deleteTS({ timeSlotId: timeSlot.id });
+      setConfirmDelete(false);
+    } catch (error) {
+      console.error("Failed to delete time slot:", error);
+    }
+  };
 
   if (!services) return null;
 
@@ -30,6 +44,18 @@ export default function SlotItem({ timeSlot }: { timeSlot: TimeSlot }) {
     >
       {editSlot && (
         <EditSlot timeSlot={timeSlot} onClose={() => setEditSlot(false)} />
+      )}
+      {confirmDelete && (
+        <ConfirmModal
+          open={confirmDelete}
+          onCancel={() => setConfirmDelete(false)}
+          title="Delete Time Slot"
+          description={`Are you sure you want to delete the time slot ${formatHour(timeSlot.startTime)} - ${formatHour(timeSlot.endTime)}? This action cannot be undone.`}
+          confirmText="Delete"
+          accent="distructive"
+          loading={isDeleting}
+          onConfirm={handleDelete}
+        />
       )}
       <div>
         <div className="flex items-center gap-3">
@@ -72,6 +98,7 @@ export default function SlotItem({ timeSlot }: { timeSlot: TimeSlot }) {
           Edit
         </Button>
         <Button
+          onClick={() => setConfirmDelete(true)}
           size={"2xs"}
           variant={"destructive"}
           className="py-2 px-3 text-xs border-black/10 flex-1 md:flex-0 flex justify-center gap-2"
