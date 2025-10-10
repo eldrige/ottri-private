@@ -62,8 +62,7 @@ export default function ManageSlotsPage() {
         <div>
           <h3 className="text-heading-4">Available slots management</h3>
           <p className="mt-3 text-sm lg:text-base">
-            Manage time slots for bookings. Each slot is 2 hours long with 1
-            hour gaps between slots.
+            Manage time slots for bookings.
           </p>
           <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
             {[

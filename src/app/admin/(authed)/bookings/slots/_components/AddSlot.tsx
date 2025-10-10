@@ -6,8 +6,12 @@ import ModalWrapper from "@/components/common/ModalWrapper";
 import { useAddTimeSlotMutation } from "../../../_services/mutations";
 import { toast } from "react-hot-toast";
 
+type FormErrorsType = {
+  [key in keyof FormDataType]?: string;
+};
+
 export default function AddSlot({ onClose }: { onClose: () => void }) {
-  const { mutateAsync, isPending } = useAddTimeSlotMutation();
+  const { mutateAsync, isPending, isError, error } = useAddTimeSlotMutation();
   const [formData, setFormData] = useState<FormDataType>(() => ({
     startTime: null,
     maxCapacity: null,
@@ -15,22 +19,47 @@ export default function AddSlot({ onClose }: { onClose: () => void }) {
     daysOfWeek: [],
     isActive: false
   }));
-  console.log({ formData });
+  const [errors, setErrors] = useState<FormErrorsType>({});
 
   const setField = (field: keyof FormDataType, value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value
     }));
+
+    // Clear error for this field when it's changed
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  const validate = (): boolean => {
+    const newErrors: FormErrorsType = {};
+
+    if (formData.startTime === null) {
+      newErrors.startTime = "Start time is required";
+    }
+
+    if (formData.maxCapacity === null) {
+      newErrors.maxCapacity = "Maximum capacity is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const onSubmit = async () => {
+    // Validate form before submission
+    if (!validate()) {
+      return;
+    }
+
     try {
       // Call the mutation with timeSlotId and body
       await mutateAsync(formData);
 
       // Show success message
-      toast.success("Time slot updated successfully", {
+      toast.success("Time slot added successfully", {
         position: "bottom-right"
       });
 
@@ -38,16 +67,7 @@ export default function AddSlot({ onClose }: { onClose: () => void }) {
       onClose();
     } catch (error) {
       // Handle errors
-      console.error("Failed to update time slot:", error);
-
-      // Show error message
-      if (error && typeof error === "object" && "message" in error) {
-        toast.error(error.message as string, { position: "bottom-right" });
-      } else {
-        toast.error("Failed to update time slot. Please try again.", {
-          position: "bottom-right"
-        });
-      }
+      console.error("Failed to add time slot:", error);
     }
   };
 
@@ -55,7 +75,14 @@ export default function AddSlot({ onClose }: { onClose: () => void }) {
     <ModalWrapper onClose={onClose}>
       <div className="p-4 flex flex-col gap-6 w-full bg-white rounded-lg max-w-xl">
         <h4 className="text-heading-5">Add Slot</h4>
-        <SlotForm formData={formData} setField={setField} />
+        <SlotForm formData={formData} setField={setField} errors={errors} />
+
+        {isError && (
+          <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+            {error.message}
+          </div>
+        )}
+
         <div className="flex gap-8 *:flex-1 mt-auto">
           <Button onClick={onClose} variant={"secondary-outline"} size={"xs"}>
             Cancel

@@ -8,6 +8,9 @@ import { useServicesQuery } from "../../../_services/queries";
 interface SlotFormProps {
   formData: FormDataType;
   setField: (field: keyof FormDataType, value: unknown) => void;
+  errors: {
+    [key in keyof FormDataType]?: string;
+  };
 }
 
 const daysOfWeekOptions = [
@@ -20,7 +23,11 @@ const daysOfWeekOptions = [
   { label: "Sun", value: 0 }
 ];
 
-export default function SlotForm({ formData, setField }: SlotFormProps) {
+export default function SlotForm({
+  formData,
+  setField,
+  errors
+}: SlotFormProps) {
   const { data: services } = useServicesQuery();
   const [checkAll, setCheckAll] = useState(false);
 
@@ -70,6 +77,7 @@ export default function SlotForm({ formData, setField }: SlotFormProps) {
             onChange={(e) =>
               setField("startTime", e.target.value.replace(/\d+$/, "00"))
             }
+            error={errors.startTime}
           />
           <p className="mt-2 text-tiny text-secondary-700/70">
             Slot will be 9:00 AM - 11:00 AM
@@ -83,6 +91,7 @@ export default function SlotForm({ formData, setField }: SlotFormProps) {
             placeholder="0"
             value={formData.maxCapacity || ""}
             onChange={(e) => setField("maxCapacity", e.target.value)}
+            error={errors.maxCapacity}
           />
         </div>
       </div>

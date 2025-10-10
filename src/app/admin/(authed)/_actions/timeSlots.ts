@@ -28,7 +28,7 @@ export async function updateTimeSlot({
     return timeSlot.data as TimeSlot;
   } catch (err: any) {
     console.log(err.response);
-    throw err.response.data;
+    throw String(err.response.data.message);
   }
 }
 
@@ -39,7 +39,7 @@ export async function addTimeSlot(data: FormDataType) {
     return timeSlot.data as TimeSlot;
   } catch (err: any) {
     console.log(err.response);
-    throw err.response.data;
+    throw String(err.response.data.message);
   }
 }
 
