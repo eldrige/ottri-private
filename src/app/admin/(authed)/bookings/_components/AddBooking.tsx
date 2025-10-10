@@ -66,7 +66,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     // Additional Details
     petType: "no-pets",
     petInstructions: "",
-    accessMethod: "home",
+    accessMethod: accessOptions[0].id,
     accessInstructions: "",
 
     // Scheduling
