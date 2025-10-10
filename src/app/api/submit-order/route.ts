@@ -9,6 +9,7 @@ import {
   calculateTotal
 } from "../../../utils/priceCalculation";
 import { serverRequest } from "@/lib/serverRequest";
+import { User } from "@/app/dashboard/_utils/types";
 
 // Extend the type to include the paymentMethodId and admin booking flag
 interface OrderRequest extends OrderFormValues {
@@ -21,36 +22,44 @@ export async function POST(request: Request) {
     const { paymentMethodId, isAdminBooking, ...orderData }: OrderRequest =
       await request.json();
 
+    // Get user profile info
+    const userRes = await serverRequest("auth/profile").catch(() => undefined);
+
+    const user = userRes?.data as User | undefined;
+
     // Calculate the total amount using the same logic as the form
     const totalAmount = calculateTotal(orderData);
     const servicesPrice = calculateServicesPrice(orderData);
     const addOnsPrice = calculateAddOnsPrice(orderData);
 
     let paymentIntent = null;
-    let customerId = undefined;
+    let customerId =
+      user?.role === "USER"
+        ? user.personalInformation?.stripeCustomerId
+        : undefined;
 
-    // Skip payment processing if it's an admin booking
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeSecretKey) {
+      console.error("STRIPE_SECRET_KEY is not set");
+      return NextResponse.json(
+        { error: { message: "Server configuration error." } },
+        { status: 500 }
+      );
+    }
+
+    const stripe = new Stripe(stripeSecretKey);
+
+    // Create customer if user logging in
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: orderData.email,
+        name: orderData.fullName
+      });
+      // FIX: customer id shit for guest bookings
+      customerId = customer.id;
+    }
+
     if (!isAdminBooking) {
-      const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-      if (!stripeSecretKey) {
-        console.error("STRIPE_SECRET_KEY is not set");
-        return NextResponse.json(
-          { error: { message: "Server configuration error." } },
-          { status: 500 }
-        );
-      }
-
-      const stripe = new Stripe(stripeSecretKey);
-
-      // Create customer if user logging in
-      if (orderData.createAccount) {
-        const customer = await stripe.customers.create({
-          email: orderData.email,
-          name: orderData.fullName
-        });
-        customerId = customer.id;
-      }
-
       // Process the payment with Stripe
       paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(totalAmount * 100), // Amount in cents
@@ -66,7 +75,7 @@ export async function POST(request: Request) {
 
     const bodyObj = {
       // TODO: get rid of empty string later
-      cleaningFrequency: orderData.frequency || "",
+      cleaningFrequency: orderData.frequency || null,
       servicesPrice: servicesPrice,
       addOnsPrice: addOnsPrice,
       tax: (servicesPrice + addOnsPrice) * 0.08,
@@ -76,7 +85,7 @@ export async function POST(request: Request) {
       phoneNumber: orderData.phoneNumber,
       address: orderData.serviceAddress,
       tip: orderData.tipAmount || 0,
-      otherAddOns: orderData.otherService || "",
+      otherAddOns: orderData.otherService || null,
       pets: orderData.petType || "no-pets",
       email: orderData.email,
       petsInstructions: orderData.petInstructions || "",
