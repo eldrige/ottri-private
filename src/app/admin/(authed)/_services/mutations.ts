@@ -15,7 +15,8 @@ import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import {
   Booking as serviceArea,
   BookingsResponse,
-  ServiceArea
+  ServiceArea,
+  Cleaner
 } from "@/app/admin/types";
 import {
   createServiceAreas,
@@ -29,6 +30,7 @@ import {
   updateTimeSlot
 } from "../_actions/timeSlots";
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
+import { updateCleaner } from "../_actions/cleaners";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -176,6 +178,19 @@ export function useDeleteTimeSlotMutation() {
   });
 }
 
+// Cleaners
+export function useUpdateCleanerMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateCleaner,
+    onSuccess: (data) => {
+      updateCleanerHelper(queryClient, data);
+    }
+  });
+}
+
+// HELPERS
+
 // Bookings Helpers
 function updateBookingHelper(
   searchParams: ReadonlyURLSearchParams,
@@ -269,14 +284,14 @@ function deleteTimeSlotHelper(
   queryClient.setQueryData(["timeslots"], newTimeSlots);
 }
 
-// function removeBookingHelper(
-//   searchParams: ReadonlyURLSearchParams,
-//   queryClient: QueryClient,
-//   booking: Booking
-// ) {
-//   const statusFilter = searchParams.get("status") || "";
-//   const queryData = queryClient.getQueryData([
-//     "bookings",
-//     statusFilter
-//   ]) as BookingsResponse;
-//   if (!queryData) return;
+// Cleaners Helpers
+function updateCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
+  const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
+  if (!queryData) return;
+
+  const newCleaners = queryData.map((b) =>
+    b.id === newCleaner.id ? newCleaner : b
+  );
+
+  queryClient.setQueryData(["cleaners"], newCleaners);
+}
