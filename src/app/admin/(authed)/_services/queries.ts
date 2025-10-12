@@ -1,5 +1,10 @@
 import { ServiceAddOn, TimeSlot } from "@/app/(landings)/booking/new/types";
-import { BookingsResponse, Cleaner, ServiceOption } from "@/app/admin/types";
+import {
+  BookingsResponse,
+  Cleaner,
+  ServiceArea,
+  ServiceOption
+} from "@/app/admin/types";
 import { axiosInstance } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -39,7 +44,8 @@ export function useCleanersQuery() {
 export function useServiceAreasQuery() {
   return useQuery({
     queryKey: ["service-areas"],
-    queryFn: () => axiosInstance.get("service-areas").then((i) => i.data)
+    queryFn: () =>
+      axiosInstance.get("service-areas").then((i) => i.data as ServiceArea[])
   });
 }
 
