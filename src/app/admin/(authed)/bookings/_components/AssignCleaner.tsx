@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { X } from "lucide-react";
-import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import React, { useState } from "react";
 import { useAssignCleanerMutation } from "../../_services/mutations";
 import { useCleanersQuery } from "../../_services/queries";
+import ModalWrapper from "@/components/common/ModalWrapper";
 
 export default function AssignCleaner({
   booking,
@@ -23,49 +23,7 @@ export default function AssignCleaner({
     null
   );
 
-  // Create a state to track if the portal container is ready
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
-    null
-  );
-
-  // Set up the portal container on mount
-  useEffect(() => {
-    // Find existing portal container or create a new one
-    let container = document.getElementById("cleaner-assign-portal");
-    if (!container) {
-      container = document.createElement("div");
-      container.id = "cleaner-assign-portal";
-      document.body.appendChild(container);
-    }
-    setPortalContainer(container);
-
-    // Cleanup function to remove the portal container when unmounted
-    return () => {
-      if (
-        container &&
-        container.parentElement &&
-        !container.childElementCount
-      ) {
-        document.body.removeChild(container);
-      }
-    };
-  }, []);
-
-  // Block scrolling while the modal is open
-  useEffect(() => {
-    // Store the original overflow style
-    const originalOverflow = document.body.style.overflow;
-
-    // Prevent scrolling
-    document.body.style.overflow = "hidden";
-
-    // Re-enable scrolling on cleanup
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-
-  if (!cleaners || !portalContainer) return null;
+  if (!cleaners) return null;
 
   const dateTime = format(
     new Date(booking.timeSlot.date),
@@ -87,15 +45,9 @@ export default function AssignCleaner({
     }
   };
 
-  // Content to render in the portal
-  const modalContent = (
-    <div
-      className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4"
-      onClick={(e) => {
-        // Close modal when clicking on the backdrop
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+  // Use createPortal to render the modal content to the portal container
+  return (
+    <ModalWrapper onClose={onClose}>
       <div
         className="border border-black/10 text-secondary-700 rounded-lg p-4 w-full max-w-2xl space-y-4 max-h-[90vh] overflow-y-auto bg-white"
         onClick={(e) => e.stopPropagation()}
@@ -224,9 +176,6 @@ export default function AssignCleaner({
           </div>
         </div>
       </div>
-    </div>
+    </ModalWrapper>
   );
-
-  // Use createPortal to render the modal content to the portal container
-  return createPortal(modalContent, portalContainer);
 }

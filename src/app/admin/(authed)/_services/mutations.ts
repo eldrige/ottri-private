@@ -7,6 +7,7 @@ import {
   assignCleaner,
   cancelBooking,
   completeBooking,
+  rescheduleBooking,
   startBooking,
   updateBooking
 } from "../_actions/bookings";
@@ -21,6 +22,13 @@ import {
   deleteServiceAreas,
   updateServiceAreas
 } from "../_actions/ServiceAreas";
+import axios from "axios";
+import {
+  addTimeSlot,
+  deleteTimeSlot,
+  updateTimeSlot
+} from "../_actions/timeSlots";
+import { TimeSlot } from "@/app/(landings)/booking/new/types";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -79,6 +87,29 @@ export function useUpdateBookingMutation() {
   });
 }
 
+export function useAddBookingMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mutationFn: ({ formData }: any) =>
+      axios.post("/api/submit-order", formData),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["bookings"] });
+    }
+  });
+}
+
+export function useRescheduleBookingMutation() {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  return useMutation({
+    mutationFn: rescheduleBooking,
+    onSuccess: (data) => {
+      updateBookingHelper(searchParams, queryClient, data);
+    }
+  });
+}
+
 // Service Areas
 export function useDeleteServiceAreaMutation() {
   const queryClient = useQueryClient();
@@ -114,7 +145,38 @@ export function useUpdateServiceAreaMutation() {
   });
 }
 
-// Helpers
+// TimeSlots
+export function useUpdateTimeSlotMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateTimeSlot,
+    onSuccess: (data) => {
+      updateTimeSlotHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["timeslots"] });
+    }
+  });
+}
+export function useAddTimeSlotMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: addTimeSlot,
+    onSuccess: (data) => {
+      addTimeSlotHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["timeslots"] });
+    }
+  });
+}
+export function useDeleteTimeSlotMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteTimeSlot,
+    onSuccess: (data) => {
+      deleteTimeSlotHelper(queryClient, data);
+    }
+  });
+}
+
+// Bookings Helpers
 function updateBookingHelper(
   searchParams: ReadonlyURLSearchParams,
   queryClient: QueryClient,
@@ -136,7 +198,7 @@ function updateBookingHelper(
   queryClient.setQueryData(["bookings", statusFilter], newData);
 }
 
-// ServiceAreas
+// ServiceAreas helpers
 function deleteSAHelper(queryClient: QueryClient, SAs: { id: number }[]) {
   const queryData = queryClient.getQueryData([
     "service-areas"
@@ -172,6 +234,39 @@ function updateSAHelper(queryClient: QueryClient, newSAs: ServiceArea[]) {
   );
 
   queryClient.setQueryData(["service-areas"], newServiceAreas);
+}
+
+// TimeSlots Helpers
+function updateTimeSlotHelper(queryClient: QueryClient, newTimeSlot: TimeSlot) {
+  const queryData = queryClient.getQueryData(["timeslots"]) as TimeSlot[];
+  if (!queryData) return;
+
+  const newTimeSlots = queryData.map((b) =>
+    b.id === newTimeSlot.id ? newTimeSlot : b
+  );
+
+  queryClient.setQueryData(["timeslots"], newTimeSlots);
+}
+
+function addTimeSlotHelper(queryClient: QueryClient, newTimeSlot: TimeSlot) {
+  const queryData = queryClient.getQueryData(["timeslots"]) as TimeSlot[];
+  if (!queryData) return;
+
+  const newTimeSlots = [newTimeSlot, ...queryData];
+
+  queryClient.setQueryData(["timeslots"], newTimeSlots);
+}
+
+function deleteTimeSlotHelper(
+  queryClient: QueryClient,
+  { id }: { id: number }
+) {
+  const queryData = queryClient.getQueryData(["timeslots"]) as TimeSlot[];
+  if (!queryData) return;
+
+  const newTimeSlots = queryData.filter((i) => i.id !== id);
+
+  queryClient.setQueryData(["timeslots"], newTimeSlots);
 }
 
 // function removeBookingHelper(

@@ -67,7 +67,6 @@ export default function ErrorComponent({ error, reset }: ErrorPageProps) {
                 </>
               )}
             </Button>
-            {/* TODO: FINISH PR!!!! */}
             {showDetails && (
               <div className="mt-4 p-4 bg-muted rounded-md text-left overflow-auto max-h-64 text-error">
                 <p className="font-medium mb-2">Error message:</p>

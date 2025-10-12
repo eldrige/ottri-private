@@ -1,3 +1,4 @@
+import { ServiceAddOn, TimeSlot } from "@/app/(landings)/booking/new/types";
 import { BookingsResponse, Cleaner, ServiceOption } from "@/app/admin/types";
 import { axiosInstance } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
@@ -39,5 +40,23 @@ export function useServiceAreasQuery() {
   return useQuery({
     queryKey: ["service-areas"],
     queryFn: () => axiosInstance.get("service-areas").then((i) => i.data)
+  });
+}
+
+// Timeslots
+export function useTimeSlotsQuery() {
+  return useQuery({
+    queryKey: ["timeslots"],
+    queryFn: () =>
+      axiosInstance.get<TimeSlot[]>("timeslots").then((i) => i.data)
+  });
+}
+
+// ServiceAddons
+export function useServiceAddOnsQuery() {
+  return useQuery({
+    queryKey: ["add-ons"],
+    queryFn: () =>
+      axiosInstance.get<ServiceAddOn[]>("service-addons").then((i) => i.data)
   });
 }
