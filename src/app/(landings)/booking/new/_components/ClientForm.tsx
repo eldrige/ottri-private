@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import StepsViewer from "./StepsViewer";
+import axios from "axios";
 
 // Step components
 import ServiceTypeStep from "./steps/ServiceTypeStep";
@@ -22,6 +23,8 @@ import { PreflightType } from "../types";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { UserData } from "@/lib/types";
+import AlertLineIcon from "@/components/icons/AlertLineIcon";
+import { X } from "lucide-react";
 
 export default function ClientForm({
   preflight,
@@ -39,6 +42,7 @@ export default function ClientForm({
     defaultValues: {
       serviceType: null,
       specificServiceType: null,
+      frequency: null,
       bedrooms: "",
       bathrooms: "",
       squareFootage: "",
@@ -74,7 +78,8 @@ export default function ClientForm({
     handleSubmit,
     trigger,
     formState: { errors },
-    setError
+    setError,
+    clearErrors
   } = methods;
   const processPaymentRef = useRef(() => Promise.resolve(""));
 
@@ -82,8 +87,6 @@ export default function ClientForm({
 
   // Watch form values for summary display
   const formValues = watch();
-
-  console.log({ preflight, formValues });
 
   // Check if current step has validation errors
   const currentStepHasErrors = () => {
@@ -116,7 +119,6 @@ export default function ClientForm({
         // Tip step - no required fields by default
         return false;
       case 7:
-        console.log(errors);
         return (
           !!errors.fullName ||
           !!errors.phoneNumber ||
@@ -217,26 +219,48 @@ export default function ClientForm({
     validateCurrentStep
   ]);
 
+  // Calculate discount based on frequency
+  const getDiscountPercentage = (frequency: string | null): number => {
+    switch (frequency) {
+      case "MONTHLY":
+        return 0.1; // 10%
+      case "BIWEEKLY":
+        return 0.15; // 15%
+      case "WEEKLY":
+        return 0.1; // 10%
+      default:
+        return 0; // No discount
+    }
+  };
+
   // Calculate price based on form values
   const calculatePrice = () => {
     return calculateBasePrice(formValues);
   };
 
-  // Calculate the total with tip included
+  // Calculate the discount amount
+  const calculateDiscount = () => {
+    const basePrice = calculatePrice();
+    const discountPercentage = getDiscountPercentage(formValues.frequency);
+    return basePrice * discountPercentage;
+  };
+
+  // Calculate the total with tip and discount included
   const calculateTotal = () => {
     const basePrice = calculatePrice();
     const tipAmount = formValues.tipAmount || 0;
+    const discountAmount = calculateDiscount();
 
-    return basePrice + tipAmount;
+    return basePrice - discountAmount + tipAmount;
   };
 
   const estimatedPrice = calculatePrice();
+  const discountAmount = calculateDiscount();
   const totalWithTip = calculateTotal();
 
   // Navigation functions
   const goToNextStep = async () => {
     const isValid = await validateCurrentStep();
-    console.log(errors, formValues);
     if (isValid && currStep < 7) {
       setCurrStep((prev) => prev + 1);
     }
@@ -276,35 +300,83 @@ export default function ClientForm({
       paymentMethodId = result.toString();
     }
 
-    // Process the final form submission
+    // Process the final form submission using axios
     try {
-      const response = await fetch("/api/submit-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, paymentMethodId })
+      const response = await axios.post("/api/submit-order", {
+        ...data,
+        paymentMethodId
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        // Handle successful submission
-        // e.g., redirect to confirmation page
-        // window.location.href = `/booking/confirmation?orderId=${result.orderId}`;
-        router.push(`/booking/confirmation?orderId=${result.orderId}`);
-      } else {
-        // Handle error
-        // if (response.status === 409) {
-        //   setError("email")
-        // }
-        console.log(response.status);
-        setProcessing(false);
-        alert(result.error?.message || "An error occurred");
-      }
+      // If we get here, request was successful
+      router.push(`/booking/confirmation?orderId=${response.data.orderId}`);
     } catch (error) {
-      console.error("Error submitting form:", error);
       setProcessing(false);
-      alert("Failed to submit form. Please try again.");
+
+      // With axios, we can directly access the error response data
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.error.message ||
+          "An unexpected error occurred during booking";
+
+        // Handle specific error cases based on status code
+        if (error.response.status === 409) {
+          // Conflict error - likely email already exists
+          setError(
+            errorMessage.includes("email")
+              ? "email"
+              : errorMessage.includes("phone")
+                ? "phoneNumber"
+                : "timeWindow",
+            {
+              type: "server",
+              message: errorMessage
+            }
+          );
+        }
+        // Generic error
+        setError("root.serverError", {
+          type: "server",
+          message: errorMessage
+        });
+      } else {
+        // Handle network errors or other unexpected errors
+        console.error("Error submitting form:", error);
+        setError("root.serverError", {
+          type: "server",
+          message: "Network error. Please check your connection and try again."
+        });
+      }
     }
+  };
+
+  // A component to display root-level server errors
+  const ServerErrorMessage = () => {
+    const rootServerError = errors.root?.serverError;
+
+    if (!rootServerError) return null;
+
+    return (
+      <div
+        className="bg-red-50 border border-error text-error px-4 py-3 rounded-md mb-4"
+        role="alert"
+      >
+        <div className="flex gap-2 items-start">
+          <div className="py-1">
+            <AlertLineIcon className="size-6" />
+          </div>
+          <div>
+            <p className="font-bold">Error</p>
+            <p className="text-sm">{rootServerError.message}</p>
+          </div>
+          <button
+            className="ml-auto pl-3"
+            onClick={() => clearErrors("root.serverError")}
+          >
+            <X className="size-6 cursor-pointer" />
+          </button>
+        </div>
+      </div>
+    );
   };
 
   // Render the current step
@@ -362,6 +434,8 @@ export default function ClientForm({
             {/* Current step content */}
             {renderCurrentStep()}
 
+            <ServerErrorMessage />
+
             <hr className="text-surface-500/10" />
 
             {/* Desktop step buttons */}
@@ -381,7 +455,7 @@ export default function ClientForm({
                 <Button
                   type="button"
                   size="xs"
-                  disabled={currStep >= 7}
+                  disabled={currStep >= 7 || currentStepHasErrors()}
                   onClick={goToNextStep}
                   className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
                     currentStepHasErrors()
@@ -393,11 +467,11 @@ export default function ClientForm({
                 </Button>
               ) : (
                 <Button
-                  disabled={processing}
-                  type="button" // Changed from "submit" to "button"
+                  disabled={processing || currentStepHasErrors()}
+                  type="button"
                   size="xs"
                   onClick={handleSubmit(onSubmit)} // Explicitly handle submission
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""}`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25`}
                 >
                   Complete Booking
                 </Button>
@@ -430,7 +504,17 @@ export default function ClientForm({
               {formValues.frequency && (
                 <p className="text-caption flex justify-between">
                   Frequency:
-                  <span className="capitalize">{formValues.frequency}</span>
+                  <span className="capitalize">
+                    {formValues.frequency.toLowerCase()}
+                    <span className="text-xs text-success">
+                      {" "}
+                      (-
+                      {(
+                        getDiscountPercentage(formValues.frequency) * 100
+                      ).toFixed(0)}
+                      %)
+                    </span>
+                  </span>
                 </p>
               )}
               {formValues.bedrooms && (
@@ -485,10 +569,25 @@ export default function ClientForm({
             </div>
 
             <hr className="text-surface-500/10" />
-            <p className="text-caption flex justify-between">
-              Subtotal:{" "}
-              <span>${estimatedPrice.toString().padStart(2, "0")}</span>
-            </p>
+            <div className="space-y-2">
+              <p className="text-caption flex justify-between items-end">
+                Subtotal:
+                {discountAmount > 0 ? (
+                  <span className="flex flex-col items-end">
+                    <span className="line-through text-xs text-gray-500">
+                      ${estimatedPrice}
+                    </span>
+                    <span className="text-success-700 font-medium">
+                      ${(estimatedPrice - discountAmount).toFixed(2)}
+                    </span>
+                  </span>
+                ) : (
+                  <span className="font-medium">
+                    ${estimatedPrice.toFixed(2)}
+                  </span>
+                )}
+              </p>
+            </div>
             <hr className="text-surface-500/10" />
             <p className="text-caption font-medium flex justify-between">
               Total:{" "}
@@ -528,23 +627,19 @@ export default function ClientForm({
                 <Button
                   type="button"
                   size="xs"
-                  disabled={currStep >= 7}
+                  disabled={currStep >= 7 || currentStepHasErrors()}
                   onClick={goToNextStep}
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${
-                    currentStepHasErrors()
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : ""
-                  }`}
+                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25`}
                 >
                   Next
                 </Button>
               ) : (
                 <Button
-                  disabled={processing}
-                  type="button" // Changed from "submit" to "button"
+                  disabled={processing || currentStepHasErrors()}
+                  type="button"
                   size="xs"
-                  onClick={handleSubmit(onSubmit)} // Explicitly handle submission
-                  className={`disabled:bg-white disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25 ${currentStepHasErrors() ? "bg-gray-300 cursor-not-allowed" : ""}`}
+                  onClick={handleSubmit(onSubmit)}
+                  className={`disabled:border-primary-700 disabled:text-primary-700 disabled:opacity-25`}
                 >
                   Complete Booking
                 </Button>

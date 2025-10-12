@@ -1,4 +1,4 @@
-"use server";
+"use client";
 import { Badge } from "@/components/ui/Badge";
 import React from "react";
 import Image from "next/image";
@@ -8,11 +8,12 @@ import { ArrowRight, RotateCwIcon, Sparkle } from "lucide-react";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { Service } from "../_utils/types";
 import ourTeamFigure2 from "@/assets/ourteam-figure2.jpg";
-import { getServices } from "../_utils/queries";
 import BoxIcon from "@/components/icons/BoxIcon";
+import { useGetServices } from "../_services/queries";
 
-export default async function ServicesSection2() {
-  const services = await getServices();
+export default function ServicesSection2() {
+  const { data: services } = useGetServices();
+  if (!services || services.length === 0) return null;
   return (
     <section className=" md:px-26 pb-10 space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -95,6 +96,8 @@ function ServiceCard({
         className="rounded-t-lg aspect-2/1 w-full object-cover"
         src={coverImage}
         alt={`${title}'s cover`}
+        width={380}
+        height={180}
       />
       <div className="space-y-4 flex flex-col justify-between h-full px-6">
         <div
@@ -113,7 +116,9 @@ function ServiceCard({
             <Sparkle />
           )}
         </div>
-        <h4 className="text-heading-4 text-secondary-700">{title}</h4>
+        <h4 className="text-heading-4 text-secondary-700 capitalize">
+          {title}
+        </h4>
         <p className="text-base text-surface-700">{description}</p>
         <div className="lg:hidden space-y-4">
           <ul className="text-surface-700 marker:text-primary-700 space-y-4">

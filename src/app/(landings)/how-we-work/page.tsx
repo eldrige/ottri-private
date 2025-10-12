@@ -2,7 +2,7 @@ import React from "react";
 import HowWeWorkHero from "./_components/HowWeWorkHero";
 import HowWeWorkSection1 from "./_components/HowWeWorkSection1";
 import HowWeWorkSection2 from "./_components/HowWeWorkSection2";
-import CommonQuestionsSection from "@/components/CommonQuestionsSection";
+import CommonQuestionsSection from "@/app/(landings)/_components/CommonQuestionsSection";
 import HowWeWorkSection4 from "./_components/HowWeWorkSection4";
 
 export default function HowWeWorkPage() {

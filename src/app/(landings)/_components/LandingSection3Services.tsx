@@ -192,6 +192,8 @@ function ServiceCard({
         className="rounded-t-lg aspect-[2/1] w-full object-cover"
         src={coverImage}
         alt={`${name}'s cover`}
+        width={380}
+        height={180}
       />
       <div className="space-y-4 px-6">
         <div
@@ -210,7 +212,7 @@ function ServiceCard({
             <Sparkle />
           )}
         </div>
-        <h4 className="text-heading-4 text-secondary-700">{name}</h4>
+        <h4 className="text-heading-4 text-secondary-700 capitalize">{name}</h4>
         <p className="text-base text-surface-700">{description}</p>
         <ul className="text-surface-700 marker:text-primary-700 space-y-4">
           {serviceAddOn.slice(0, 3).map((service) => (

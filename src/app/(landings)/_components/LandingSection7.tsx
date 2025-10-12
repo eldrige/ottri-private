@@ -2,6 +2,7 @@ import ClockIcon from "@/components/icons/ClockIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Button } from "@/components/ui/Button";
 import Map from "./Map";
+import Link from "next/link";
 
 export default function LandingSection7() {
   const locations: { title: string; subtitle: string; popular?: boolean }[] = [
@@ -58,9 +59,12 @@ export default function LandingSection7() {
                   {location.subtitle}
                 </p>
               </div>
-              <button className="ml-auto md:px-6 py-3 font-medium text-primary-700 min-w-fit">
+              <Link
+                href="/booking/new"
+                className="ml-auto md:px-6 py-3 font-medium text-primary-700 min-w-fit"
+              >
                 Book now
-              </button>
+              </Link>
             </li>
           ))}
         </ul>

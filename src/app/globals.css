@@ -89,18 +89,20 @@
   @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-poppins);
-}
+@layer components {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-poppins);
+  }
 
-h1,
-h2 {
-  font-family: var(--font-nunito-sans);
-  line-height: 1.375;
-}
+  h1,
+  h2 {
+    font-family: var(--font-nunito-sans);
+    line-height: 1.375;
+  }
 
-button {
-  cursor: pointer;
+  button {
+    cursor: pointer;
+  }
 }

@@ -1,4 +1,5 @@
 import { UserData } from "@/lib/types";
+import { ServiceAddOn } from "../(landings)/booking/new/types";
 
 export interface BookingsResponse {
   limit: number;
@@ -22,7 +23,6 @@ export interface Booking {
   bathrooms: string;
   approximateSquareFootage: string;
   address: string;
-  mapLocation: null;
   stripePaymentIntentId: string;
   pets: string;
   petsInstructions: string;
@@ -40,6 +40,15 @@ export interface Booking {
   review: null;
   timeSlot: TimeSlot;
   price: number;
+  location?: {
+    type: string;
+    coordinates: number[];
+  };
+  guest?: Omit<PersonalInformation, "stripeCustomerId" | "userId"> & {
+    email: string;
+  };
+  addOns: ServiceAddOn[];
+  entryMethod: string;
 }
 
 interface TimeSlot {
@@ -55,7 +64,7 @@ interface TimeSlot {
   templateId: number;
 }
 
-interface ServiceType {
+export interface ServiceType {
   id: number;
   name: string;
   description: string;
@@ -129,30 +138,6 @@ interface PricingDetail {
   serviceId: number;
 }
 
-interface ServiceAddOn {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  type: string;
-  serviceId: number;
-  createdAt: string;
-  updatedAt: null | string;
-  deletedAt: null;
-}
-
-interface ServiceType {
-  id: number;
-  name: string;
-  description: string;
-  basePrice: number;
-  currency: string;
-  serviceId: number;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: null;
-}
-
 // Cleaner Type
 export interface Cleaner {
   id: number;
@@ -184,4 +169,25 @@ interface Stats {
   completedBookings: number;
   averageCompletionRate: number;
   averageRating: number;
+}
+
+// Service Areas
+
+export interface ServiceArea {
+  id: number;
+  popular: boolean;
+  isActive: boolean;
+  name: string;
+  nickName: string;
+  basePrice: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  services: unknown[];
+  location: SALocation;
+}
+
+interface SALocation {
+  type: string;
+  coordinates: number[][][];
 }

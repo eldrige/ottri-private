@@ -3,6 +3,7 @@ import React from "react";
 import figure from "@/assets/landing-section2-figure.jpg";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 
 export default function LandingSection2() {
   return (
@@ -28,10 +29,14 @@ export default function LandingSection2() {
           cleaning and specialized event cleaning.
         </p>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 w-full">
-          <Button size="xs">See how we work</Button>
-          <Button size="xs" variant="secondary-outline">
-            Meet our Team
-          </Button>
+          <Link href="/how-we-work">
+            <Button size="xs">See how we work</Button>
+          </Link>
+          <Link href="/our-team">
+            <Button size="xs" variant="secondary-outline">
+              Meet our Team
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

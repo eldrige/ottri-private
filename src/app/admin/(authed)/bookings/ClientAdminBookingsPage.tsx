@@ -13,6 +13,7 @@ import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
 import { useGetBookingsQuery } from "../_services/queries";
 import { useClientSearchParams } from "@/hooks/useClientSearchParams";
+import AddBooking from "./_components/AddBooking";
 
 const filterOptions = [
   { label: "All Bookings", value: "all-bookings" },
@@ -28,6 +29,7 @@ export default function ClientAdminBookingsPage() {
   const statusFilter = searchParams.get("status") || undefined;
   const getBookingsQuery = useGetBookingsQuery(statusFilter);
   const bookingsResponse = getBookingsQuery.data;
+  const [showAddBooking, setShowAddBooking] = useState(false);
   // console.log(bookingsResponse);
 
   return (
@@ -59,16 +61,19 @@ export default function ClientAdminBookingsPage() {
           />
         </div>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-          <Link href={"#"}>
-            <Button
-              size={"2xs"}
-              variant={"secondary"}
-              className="flex gap-2 items-center text-base justify-center"
-            >
-              <PlusIcon className="size-5" /> New Booking
-            </Button>
-          </Link>
-          <Link href={"/admin/bookings/manage"}>
+          <Button
+            size={"2xs"}
+            variant={"secondary"}
+            className="flex gap-2 items-center text-base justify-center"
+            onClick={() => setShowAddBooking(!showAddBooking)}
+          >
+            <PlusIcon className="size-5" /> New Booking
+          </Button>
+          {showAddBooking && (
+            <AddBooking onClose={() => setShowAddBooking(false)} />
+          )}
+          {/* <Link href={"/admin/bookings/manage"}> */}
+          <Link href={"/admin/bookings/slots"}>
             <Button
               size={"2xs"}
               variant={"secondary-outline"}
@@ -143,7 +148,7 @@ export default function ClientAdminBookingsPage() {
       ) : activeView === "list" ? (
         <ListView bookingsResponse={bookingsResponse} />
       ) : (
-        <MapView />
+        <MapView bookings={bookingsResponse.data} />
       )}
     </main>
   );

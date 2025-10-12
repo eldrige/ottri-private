@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import DashboardSection1 from "./_components/DashboardSection1";
 import DashboardSection2 from "./_components/DashboardSection2";

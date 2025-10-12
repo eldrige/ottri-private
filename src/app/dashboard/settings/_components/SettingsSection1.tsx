@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 export default function SettingsSection1() {
@@ -13,13 +14,15 @@ export default function SettingsSection1() {
           Manage your account preferences and settings
         </h3>
       </div>
-      <Button
-        className="flex w-full md:w-fit justify-center text-body text-white gap-2 px-3 items-center h-fit"
-        size={"xs"}
-      >
-        <PlusIcon />
-        Add Booking
-      </Button>
+      <Link href="/booking/new">
+        <Button
+          className="flex w-full md:w-fit justify-center text-body text-white gap-2 px-3 items-center h-fit"
+          size={"xs"}
+        >
+          <PlusIcon />
+          Add Booking
+        </Button>
+      </Link>
     </section>
   );
 }

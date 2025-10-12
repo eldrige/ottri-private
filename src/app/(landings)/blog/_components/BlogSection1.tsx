@@ -86,9 +86,11 @@ function FeaturedArticle({
             <span className="text-surface-500">{converReadTime(readTime)}</span>
           </div>
         </div>
-        <Button className="md:w-fit py-2" size={"xs"}>
-          Book with Ottri
-        </Button>
+        <Link href="/booking/new">
+          <Button className="md:w-fit py-2" size={"xs"}>
+            Book with Ottri
+          </Button>
+        </Link>
       </div>
     </div>
   );

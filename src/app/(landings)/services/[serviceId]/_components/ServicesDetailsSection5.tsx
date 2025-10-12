@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import React from "react";
 
 export default function ServicesDetailsSection5() {
@@ -13,12 +14,16 @@ export default function ServicesDetailsSection5() {
         </p>
       </div>
       <div className="flex flex-col sm:flex-row gap-4">
-        <Button className="border-primary-700 border-2" size="xs">
-          Book one-time Cleaning
-        </Button>
-        <Button size="xs" variant="secondary-outline">
-          Explore our services
-        </Button>
+        <Link href="/booking/new">
+          <Button className="border-primary-700 border-2" size="xs">
+            Book one-time Cleaning
+          </Button>
+        </Link>
+        <Link href="/services">
+          <Button size="xs" variant="secondary-outline">
+            Explore our services
+          </Button>
+        </Link>
       </div>
     </section>
   );

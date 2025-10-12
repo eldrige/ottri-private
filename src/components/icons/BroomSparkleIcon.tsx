@@ -1,12 +1,17 @@
 import React from "react";
 
-export default function BroomSparkleIcon() {
+export default function BroomSparkleIcon({
+  className
+}: {
+  className?: string;
+}) {
   return (
     <svg
       width="30"
       height="35"
       viewBox="0 0 41 40"
       fill="none"
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

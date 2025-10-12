@@ -70,7 +70,7 @@ function MobileNav({
                   </SideNavLink>
                   <SideNavLink
                     onNavigate={() => setShow(false)}
-                    href={"/dashboard/my-booking"}
+                    href={"/dashboard/my-bookings"}
                   >
                     <Calendar className="size-5" />
                     My Bookings

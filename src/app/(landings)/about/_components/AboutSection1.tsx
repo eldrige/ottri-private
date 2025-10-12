@@ -4,6 +4,7 @@ import React from "react";
 import figure1 from "@/assets/about-section1-figure.png";
 import figure1Mobile from "@/assets/about-section1-figureMobile.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function AboutSection1() {
   return (
@@ -26,10 +27,14 @@ export default function AboutSection1() {
           cleaning and specialized event cleaning.
         </p>
         <div className="flex flex-col sm:flex-row gap-x-8 gap-y-4">
-          <Button size="xs">See how we work</Button>
-          <Button size="xs" variant="secondary-outline">
-            Meet our Team
-          </Button>
+          <Link href="/how-we-work">
+            <Button size="xs">See how we work</Button>
+          </Link>
+          <Link href="/our-team">
+            <Button size="xs" variant="secondary-outline">
+              Meet our Team
+            </Button>
+          </Link>
         </div>
       </div>
       <figure className="">

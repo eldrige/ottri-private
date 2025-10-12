@@ -6,3 +6,12 @@ export function getBookings(searchParams: URLSearchParams) {
   return serverRequest(`booking?${searchParams.toString()}`, "GET");
   // return serverFetch(`bookings?${searchParams.toString()}`, "GET")
 }
+
+export function getBookingDetails(bookingId: string) {
+  return serverRequest(`bookings/${bookingId}`, "GET");
+  // return serverFetch(`bookings/${bookingId}`, "GET")
+}
+
+export async function getBookingReview(bookingId: number) {
+  return serverRequest(`bookings/${bookingId}/reviews`, "GET");
+}
