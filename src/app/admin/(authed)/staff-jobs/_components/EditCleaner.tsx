@@ -8,6 +8,8 @@ import ModalWrapper from "@/components/common/ModalWrapper";
 import { AddCleanerForm, Cleaner } from "@/app/admin/types";
 import { useUpdateCleanerMutation } from "../../_services/mutations";
 import CleanerForm from "./CleanerForm";
+import { ImageListType } from "react-images-uploading";
+import { uploadImage } from "@/app/_actions/uploadImage";
 
 export default function EditCleaner({
   onClose,
@@ -45,6 +47,8 @@ export default function EditCleaner({
     ...initialCleanerData
   });
 
+  const [image, setImage] = useState<ImageListType>([]);
+
   const [isPending, setIsPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -62,6 +66,10 @@ export default function EditCleaner({
 
   // Helper function to check if a field has been changed
   const isFieldChanged = (field: keyof typeof cleanerData): boolean => {
+    if (field === "profile") {
+      return image.length > 0;
+    }
+
     // Handle array comparisons
     if (
       Array.isArray(cleanerData[field]) &&
@@ -94,8 +102,10 @@ export default function EditCleaner({
 
   // Function to check if any field has changed
   const hasChanges = (): boolean => {
-    return Object.keys(cleanerData).some((key) =>
-      isFieldChanged(key as keyof typeof cleanerData)
+    return (
+      Object.keys(cleanerData).some((key) =>
+        isFieldChanged(key as keyof typeof cleanerData)
+      ) || image.length > 0
     );
   };
 
@@ -159,6 +169,18 @@ export default function EditCleaner({
     setIsPending(true);
 
     try {
+      // Handle image change
+      let imageUrl = cleanerData.profile;
+      if (image[0]?.file && imageUrl === cleaner.profile) {
+        const imageData = await uploadImage(image[0].file);
+
+        if (imageData?.error || !imageData?.data) throw imageData?.error;
+
+        setField("profile", imageData.data.url);
+
+        imageUrl = imageData.data.url;
+      }
+
       // Initialize an empty object for formData
       const formData: Record<string, any> = {};
 
@@ -167,7 +189,7 @@ export default function EditCleaner({
       if (isFieldChanged("phoneNumber"))
         formData.phoneNumber = cleanerData.phoneNumber;
       if (isFieldChanged("email")) formData.email = cleanerData.email;
-      if (isFieldChanged("profile")) formData.profile = cleanerData.profile;
+      if (isFieldChanged("profile")) formData.profile = imageUrl;
       if (isFieldChanged("description"))
         formData.description = cleanerData.description;
       if (isFieldChanged("quote")) formData.quote = cleanerData.quote;
@@ -222,6 +244,8 @@ export default function EditCleaner({
           formData={cleanerData}
           setField={setField}
           errors={errors}
+          image={image}
+          setImage={setImage}
         />
         {errors.form && (
           <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-md text-red-600">

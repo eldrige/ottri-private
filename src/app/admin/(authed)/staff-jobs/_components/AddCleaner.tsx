@@ -8,6 +8,8 @@ import ModalWrapper from "@/components/common/ModalWrapper";
 import { AddCleanerForm } from "@/app/admin/types";
 import { useAddCleanerMutation } from "../../_services/mutations";
 import CleanerForm from "./CleanerForm";
+import { ImageListType } from "react-images-uploading";
+import { uploadImage } from "@/app/_actions/uploadImage";
 
 export default function AddCleaner({ onClose }: { onClose: () => void }) {
   const { mutateAsync } = useAddCleanerMutation();
@@ -34,6 +36,7 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
     qualificationsIds: [] as number[]
   });
 
+  const [image, setImage] = useState<ImageListType>([]);
   const [isPending, setIsPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -47,6 +50,15 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
         return updated;
       });
     }
+  };
+
+  const handleSetImage = (image: ImageListType) => {
+    setImage(image);
+    setErrors((prev) => {
+      const updated = { ...prev };
+      delete updated["profile"];
+      return updated;
+    });
   };
 
   const validateForm = () => {
@@ -76,14 +88,8 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
     }
 
     // pfp validation
-    if (!cleanerData.profile) {
+    if (image.length === 0) {
       newErrors.profile = "Profile image is required";
-    } else {
-      try {
-        new URL(cleanerData.profile);
-      } catch {
-        newErrors.profile = "Please enter a valid URL";
-      }
     }
 
     // description
@@ -109,10 +115,22 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
     setIsPending(true);
 
     try {
+      // Upload image
+      let imageUrl = cleanerData.profile;
+      if (image[0].file && !imageUrl) {
+        const imageData = await uploadImage(image[0].file);
+
+        if (imageData?.error || !imageData?.data) throw imageData?.error;
+
+        setField("profile", imageData.data.url);
+
+        imageUrl = imageData.data.url;
+      }
+
       // Format the data according to the expected API structure
       const formData = {
-        ...cleanerData
-        // Any additional formatting needed
+        ...cleanerData,
+        profile: imageUrl
       };
 
       // Send data to the API
@@ -144,6 +162,8 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
           formData={cleanerData}
           setField={setField}
           errors={errors}
+          image={image}
+          setImage={handleSetImage}
         />
         {errors.form && (
           <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-md text-red-600">

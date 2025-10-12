@@ -6,6 +6,8 @@ import Select from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import AddressInput from "@/app/(landings)/booking/new/_components/AddressInput";
 import { useServiceAreasQuery } from "../../_services/queries";
+import { ImageUpload } from "@/app/_components/ImageUpload";
+import { ImageListType } from "react-images-uploading";
 
 interface SlotFormProps {
   formData: AddCleanerForm;
@@ -13,6 +15,8 @@ interface SlotFormProps {
   errors: {
     [key in keyof AddCleanerForm]?: string;
   };
+  image: ImageListType;
+  setImage: (value: ImageListType) => void;
 }
 
 // Language options
@@ -46,7 +50,9 @@ const preferenceOptions = [
 export default function CleanerForm({
   formData,
   setField,
-  errors
+  errors,
+  image,
+  setImage
 }: SlotFormProps) {
   const { data: serviceAreas } = useServiceAreasQuery();
 
@@ -116,12 +122,11 @@ export default function CleanerForm({
             />
           </div>
           <div>
-            <label className="block mb-2 font-medium">Profile Image URL</label>
-            <Input
-              placeholder="https://example.com/profile-image.jpg"
-              value={formData.profile}
-              onChange={(e) => setField("profile", e.target.value)}
-              className="w-full p-4 rounded-lg bg-gray-50"
+            <label className="block mb-2 font-medium">Profile Image</label>
+            <ImageUpload
+              image={image}
+              setImage={setImage}
+              placeholderImageUrl={formData.profile}
               error={errors.profile}
             />
           </div>
