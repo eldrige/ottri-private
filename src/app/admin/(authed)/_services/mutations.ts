@@ -30,7 +30,7 @@ import {
   updateTimeSlot
 } from "../_actions/timeSlots";
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
-import { updateCleaner } from "../_actions/cleaners";
+import { addCleaner, updateCleaner } from "../_actions/cleaners";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -189,6 +189,21 @@ export function useUpdateCleanerMutation() {
   });
 }
 
+export function useAddCleanerMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (...data: Parameters<typeof addCleaner>) => {
+      const res = await addCleaner(...data);
+      if (res.error || !res.data) throw await Promise.reject(res.error);
+
+      return res.data;
+    },
+    onSuccess: (data) => {
+      addCleanerHelper(queryClient, data);
+    }
+  });
+}
+
 // HELPERS
 
 // Bookings Helpers
@@ -292,6 +307,15 @@ function updateCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
   const newCleaners = queryData.map((b) =>
     b.id === newCleaner.id ? newCleaner : b
   );
+
+  queryClient.setQueryData(["cleaners"], newCleaners);
+}
+
+function addCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
+  const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
+  if (!queryData) return;
+
+  const newCleaners = [newCleaner, ...queryData];
 
   queryClient.setQueryData(["cleaners"], newCleaners);
 }

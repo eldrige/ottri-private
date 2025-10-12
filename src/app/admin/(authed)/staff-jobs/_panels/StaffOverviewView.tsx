@@ -13,48 +13,11 @@ export default function StaffOverviewView({
 }: {
   cleaners: Cleaner[];
 }) {
-  console.log(cleaners);
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
       {cleaners.map((cleaner) => (
         <StaffBox key={cleaner.id} cleaner={cleaner} />
       ))}
-      {/* <StaffBox
-        name="Maria Garcia"
-        rating={4.9}
-        jobsCompleted={159}
-        todaysJobs={3}
-        complaints={1}
-        specialties={["Office clean", "Commercial"]}
-        selectedStatus="available"
-      />
-      <StaffBox
-        name="Lisa Brown"
-        rating={4.9}
-        jobsCompleted={159}
-        todaysJobs={3}
-        complaints={1}
-        specialties={["Pet-friendly", "Deep clean", "move-out clean"]}
-        selectedStatus="available"
-      />
-      <StaffBox
-        name="John Smith"
-        rating={4.5}
-        jobsCompleted={89}
-        todaysJobs={1}
-        complaints={5}
-        specialties={["Pet-friendly", "Deep clean", "move-out clean"]}
-        selectedStatus="unavailable"
-      />
-      <StaffBox
-        name="Carlos Martinez"
-        rating={4.7}
-        jobsCompleted={190}
-        todaysJobs={2}
-        complaints={0}
-        specialties={["Pet-friendly", "Deep clean", "move-out clean"]}
-        selectedStatus="busy"
-      /> */}
     </div>
   );
 }

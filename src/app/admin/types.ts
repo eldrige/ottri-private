@@ -164,6 +164,22 @@ export interface Cleaner {
   stats: Stats;
 }
 
+export interface AddCleanerForm {
+  profile: string;
+  description: string;
+  quote: string;
+  address: string;
+  preference: string;
+  languages: string[];
+  specialitiesIds: number[];
+  serviceAreasIds: number[];
+  qualificationsIds: number[];
+  email: string;
+  experience: string;
+  fullName: string;
+  phoneNumber: string;
+}
+
 interface Stats {
   totalBookings: number;
   completedBookings: number;

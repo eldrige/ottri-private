@@ -8,6 +8,7 @@ import StaffOverviewView from "./_panels/StaffOverviewView";
 import JobAssignmentView from "./_panels/JobAssignmentView";
 import PerformanceView from "./_panels/PerformanceView";
 import { useCleanersQuery } from "../_services/queries";
+import AddCleaner from "./_components/AddCleaner";
 
 const filterOptions = [
   { label: "All Cleaners", value: "all-cleaners" },
@@ -22,6 +23,8 @@ export default function StaffJobsPage() {
   console.log(cleanersQuery.data);
 
   const [activeView, setActiveView] = useState<string>("staff-overview");
+
+  const [addCleaner, setAddCleaner] = useState(false);
 
   if (!cleanersQuery.data) return;
 
@@ -46,12 +49,14 @@ export default function StaffJobsPage() {
         </div>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           <Button
+            onClick={() => setAddCleaner(true)}
             size={"2xs"}
             variant={"secondary"}
             className="flex gap-2 items-center text-base justify-center"
           >
             <PlusIcon className="size-5" /> Add Cleaner
           </Button>
+          {addCleaner && <AddCleaner onClose={() => setAddCleaner(false)} />}
         </div>
       </div>
 

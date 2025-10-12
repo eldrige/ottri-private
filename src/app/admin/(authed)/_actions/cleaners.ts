@@ -2,7 +2,7 @@
 "use server";
 
 import { serverRequest } from "@/lib/serverRequest";
-import { Cleaner } from "../../types";
+import { AddCleanerForm, Cleaner } from "../../types";
 
 export async function updateCleaner({
   cleanerId,
@@ -17,6 +17,16 @@ export async function updateCleaner({
     return cleaner.data;
   } catch (err: any) {
     console.log(err.response);
-    throw err;
+    throw String(err.response.data);
+  }
+}
+
+export async function addCleaner(cleanerData: AddCleanerForm) {
+  try {
+    const cleaner = await serverRequest(`cleaners`, "POST", cleanerData);
+    return { data: cleaner.data as Cleaner };
+  } catch (err: any) {
+    console.log(err.response);
+    return { error: err.response.data.message };
   }
 }
