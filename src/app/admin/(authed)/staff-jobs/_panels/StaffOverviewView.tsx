@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { Cleaner } from "@/app/admin/types";
 import { useUpdateCleanerMutation } from "../../_services/mutations";
 import Image from "next/image";
+import EditCleaner from "../_components/EditCleaner";
 
 export default function StaffOverviewView({
   cleaners
@@ -30,6 +31,8 @@ const options = [
 
 function StaffBox({ cleaner }: { cleaner: Cleaner }) {
   const { mutateAsync, isPending: isUpdating } = useUpdateCleanerMutation();
+
+  const [showEdit, setShowEdit] = useState(false);
 
   const [status, setStatus] = useState(
     options.find((i) => i.value === cleaner.status) || options[0]
@@ -57,6 +60,9 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
 
   return (
     <div className="p-4 border border-black/10 rounded-lg">
+      {showEdit && (
+        <EditCleaner onClose={() => setShowEdit(false)} cleaner={cleaner} />
+      )}
       <div className="flex items-center gap-3">
         {cleaner.profile ? (
           <Image
@@ -137,6 +143,7 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
       </div>
       <div className="mt-8 flex gap-3 *:flex-1">
         <Button
+          onClick={() => setShowEdit(true)}
           className="flex items-center justify-center gap-1 border-secondary-700/10"
           size={"2xs"}
           variant={"secondary-outline"}

@@ -158,7 +158,7 @@ export interface Cleaner {
   deletedAt: null;
   user: UserData;
   specialities: ServiceOption[];
-  serviceAreas: string[];
+  serviceAreas: ServiceArea[];
   qualifications: string[];
   location: null;
   stats: Stats;
