@@ -21,7 +21,7 @@ export default function ProfileSection2({ user }: { user: User }) {
           />
           <div className="flex items-center flex-col">
             <h1 className="font-medium text-2xl text-secondary-700">
-              {user.personalInformation.fullName}
+              {user.personalInformation?.fullName}
             </h1>
             <p className="text-surface-500 text-body text-xs">
               Joined since {new Date(user.createdAt).getFullYear()}
@@ -35,11 +35,11 @@ export default function ProfileSection2({ user }: { user: User }) {
           </div>
           <div>
             <Phone />
-            <p>{user.personalInformation.phoneNumber}</p>
+            <p>{user.personalInformation?.phoneNumber}</p>
           </div>
           <div>
             <LocationIcon />
-            <p>{user.personalInformation.address}</p>
+            <p>{user.personalInformation?.address}</p>
           </div>
         </div>
       </div>
@@ -50,10 +50,10 @@ export default function ProfileSection2({ user }: { user: User }) {
 
 function PersonalInfoForm({ user }: { user: User }) {
   const [formData, setFormData] = useState({
-    fullName: user.personalInformation.fullName,
+    fullName: user.personalInformation?.fullName,
     email: user.email,
-    phone: user.personalInformation.phoneNumber,
-    address: user.personalInformation.address,
+    phone: user.personalInformation?.phoneNumber,
+    address: user.personalInformation?.address,
     yearJoined: new Date(user.createdAt).getFullYear()
   });
 
@@ -119,9 +119,9 @@ function PersonalInfoForm({ user }: { user: User }) {
             e.preventDefault();
             await updateProfile({
               userId: String(user.id),
-              fullName: formData.fullName,
-              phoneNumber: formData.phone,
-              address: formData.address
+              fullName: formData.fullName || "",
+              phoneNumber: formData.phone || "",
+              address: formData.address || ""
             });
           }}
           size={"xs"}
