@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Cleaner } from "@/app/admin/types";
 import { useUpdateCleanerMutation } from "../../_services/mutations";
+import Image from "next/image";
 
 export default function StaffOverviewView({
   cleaners
@@ -57,13 +58,23 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
   return (
     <div className="p-4 border border-black/10 rounded-lg">
       <div className="flex items-center gap-3">
-        <div className="hidden md:flex rounded-full p-2 h-13.5 aspect-square bg-gray-100 font-medium items-center justify-center uppercase">
-          {cleaner.fullName
-            .split(" ")
-            .slice(0, 2)
-            .map((i) => i[0])
-            .join("")}
-        </div>
+        {cleaner.profile ? (
+          <Image
+            src={cleaner.profile}
+            alt={`${cleaner.fullName}'s profile picture`}
+            width={100}
+            height={100}
+            className="object-cover rounded-full w-13.5 aspect-square"
+          />
+        ) : (
+          <div className="hidden md:flex rounded-full p-2 h-13.5 aspect-square bg-gray-100 font-medium items-center justify-center uppercase">
+            {cleaner.fullName
+              .split(" ")
+              .slice(0, 2)
+              .map((i) => i[0])
+              .join("")}
+          </div>
+        )}
         <h3 className="font-medium text-xl">{cleaner.fullName}</h3>
         <Select
           options={options}
