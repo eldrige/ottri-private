@@ -1,6 +1,7 @@
 import { ServiceAddOn, TimeSlot } from "@/app/(landings)/booking/new/types";
 import {
   BookingsResponse,
+  BookingStats,
   Cleaner,
   ServiceArea,
   ServiceOption
@@ -15,10 +16,23 @@ export function useGetBookingsQuery(statusFilter: string = "", limit = 50) {
     queryFn: () =>
       axios
         .get(`/api/bookings?limit=${limit}&status=${statusFilter}`)
+        // .get(`/api/proxy?path=/bookings?limit=${limit}&status=${statusFilter}`)
         .then((i) => i.data) as Promise<BookingsResponse>
   });
 }
 
+export function useStatsQuery() {
+  return useQuery({
+    queryKey: ["booking-stats"],
+    queryFn: () => {
+      return axios
+        .get("/api/proxy?path=/bookings/stats")
+        .then((i) => i.data) as Promise<BookingStats>;
+    }
+  });
+}
+
+// Services
 export function useServicesQuery() {
   return useQuery({
     queryKey: ["services"],

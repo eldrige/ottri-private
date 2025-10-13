@@ -1,3 +1,4 @@
+"use client";
 import CalendarIcon from "@/components/icons/CalendarIcon";
 import CallIcon from "@/components/icons/CallIcon";
 import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
@@ -6,8 +7,12 @@ import DollarIcon2 from "@/components/icons/DollarIcon2";
 import LineGraphIncreaseIcon from "@/components/icons/LineGraphIncreaseIcon";
 import { AlertCircleIcon, Users } from "lucide-react";
 import React from "react";
+import { useStatsQuery } from "./_services/queries";
 
 export default function AdminDashboardPage() {
+  const { data: stats } = useStatsQuery();
+
+  if (!stats) return null;
   const statsBoxes = [
     {
       title: "Today's Booking",
@@ -224,15 +229,21 @@ export default function AdminDashboardPage() {
       </div>
       <div className="mt-6 flex gap-6 *:flex-1 flex-col lg:flex-row">
         <div className="flex flex-col items-center gap-4 px-4 py-3 border border-black/10 rounded-lg">
-          <p className="text-2xl text-success">1</p>
+          <p className="text-2xl text-success">
+            {stats.statusBreakdown.COMPLETED}
+          </p>
           <p>Total Completed</p>
         </div>
         <div className="flex flex-col items-center gap-4 px-4 py-3 border border-black/10 rounded-lg">
-          <p className="text-2xl text-info-text">1</p>
+          <p className="text-2xl text-info-text">
+            {stats.statusBreakdown.INPROGRESS}
+          </p>
           <p>Total Progress</p>
         </div>
         <div className="flex flex-col items-center gap-4 px-4 py-3 border border-black/10 rounded-lg">
-          <p className="text-2xl text-primary-700">1</p>
+          <p className="text-2xl text-primary-700">
+            {stats.statusBreakdown.PENDING}
+          </p>
           <p>Pending</p>
         </div>
       </div>

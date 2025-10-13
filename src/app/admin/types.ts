@@ -161,7 +161,7 @@ export interface Cleaner {
   serviceAreas: ServiceArea[];
   qualifications: string[];
   location: null;
-  stats: Stats;
+  stats: CleanerStats;
 }
 
 export interface AddCleanerForm {
@@ -180,7 +180,7 @@ export interface AddCleanerForm {
   phoneNumber: string;
 }
 
-interface Stats {
+interface CleanerStats {
   totalBookings: number;
   completedBookings: number;
   averageCompletionRate: number;
@@ -206,4 +206,18 @@ export interface ServiceArea {
 interface SALocation {
   type: string;
   coordinates: number[][][];
+}
+
+// BookingStats
+export interface BookingStats {
+  totalBookings: number;
+  statusBreakdown: {
+    COMPLETED: number;
+    CANCELLED: number;
+    PENDING: number;
+    INPROGRESS: number;
+  };
+  totalRevenue: number;
+  baseRevenue: number;
+  totalTips: number;
 }
