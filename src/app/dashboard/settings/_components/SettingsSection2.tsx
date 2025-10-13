@@ -118,8 +118,9 @@ function PrivacySecuritySettings() {
     twoFactorAuth: userData?.settings.twoFactorAuth,
     locationSharing: userData?.settings.shareMyLocation
   });
-  const { mutateAsync: updateSettings, isPending: isUpdating } =
-    useUpdateSettingMutation();
+  const [isDebouncing, setIsDebouncing] = useState(false);
+  const { mutateAsync: updateSettings, isPending } = useUpdateSettingMutation();
+  const isUpdating = isPending || isDebouncing;
 
   if (!userData) return null;
   const toggleTwoFactorAuth = async (value: boolean) => {
@@ -131,6 +132,13 @@ function PrivacySecuritySettings() {
       });
     } catch (err) {
       console.error("Update two-factor authentication failed", err);
+    } finally {
+      setIsDebouncing(true);
+      Promise.resolve(() => {
+        setTimeout(() => {
+          setIsDebouncing(false);
+        }, 3000);
+      });
     }
   };
 
