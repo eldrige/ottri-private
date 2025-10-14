@@ -157,7 +157,7 @@ export interface Cleaner {
   updatedAt: string;
   deletedAt: null;
   user: UserData;
-  specialities: ServiceOption[];
+  specialties: string[];
   serviceAreas: ServiceArea[];
   qualifications: string[];
   location: null;
@@ -171,9 +171,9 @@ export interface AddCleanerForm {
   address: string;
   preference: string;
   languages: string[];
-  specialitiesIds: number[];
+  specialties: string[];
   serviceAreasIds: number[];
-  qualificationsIds: number[];
+  qualifications: string[];
   email: string;
   experience: string;
   fullName: string;

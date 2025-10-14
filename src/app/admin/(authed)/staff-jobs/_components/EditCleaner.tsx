@@ -38,9 +38,9 @@ export default function EditCleaner({
     address: cleaner.address,
     // Skills and Qualifications
     languages: cleaner.languages || ([] as string[]),
-    specialitiesIds: cleaner.specialities.map((i) => i.id) || ([] as number[]),
+    specialties: cleaner.specialties,
     serviceAreasIds: cleaner.serviceAreas.map((i) => i.id) || ([] as number[]),
-    qualificationsIds: [] as number[]
+    qualifications: cleaner.qualifications
   };
 
   const [cleanerData, setCleanerData] = useState<AddCleanerForm>({
@@ -174,10 +174,7 @@ export default function EditCleaner({
       if (image[0]?.file && imageUrl === cleaner.profile) {
         const imageData = await uploadImage(image[0].file);
 
-        if (imageData?.error || !imageData?.data) throw imageData?.error;
-
         setField("profile", imageData.data.url);
-
         imageUrl = imageData.data.url;
       }
 
@@ -202,12 +199,12 @@ export default function EditCleaner({
       // Handle arrays separately
       if (isFieldChanged("languages"))
         formData.languages = cleanerData.languages;
-      if (isFieldChanged("specialitiesIds"))
-        formData.specialitiesIds = cleanerData.specialitiesIds;
+      if (isFieldChanged("specialties"))
+        formData.specialties = cleanerData.specialties;
       if (isFieldChanged("serviceAreasIds"))
         formData.serviceAreasIds = cleanerData.serviceAreasIds;
-      if (isFieldChanged("qualificationsIds"))
-        formData.qualificationsIds = cleanerData.qualificationsIds;
+      if (isFieldChanged("qualifications"))
+        formData.qualifications = cleanerData.qualifications;
 
       // Only send request if there are changes
       if (Object.keys(formData).length > 0) {
@@ -223,7 +220,7 @@ export default function EditCleaner({
 
       setErrors((prev) => ({
         ...prev,
-        form: JSON.stringify(error) || "Network error. Please try again."
+        form: error?.message || "Network error. Please try again."
       }));
     } finally {
       setIsPending(false);

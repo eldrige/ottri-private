@@ -8,6 +8,7 @@ import AddressInput from "@/app/(landings)/booking/new/_components/AddressInput"
 import { useServiceAreasQuery } from "../../_services/queries";
 import { ImageUpload } from "@/app/_components/ImageUpload";
 import { ImageListType } from "react-images-uploading";
+import { TagInput } from "@/components/ui/TagInput";
 
 interface SlotFormProps {
   formData: AddCleanerForm;
@@ -238,38 +239,20 @@ export default function CleanerForm({
       </div>
 
       {/* Specialities Section */}
-      {/* {specialities && specialities.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-4">Specialities</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {specialities.map((speciality) => (
-                  <div
-                    key={speciality.id}
-                    className={`flex items-start gap-2 p-2 border rounded-md transition-colors ${
-                      formData.specialitiesIds.includes(speciality.id)
-                        ? "border-secondary-700/70 bg-secondary-50/30"
-                        : "border-gray-200 hover:bg-gray-50"
-                    }`}
-                  >
-                    <Checkbox
-                      id={`spec-${speciality.id}`}
-                      checked={formData.specialitiesIds.includes(speciality.id)}
-                      onChange={() => handleSpecialityToggle(speciality.id)}
-                      className="mt-0.5"
-                    />
-                    <div className="flex-1">
-                      <label
-                        htmlFor={`spec-${speciality.id}`}
-                        className="text-sm font-medium text-gray-900 cursor-pointer capitalize"
-                      >
-                        {speciality.name}
-                      </label>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )} */}
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold mb-4">Specialities</h3>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <label className="block mb-2 font-medium">Add Specialities</label>
+            <TagInput
+              tags={formData.specialties}
+              setTags={(value) => setField("specialties", value)}
+              placeholder="Enter a speciality and press Enter (e.g. Deep Cleaning)"
+              error={errors.specialties}
+            />
+          </div>
+        </div>
+      </div>
 
       {/* Service Areas Section */}
       {serviceAreas && serviceAreas.length > 0 && (
@@ -306,38 +289,20 @@ export default function CleanerForm({
       )}
 
       {/* Qualifications Section */}
-      {/* {qualifications && qualifications.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-4">Qualifications</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {qualifications.map((qualification) => (
-                  <div
-                    key={qualification.id}
-                    className={`flex items-start gap-2 p-2 border rounded-md transition-colors ${
-                      formData.qualificationsIds.includes(qualification.id)
-                        ? "border-secondary-700/70 bg-secondary-50/30"
-                        : "border-gray-200 hover:bg-gray-50"
-                    }`}
-                  >
-                    <Checkbox
-                      id={`qual-${qualification.id}`}
-                      checked={formData.qualificationsIds.includes(qualification.id)}
-                      onChange={() => handleQualificationToggle(qualification.id)}
-                      className="mt-0.5"
-                    />
-                    <div className="flex-1">
-                      <label
-                        htmlFor={`qual-${qualification.id}`}
-                        className="text-sm font-medium text-gray-900 cursor-pointer capitalize"
-                      >
-                        {qualification.name}
-                      </label>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )} */}
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold mb-4">Qualifications</h3>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <label className="block mb-2 font-medium">Add Qualifications</label>
+            <TagInput
+              tags={formData.qualifications}
+              setTags={(value) => setField("qualifications", value)}
+              placeholder="Enter a qualification and press Enter (e.g. Certified Cleaner)"
+              error={errors.qualifications}
+            />
+          </div>
+        </div>
+      </div>
     </form>
   );
 }

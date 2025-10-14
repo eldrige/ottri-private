@@ -30,10 +30,10 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
     // Location
     address: "",
     // Skills and Qualifications
-    languages: [] as string[],
-    specialitiesIds: [] as number[],
-    serviceAreasIds: [] as number[],
-    qualificationsIds: [] as number[]
+    languages: [],
+    specialties: [],
+    serviceAreasIds: [],
+    qualifications: []
   });
 
   const [image, setImage] = useState<ImageListType>([]);
@@ -120,7 +120,15 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
       if (image[0].file && !imageUrl) {
         const imageData = await uploadImage(image[0].file);
 
-        if (imageData?.error || !imageData?.data) throw imageData?.error;
+        // if (imageData?.error || !imageData?.data) {
+        //   setErrors((prev) => ({
+        //     ...prev,
+        //     profile: imageData?.error || "Failed to upload image",
+        //     form: "Image upload failed. Please try again.",
+        //   }));
+        //   setIsPending(false);
+        //   return;
+        // }
 
         setField("profile", imageData.data.url);
 
@@ -141,7 +149,7 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
 
       setErrors((prev) => ({
         ...prev,
-        form: JSON.stringify(error) || "Network error. Please try again."
+        form: error?.message || "Network error. Please try again."
       }));
     } finally {
       setIsPending(false);
