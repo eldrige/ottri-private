@@ -131,12 +131,12 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
       <div className="mt-4">
         <p className="font-medium">Specialties: </p>
         <div className="mt-4 flex gap-2.5">
-          {cleaner.specialities.map((spec) => (
+          {cleaner.specialties?.map((spec) => (
             <div
-              key={`${cleaner.id}-${spec.id}`}
+              key={`${cleaner.id}-${spec}`}
               className="text-sm py-1 px-3 rounded-lg bg-secondary-700/10 capitalize"
             >
-              <span>{spec.name}</span>
+              <span>{spec}</span>
             </div>
           ))}
         </div>

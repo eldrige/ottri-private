@@ -139,9 +139,9 @@ export default function AssignCleaner({
                   </p>
                   <p className="text-secondary-700/70 ml-auto">0 Complaints</p>
                 </div>
-                {cleaner.specialities.length > 0 && (
+                {cleaner.specialties.length > 0 && (
                   <div className="mt-4 flex gap-2.5">
-                    {cleaner.specialities.map((item, idx) => (
+                    {cleaner.specialties.map((item, idx) => (
                       <p
                         key={item.id}
                         className={cn(
