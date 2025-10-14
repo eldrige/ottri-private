@@ -5,10 +5,7 @@ import { serverRequest } from "@/lib/serverRequest";
 /**
  * Handles all HTTP methods and forwards them to the backend API
  */
-export async function handler(
-  req: NextRequest,
-  {}: { params: { path: string[] } }
-) {
+async function handler(req: NextRequest) {
   try {
     // Get the path from the request URL
     const url = new URL(

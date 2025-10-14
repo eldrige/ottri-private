@@ -143,7 +143,7 @@ export default function AssignCleaner({
                   <div className="mt-4 flex gap-2.5">
                     {cleaner.specialties.map((item, idx) => (
                       <p
-                        key={item.id}
+                        key={idx}
                         className={cn(
                           "text-xs py-1 px-2 rounded-lg capitalize",
                           idx % 2 === 0
@@ -151,7 +151,7 @@ export default function AssignCleaner({
                             : "bg-secondary-700/10"
                         )}
                       >
-                        {item.name}
+                        {item}
                       </p>
                     ))}
                   </div>
