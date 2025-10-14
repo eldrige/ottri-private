@@ -31,6 +31,7 @@ import {
 } from "../_actions/timeSlots";
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
 import { addCleaner, updateCleaner } from "../_actions/cleaners";
+import { clientAxios } from "@/lib/axios";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -204,6 +205,19 @@ export function useAddCleanerMutation() {
   });
 }
 
+export function useDeleteCleanerMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ cleanerId }: { cleanerId: number }) => {
+      await clientAxios.delete(`cleaners/${cleanerId}`);
+      return cleanerId;
+    },
+    onSuccess: (data) => {
+      deleteCleanerHelper(queryClient, data);
+    }
+  });
+}
+
 // HELPERS
 
 // Bookings Helpers
@@ -316,6 +330,15 @@ function addCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
   if (!queryData) return;
 
   const newCleaners = [newCleaner, ...queryData];
+
+  queryClient.setQueryData(["cleaners"], newCleaners);
+}
+
+function deleteCleanerHelper(queryClient: QueryClient, cleanerId: number) {
+  const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
+  if (!queryData) return;
+
+  const newCleaners = queryData.filter((i) => i.id !== cleanerId);
 
   queryClient.setQueryData(["cleaners"], newCleaners);
 }

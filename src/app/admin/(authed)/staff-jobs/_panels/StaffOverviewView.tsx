@@ -6,9 +6,14 @@ import Select from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Cleaner } from "@/app/admin/types";
-import { useUpdateCleanerMutation } from "../../_services/mutations";
+import {
+  useDeleteCleanerMutation,
+  useUpdateCleanerMutation
+} from "../../_services/mutations";
 import Image from "next/image";
 import EditCleaner from "../_components/EditCleaner";
+import ConfirmModal from "@/components/common/ConfirmModal";
+import TrashIcon from "@/components/icons/TrashIcon";
 
 export default function StaffOverviewView({
   cleaners
@@ -30,9 +35,13 @@ const options = [
 ];
 
 function StaffBox({ cleaner }: { cleaner: Cleaner }) {
-  const { mutateAsync, isPending: isUpdating } = useUpdateCleanerMutation();
+  const { mutateAsync: updateCleaner, isPending: isUpdating } =
+    useUpdateCleanerMutation();
+  const { mutateAsync: deleteCleaner, isPending: isDeleting } =
+    useDeleteCleanerMutation();
 
   const [showEdit, setShowEdit] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const [status, setStatus] = useState(
     options.find((i) => i.value === cleaner.status) || options[0]
@@ -41,7 +50,7 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
   useEffect(() => {
     console.log(status.value, cleaner.status);
     if (status.value !== cleaner.status) {
-      mutateAsync(
+      updateCleaner(
         {
           cleanerId: cleaner.id,
           status: status.value as "AVAILABLE" | "UNAVAILABLE"
@@ -56,12 +65,24 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
         }
       );
     }
-  }, [status, cleaner, mutateAsync]);
+  }, [status, cleaner, updateCleaner]);
 
   return (
     <div className="p-4 border border-black/10 rounded-lg">
       {showEdit && (
         <EditCleaner onClose={() => setShowEdit(false)} cleaner={cleaner} />
+      )}
+      {showConfirm && (
+        <ConfirmModal
+          onCancel={() => setShowConfirm(false)}
+          open={showConfirm}
+          title="Delete Staff"
+          description={`Are you sure you want to delete ${cleaner.fullName}? This action cannot be undone.`}
+          confirmText="Delete"
+          loading={isDeleting}
+          onConfirm={() => deleteCleaner({ cleanerId: cleaner.id })}
+          accent="distructive"
+        />
       )}
       <div className="flex items-center gap-3">
         {cleaner.profile ? (
@@ -156,6 +177,15 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
           variant={"secondary-outline"}
         >
           <CallIcon className="size-4" /> Call
+        </Button>
+        <Button
+          onClick={() => setShowConfirm(true)}
+          className="flex items-center justify-center gap-1"
+          size={"2xs"}
+          variant={"destructive"}
+        >
+          <TrashIcon className="size-4" />
+          Delete
         </Button>
       </div>
     </div>
