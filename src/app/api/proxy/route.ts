@@ -46,8 +46,19 @@ export async function handler(
     let requestBody;
     if (req.method !== "GET" && req.method !== "HEAD") {
       const contentType = req.headers.get("content-type");
+
       if (contentType?.includes("application/json")) {
         requestBody = await req.json();
+      } else if (contentType?.includes("multipart/form-data")) {
+        // Handle FormData
+        const formData = await req.formData();
+        requestBody = formData;
+
+        // Make sure to override the content-type header to include boundary
+        // The browser sets this automatically when sending FormData
+        if (contentType) {
+          headersToForward["content-type"] = contentType;
+        }
       } else {
         requestBody = await req.text();
       }
