@@ -15,21 +15,24 @@ type GBQParamsType = {
   limit?: number;
   startTime?: string;
   endTime?: string;
+  page?: number;
 };
 export function useGetBookingsQuery({
   statusFilter = "",
   limit = 50,
   startTime,
-  endTime
+  endTime,
+  page = 0
 }: GBQParamsType) {
   const sp = new URLSearchParams();
   if (limit) sp.append("limit", String(limit));
   if (statusFilter) sp.append("status", statusFilter);
   if (startTime) sp.append("startTime", startTime);
   if (endTime) sp.append("endTime", endTime);
+  if (page) sp.append("page", String(page));
 
   return useQuery({
-    queryKey: ["bookings", { statusFilter, limit, startTime, endTime }],
+    queryKey: ["bookings", { statusFilter, limit, startTime, endTime, page }],
     queryFn: () =>
       axios
         .get(`/api/bookings?${sp}`)
