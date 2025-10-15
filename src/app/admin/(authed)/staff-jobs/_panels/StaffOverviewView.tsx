@@ -178,15 +178,17 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
         >
           <CallIcon className="size-4" /> Call
         </Button>
-        <Button
-          onClick={() => setShowConfirm(true)}
-          className="flex items-center justify-center gap-1"
-          size={"2xs"}
-          variant={"destructive"}
-        >
-          <TrashIcon className="size-4" />
-          Delete
-        </Button>
+        {!cleaner.deletedAt && (
+          <Button
+            onClick={() => setShowConfirm(true)}
+            className="flex items-center justify-center gap-1"
+            size={"2xs"}
+            variant={"destructive"}
+          >
+            <TrashIcon className="size-4" />
+            Archive
+          </Button>
+        )}
       </div>
     </div>
   );

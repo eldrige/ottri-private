@@ -17,7 +17,7 @@ export default function AssignCleaner({
   booking: Booking;
   onClose: () => void;
 }) {
-  const { data: cleaners } = useCleanersQuery();
+  const { data: cleaners } = useCleanersQuery({});
   const { mutateAsync: cleanerMutate, isPending } = useAssignCleanerMutation();
   const [selectedCleanerId, setSelectedCleanerId] = useState<string | null>(
     null

@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
-import { Filter, PlusIcon } from "lucide-react";
+import { Filter, Loader2, PlusIcon } from "lucide-react";
 import { useState } from "react";
 import PanelViewer from "../_components/PanelViewer";
 import StaffOverviewView from "./_panels/StaffOverviewView";
@@ -9,24 +9,21 @@ import JobAssignmentView from "./_panels/JobAssignmentView";
 import PerformanceView from "./_panels/PerformanceView";
 import { useCleanersQuery } from "../_services/queries";
 import AddCleaner from "./_components/AddCleaner";
+import { useClientSearchParams } from "@/hooks/useClientSearchParams";
+import ErrorComponent from "@/app/_components/ErrorComponent";
 
 const filterOptions = [
   { label: "All Cleaners", value: "all-cleaners" },
-  { label: "Maria Gracia", value: "maria-gracia" },
-  { label: "John Smith", value: "john-smith" },
-  { label: "Lisa Brown", value: "lisa-brown" },
-  { label: "Carlos Martinez", value: "carlos-martinez" }
+  { label: "Archived Cleaners", value: "archive" }
 ];
 
 export default function StaffJobsPage() {
-  const cleanersQuery = useCleanersQuery();
-  console.log(cleanersQuery.data);
+  const { searchParams, setSearchParam } = useClientSearchParams();
+  const isArchive = searchParams.get("archive");
+  const cleanersQuery = useCleanersQuery({ archive: !!isArchive });
 
   const [activeView, setActiveView] = useState<string>("staff-overview");
-
   const [addCleaner, setAddCleaner] = useState(false);
-
-  if (!cleanersQuery.data) return;
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
@@ -42,6 +39,10 @@ export default function StaffJobsPage() {
           <Select
             options={filterOptions}
             value={filterOptions[0]}
+            onChange={(option) => {
+              if (option.value === "archive") setSearchParam("archive", "true");
+              else setSearchParam("archive", "");
+            }}
             placeholder="All Cleaners"
             buttonClassName="border-none gap-2 font-medium"
             accent="secondary"
@@ -73,7 +74,14 @@ export default function StaffJobsPage() {
       />
 
       <div className="mt-8">
-        {activeView === "staff-overview" ? (
+        {cleanersQuery.isLoading ? (
+          <Loader2 className="animate-spin size-6 mx-auto" />
+        ) : cleanersQuery.isError ? (
+          <ErrorComponent
+            error={cleanersQuery.error}
+            reset={cleanersQuery.refetch}
+          />
+        ) : !cleanersQuery.data ? null : activeView === "staff-overview" ? (
           <StaffOverviewView cleaners={cleanersQuery.data} />
         ) : activeView === "job-assignment" ? (
           <JobAssignmentView />

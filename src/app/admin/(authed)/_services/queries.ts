@@ -6,7 +6,7 @@ import {
   ServiceArea,
   ServiceOption
 } from "@/app/admin/types";
-import { axiosInstance } from "@/lib/axios";
+import { axiosInstance, clientAxios } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -44,13 +44,15 @@ export function useServicesQuery() {
 }
 
 // Cleaners
-export function useCleanersQuery() {
+export function useCleanersQuery({ archive }: { archive?: boolean }) {
+  const sp = new URLSearchParams();
+  if (archive) sp.append("archive", "true");
   return useQuery({
-    queryKey: ["cleaners"],
+    queryKey: ["cleaners", archive && "archive"].filter((i) => i),
     queryFn: () =>
-      axiosInstance.get(`cleaners?limit=50`).then((i) => i.data) as Promise<
-        Cleaner[]
-      >
+      clientAxios
+        .get(`cleaners?limit=50&archive=true`)
+        .then((i) => i.data) as Promise<Cleaner[]>
   });
 }
 
