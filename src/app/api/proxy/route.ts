@@ -9,12 +9,11 @@ async function handler(req: NextRequest) {
   try {
     // Get the path from the request URL
     const url = new URL(
-      "https://example.com" + (req.nextUrl.searchParams.get("path") || "")
+      "https://example.com" + (req.url.replace(/^.*path=/, "") || "")
     );
     // const pathSegments = url.pathname.replace('/api/proxy', '');
     const pathSegments = url.pathname;
 
-    console.log(url.searchParams);
     // Extract query parameters as a plain object
     const queryParams: Record<string, string> = {};
     url.searchParams.forEach((value, key) => {
@@ -85,7 +84,7 @@ async function handler(req: NextRequest) {
       headers: response.headers as any
     });
   } catch (error: any) {
-    console.error("Proxy error:", error);
+    // console.error("Proxy error:", error);
 
     // Return error with status code if available from axios error
     const status = error.response?.status || 500;
