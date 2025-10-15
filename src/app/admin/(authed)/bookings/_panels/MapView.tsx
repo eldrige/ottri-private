@@ -1,8 +1,28 @@
 import Map from "@/app/(landings)/_components/Map";
-import { Booking } from "@/app/admin/types";
+import { useClientSearchParams } from "@/hooks/useClientSearchParams";
 import React from "react";
+import { useGetBookingsQuery } from "../../_services/queries";
+import ErrorComponent from "@/app/_components/ErrorComponent";
+import { Loader2 } from "lucide-react";
 
-export default function MapView({ bookings }: { bookings: Booking[] }) {
+export default function MapView() {
+  const statusFilter = useClientSearchParams().searchParams.get("status") || "";
+  const getBookingsQuery = useGetBookingsQuery({ statusFilter });
+  const bookingsResponse = getBookingsQuery.data;
+
+  if (getBookingsQuery.error)
+    return (
+      <ErrorComponent
+        error={getBookingsQuery.error}
+        reset={getBookingsQuery.refetch}
+      />
+    );
+
+  if (!bookingsResponse)
+    return <Loader2 className="animate-spin size-6 mx-auto my-8" />;
+
+  const bookings = bookingsResponse.data;
+
   const locations = bookings
     .filter((b) => b.location)
     .map((b) => ({

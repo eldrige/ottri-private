@@ -10,13 +10,29 @@ import { axiosInstance, clientAxios } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export function useGetBookingsQuery(statusFilter: string = "", limit = 50) {
+type GBQParamsType = {
+  statusFilter?: string;
+  limit?: number;
+  startTime?: string;
+  endTime?: string;
+};
+export function useGetBookingsQuery({
+  statusFilter = "",
+  limit = 50,
+  startTime,
+  endTime
+}: GBQParamsType) {
+  const sp = new URLSearchParams();
+  if (limit) sp.append("limit", String(limit));
+  if (statusFilter) sp.append("status", statusFilter);
+  if (startTime) sp.append("startTime", startTime);
+  if (endTime) sp.append("endTime", endTime);
+
   return useQuery({
-    queryKey: ["bookings", statusFilter],
+    queryKey: ["bookings", { statusFilter, limit, startTime, endTime }],
     queryFn: () =>
       axios
-        .get(`/api/bookings?limit=${limit}&status=${statusFilter}`)
-        // .get(`/api/proxy?path=/bookings?limit=${limit}&status=${statusFilter}`)
+        .get(`/api/bookings?${sp}`)
         .then((i) => i.data) as Promise<BookingsResponse>
   });
 }

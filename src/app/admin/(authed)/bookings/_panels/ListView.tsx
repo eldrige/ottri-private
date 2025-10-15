@@ -1,13 +1,27 @@
 import React from "react";
 import ListItem from "../_components/ListItem";
-import { BookingsResponse } from "@/app/admin/types";
 import { cn } from "@/lib/utils";
+import { useGetBookingsQuery } from "../../_services/queries";
+import { useClientSearchParams } from "@/hooks/useClientSearchParams";
+import { Loader2 } from "lucide-react";
+import ErrorComponent from "@/app/_components/ErrorComponent";
 
-export default function ListView({
-  bookingsResponse
-}: {
-  bookingsResponse: BookingsResponse;
-}) {
+export default function ListView() {
+  const statusFilter = useClientSearchParams().searchParams.get("status") || "";
+  const getBookingsQuery = useGetBookingsQuery({ statusFilter });
+  const bookingsResponse = getBookingsQuery.data;
+
+  if (getBookingsQuery.error)
+    return (
+      <ErrorComponent
+        error={getBookingsQuery.error}
+        reset={getBookingsQuery.refetch}
+      />
+    );
+
+  if (!bookingsResponse)
+    return <Loader2 className="animate-spin size-6 mx-auto my-8" />;
+
   const bookings = bookingsResponse.data;
 
   const statuses = [
