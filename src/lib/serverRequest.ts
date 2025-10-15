@@ -15,8 +15,8 @@ export async function serverRequest(
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
 
-  // Make the request with auth header if token exists
-  return axiosInstance({
+  // If data is FormData, make sure axios doesn't try to transform it
+  const config: any = {
     url,
     method,
     data,
@@ -24,5 +24,14 @@ export async function serverRequest(
       ...headers,
       ...(accessToken && { Authorization: `Bearer ${accessToken}` })
     }
-  });
+  };
+
+  // Add special handling for FormData
+  if (data instanceof FormData) {
+    // axios will automatically set the correct content-type with boundary
+    config.transformRequest = [(data: any) => data];
+  }
+
+  // Make the request with auth header if token exists
+  return axiosInstance(config);
 }

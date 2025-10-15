@@ -17,7 +17,7 @@ export default function AssignCleaner({
   booking: Booking;
   onClose: () => void;
 }) {
-  const { data: cleaners } = useCleanersQuery();
+  const { data: cleaners } = useCleanersQuery({});
   const { mutateAsync: cleanerMutate, isPending } = useAssignCleanerMutation();
   const [selectedCleanerId, setSelectedCleanerId] = useState<string | null>(
     null
@@ -139,11 +139,11 @@ export default function AssignCleaner({
                   </p>
                   <p className="text-secondary-700/70 ml-auto">0 Complaints</p>
                 </div>
-                {cleaner.specialities.length > 0 && (
+                {cleaner.specialties.length > 0 && (
                   <div className="mt-4 flex gap-2.5">
-                    {cleaner.specialities.map((item, idx) => (
+                    {cleaner.specialties.map((item, idx) => (
                       <p
-                        key={item.id}
+                        key={idx}
                         className={cn(
                           "text-xs py-1 px-2 rounded-lg capitalize",
                           idx % 2 === 0
@@ -151,7 +151,7 @@ export default function AssignCleaner({
                             : "bg-secondary-700/10"
                         )}
                       >
-                        {item.name}
+                        {item}
                       </p>
                     ))}
                   </div>

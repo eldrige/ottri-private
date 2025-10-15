@@ -157,14 +157,30 @@ export interface Cleaner {
   updatedAt: string;
   deletedAt: null;
   user: UserData;
-  specialities: ServiceOption[];
-  serviceAreas: string[];
+  specialties: string[];
+  serviceAreas: ServiceArea[];
   qualifications: string[];
   location: null;
-  stats: Stats;
+  stats: CleanerStats;
 }
 
-interface Stats {
+export interface AddCleanerForm {
+  profile: string;
+  description: string;
+  quote: string;
+  address: string;
+  preference: string;
+  languages: string[];
+  specialties: string[];
+  serviceAreasIds: number[];
+  qualifications: string[];
+  email: string;
+  experience: string;
+  fullName: string;
+  phoneNumber: string;
+}
+
+interface CleanerStats {
   totalBookings: number;
   completedBookings: number;
   averageCompletionRate: number;
@@ -190,4 +206,18 @@ export interface ServiceArea {
 interface SALocation {
   type: string;
   coordinates: number[][][];
+}
+
+// BookingStats
+export interface BookingStats {
+  totalBookings: number;
+  statusBreakdown: {
+    COMPLETED: number;
+    CANCELLED: number;
+    PENDING: number;
+    INPROGRESS: number;
+  };
+  totalRevenue: number;
+  baseRevenue: number;
+  totalTips: number;
 }

@@ -15,7 +15,8 @@ import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import {
   Booking as serviceArea,
   BookingsResponse,
-  ServiceArea
+  ServiceArea,
+  Cleaner
 } from "@/app/admin/types";
 import {
   createServiceAreas,
@@ -29,6 +30,8 @@ import {
   updateTimeSlot
 } from "../_actions/timeSlots";
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
+import { addCleaner, updateCleaner } from "../_actions/cleaners";
+import { clientAxios } from "@/lib/axios";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -176,6 +179,47 @@ export function useDeleteTimeSlotMutation() {
   });
 }
 
+// Cleaners
+export function useUpdateCleanerMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateCleaner,
+    onSuccess: (data) => {
+      updateCleanerHelper(queryClient, data);
+    }
+  });
+}
+
+export function useAddCleanerMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (...data: Parameters<typeof addCleaner>) => {
+      const res = await addCleaner(...data);
+      if (res.error || !res.data) throw await Promise.reject(res.error);
+
+      return res.data;
+    },
+    onSuccess: (data) => {
+      addCleanerHelper(queryClient, data);
+    }
+  });
+}
+
+export function useDeleteCleanerMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ cleanerId }: { cleanerId: number }) => {
+      await clientAxios.delete(`cleaners/${cleanerId}`);
+      return cleanerId;
+    },
+    onSuccess: (data) => {
+      deleteCleanerHelper(queryClient, data);
+    }
+  });
+}
+
+// HELPERS
+
 // Bookings Helpers
 function updateBookingHelper(
   searchParams: ReadonlyURLSearchParams,
@@ -269,21 +313,32 @@ function deleteTimeSlotHelper(
   queryClient.setQueryData(["timeslots"], newTimeSlots);
 }
 
-// function removeBookingHelper(
-//   searchParams: ReadonlyURLSearchParams,
-//   queryClient: QueryClient,
-//   booking: Booking
-// ) {
-//   const statusFilter = searchParams.get("status") || "";
-//   const queryData = queryClient.getQueryData([
-//     "bookings",
-//     statusFilter
-//   ]) as BookingsResponse;
-//   if (!queryData) return;
+// Cleaners Helpers
+function updateCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
+  const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
+  if (!queryData) return;
 
-//   const newBookings = queryData.data.filter((i) => i.id !== booking.id);
+  const newCleaners = queryData.map((b) =>
+    b.id === newCleaner.id ? newCleaner : b
+  );
 
-//   const newData = { ...queryData, data: newBookings } as BookingsResponse;
+  queryClient.setQueryData(["cleaners"], newCleaners);
+}
 
-//   queryClient.setQueryData(["bookings", statusFilter], newData);
-// }
+function addCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
+  const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
+  if (!queryData) return;
+
+  const newCleaners = [newCleaner, ...queryData];
+
+  queryClient.setQueryData(["cleaners"], newCleaners);
+}
+
+function deleteCleanerHelper(queryClient: QueryClient, cleanerId: number) {
+  const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
+  if (!queryData) return;
+
+  const newCleaners = queryData.filter((i) => i.id !== cleanerId);
+
+  queryClient.setQueryData(["cleaners"], newCleaners);
+}
