@@ -11,7 +11,6 @@ import MapView from "./_panels/MapView";
 import Select from "@/components/ui/Select";
 import Link from "next/link";
 import PanelViewer from "../_components/PanelViewer";
-import { useGetBookingsQuery } from "../_services/queries";
 import { useClientSearchParams } from "@/hooks/useClientSearchParams";
 import AddBooking from "./_components/AddBooking";
 
@@ -27,8 +26,6 @@ export default function ClientAdminBookingsPage() {
   const { searchParams, setSearchParam } = useClientSearchParams();
   const [activeView, setActiveView] = useState<string>("calendar");
   const statusFilter = searchParams.get("status") || undefined;
-  const getBookingsQuery = useGetBookingsQuery(statusFilter);
-  const bookingsResponse = getBookingsQuery.data;
   const [showAddBooking, setShowAddBooking] = useState(false);
   // console.log(bookingsResponse);
 
@@ -136,19 +133,12 @@ export default function ClientAdminBookingsPage() {
         setActiveView={setActiveView}
       />
 
-      {!getBookingsQuery.isSuccess || !bookingsResponse ? (
-        <div className="flex items-center justify-center w-full h-64">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-secondary-700">Loading bookings...</p>
-          </div>
-        </div>
-      ) : activeView === "calendar" ? (
-        <CalendarView bookings={bookingsResponse.data} />
+      {activeView === "calendar" ? (
+        <CalendarView />
       ) : activeView === "list" ? (
-        <ListView bookingsResponse={bookingsResponse} />
+        <ListView />
       ) : (
-        <MapView bookings={bookingsResponse.data} />
+        <MapView />
       )}
     </main>
   );
