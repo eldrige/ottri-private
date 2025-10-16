@@ -1,21 +1,18 @@
 import Map from "@/app/(landings)/_components/Map";
 import { useClientSearchParams } from "@/hooks/useClientSearchParams";
 import React from "react";
-import { useGetBookingsQuery } from "../../_services/queries";
+import { useMapBookingsQuery } from "../../_services/queries";
 import ErrorComponent from "@/app/_components/ErrorComponent";
 import { Loader2 } from "lucide-react";
 
 export default function MapView() {
   const statusFilter = useClientSearchParams().searchParams.get("status") || "";
-  const getBookingsQuery = useGetBookingsQuery({ statusFilter });
-  const bookingsResponse = getBookingsQuery.data;
+  const mapBookings = useMapBookingsQuery({ statusFilter });
+  const bookingsResponse = mapBookings.data;
 
-  if (getBookingsQuery.error)
+  if (mapBookings.error)
     return (
-      <ErrorComponent
-        error={getBookingsQuery.error}
-        reset={getBookingsQuery.refetch}
-      />
+      <ErrorComponent error={mapBookings.error} reset={mapBookings.refetch} />
     );
 
   if (!bookingsResponse)

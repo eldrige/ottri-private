@@ -3,6 +3,7 @@ import {
   BookingsResponse,
   BookingStats,
   Cleaner,
+  MapBookingsResponse,
   ServiceArea,
   ServiceOption
 } from "@/app/admin/types";
@@ -16,13 +17,15 @@ type GBQParamsType = {
   startTime?: string;
   endTime?: string;
   page?: number;
+  enabled?: boolean;
 };
 export function useGetBookingsQuery({
   statusFilter = "",
   limit = 50,
   startTime,
   endTime,
-  page = 0
+  page = 0,
+  enabled = true
 }: GBQParamsType) {
   const sp = new URLSearchParams();
   if (limit) sp.append("limit", String(limit));
@@ -36,7 +39,25 @@ export function useGetBookingsQuery({
     queryFn: () =>
       axios
         .get(`/api/bookings?${sp}`)
-        .then((i) => i.data) as Promise<BookingsResponse>
+        .then((i) => i.data) as Promise<BookingsResponse>,
+    enabled: enabled
+  });
+}
+
+export function useMapBookingsQuery({
+  statusFilter = ""
+}: {
+  statusFilter?: string;
+}) {
+  const sp = new URLSearchParams();
+  if (statusFilter) sp.append("status", statusFilter);
+
+  return useQuery({
+    queryKey: ["bookings", "map", { statusFilter }],
+    queryFn: () =>
+      clientAxios
+        .get(`bookings/map?${sp}`)
+        .then((i) => i.data) as Promise<MapBookingsResponse>
   });
 }
 
