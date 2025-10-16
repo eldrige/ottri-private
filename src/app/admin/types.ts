@@ -1,4 +1,5 @@
 import { UserData } from "@/lib/types";
+import { ServiceAddOn } from "../(landings)/booking/new/types";
 
 export interface BookingsResponse {
   limit: number;
@@ -43,16 +44,11 @@ export interface Booking {
     type: string;
     coordinates: number[];
   };
-  guest?: Omit<PersonalInformation, "stripeCustomerId" | "userId">;
-}
-
-export interface UpdateBookingPayload {
-  bookingId: number;
-  bedrooms?: string;
-  bathrooms?: string;
-  approximateSquareFootage?: string;
-  serviceType?: { serviceId: number };
-  guest?: { fullName: string };
+  guest?: Omit<PersonalInformation, "stripeCustomerId" | "userId"> & {
+    email: string;
+  };
+  addOns: ServiceAddOn[];
+  entryMethod: string;
 }
 
 interface TimeSlot {
@@ -68,7 +64,7 @@ interface TimeSlot {
   templateId: number;
 }
 
-interface ServiceType {
+export interface ServiceType {
   id: number;
   name: string;
   description: string;
@@ -142,30 +138,6 @@ interface PricingDetail {
   serviceId: number;
 }
 
-interface ServiceAddOn {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  type: string;
-  serviceId: number;
-  createdAt: string;
-  updatedAt: null | string;
-  deletedAt: null;
-}
-
-interface ServiceType {
-  id: number;
-  name: string;
-  description: string;
-  basePrice: number;
-  currency: string;
-  serviceId: number;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: null;
-}
-
 // Cleaner Type
 export interface Cleaner {
   id: number;
@@ -185,14 +157,30 @@ export interface Cleaner {
   updatedAt: string;
   deletedAt: null;
   user: UserData;
-  specialities: ServiceOption[];
-  serviceAreas: string[];
+  specialties: string[];
+  serviceAreas: ServiceArea[];
   qualifications: string[];
   location: null;
-  stats: Stats;
+  stats: CleanerStats;
 }
 
-interface Stats {
+export interface AddCleanerForm {
+  profile: string;
+  description: string;
+  quote: string;
+  address: string;
+  preference: string;
+  languages: string[];
+  specialties: string[];
+  serviceAreasIds: number[];
+  qualifications: string[];
+  email: string;
+  experience: string;
+  fullName: string;
+  phoneNumber: string;
+}
+
+interface CleanerStats {
   totalBookings: number;
   completedBookings: number;
   averageCompletionRate: number;
@@ -218,4 +206,18 @@ export interface ServiceArea {
 interface SALocation {
   type: string;
   coordinates: number[][][];
+}
+
+// BookingStats
+export interface BookingStats {
+  totalBookings: number;
+  statusBreakdown: {
+    COMPLETED: number;
+    CANCELLED: number;
+    PENDING: number;
+    INPROGRESS: number;
+  };
+  totalRevenue: number;
+  baseRevenue: number;
+  totalTips: number;
 }

@@ -160,7 +160,7 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
           {/* Specialties */}
           <h1 className="text-[17.8px] text-white">Specialities</h1>
           <div className="flex gap-2 *:text-nowrap flex-nowrap">
-            {member.specialities.slice(0, 2).map((spec, i) => (
+            {member.specialties.slice(0, 2).map((spec, i) => (
               <span
                 key={i}
                 className="bg-white/30 text-white px-2 py-1 rounded-lg text-xs"
@@ -168,9 +168,9 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
                 {spec}
               </span>
             ))}
-            {member.specialities.length > 2 && (
+            {member.specialties.length > 2 && (
               <span className="bg-white/30 text-white px-1.25 py-1 rounded-lg text-xs">
-                +{member.specialities.length - 2}
+                +{member.specialties.length - 2}
               </span>
             )}
           </div>

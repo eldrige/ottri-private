@@ -130,10 +130,10 @@ export const petTypeOptions = [
 
 // Step 5 - Access
 export const accessOptions = [
-  { id: "home", name: "I'll be home" },
-  { id: "hidden-key", name: "Key under mat/hidden" },
-  { id: "door-code", name: "Door code" },
-  { id: "other", name: "Other" }
+  { id: "HOME", name: "I'll be home" },
+  { id: "HIDDENKEY", name: "Key under mat/hidden" },
+  { id: "DOORCODE", name: "Door code" },
+  { id: "OTHER", name: "Other" }
 ];
 
 // Step 6 - Schedule

@@ -12,3 +12,7 @@ const resolvedBaseURL =
 export const axiosInstance = Axios.create({
   baseURL: resolvedBaseURL
 });
+
+export const clientAxios = Axios.create({
+  baseURL: "/api/proxy?path=/"
+});

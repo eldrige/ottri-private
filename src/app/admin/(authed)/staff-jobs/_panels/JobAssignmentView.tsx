@@ -1,5 +1,5 @@
 import React from "react";
-import JobListItem from "../components/JobListItem";
+import JobListItem from "../_components/JobListItem";
 
 const statuses = [
   { label: "Pending", value: "pending" },

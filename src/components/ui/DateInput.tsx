@@ -17,6 +17,7 @@ interface DateInputProps {
   // timeSlots: Record<string, number>;
   unavailableDates: Set<string>;
   availableWeekdays: Set<number>;
+  accent?: "primary" | "secondary";
 }
 
 const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
@@ -32,6 +33,7 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
       error,
       unavailableDates,
       availableWeekdays,
+      accent,
       ...props
     },
     ref
@@ -112,8 +114,11 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
                 className="p-3"
                 classNames={{
                   today: "text-secondary-700 font-bold",
-                  selected: `bg-primary-700 text-white rounded-lg`,
-                  chevron: "fill-primary-700"
+                  selected: `text-white rounded-lg ${accent === "primary" ? "bg-primary-700" : "bg-secondary-700"}`,
+                  chevron:
+                    accent === "primary"
+                      ? "fill-primary-700"
+                      : "fill-secondary-700"
                 }}
               />
             </div>

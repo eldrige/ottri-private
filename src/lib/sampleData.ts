@@ -37,7 +37,7 @@ export const teamMembers: TeamMember[] = [
     averageRatings: 4.9,
     experience: 8,
     location: "Downtown $ city Center",
-    specialities: [
+    specialties: [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
@@ -53,7 +53,7 @@ export const teamMembers: TeamMember[] = [
     averageRatings: 4.9,
     experience: 8,
     location: "Downtown $ city Center",
-    specialities: [
+    specialties: [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
@@ -69,7 +69,7 @@ export const teamMembers: TeamMember[] = [
     averageRatings: 4.9,
     experience: 8,
     location: "Downtown $ city Center",
-    specialities: [
+    specialties: [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
@@ -86,7 +86,7 @@ export const teamMembers: TeamMember[] = [
     averageRatings: 4.9,
     experience: 8,
     location: "Downtown $ city Center",
-    specialities: [
+    specialties: [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
@@ -103,7 +103,7 @@ export const teamMembers: TeamMember[] = [
     averageRatings: 4.9,
     experience: 8,
     location: "Downtown $ city Center",
-    specialities: [
+    specialties: [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",
@@ -120,7 +120,7 @@ export const teamMembers: TeamMember[] = [
     averageRatings: 4.9,
     experience: 8,
     location: "Downtown $ city Center",
-    specialities: [
+    specialties: [
       "Deep cleaning",
       "Move-in/Move-out",
       "Deep cleaning",

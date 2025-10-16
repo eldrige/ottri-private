@@ -38,7 +38,7 @@ export type User = {
     twoFactorAuth: boolean;
     shareMyLocation: boolean;
   };
-  personalInformation: {
+  personalInformation?: {
     id: number;
     fullName: string;
     phoneNumber: string;

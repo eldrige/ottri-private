@@ -3,10 +3,10 @@ import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 
 interface ApiResType {
-  results: Result[];
+  results: AddressDetails[];
 }
 
-interface Result {
+export interface AddressDetails {
   country_code: string;
   housenumber: string;
   street: string;
@@ -45,12 +45,12 @@ interface Rank {
 
 interface AddressInputProps {
   value?: string;
-  onChange?: (value: string, result?: Result) => void;
+  onChange?: (value: string, result?: AddressDetails) => void;
   placeholder?: string;
   error?: string;
   required?: boolean;
   label?: string;
-  onSelectedAddress?: (address: Result) => void;
+  onSelectedAddress?: (address: AddressDetails) => void;
 }
 
 export default function AddressInput({
@@ -63,7 +63,7 @@ export default function AddressInput({
   onSelectedAddress
 }: AddressInputProps) {
   const [searchTerm, setSearchTerm] = useState(value);
-  const [apiResults, setApiResults] = useState<Result[]>([]);
+  const [apiResults, setApiResults] = useState<AddressDetails[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -136,7 +136,7 @@ export default function AddressInput({
       .replace(/, United States$/, "");
   };
 
-  const handleSelectAddress = (address: Result) => {
+  const handleSelectAddress = (address: AddressDetails) => {
     const formattedAddress = formatUSAddress(address.formatted);
     setSearchTerm(formattedAddress);
     if (onChange) {
