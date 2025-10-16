@@ -10,7 +10,7 @@ export interface TeamMember {
   averageRatings: number;
   experience: number;
   location: string;
-  specialities: string[];
+  specialties: string[];
   coverSrc: StaticImageData;
 }
 

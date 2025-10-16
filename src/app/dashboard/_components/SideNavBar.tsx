@@ -72,7 +72,7 @@ export default function SideNavBar({ user }: { user: User }) {
             className="flex cursor-pointer flex-col"
           >
             <h1 className="font-medium text-caption text-black">
-              {user.personalInformation.fullName}
+              {user.personalInformation?.fullName}
             </h1>
             <p className="text-surface-500 text-xs">{user.email}</p>
           </Link>
