@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 
 export default function CalendarView() {
   const [window, setWindow] = useState({
-    startTime: "",
-    endTime: ""
+    startTime: undefined as string | undefined,
+    endTime: undefined as string | undefined
   });
 
   const statusFilter = useClientSearchParams().searchParams.get("status") || "";
@@ -20,7 +20,8 @@ export default function CalendarView() {
     statusFilter,
     limit: 100,
     startTime: window.startTime,
-    endTime: window.endTime
+    endTime: window.endTime,
+    enabled: !!(window.startTime && window.endTime)
   });
   const bookingsResponse = getBookingsQuery.data;
 
