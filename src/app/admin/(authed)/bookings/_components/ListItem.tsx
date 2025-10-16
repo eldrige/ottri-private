@@ -220,7 +220,10 @@ export default function ListItem({
           title="Cancel Booking"
           description={`Are you sure you want to cancel booking #${bookingNumber.toString().padStart(3, "0")}? This action cannot be undone.`}
           onCancel={() => setConfirmCancel(false)}
-          onConfirm={() => mutateCancel({ bookingId: booking.id })}
+          onConfirm={async () => {
+            await mutateCancel({ bookingId: booking.id });
+            setConfirmCancel(false);
+          }}
           loading={isCancelling}
           open={confirmCancel}
         />
