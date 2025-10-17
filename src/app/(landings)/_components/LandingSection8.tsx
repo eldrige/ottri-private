@@ -16,7 +16,10 @@ export default function LandingSection8() {
   };
 
   return (
-    <section className="text-secondary-700 pt-16 lg:pt-24 pb-24 lg:pb-40">
+    <section
+      id="quote-calculator"
+      className="text-secondary-700 pt-16 lg:pt-24 pb-24 lg:pb-40"
+    >
       <h2 className="text-heading-3 lg:text-heading-2 text-center text-black">
         Transparent, Fair Pricing
       </h2>
