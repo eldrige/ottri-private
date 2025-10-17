@@ -36,11 +36,11 @@ export default function ProfileSection2({ user }: { user: User }) {
           </div>
           <div>
             <Phone className="size-5" />
-            <p>{user.personalInformation.phoneNumber}</p>
+            <p>{user.personalInformation?.phoneNumber || "N/A"}</p>
           </div>
           <div>
             <LocationIcon className="size-5" />
-            <p>{user.personalInformation.address}</p>
+            <p>{user.personalInformation?.address || "N/A"}</p>
           </div>
         </div>
       </div>
@@ -51,10 +51,10 @@ export default function ProfileSection2({ user }: { user: User }) {
 
 function PersonalInfoForm({ user }: { user: User }) {
   const [formData, setFormData] = useState({
-    fullName: user.personalInformation?.fullName,
+    fullName: user.personalInformation?.fullName || "",
     email: user.email,
-    phone: user.personalInformation?.phoneNumber,
-    address: user.personalInformation?.address,
+    phone: user.personalInformation?.phoneNumber || "",
+    address: user.personalInformation?.address || "",
     yearJoined: new Date(user.createdAt).getFullYear()
   });
 

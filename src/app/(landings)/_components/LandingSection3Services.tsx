@@ -194,8 +194,6 @@ function ServiceCard({
         width={500}
         height={500}
         alt={`${name}'s cover`}
-        width={380}
-        height={180}
       />
       <div className="space-y-4 px-6">
         <div
