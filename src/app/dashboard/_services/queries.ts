@@ -2,12 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Booking, Review, User } from "../_utils/types";
 
-export function useGetBookingsQuery(statusFilter: string = "", limit = 50) {
+export function useGetBookingsQuery(
+  statusFilter: string = "",
+  limit = 4,
+  page = 0
+) {
   return useQuery({
-    queryKey: ["bookings", statusFilter],
+    queryKey: ["bookings", statusFilter, limit, page],
     queryFn: () =>
       axios
-        .get(`/api/bookings?limit=${limit}&status=${statusFilter}`)
+        .get(`/api/bookings?limit=${limit}&status=${statusFilter}&page=${page}`)
         .then((i) => i.data) as Promise<{
         limit: number;
         page: number;

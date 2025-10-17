@@ -1,10 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/Button";
 import { GlobeIcon, IdCard, LogOut } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { useGetUserProfile } from "../../_services/queries";
 import { useLogoutMutation } from "../../_services/mutations";
 import Select from "@/components/ui/Select";
+import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
 
 export default function SettingsSection3() {
   return (
@@ -17,13 +18,13 @@ export default function SettingsSection3() {
 
 function LanguageSettings() {
   const { data: userData } = useGetUserProfile();
-  const [currentLanguage, setCurrentLanguage] = React.useState<string>(
+  const [currentLanguage, setCurrentLanguage] = useState<string>(
     userData?.settings.language || "en"
   );
-  const [currentTimeZone, setCurrentTimeZone] = React.useState<string>(
+  const [currentTimeZone, setCurrentTimeZone] = useState<string>(
     userData?.settings.timezone || "UTC"
   );
-  const [currentCurrency, setCurrentCurrency] = React.useState<string>(
+  const [currentCurrency, setCurrentCurrency] = useState<string>(
     userData?.settings.currency || "USD"
   );
   const languageOptions = [
@@ -76,7 +77,7 @@ function LanguageSettings() {
                   setCurrentLanguage(option.value);
                 }}
                 placeholder="Select Language"
-                buttonClassName="border-none w-full gap-2 font-medium"
+                buttonClassName="border-none w-full gap-2"
                 accent="secondary"
               />
             </div>
@@ -98,7 +99,7 @@ function LanguageSettings() {
                   setCurrentTimeZone(option.value);
                 }}
                 placeholder="Select Language"
-                buttonClassName="border-none w-full gap-2 font-medium"
+                buttonClassName="border-none w-full gap-2"
                 accent="secondary"
               />
             </div>
@@ -107,14 +108,6 @@ function LanguageSettings() {
             <h3 className="text-secondary-700 text-caption font-medium">
               Currency
             </h3>
-            {/* <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-4 py-3 rounded-lg">
-              <select className="w-full" name="filter" id="">
-                <option value="all">{settings.currency}</option>
-                <option value="all">USD ($)</option>
-                <option value="today">EUR (€)</option>
-                <option value="upcoming">GBP (£)</option>
-              </select>
-            </div> */}
             <div className="flex w-full text-caption text-secondary-700 items-center gap-3 bg-surface-50 px-2 py-2 rounded-lg">
               <Select
                 className="flex w-full"
@@ -128,7 +121,7 @@ function LanguageSettings() {
                   setCurrentCurrency(option.value);
                 }}
                 placeholder="Select Currency"
-                buttonClassName="border-none w-full gap-2 font-medium"
+                buttonClassName="border-none w-full gap-2"
                 accent="secondary"
               />
             </div>
@@ -140,17 +133,23 @@ function LanguageSettings() {
 }
 
 function AccountActions() {
-  const { mutateAsync: logout, isPending } = useLogoutMutation();
-  const handleLogout = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
+  const { mutateAsync: logout, isPending: isLoggingOut } = useLogoutMutation();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleLogout = async () => {
     try {
       await logout();
       window.location.href = "/login";
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  const handleDeleteAccount = async () => {
+    // TODO: Implement delete account mutation
+    console.log("Delete account");
+    setShowDeleteModal(false);
   };
 
   return (
@@ -168,24 +167,46 @@ function AccountActions() {
       </div>
       <div className="flex flex-col gap-4 mt-6">
         <Button
-          onClick={handleLogout}
-          disabled={isPending}
+          onClick={() => setShowLogoutModal(true)}
+          disabled={isLoggingOut}
           variant="outline"
           size={"xs"}
           className=" w-full flex items-center py-2 px-4 gap-3 text-secondary-700"
         >
           <LogOut className="size-5" />
-          <p className="text-caption">
-            {isPending ? "Signing Out..." : "Sign Out"}
-          </p>
+          <p className="text-caption">Sign Out</p>
         </Button>
         <Button
+          onClick={() => setShowDeleteModal(true)}
           size={"xs"}
-          className=" w-full flex items-center justify-center hover:border-[#DC3545] hover:text-[#DC3545] bg-[#DC3545] py-2 px-4 gap-3"
+          variant="destructive"
+          className=" w-full flex items-center justify-center py-2 px-4 gap-3"
         >
           <p className="text-caption">Delete Account</p>
         </Button>
       </div>
+      {showLogoutModal && (
+        <BasicConfirmationModal
+          setShowConfirmModal={setShowLogoutModal}
+          isUpdating={isLoggingOut}
+          handleSaveChanges={handleLogout}
+          title="Confirm Sign Out"
+          message="Are you sure you want to sign out of your account?"
+        />
+      )}
+
+      {showDeleteModal && (
+        <BasicConfirmationModal
+          setShowConfirmModal={setShowDeleteModal}
+          isUpdating={false}
+          handleSaveChanges={handleDeleteAccount}
+          title="Delete Account"
+          message="Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed."
+          confirmationText="Delete"
+          cancellationText="Cancel"
+          isUpdatingText="Deleting..."
+        />
+      )}
     </div>
   );
 }

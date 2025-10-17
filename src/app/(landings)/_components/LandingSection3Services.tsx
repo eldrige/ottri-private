@@ -191,6 +191,8 @@ function ServiceCard({
       <Image
         className="rounded-t-lg aspect-[2/1] w-full object-cover"
         src={coverImage}
+        width={500}
+        height={500}
         alt={`${name}'s cover`}
         width={380}
         height={180}

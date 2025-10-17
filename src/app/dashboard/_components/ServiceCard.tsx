@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
@@ -10,6 +11,8 @@ import { Button } from "@/components/ui/Button";
 import { Booking } from "../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../_utils/helpers";
+import { useCancelBookingMutation } from "../_services/mutations";
+import { useSearchParams } from "next/navigation";
 
 export default function ServiceCard({
   service
@@ -153,13 +156,31 @@ export function AppointmentCard({
 }: Readonly<{
   service: ServiceCardProps;
 }>) {
+  const searchParams = useSearchParams();
+  const { mutateAsync: handleCancel, isPending } = useCancelBookingMutation(
+    searchParams.get("status")
+  );
+
+  const handleCancelClick = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleCancel({ bookingId: service.id });
+  };
+
   return (
     <>
       <div className="flex flex-col xl:hidden gap-4">
-        <AppointmentCardMobile {...service} />
+        <AppointmentCardMobile
+          {...service}
+          handleCancel={handleCancelClick}
+          isPendingCancel={isPending}
+        />
       </div>
       <div className="hidden xl:flex gap-4">
-        <AppointmentCardDesktop {...service} />
+        <AppointmentCardDesktop
+          {...service}
+          handleCancel={handleCancelClick}
+          isPendingCancel={isPending}
+        />
       </div>
     </>
   );
@@ -170,8 +191,13 @@ function AppointmentCardDesktop({
   cleaners,
   timeSlot,
   address,
-  status
-}: ServiceCardProps) {
+  status,
+  handleCancel,
+  isPendingCancel
+}: ServiceCardProps & {
+  handleCancel?: (e: React.FormEvent) => void;
+  isPendingCancel?: boolean;
+}) {
   return (
     <div className="w-full">
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -209,7 +235,9 @@ function AppointmentCardDesktop({
         </div>
         <div className="flex gap-2">
           <Button
+            onClick={handleCancel}
             disabled={
+              isPendingCancel ||
               status === "COMPLETED" ||
               status === "CANCELLED" ||
               status === "INPROGRESS"
@@ -218,7 +246,7 @@ function AppointmentCardDesktop({
             className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
             variant={"outline"}
           >
-            Cancel
+            {isPendingCancel ? "Cancelling..." : "Cancel"}
           </Button>
         </div>
       </div>
@@ -231,8 +259,13 @@ function AppointmentCardMobile({
   cleaners,
   timeSlot,
   address,
-  status
-}: ServiceCardProps) {
+  status,
+  handleCancel,
+  isPendingCancel
+}: ServiceCardProps & {
+  handleCancel?: (e: React.FormEvent) => void;
+  isPendingCancel?: boolean;
+}) {
   return (
     <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
       <div className="flex gap-4 w-full items-center">
@@ -269,7 +302,9 @@ function AppointmentCardMobile({
           </div>
           <div className="flex flex-row-reverse md:flex-row items-center gap-2">
             <Button
+              onClick={handleCancel}
               disabled={
+                isPendingCancel ||
                 status === "COMPLETED" ||
                 status === "CANCELLED" ||
                 status === "INPROGRESS"
@@ -278,7 +313,7 @@ function AppointmentCardMobile({
               className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
               variant={"outline"}
             >
-              Cancel
+              {isPendingCancel ? "Cancelling..." : "Cancel"}
             </Button>
           </div>
         </div>
