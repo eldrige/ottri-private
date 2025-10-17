@@ -3,6 +3,7 @@ import {
   BookingsResponse,
   BookingStats,
   Cleaner,
+  MapBookingsResponse,
   ServiceArea,
   ServiceOption
 } from "@/app/admin/types";
@@ -10,14 +11,53 @@ import { axiosInstance, clientAxios } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export function useGetBookingsQuery(statusFilter: string = "", limit = 50) {
+type GBQParamsType = {
+  statusFilter?: string;
+  limit?: number;
+  startTime?: string;
+  endTime?: string;
+  page?: number;
+  enabled?: boolean;
+};
+export function useGetBookingsQuery({
+  statusFilter = "",
+  limit = 50,
+  startTime,
+  endTime,
+  page = 0,
+  enabled = true
+}: GBQParamsType) {
+  const sp = new URLSearchParams();
+  if (limit) sp.append("limit", String(limit));
+  if (statusFilter) sp.append("status", statusFilter);
+  if (startTime) sp.append("startTime", startTime);
+  if (endTime) sp.append("endTime", endTime);
+  if (page) sp.append("page", String(page));
+
   return useQuery({
-    queryKey: ["bookings", statusFilter],
+    queryKey: ["bookings", { statusFilter, limit, startTime, endTime, page }],
     queryFn: () =>
       axios
-        .get(`/api/bookings?limit=${limit}&status=${statusFilter}`)
-        // .get(`/api/proxy?path=/bookings?limit=${limit}&status=${statusFilter}`)
-        .then((i) => i.data) as Promise<BookingsResponse>
+        .get(`/api/bookings?${sp}`)
+        .then((i) => i.data) as Promise<BookingsResponse>,
+    enabled: enabled
+  });
+}
+
+export function useMapBookingsQuery({
+  statusFilter = ""
+}: {
+  statusFilter?: string;
+}) {
+  const sp = new URLSearchParams();
+  if (statusFilter) sp.append("status", statusFilter);
+
+  return useQuery({
+    queryKey: ["bookings", "map", { statusFilter }],
+    queryFn: () =>
+      clientAxios
+        .get(`bookings/map?${sp}`)
+        .then((i) => i.data) as Promise<MapBookingsResponse>
   });
 }
 

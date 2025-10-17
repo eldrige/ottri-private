@@ -8,6 +8,14 @@ export interface BookingsResponse {
   data: Booking[];
 }
 
+export interface MapBookingsResponse {
+  total: number;
+  data: Pick<
+    Booking,
+    "id" | "displayId" | "status" | "customer" | "guest" | "location"
+  >[];
+}
+
 export interface Booking {
   id: number;
   displayId: string;

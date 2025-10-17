@@ -11,12 +11,11 @@ import {
   startBooking,
   updateBooking
 } from "../_actions/bookings";
-import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import {
-  Booking as serviceArea,
   BookingsResponse,
   ServiceArea,
-  Cleaner
+  Cleaner,
+  Booking
 } from "@/app/admin/types";
 import {
   createServiceAreas,
@@ -36,11 +35,10 @@ import { clientAxios } from "@/lib/axios";
 // Assign cleaner
 export function useAssignCleanerMutation() {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: assignCleaner,
     onSuccess: (data) => {
-      updateBookingHelper(searchParams, queryClient, data);
+      updateBookingHelper(queryClient, data);
     }
   });
 }
@@ -48,44 +46,40 @@ export function useAssignCleanerMutation() {
 // Bookings
 export function useCancelBookingMutation() {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: cancelBooking,
     onSuccess: (data) => {
-      updateBookingHelper(searchParams, queryClient, data);
+      updateBookingHelper(queryClient, data);
     }
   });
 }
 
 export function useStartBookingMutation() {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: startBooking,
     onSuccess: (data) => {
-      updateBookingHelper(searchParams, queryClient, data);
+      updateBookingHelper(queryClient, data);
     }
   });
 }
 
 export function useCompleteBookingMutation() {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: completeBooking,
     onSuccess: (data) => {
-      updateBookingHelper(searchParams, queryClient, data);
+      updateBookingHelper(queryClient, data);
     }
   });
 }
 
 export function useUpdateBookingMutation() {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: updateBooking,
     onSuccess: (data) => {
-      updateBookingHelper(searchParams, queryClient, data);
+      updateBookingHelper(queryClient, data);
     }
   });
 }
@@ -104,11 +98,10 @@ export function useAddBookingMutation() {
 
 export function useRescheduleBookingMutation() {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: rescheduleBooking,
     onSuccess: (data) => {
-      updateBookingHelper(searchParams, queryClient, data);
+      updateBookingHelper(queryClient, data);
     }
   });
 }
@@ -221,25 +214,21 @@ export function useDeleteCleanerMutation() {
 // HELPERS
 
 // Bookings Helpers
-function updateBookingHelper(
-  searchParams: ReadonlyURLSearchParams,
-  queryClient: QueryClient,
-  newBooking: serviceArea
-) {
-  const statusFilter = searchParams.get("status") || "";
-  const queryData = queryClient.getQueryData([
-    "bookings",
-    statusFilter
-  ]) as BookingsResponse;
-  if (!queryData) return;
+function updateBookingHelper(queryClient: QueryClient, newBooking: Booking) {
+  queryClient.setQueriesData(
+    { queryKey: ["bookings"] },
+    (queryData?: BookingsResponse) => {
+      if (queryData) {
+        const newBookings = queryData.data.map((b) =>
+          b.id === newBooking.id ? newBooking : b
+        );
+        const newData = { ...queryData, data: newBookings } as BookingsResponse;
+        return newData;
+      }
 
-  const newBookings = queryData.data.map((b) =>
-    b.id === newBooking.id ? newBooking : b
+      return queryData;
+    }
   );
-
-  const newData = { ...queryData, data: newBookings } as BookingsResponse;
-
-  queryClient.setQueryData(["bookings", statusFilter], newData);
 }
 
 // ServiceAreas helpers

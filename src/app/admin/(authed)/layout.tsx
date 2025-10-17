@@ -6,8 +6,7 @@ import {
   HydrationBoundary,
   QueryClient
 } from "@tanstack/react-query";
-import { getBookings } from "@/lib/api/bookings";
-import { BookingsResponse, Cleaner, ServiceOption } from "../types";
+import { Cleaner, ServiceOption } from "../types";
 import { axiosInstance } from "@/lib/axios";
 
 export default async function AdminLayout({
@@ -18,13 +17,6 @@ export default async function AdminLayout({
   const queryClient = new QueryClient();
 
   const prefetcher = [
-    queryClient.prefetchQuery({
-      queryKey: ["bookings", ""],
-      queryFn: () =>
-        getBookings(new URLSearchParams()).then(
-          (i) => i.data
-        ) as Promise<BookingsResponse>
-    }),
     queryClient.prefetchQuery({
       queryKey: ["cleaners"],
       queryFn: () =>

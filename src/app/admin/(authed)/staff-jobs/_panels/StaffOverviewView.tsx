@@ -80,7 +80,10 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
           description={`Are you sure you want to delete ${cleaner.fullName}? This action cannot be undone.`}
           confirmText="Delete"
           loading={isDeleting}
-          onConfirm={() => deleteCleaner({ cleanerId: cleaner.id })}
+          onConfirm={async () => {
+            await deleteCleaner({ cleanerId: cleaner.id });
+            setShowConfirm(false);
+          }}
           accent="distructive"
         />
       )}
