@@ -8,6 +8,7 @@ import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
 import { useGetBookingReview } from "../../_services/queries";
+import { useRouter } from "next/navigation";
 
 type ServiceHistoryCardProps = Booking;
 
@@ -17,7 +18,13 @@ export default function ServiceHistoryCard({
   service: ServiceHistoryCardProps;
 }) {
   const { data: review } = useGetBookingReview(String(service.id));
-  console.log(review);
+  const router = useRouter();
+
+  const handleBookAgain = () => {
+    // Navigate to booking page with the booking ID as query param
+    router.push(`/booking/new?bookagain=${service.id}`);
+  };
+
   return (
     <DesktopServiceHistoryCard
       cleanerName={service.cleaners[0]?.name || "No Cleaner"}
@@ -29,6 +36,7 @@ export default function ServiceHistoryCard({
       cleanerImage={service.cleaners[0]?.image || cleanerPlacholderImage}
       rating={review?.rating || 0}
       review={review?.comment || "No review provided"}
+      onBookAgain={handleBookAgain}
     />
   );
 }
@@ -42,7 +50,8 @@ function DesktopServiceHistoryCard({
   location,
   price,
   rating,
-  review
+  review,
+  onBookAgain
 }: {
   serviceName: string;
   cleanerName: string;
@@ -53,6 +62,7 @@ function DesktopServiceHistoryCard({
   price: number;
   rating: number;
   review: string;
+  onBookAgain: () => void;
 }) {
   return (
     <div className="w-full">
@@ -114,6 +124,7 @@ function DesktopServiceHistoryCard({
               size={"xs"}
               className="w-full text-secondary-700 text-caption flex text-nowrap justify-center  gap-3 "
               variant={"outline"}
+              onClick={onBookAgain}
             >
               Book Again
             </Button>
@@ -124,6 +135,7 @@ function DesktopServiceHistoryCard({
           size={"xs"}
           className="w-full md:hidden text-secondary-700 text-caption  text-nowrap flex justify-center gap-3 "
           variant={"outline"}
+          onClick={onBookAgain}
         >
           Book Again
         </Button>
