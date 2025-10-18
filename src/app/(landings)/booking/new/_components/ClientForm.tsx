@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { UserData } from "@/lib/types";
 import AlertLineIcon from "@/components/icons/AlertLineIcon";
 import { X } from "lucide-react";
+import { accessOptions } from "../formData";
 
 export default function ClientForm({
   preflight,
@@ -53,7 +54,7 @@ export default function ClientForm({
       otherService: "",
       petType: "no-pets",
       petInstructions: "",
-      accessMethod: "home",
+      accessMethod: accessOptions[0].id,
       accessInstructions: "",
       preferredDate: undefined,
       timeWindow: undefined,

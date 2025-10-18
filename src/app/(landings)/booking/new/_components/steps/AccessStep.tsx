@@ -12,8 +12,9 @@ export default function AccessStep() {
     formState: { errors }
   } = useFormContext<OrderFormValues>();
 
-  const selectedPetType = watch("accessMethod");
-  const showAccessInstructions = selectedPetType && selectedPetType !== "home";
+  const selectedAccessMethod = watch("accessMethod");
+  const showAccessInstructions =
+    selectedAccessMethod && selectedAccessMethod !== accessOptions[0].id;
 
   return (
     <>
@@ -29,7 +30,7 @@ export default function AccessStep() {
             }
             className={cn(
               "py-1 px-2 rounded text-start cursor-pointer",
-              selectedPetType === option.id
+              selectedAccessMethod === option.id
                 ? "bg-primary-700 text-white border-primary-700"
                 : "border-black/10 hover:border-primary-700/50"
             )}
