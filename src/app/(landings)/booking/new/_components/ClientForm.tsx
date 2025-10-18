@@ -18,7 +18,10 @@ import AccessStep from "./steps/AccessStep";
 import ScheduleStep from "./steps/ScheduleStep";
 import TipStep from "./steps/TipStep";
 import PaymentStep from "./steps/PaymentStep";
-import { calculateBasePrice } from "@/utils/priceCalculation";
+import {
+  calculateBasePrice,
+  getDiscountPercentage
+} from "@/utils/priceCalculation";
 import { PreflightType } from "../types";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -218,20 +221,6 @@ export default function ClientForm({
     formValues.zipCode,
     validateCurrentStep
   ]);
-
-  // Calculate discount based on frequency
-  const getDiscountPercentage = (frequency: string | null): number => {
-    switch (frequency) {
-      case "MONTHLY":
-        return 0.1; // 10%
-      case "BIWEEKLY":
-        return 0.15; // 15%
-      case "WEEKLY":
-        return 0.1; // 10%
-      default:
-        return 0; // No discount
-    }
-  };
 
   // Calculate price based on form values
   const calculatePrice = () => {

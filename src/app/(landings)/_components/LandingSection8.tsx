@@ -1,19 +1,47 @@
 "use client";
 import Calculator from "@/components/icons/Calculator";
 import RangeSlider from "./RangeSlider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import RewardStars from "@/components/icons/RewardStars";
 import { Check, HomeIcon } from "lucide-react";
 import Link from "next/link";
+import Select from "@/components/ui/Select";
+import {
+  bathroomOptions,
+  bedroomOptions,
+  frequencies
+} from "../booking/new/formData";
+import {
+  calculateSquareFootage as calcSF,
+  calculateBathroomsPrice,
+  calculateBedroomsPrice,
+  getDiscountPercentage
+} from "@/utils/priceCalculation";
 
 export default function LandingSection8() {
   const [squareFootage, setSquareFootage] = useState(1500);
+  const [bathrooms, setBathrooms] = useState(bathroomOptions[0]);
+  const [bedrooms, setBedrooms] = useState(bedroomOptions[1]);
+  const [frequency, setFrequency] = useState(frequencies[0]);
 
-  // Calculate square footage based on slider value (1-100)
+  const [estimatedPrice, setEstimatedPrice] = useState(0);
+
   const calculateSquareFootage = (value: number) => {
     setSquareFootage(value);
   };
+
+  useEffect(() => {
+    let newEstPrice = 0;
+
+    newEstPrice += calcSF(squareFootage);
+
+    newEstPrice += calculateBedroomsPrice(bedrooms.value);
+    newEstPrice += calculateBathroomsPrice(bathrooms.value);
+    newEstPrice -= getDiscountPercentage(frequency.value) * newEstPrice;
+
+    setEstimatedPrice(newEstPrice);
+  }, [squareFootage, bedrooms, bathrooms, frequency]);
 
   return (
     <section
@@ -35,28 +63,24 @@ export default function LandingSection8() {
             Quick Price Calculator
           </h5>
           <form className="mt-4 flex flex-col gap-4">
-            <label className="text-caption text-black">
-              Bedrooms
-              <select className="w-full px-4 py-2 text-caption text-surface-500 bg-surface-50 rounded-lg focus:border-none focus:outline-none">
-                <option value="2_BEDROOMS">2 Bedrooms</option>
-                <option value="1_BEDROOMS">1 Bedroom</option>
-                <option value="3_BEDROOMS">3 Bedrooms</option>
-              </select>
-            </label>
-            <label className="text-caption text-black">
-              Bathrooms
-              <select className="w-full px-4 py-2 text-caption text-surface-500 bg-surface-50 rounded-lg focus:border-none focus:outline-none">
-                <option value="2_BATHROOMS">2 Bathrooms</option>
-                <option value="1_BATHROOMS">1 Bathroom</option>
-                <option value="3_BATHROOMS">3 Bathrooms</option>
-              </select>
-            </label>
+            <Select
+              label="Bedrooms"
+              options={bedroomOptions}
+              value={bedrooms}
+              onChange={(opt) => setBedrooms(opt)}
+            />
+            <Select
+              label="Bathrooms"
+              options={bathroomOptions}
+              value={bathrooms}
+              onChange={(opt) => setBathrooms(opt)}
+            />
             <label className="text-caption text-black">
               Square Footage: {squareFootage.toLocaleString()} sq ft
               <div className="relative mt-2">
                 <RangeSlider
                   min={1}
-                  max={3000}
+                  max={5000}
                   defaultValue={1500}
                   id="squareFootageSlider"
                   sliderHeight={10}
@@ -69,13 +93,12 @@ export default function LandingSection8() {
               </div>
             </label>
 
-            <label className="text-caption text-black">
-              Cleaning Frequency
-              <select className="w-full px-4 py-2 text-caption text-surface-500 bg-surface-50 rounded-lg focus:border-none focus:outline-none">
-                <option value="1_TIME">One-time cleaning</option>
-                <option value="RECURRING">Recurring Cleaning</option>
-              </select>
-            </label>
+            <Select
+              label="Cleaning Frequency"
+              options={frequencies}
+              value={frequency}
+              onChange={(opt) => setFrequency(opt)}
+            />
 
             <div className="border border-primary-700 rounded-lg p-4 mt-8">
               <div className="flex items-start">
@@ -83,7 +106,7 @@ export default function LandingSection8() {
                   Estimated Price
                 </h5>
                 <p className="text-heading-3 font-normal text-primary-700 ml-auto">
-                  $140
+                  ${estimatedPrice}
                 </p>
               </div>
               <Link href="/booking/new" className="w-full mt-4">
