@@ -46,7 +46,7 @@ function DesktopServiceCard({
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex gap-4 items-center">
           <Image
-            className="rounded-full size-12"
+            className="object-cover rounded-full w-13.5 aspect-square"
             src={
               cleaners[0]?.profile
                 ? cleaners[0].profile
@@ -207,7 +207,7 @@ function AppointmentCardDesktop({
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex gap-4 items-center">
           <Image
-            className="rounded-full size-12"
+            className="object-cover rounded-full w-13.5 aspect-square"
             src={
               cleaners[0]?.profile
                 ? cleaners[0].profile
@@ -280,7 +280,7 @@ function AppointmentCardMobile({
         <div className="flex gap-2 w-full flex-col">
           <div className="flex items-center gap-4 mb-2 w-full">
             <Image
-              className="rounded-full size-11"
+              className="object-cover rounded-full w-13.5 aspect-square"
               src={
                 cleaners[0]?.profile
                   ? cleaners[0].profile

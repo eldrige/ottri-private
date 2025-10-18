@@ -59,7 +59,7 @@ function DesktopServiceHistoryCard({
       <div className="flex flex-col md:flex-row p-4 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex w-full gap-4">
           <Image
-            className="hidden md:flex rounded-full size-12"
+            className="hidden md:flex object-cover rounded-full w-13.5 aspect-square"
             src={cleanerImage}
             alt={"cleaner profile"}
             width={100}
