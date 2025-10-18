@@ -27,9 +27,9 @@ type NavLinkProps = Omit<ComponentProps<typeof Link>, "className"> & {
   end?: boolean;
 };
 
-export function NavLink(props: NavLinkProps) {
+export function NavLink({ end, ...props }: NavLinkProps) {
   const pathname = usePathname();
-  const isActive = props.end
+  const isActive = end
     ? pathname === props.href
     : pathname.startsWith(`${props.href}`);
   return (
