@@ -13,9 +13,10 @@ export const revalidate = 0;
 export default async function NewOrderPage({
   searchParams
 }: {
-  searchParams: { bookagain?: string };
+  searchParams: Promise<{ bookagain?: string }>;
 }) {
-  const bookAgainId = searchParams.bookagain;
+  const params = await searchParams;
+  const bookAgainId = params.bookagain;
 
   const data = await Promise.all([
     axiosInstance.get("bookings/preflight"),
