@@ -115,7 +115,7 @@ function DesktopBookingCard({
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex gap-4 items-center">
           <Image
-            className="rounded-full size-12"
+            className="object-cover rounded-full w-13.5 aspect-square"
             src={cleaners[0]?.profile || cleanerPlacholderImage}
             alt={"cleaner profile"}
             width={100}
