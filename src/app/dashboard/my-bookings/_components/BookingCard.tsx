@@ -118,8 +118,8 @@ function DesktopBookingCard({
             className="rounded-full size-12"
             src={cleaners[0]?.profile || cleanerPlacholderImage}
             alt={"cleaner profile"}
-            width={48}
-            height={48}
+            width={100}
+            height={100}
           />
           <div className="flex cursor-pointer gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">

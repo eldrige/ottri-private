@@ -62,8 +62,8 @@ function DesktopServiceHistoryCard({
             className="hidden md:flex rounded-full size-12"
             src={cleanerImage}
             alt={"cleaner profile"}
-            width={48}
-            height={48}
+            width={100}
+            height={100}
           />
           <div className="flex cursor-pointer w-full gap-2 flex-col">
             <div className="flex justify-between items-center md:items-start md:flex-col">

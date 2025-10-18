@@ -53,8 +53,8 @@ function DesktopServiceCard({
                 : cleanerPlacholderImage
             }
             alt={"cleaner profile"}
-            width={48}
-            height={48}
+            width={100}
+            height={100}
           />
           <div className="gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
@@ -214,8 +214,8 @@ function AppointmentCardDesktop({
                 : cleanerPlacholderImage
             }
             alt={"cleaner profile"}
-            width={48}
-            height={48}
+            width={100}
+            height={100}
           />
           <div className="flex gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
@@ -287,8 +287,8 @@ function AppointmentCardMobile({
                   : cleanerPlacholderImage
               }
               alt={"cleaner profile"}
-              width={48}
-              height={48}
+              width={100}
+              height={100}
             />
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
