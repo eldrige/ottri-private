@@ -19,6 +19,7 @@ interface SelectProps {
   disabled?: boolean;
   buttonClassName?: string;
   accent?: "primary" | "secondary";
+  initialValue?: SelectOption;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -31,7 +32,8 @@ const Select: React.FC<SelectProps> = ({
   error,
   disabled = false,
   buttonClassName = "",
-  accent = "primary"
+  accent = "primary",
+  initialValue
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<
@@ -89,6 +91,8 @@ const Select: React.FC<SelectProps> = ({
         >
           {selectedOption ? (
             <span>{selectedOption.label}</span>
+          ) : initialValue ? (
+            <span>{initialValue?.label}</span>
           ) : (
             <span className="text-gray-400">{placeholder}</span>
           )}

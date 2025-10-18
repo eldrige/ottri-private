@@ -16,7 +16,7 @@ export default function DashboardSection1() {
           {isProfilePending ? (
             <Loader2 className="animate-spin h-3 w-3" />
           ) : (
-            userProfile?.personalInformation.fullName
+            userProfile?.personalInformation?.fullName
           )}
           !
         </h3>

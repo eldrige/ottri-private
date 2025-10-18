@@ -1,5 +1,12 @@
-import { BookingsResponse, Cleaner, ServiceOption } from "@/app/admin/types";
-import { axiosInstance } from "@/lib/axios";
+import { ServiceAddOn, TimeSlot } from "@/app/(landings)/booking/new/types";
+import {
+  BookingsResponse,
+  BookingStats,
+  Cleaner,
+  ServiceArea,
+  ServiceOption
+} from "@/app/admin/types";
+import { axiosInstance, clientAxios } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -9,10 +16,23 @@ export function useGetBookingsQuery(statusFilter: string = "", limit = 50) {
     queryFn: () =>
       axios
         .get(`/api/bookings?limit=${limit}&status=${statusFilter}`)
+        // .get(`/api/proxy?path=/bookings?limit=${limit}&status=${statusFilter}`)
         .then((i) => i.data) as Promise<BookingsResponse>
   });
 }
 
+export function useStatsQuery() {
+  return useQuery({
+    queryKey: ["booking-stats"],
+    queryFn: () => {
+      return axios
+        .get("/api/proxy?path=/bookings/stats")
+        .then((i) => i.data) as Promise<BookingStats>;
+    }
+  });
+}
+
+// Services
 export function useServicesQuery() {
   return useQuery({
     queryKey: ["services"],
@@ -24,13 +44,15 @@ export function useServicesQuery() {
 }
 
 // Cleaners
-export function useCleanersQuery() {
+export function useCleanersQuery({ archive }: { archive?: boolean }) {
+  const sp = new URLSearchParams();
+  if (archive) sp.append("archive", "true");
   return useQuery({
-    queryKey: ["cleaners"],
+    queryKey: ["cleaners", archive && "archive"].filter((i) => i),
     queryFn: () =>
-      axiosInstance.get(`cleaners?limit=50`).then((i) => i.data) as Promise<
-        Cleaner[]
-      >
+      clientAxios
+        .get(`cleaners?limit=50&archive=true`)
+        .then((i) => i.data) as Promise<Cleaner[]>
   });
 }
 
@@ -38,6 +60,25 @@ export function useCleanersQuery() {
 export function useServiceAreasQuery() {
   return useQuery({
     queryKey: ["service-areas"],
-    queryFn: () => axiosInstance.get("service-areas").then((i) => i.data)
+    queryFn: () =>
+      axiosInstance.get("service-areas").then((i) => i.data as ServiceArea[])
+  });
+}
+
+// Timeslots
+export function useTimeSlotsQuery() {
+  return useQuery({
+    queryKey: ["timeslots"],
+    queryFn: () =>
+      axiosInstance.get<TimeSlot[]>("timeslots").then((i) => i.data)
+  });
+}
+
+// ServiceAddons
+export function useServiceAddOnsQuery() {
+  return useQuery({
+    queryKey: ["add-ons"],
+    queryFn: () =>
+      axiosInstance.get<ServiceAddOn[]>("service-addons").then((i) => i.data)
   });
 }
