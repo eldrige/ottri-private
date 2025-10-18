@@ -16,37 +16,52 @@ export default function SettingsSection2() {
 }
 function NotificationSettings() {
   const { data: userData } = useGetUserProfile();
-  const userId = userData?.id;
+  const userId = String(userData?.id);
+
   const [toggle, setToggle] = useState({
     bookingReminder: userData?.settings.bookingReminder ?? false,
     promotionalEmails: userData?.settings.promotionalEmails ?? false
   });
-  const { mutateAsync: updateSettings, isPending: isUpdating } =
-    useUpdateSettingMutation();
+
+  const [isDebouncing, setIsDebouncing] = useState(false);
+  const { mutateAsync: updateSettings, isPending } = useUpdateSettingMutation();
+  const isUpdating = isPending || isDebouncing;
 
   if (!userData) return null;
 
-  const togglePromotionalEmails = async (value: boolean) => {
-    setToggle((prev) => ({ ...prev, promotionalEmails: value }));
-    try {
-      await updateSettings({
-        promotionalEmails: value,
-        userId: String(userId)
-      });
-    } catch (err) {
-      console.error("Update email notification failed", err);
-    }
-  };
-
+  // ✅ Debounced update for booking reminder
   const toggleBookingReminder = async (value: boolean) => {
+    if (isDebouncing) return; // prevent rapid clicks
+    setIsDebouncing(true);
     setToggle((prev) => ({ ...prev, bookingReminder: value }));
+
     try {
       await updateSettings({
         bookingReminder: value,
-        userId: String(userId)
+        userId
       });
     } catch (err) {
       console.error("Update sms notification failed", err);
+    } finally {
+      setTimeout(() => setIsDebouncing(false), 3000);
+    }
+  };
+
+  // ✅ Debounced update for promotional emails
+  const togglePromotionalEmails = async (value: boolean) => {
+    if (isDebouncing) return; // prevent rapid clicks
+    setIsDebouncing(true);
+    setToggle((prev) => ({ ...prev, promotionalEmails: value }));
+
+    try {
+      await updateSettings({
+        promotionalEmails: value,
+        userId
+      });
+    } catch (err) {
+      console.error("Update email notification failed", err);
+    } finally {
+      setTimeout(() => setIsDebouncing(false), 3000);
     }
   };
 
@@ -63,7 +78,9 @@ function NotificationSettings() {
           Choose what notifications you want to receive
         </p>
       </div>
+
       <div className="flex flex-col gap-4 mt-6">
+        {/* Booking Reminders */}
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h3 className="text-body font-medium text-secondary-700">
@@ -75,14 +92,14 @@ function NotificationSettings() {
           </div>
           <button
             className="cursor-pointer transform transition-all ease-in-out duration-200"
-            onClick={() => {
-              toggleBookingReminder(!toggle.bookingReminder);
-            }}
+            onClick={() => toggleBookingReminder(!toggle.bookingReminder)}
             disabled={isUpdating}
           >
             {toggle.bookingReminder ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
           </button>
         </div>
+
+        {/* Promotional Emails */}
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h3 className="text-body font-medium text-secondary-700">
@@ -94,9 +111,7 @@ function NotificationSettings() {
           </div>
           <button
             className="cursor-pointer transform transition-all ease-in-out duration-200"
-            onClick={() => {
-              togglePromotionalEmails(!toggle.promotionalEmails);
-            }}
+            onClick={() => togglePromotionalEmails(!toggle.promotionalEmails)}
             disabled={isUpdating}
           >
             {toggle.promotionalEmails ? (
@@ -114,17 +129,25 @@ function NotificationSettings() {
 function PrivacySecuritySettings() {
   const { data: userData } = useGetUserProfile();
   const userId = String(userData?.id);
+
   const [toggle, setToggle] = useState({
-    twoFactorAuth: userData?.settings.twoFactorAuth,
-    locationSharing: userData?.settings.shareMyLocation
+    twoFactorAuth: userData?.settings.twoFactorAuth ?? false,
+    locationSharing: userData?.settings.shareMyLocation ?? false
   });
+
   const [isDebouncing, setIsDebouncing] = useState(false);
   const { mutateAsync: updateSettings, isPending } = useUpdateSettingMutation();
   const isUpdating = isPending || isDebouncing;
 
   if (!userData) return null;
+
+  // ✅ Fixed debounce logic
   const toggleTwoFactorAuth = async (value: boolean) => {
+    if (isDebouncing) return; // prevent rapid toggling
+
+    setIsDebouncing(true);
     setToggle((prev) => ({ ...prev, twoFactorAuth: value }));
+
     try {
       await updateSettings({
         twoFactorAuth: value,
@@ -133,12 +156,10 @@ function PrivacySecuritySettings() {
     } catch (err) {
       console.error("Update two-factor authentication failed", err);
     } finally {
-      setIsDebouncing(true);
-      Promise.resolve(() => {
-        setTimeout(() => {
-          setIsDebouncing(false);
-        }, 3000);
-      });
+      // reset after 3 seconds
+      setTimeout(() => {
+        setIsDebouncing(false);
+      }, 3000);
     }
   };
 
@@ -167,13 +188,15 @@ function PrivacySecuritySettings() {
           Manage your privacy and security setting
         </p>
       </div>
+
       <div className="flex flex-col gap-4 mt-6">
+        {/* Two-Factor Auth */}
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h3 className="text-body font-medium text-secondary-700">
               Two-factor Authentication
             </h3>
-            <p className="text-caption text-secondary-800  font-normal text-wrap">
+            <p className="text-caption text-secondary-800 font-normal text-wrap">
               Add an extra layer of security to your account
             </p>
           </div>
@@ -185,12 +208,14 @@ function PrivacySecuritySettings() {
             {toggle.twoFactorAuth ? <ToggleSwitchOn /> : <ToggleSwitchOff />}
           </button>
         </div>
+
+        {/* Location Sharing */}
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h3 className="text-body font-medium text-secondary-700">
               Location Sharing
             </h3>
-            <p className="text-caption text-secondary-800  font-normal text-wrap">
+            <p className="text-caption text-secondary-800 font-normal text-wrap">
               Allow cleaners to see your location for navigation
             </p>
           </div>
