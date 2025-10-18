@@ -132,14 +132,14 @@ function DesktopBookingCard({
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <ClockIcon className="text-surface-500/50 *:size-5" />
+                <ClockIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">
                   {formatHour24To12(timeSlot.startTime)} -{" "}
                   {formatHour24To12(timeSlot.endTime)}
                 </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <LocationIcon className="text-surface-500/50 *:size-5" />
+                <LocationIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">{address}</p>
               </div>
             </div>
@@ -276,14 +276,14 @@ function MobileBookingCard({
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <ClockIcon className="text-surface-500/50 *:size-5" />
+              <ClockIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">
                 {formatHour24To12(timeSlot.startTime)} -{" "}
                 {formatHour24To12(timeSlot.endTime)}
               </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <LocationIcon className="text-surface-500/50 *:size-5" />
+              <LocationIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">{address}</p>
             </div>
           </div>
