@@ -20,13 +20,13 @@ export default function ServiceHistoryCard({
   console.log(review);
   return (
     <DesktopServiceHistoryCard
-      cleanerName={service.cleaners[0]?.name || "No Cleaner"}
+      cleanerName={service.cleaners[0]?.fullName || "No Cleaner"}
       date={formatDate(service.timeSlot.date)}
       location={service.address}
       price={service.price}
       serviceName={formatName(service.serviceType.name)}
       time={`${formatHour24To12(service.timeSlot.startTime)} - ${formatHour24To12(service.timeSlot.endTime)}`}
-      cleanerImage={service.cleaners[0]?.image || cleanerPlacholderImage}
+      cleanerImage={service.cleaners[0]?.profile || cleanerPlacholderImage}
       rating={review?.rating || 0}
       review={review?.comment || "No review provided"}
     />
@@ -61,7 +61,9 @@ function DesktopServiceHistoryCard({
           <Image
             className="hidden md:flex rounded-full size-12"
             src={cleanerImage}
-            alt={"user profile"}
+            alt={"cleaner profile"}
+            width={48}
+            height={48}
           />
           <div className="flex cursor-pointer w-full gap-2 flex-col">
             <div className="flex justify-between items-center md:items-start md:flex-col">

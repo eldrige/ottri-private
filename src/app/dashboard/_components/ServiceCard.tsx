@@ -48,16 +48,20 @@ function DesktopServiceCard({
           <Image
             className="rounded-full size-12"
             src={
-              cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+              cleaners[0]?.profile
+                ? cleaners[0].profile
+                : cleanerPlacholderImage
             }
-            alt={"user profile"}
+            alt={"cleaner profile"}
+            width={48}
+            height={48}
           />
           <div className="gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name || "No Cleaner"}</p>
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
               <p>{formatDate(timeSlot.date)}</p>
             </div>
@@ -128,7 +132,7 @@ function MobileServiceCard({
             </div>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <p>{cleaners[0]?.name || "No Cleaner"} </p>
+            <p>{cleaners[0]?.fullName || "No Cleaner"} </p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>
@@ -205,16 +209,20 @@ function AppointmentCardDesktop({
           <Image
             className="rounded-full size-12"
             src={
-              cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+              cleaners[0]?.profile
+                ? cleaners[0].profile
+                : cleanerPlacholderImage
             }
-            alt={"user profile"}
+            alt={"cleaner profile"}
+            width={48}
+            height={48}
           />
           <div className="flex gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name || "No Cleaner"}</p>
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
               <p>{formatDate(timeSlot.date)}</p>
             </div>
@@ -274,16 +282,20 @@ function AppointmentCardMobile({
             <Image
               className="rounded-full size-11"
               src={
-                cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+                cleaners[0]?.profile
+                  ? cleaners[0].profile
+                  : cleanerPlacholderImage
               }
-              alt={"user profile"}
+              alt={"cleaner profile"}
+              width={48}
+              height={48}
             />
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <p>{cleaners[0]?.name || "No Cleaner"}</p>
+            <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>

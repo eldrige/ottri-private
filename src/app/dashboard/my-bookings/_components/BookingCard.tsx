@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import userImage from "@/assets/user-profile-figure.png";
+
+import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
 import { ClockIcon } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
@@ -115,15 +116,17 @@ function DesktopBookingCard({
         <div className="flex gap-4 items-center">
           <Image
             className="rounded-full size-12"
-            src={cleaners[0]?.image || userImage}
-            alt={"user profile"}
+            src={cleaners[0]?.profile || cleanerPlacholderImage}
+            alt={"cleaner profile"}
+            width={48}
+            height={48}
           />
           <div className="flex cursor-pointer gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name || "No Cleaner"}</p>
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
               <p>{formatDate(timeSlot.date)}</p>
             </div>
@@ -267,7 +270,7 @@ function MobileBookingCard({
             <p className="text-body font-medium text-secondary-700">${price}</p>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <p>{cleaners[0]?.name || "No Cleaner"}</p>
+            <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>
