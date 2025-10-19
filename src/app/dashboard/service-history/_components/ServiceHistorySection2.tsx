@@ -3,16 +3,20 @@ import StatCard from "../../_components/StatCard";
 import { Button } from "@/components/ui/Button";
 import { CalendarIcon, Download, StarIcon } from "lucide-react";
 import MoneyIcon from "@/components/icons/MoneyIcon";
+import { useGetBookingsQuery } from "../../_services/queries";
 
-export default function ServiceHistorySection2({
-  totalServices,
-  averageRating,
-  totalSpent
-}: {
-  totalServices: number;
-  averageRating: number;
-  totalSpent: number;
-}) {
+export default function ServiceHistorySection2() {
+  const { data: bookings } = useGetBookingsQuery("COMPLETED");
+  const completedBookings = bookings?.data || [];
+
+  const totalServices = bookings?.total || 0;
+  const totalSpent =
+    completedBookings.reduce((total, booking) => total + booking.price, 0) | 0;
+  const averageRating =
+    completedBookings.reduce((cum, booking) => {
+      return cum + (booking.review?.rating || 0);
+    }, 0) / (completedBookings.filter((b) => b.review).length || 1);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <StatCard
