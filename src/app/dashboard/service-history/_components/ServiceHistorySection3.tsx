@@ -1,9 +1,14 @@
 import React from "react";
 import ServiceHistoryCard from "./ServiceHistoryCard";
 import { useGetBookingsQuery } from "../../_services/queries";
+import { Loader2 } from "lucide-react";
 
 export default function ServiceHistorySection3() {
-  const { data: historyServices } = useGetBookingsQuery("COMPLETED", 100, 0);
+  const { data: historyServices, isLoading } = useGetBookingsQuery(
+    "COMPLETED",
+    100,
+    0
+  );
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-8">
@@ -22,7 +27,12 @@ export default function ServiceHistorySection3() {
             {historyServices?.data.map((service) => {
               return <ServiceHistoryCard key={service.id} service={service} />;
             })}
-            {historyServices?.data.length === 0 && (
+            {isLoading && (
+              <div className="text-caption w-full flex items-center justify-center text-center text-secondary-800">
+                <Loader2 className="animate-spin w-4 h-4" />
+              </div>
+            )}
+            {!isLoading && historyServices?.data.length === 0 && (
               <div className="w-full flex justify-center">
                 <h3 className="text-caption text-secondary-800">
                   No completed services found.
