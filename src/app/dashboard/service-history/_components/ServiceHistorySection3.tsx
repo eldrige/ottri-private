@@ -1,11 +1,8 @@
 import React from "react";
 import ServiceHistoryCard from "./ServiceHistoryCard";
-import { Booking } from "../../_utils/types";
 import { useGetBookingsQuery } from "../../_services/queries";
 
-export default function ServiceHistorySection3({}: {
-  historyServices?: Booking[];
-}) {
+export default function ServiceHistorySection3() {
   const { data: historyServices } = useGetBookingsQuery("COMPLETED", 100, 0);
   return (
     <div className="flex flex-col gap-6">
