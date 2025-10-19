@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import ServiceHistoryCard from "./ServiceHistoryCard";
 import { useGetBookingsQuery } from "../../_services/queries";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 export default function ServiceHistorySection3() {
+  const [page, setPage] = useState(0);
   const { data: historyServices, isLoading } = useGetBookingsQuery(
     "COMPLETED",
     100,
     0
   );
+
+  const totalPages = historyServices
+    ? Math.ceil(historyServices.total / historyServices.limit)
+    : 0;
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-8">
@@ -40,6 +46,27 @@ export default function ServiceHistorySection3() {
               </div>
             )}
           </div>
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4">
+              <Button
+                onClick={() => setPage((old) => Math.max(old - 1, 0))}
+                disabled={page === 0}
+                size={"2xs"}
+              >
+                <ChevronLeft className="size-4" />
+              </Button>
+              <span className="text-sm text-secondary-700">
+                Page {page + 1} of {totalPages}
+              </span>
+              <Button
+                onClick={() => setPage((old) => old + 1)}
+                disabled={page >= totalPages - 1}
+                size="2xs"
+              >
+                <ChevronRight className="size-4" />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

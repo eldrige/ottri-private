@@ -37,7 +37,7 @@ export default function BillingSection4() {
               <TransactionCard
                 key={booking.id}
                 service={formatName(booking.serviceType.name)}
-                cleaner={booking.cleaners[0]?.name || "No Cleaner"}
+                cleaner={booking.cleaners[0]?.fullName || "No Cleaner"}
                 amount={booking.price}
                 date={formatDate(booking.timeSlot.date)}
                 state={formatName(booking.status)}
