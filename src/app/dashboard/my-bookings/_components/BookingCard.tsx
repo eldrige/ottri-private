@@ -116,7 +116,7 @@ function DesktopBookingCard({
         <div className="flex gap-4 items-center">
           <Image
             className="rounded-full size-12"
-            src={cleaners[0]?.image || userImage}
+            src={cleaners[0]?.profile || userImage}
             alt={"user profile"}
           />
           <div className="flex cursor-pointer gap-1 flex-col">
@@ -124,7 +124,7 @@ function DesktopBookingCard({
               {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name || "No Cleaner"}</p>
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
               <p>{formatDate(timeSlot.date)}</p>
             </div>
@@ -269,7 +269,7 @@ function MobileBookingCard({
             <p className="text-body font-medium text-secondary-700">${price}</p>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <p>{cleaners[0]?.name || "No Cleaner"}</p>
+            <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>
