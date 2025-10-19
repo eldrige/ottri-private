@@ -5,13 +5,20 @@ import { Booking, Review, User } from "../_utils/types";
 export function useGetBookingsQuery(
   statusFilter: string = "",
   limit = 4,
-  page = 0
+  page = 0,
+  startDate?: string,
+  endDate?: string
 ) {
+  const sD = startDate && startDate !== "" ? `&startDate=${startDate}` : "";
+  const eD = endDate && endDate !== "" ? `&endDate=${endDate}` : "";
+  const dateFilter = sD + eD;
   return useQuery({
-    queryKey: ["bookings", statusFilter, limit, page],
+    queryKey: ["bookings", statusFilter, limit, page, startDate, endDate],
     queryFn: () =>
       axios
-        .get(`/api/bookings?limit=${limit}&status=${statusFilter}&page=${page}`)
+        .get(
+          `/api/bookings?limit=${limit}&status=${statusFilter}&page=${page}${dateFilter}`
+        )
         .then((i) => i.data) as Promise<{
         limit: number;
         page: number;

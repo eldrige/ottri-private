@@ -16,10 +16,14 @@ export default function MyBookingSection4() {
   );
   const [page, setPage] = useState(0);
 
+  const [today] = useState(() => new Date().toISOString());
+
   const { data: bookings, isLoading } = useGetBookingsQuery(
     statusFilter,
     10,
-    page
+    page,
+    "",
+    today
   );
 
   const pastBookings = bookings

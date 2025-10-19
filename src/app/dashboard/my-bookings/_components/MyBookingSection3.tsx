@@ -26,34 +26,23 @@ export default function MyBookingSection3() {
     { label: "Today", value: "today" }
   ];
 
+  const [today] = useState(() => new Date().toISOString());
+  const [dayAfterToday] = useState(() =>
+    new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+  );
+
   const { data: bookings, isLoading: bookingsIsLoading } = useGetBookingsQuery(
     "",
     4,
-    page
+    page,
+    today,
+    `${statusFilter === "today" ? dayAfterToday : ""}`
   );
 
-  if (!bookings) return null;
+  const upcomingBookings = bookings ? bookings.data : [];
+  if (!(upcomingBookings || bookings)) return null;
 
-  const upcomingBookings = bookings.data.filter((booking) => {
-    const bookingDate = new Date(booking.timeSlot.date);
-    const today = new Date();
-    return bookingDate >= today;
-  });
-
-  const filteredBookingsFinalBookings =
-    statusFilter === "today"
-      ? upcomingBookings.filter((booking) => {
-          const bookingDate = new Date(booking.timeSlot.date);
-          const today = new Date();
-          return (
-            bookingDate.getDate() === today.getDate() &&
-            bookingDate.getMonth() === today.getMonth() &&
-            bookingDate.getFullYear() === today.getFullYear()
-          );
-        })
-      : upcomingBookings;
-
-  const totalPages = Math.ceil(bookings.total / bookings.limit);
+  const totalPages = Math.ceil(bookings ? bookings.total / bookings.limit : 0);
 
   return (
     <div className="flex flex-col gap-6">
@@ -90,7 +79,7 @@ export default function MyBookingSection3() {
             </div>
           </div>
           <div className="flex flex-col gap-2.5">
-            {filteredBookingsFinalBookings.map((booking) => (
+            {upcomingBookings.map((booking) => (
               <BookingCard key={booking.id} service={{ ...booking }} />
             ))}
             {bookingsIsLoading && (
@@ -98,17 +87,14 @@ export default function MyBookingSection3() {
                 <Loader2 className="animate-spin w-4 h-4" />
               </div>
             )}
-            {!bookingsIsLoading &&
-              filteredBookingsFinalBookings.length === 0 && (
-                <p className="text-secondary-700 text-center">
-                  No upcoming bookings found.
-                </p>
-              )}
+            {!bookingsIsLoading && upcomingBookings.length === 0 && (
+              <p className="text-secondary-700 text-center">
+                No upcoming bookings found.
+              </p>
+            )}
           </div>
           {totalPages > 1 &&
-            !(
-              filteredBookingsFinalBookings.length === 0 || bookingsIsLoading
-            ) && (
+            !(upcomingBookings.length === 0 || bookingsIsLoading) && (
               <div className="flex justify-center items-center gap-4">
                 <Button
                   onClick={() => setPage((old) => Math.max(old - 1, 0))}

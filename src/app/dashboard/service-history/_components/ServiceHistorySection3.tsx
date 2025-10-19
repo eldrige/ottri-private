@@ -1,12 +1,12 @@
 import React from "react";
 import ServiceHistoryCard from "./ServiceHistoryCard";
 import { Booking } from "../../_utils/types";
+import { useGetBookingsQuery } from "../../_services/queries";
 
-export default function ServiceHistorySection3({
-  historyServices
-}: {
-  historyServices: Booking[];
+export default function ServiceHistorySection3({}: {
+  historyServices?: Booking[];
 }) {
+  const { data: historyServices } = useGetBookingsQuery("COMPLETED", 100, 0);
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-8">
@@ -22,10 +22,10 @@ export default function ServiceHistorySection3({
             </div>
           </div>
           <div className="flex flex-col gap-2.5">
-            {historyServices.map((service) => {
+            {historyServices?.data.map((service) => {
               return <ServiceHistoryCard key={service.id} service={service} />;
             })}
-            {historyServices.length === 0 && (
+            {historyServices?.data.length === 0 && (
               <div className="w-full flex justify-center">
                 <h3 className="text-caption text-secondary-800">
                   No completed services found.

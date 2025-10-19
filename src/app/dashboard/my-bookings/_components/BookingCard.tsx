@@ -10,9 +10,8 @@ import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
 import { useCancelBookingMutation } from "../../_services/mutations";
-import { useGetBookingReview } from "../../_services/queries";
 import { useSearchParams } from "next/navigation";
-// import { revalidatePath } from "next/cache";
+
 type BookingCardProps = Pick<
   Booking,
   | "id"
@@ -22,6 +21,7 @@ type BookingCardProps = Pick<
   | "address"
   | "status"
   | "price"
+  | "review"
 >;
 
 export default function BookingCard({
@@ -90,7 +90,8 @@ function DesktopBookingCard({
   setIsOpen,
   setBookedServiceOnRating,
   handleCancel,
-  isPendingCancel
+  isPendingCancel,
+  review
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (
@@ -108,7 +109,7 @@ function DesktopBookingCard({
   handleCancel?: (e: React.FormEvent) => void;
   isPendingCancel?: boolean;
 }) {
-  const { data: review, isLoading } = useGetBookingReview(String(id));
+  const isReviewed = Boolean(review);
   return (
     <div className="w-full">
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -179,7 +180,7 @@ function DesktopBookingCard({
               : setIsOpen &&
                 setBookedServiceOnRating && (
                   <Button
-                    disabled={isLoading || Boolean(review)}
+                    disabled={isReviewed}
                     onClick={() => {
                       setBookedServiceOnRating({
                         id,
@@ -195,7 +196,7 @@ function DesktopBookingCard({
                     size={"xs"}
                     className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
                   >
-                    {isLoading ? "Loading..." : "Rate Cleaning"}
+                    {"Rate Cleaning"}
                   </Button>
                 )}
           </div>
@@ -216,7 +217,8 @@ function MobileBookingCard({
   setIsOpen,
   setBookedServiceOnRating,
   handleCancel,
-  isPendingCancel
+  isPendingCancel,
+  review
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (
@@ -234,7 +236,7 @@ function MobileBookingCard({
   handleCancel?: (e: React.FormEvent) => void;
   isPendingCancel?: boolean;
 }) {
-  const { data: review, isLoading } = useGetBookingReview(String(id));
+  const isReviewed = Boolean(review);
   return (
     <div className="flex flex-col px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
       <div className="flex gap-4 w-full items-center">
@@ -301,7 +303,7 @@ function MobileBookingCard({
         : setIsOpen &&
           setBookedServiceOnRating && (
             <Button
-              disabled={isLoading || Boolean(review)}
+              disabled={isReviewed}
               onClick={() => {
                 setBookedServiceOnRating({
                   id,
@@ -317,7 +319,7 @@ function MobileBookingCard({
               size={"xs"}
               className="hover:border-secondary-700 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
             >
-              {isLoading ? "Loading..." : "Rate Cleaning"}
+              {"Rate Cleaning"}
             </Button>
           )}
     </div>

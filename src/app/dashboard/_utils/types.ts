@@ -1,3 +1,5 @@
+import { Cleaner } from "@/app/admin/types";
+
 export interface Profile {
   id: number;
   email: string;
@@ -94,11 +96,7 @@ export interface Booking {
     updatedAt: string;
     deletedAt: null;
   };
-  cleaners: {
-    id: number;
-    name: string;
-    image: string | null;
-  }[];
+  cleaners: Cleaner[];
   timeSlot: {
     id: number;
     date: string;
@@ -111,6 +109,7 @@ export interface Booking {
     isActive: boolean;
     templateId: number;
   };
+  review: Review | null;
   location: string | null;
   price: number;
 }
