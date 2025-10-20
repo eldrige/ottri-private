@@ -32,7 +32,7 @@ export default function LandingSection8() {
   };
 
   useEffect(() => {
-    let newEstPrice = 0;
+    let newEstPrice = 105;
 
     newEstPrice += calcSF(squareFootage);
 
@@ -80,7 +80,7 @@ export default function LandingSection8() {
               <div className="relative mt-2">
                 <RangeSlider
                   min={1}
-                  max={5000}
+                  max={3000}
                   defaultValue={1500}
                   id="squareFootageSlider"
                   sliderHeight={10}
