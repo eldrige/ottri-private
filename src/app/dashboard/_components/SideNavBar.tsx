@@ -22,13 +22,10 @@ export default function SideNavBar({ user }: { user: User }) {
       <div className="flex border-b border-secondary-800/25 py-5 justify-between items-center container mx-auto">
         <Link href="/" className="w-64 flex items-center gap-2.5">
           <Image
-            className="h-8 lg:h-10 w-8 lg:w-10"
+            className="h-8 lg:h-10 max-w-fit"
             src={logo}
             alt="Ottri Logo"
           />
-          <h3 className="flex font-poppins items-center gap-2.5 font-medium text-2xl text-secondary-700">
-            Ottri
-          </h3>
         </Link>
       </div>
       <div className="flex flex-col text-caption gap-2.5">

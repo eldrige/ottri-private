@@ -32,11 +32,10 @@ export default function Header() {
             className="flex items-center gap-2.5 text-heading-5 lg:text-heading-4"
           >
             <Image
-              className="h-8 w-8 lg:h-10lg:w-10"
+              className="h-8 lg:h-10 max-w-fit"
               src={logo}
               alt="Ottri Logo"
             />
-            <span>Ottri</span>
           </Link>
 
           <hr className="text-black/10 mt-4" />

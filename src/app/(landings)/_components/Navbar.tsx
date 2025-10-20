@@ -20,11 +20,10 @@ export default function Navbar() {
             className="w-64 flex items-center gap-2.5 text-heading-5 lg:text-heading-4"
           >
             <Image
-              className="h-8 lg:h-10 w-8 lg:w-10"
+              className="h-8 lg:h-10 max-w-fit"
               src={logo}
               alt="Ottri Logo"
             />
-            <span>Ottri</span>
           </Link>
           <Nav className="hidden xl:flex">
             <NavLink href="/" end>
@@ -81,8 +80,7 @@ function MobileNav({
       >
         <div className="flex justify-between">
           <div className="w-64 flex items-center gap-2.5 text-heading-5">
-            <Image className="h-8 w-8" src={logo} alt="Ottri Logo" />
-            <span>Ottri</span>
+            <Image className="h-8 max-w-fit" src={logo} alt="Ottri Logo" />
           </div>
           <button
             onClick={() => setShow((prev) => !prev)}
