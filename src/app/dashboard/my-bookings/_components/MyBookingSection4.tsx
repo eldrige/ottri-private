@@ -18,7 +18,7 @@ export default function MyBookingSection4() {
 
   const { data: bookings, isLoading } = useGetBookingsQuery(
     statusFilter,
-    10,
+    4,
     page
   );
 

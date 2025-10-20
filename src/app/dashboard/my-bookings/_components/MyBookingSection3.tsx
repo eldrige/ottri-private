@@ -105,30 +105,27 @@ export default function MyBookingSection3() {
                 </p>
               )}
           </div>
-          {totalPages > 1 &&
-            !(
-              filteredBookingsFinalBookings.length === 0 || bookingsIsLoading
-            ) && (
-              <div className="flex justify-center items-center gap-4">
-                <Button
-                  onClick={() => setPage((old) => Math.max(old - 1, 0))}
-                  disabled={page === 0}
-                  size="2xs"
-                >
-                  <ChevronLeft className="size-4" />
-                </Button>
-                <span className="text-sm text-secondary-700">
-                  Page {page + 1} of {totalPages}
-                </span>
-                <Button
-                  onClick={() => setPage((old) => old + 1)}
-                  disabled={page >= totalPages - 1}
-                  size="2xs"
-                >
-                  <ChevronRight className="size-4" />
-                </Button>
-              </div>
-            )}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4">
+              <Button
+                onClick={() => setPage((old) => Math.max(old - 1, 0))}
+                disabled={page === 0}
+                size="2xs"
+              >
+                <ChevronLeft className="size-4" />
+              </Button>
+              <span className="text-sm text-secondary-700">
+                Page {page + 1} of {totalPages}
+              </span>
+              <Button
+                onClick={() => setPage((old) => old + 1)}
+                disabled={page >= totalPages - 1}
+                size="2xs"
+              >
+                <ChevronRight className="size-4" />
+              </Button>
+            </div>
+          )}
           <Link href="/booking/new">
             <Button
               size={"xs"}

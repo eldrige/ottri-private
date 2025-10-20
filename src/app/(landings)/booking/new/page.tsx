@@ -5,19 +5,33 @@ import { axiosInstance } from "@/lib/axios";
 import { PreflightType } from "./types";
 import { UserData } from "@/lib/types";
 import { serverRequest } from "@/lib/serverRequest";
+import { Booking } from "@/app/dashboard/_utils/types";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default async function NewOrderPage() {
+export default async function NewOrderPage({
+  searchParams
+}: {
+  searchParams: Promise<{ bookagain?: string }>;
+}) {
+  const params = await searchParams;
+  const bookAgainId = params.bookagain;
+
   const data = await Promise.all([
     axiosInstance.get("bookings/preflight"),
-    serverRequest("auth/profile", "GET").catch((e) => console.log(e))
+    serverRequest("auth/profile", "GET").catch((e) => console.log(e)),
+    bookAgainId
+      ? serverRequest(`bookings/${bookAgainId}`, "GET").catch((e) =>
+          console.log(e)
+        )
+      : Promise.resolve(null)
   ]);
 
   const preflightData = data[0].data as PreflightType;
 
   let userData = data[1]?.data as UserData | undefined;
+  const bookingData = data[2]?.data as Booking | undefined;
 
   if (userData?.role !== "USER") {
     userData = undefined;
@@ -32,7 +46,11 @@ export default async function NewOrderPage() {
         <ArrowLeft />
         Back to all services
       </Link>
-      <ClientForm preflight={preflightData} userData={userData} />
+      <ClientForm
+        preflight={preflightData}
+        userData={userData}
+        bookingData={bookingData}
+      />
     </main>
   );
 }
