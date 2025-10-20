@@ -96,7 +96,7 @@ export default function Header() {
           )}
           onClick={(e) => e.stopPropagation()} // Prevent clicks inside nav from closing it
         >
-          <AdminNavbar />
+          <AdminNavbar onNav={() => setShowMobile(false)} />
           <div className="flex gap-2 py-2 mb-6 mt-auto">
             <div className="h-10 aspect-square rounded-full bg-gray-500" />
             <div>

@@ -15,7 +15,7 @@ type NavItem = {
   end?: boolean;
 };
 
-export default function AdminNavbar() {
+export default function AdminNavbar({ onNav }: { onNav?: () => void }) {
   const navItems: NavItem[] = [
     {
       href: "/admin",
@@ -59,7 +59,7 @@ export default function AdminNavbar() {
   return (
     <Nav>
       {navItems.map((item, index) => (
-        <NavLink key={index} href={item.href} end={item.end}>
+        <NavLink key={index} href={item.href} end={item.end} onNavigate={onNav}>
           {item.icon}
           {item.label}
           {item.badge && (

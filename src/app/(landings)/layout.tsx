@@ -1,9 +1,12 @@
 import Navbar from "./_components/Navbar";
 import Footer from "@/app/(landings)/_components/Footer";
 import CookiesBanner from "./_components/CookiesBanner";
-import { dehydrate, QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient
+} from "@tanstack/react-query";
 import { getServices } from "./services/_utils/queries";
-import { ClientProviders } from "./LandingPageLayoutWrapUps";
 
 export default async function LandingLayout({
   children
@@ -18,13 +21,13 @@ export default async function LandingLayout({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <ClientProviders dehydratedState={dehydratedState}>
+    <HydrationBoundary state={dehydratedState}>
       <Navbar />
       {children}
       <footer className="bg-secondary-700">
         <Footer />
       </footer>
       <CookiesBanner />
-    </ClientProviders>
+    </HydrationBoundary>
   );
 }
