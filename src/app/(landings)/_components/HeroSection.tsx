@@ -43,9 +43,11 @@ export default function HeroSection() {
           <Link href="/booking/new">
             <Button size="xs">Book a cleaning now</Button>
           </Link>
-          <Button size="xs" variant="secondary-outline">
-            Get a free quote
-          </Button>
+          <Link href="#quote-calculator">
+            <Button size="xs" variant="secondary-outline">
+              Get a free quote
+            </Button>
+          </Link>
         </div>
 
         <div className="lg:mt-24 py-4 px-4 sm:px-6 space-y-4 lg:mr-6.5 rounded shadow-custom">

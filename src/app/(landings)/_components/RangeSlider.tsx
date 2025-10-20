@@ -68,9 +68,9 @@ export default function RangeSlider({
         <input
           type="range"
           id={id}
-          min={min + 49}
+          min={min + 499}
           max={max}
-          step={50}
+          step={500}
           value={value}
           disabled={disabled}
           onChange={(e) => handleChange(Number(e.target.value))}

@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import userImage from "@/assets/user-profile-figure.png";
+
+import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
 import { ClockIcon } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
@@ -115,9 +116,11 @@ function DesktopBookingCard({
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex gap-4 items-center">
           <Image
-            className="rounded-full size-12"
-            src={cleaners[0]?.profile || userImage}
-            alt={"user profile"}
+            className="object-cover rounded-full w-13.5 aspect-square"
+            src={cleaners[0]?.profile || cleanerPlacholderImage}
+            alt={"cleaner profile"}
+            width={100}
+            height={100}
           />
           <div className="flex cursor-pointer gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
@@ -130,14 +133,14 @@ function DesktopBookingCard({
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <ClockIcon className="text-surface-500/50 *:size-5" />
+                <ClockIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">
                   {formatHour24To12(timeSlot.startTime)} -{" "}
                   {formatHour24To12(timeSlot.endTime)}
                 </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <LocationIcon className="text-surface-500/50 *:size-5" />
+                <LocationIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">{address}</p>
               </div>
             </div>
@@ -275,14 +278,14 @@ function MobileBookingCard({
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <ClockIcon className="text-surface-500/50 *:size-5" />
+              <ClockIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">
                 {formatHour24To12(timeSlot.startTime)} -{" "}
                 {formatHour24To12(timeSlot.endTime)}
               </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <LocationIcon className="text-surface-500/50 *:size-5" />
+              <LocationIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">{address}</p>
             </div>
           </div>

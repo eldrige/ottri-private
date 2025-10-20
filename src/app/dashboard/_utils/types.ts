@@ -57,6 +57,28 @@ export type User = {
   };
 };
 
+export interface Cleaner {
+  id: number;
+  profile: string;
+  fullName: string;
+  phoneNumber: string;
+  description: string;
+  quote: string;
+  status: "AVAILABLE" | "UNAVAILABLE";
+  experience: string;
+  address: string;
+  preference: string;
+  languages: string[];
+  mapLocation: string | null;
+  specialties: string[];
+  qualifications: string[];
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  location: string | null;
+}
+
 export interface Booking {
   id: number;
   displayId: string;

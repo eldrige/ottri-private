@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
+import { useGetBookingReview } from "../../_services/queries";
+import { useRouter } from "next/navigation";
 
 type ServiceHistoryCardProps = Booking;
 
@@ -15,6 +17,12 @@ export default function ServiceHistoryCard({
 }: {
   service: ServiceHistoryCardProps;
 }) {
+  const router = useRouter();
+
+  const handleBookAgain = () => {
+    router.push(`/booking/new?bookagain=${service.id}`);
+  };
+
   return (
     <DesktopServiceHistoryCard
       cleanerName={service.cleaners[0]?.fullName || "No Cleaner"}
@@ -39,7 +47,8 @@ function DesktopServiceHistoryCard({
   location,
   price,
   rating,
-  review
+  review,
+  onBookAgain
 }: {
   serviceName: string;
   cleanerName: string;
@@ -50,6 +59,7 @@ function DesktopServiceHistoryCard({
   price: number;
   rating: number;
   review: string;
+  onBookAgain: () => void;
 }) {
   return (
     <div className="w-full">
@@ -118,6 +128,7 @@ function DesktopServiceHistoryCard({
               size={"xs"}
               className="w-full text-secondary-700 text-caption flex text-nowrap justify-center  gap-3 "
               variant={"outline"}
+              onClick={onBookAgain}
             >
               Book Again
             </Button>
@@ -128,6 +139,7 @@ function DesktopServiceHistoryCard({
           size={"xs"}
           className="w-full md:hidden text-secondary-700 text-caption  text-nowrap flex justify-center gap-3 "
           variant={"outline"}
+          onClick={onBookAgain}
         >
           Book Again
         </Button>

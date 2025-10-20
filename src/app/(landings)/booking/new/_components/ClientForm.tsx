@@ -18,39 +18,65 @@ import AccessStep from "./steps/AccessStep";
 import ScheduleStep from "./steps/ScheduleStep";
 import TipStep from "./steps/TipStep";
 import PaymentStep from "./steps/PaymentStep";
-import { calculateBasePrice } from "@/utils/priceCalculation";
+import {
+  calculateBasePrice,
+  getDiscountPercentage
+} from "@/utils/priceCalculation";
 import { PreflightType } from "../types";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { UserData } from "@/lib/types";
 import AlertLineIcon from "@/components/icons/AlertLineIcon";
 import { X } from "lucide-react";
+import { accessOptions } from "../formData";
+import { Booking } from "@/app/dashboard/_utils/types";
 
 export default function ClientForm({
   preflight,
-  userData
+  userData,
+  bookingData
 }: {
   preflight: PreflightType;
   userData: UserData | undefined;
+  bookingData?: Booking;
 }) {
   const [currStep, setCurrStep] = useState(0);
   const [processing, setProcessing] = useState(false);
   const router = useRouter();
+
+  // Helper function to find service and service type from preflight data
+  const findServiceInfo = () => {
+    if (!bookingData) return { service: null, serviceType: null };
+
+    const service = preflight.services.find(
+      (s) => s.id === bookingData.serviceType.serviceId
+    );
+    const serviceType = service?.serviceTypes.find(
+      (st) => st.id === bookingData.serviceTypeId
+    );
+
+    return { service, serviceType };
+  };
+
+  const { service: matchedService, serviceType: matchedServiceType } =
+    findServiceInfo();
+
   // Set up react-hook-form
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
-      serviceType: null,
-      specificServiceType: null,
-      frequency: null,
-      bedrooms: "",
-      bathrooms: "",
-      squareFootage: "",
+      // Pre-fill from bookingData if available
+      serviceType: matchedService || null,
+      specificServiceType: matchedServiceType || null,
+      frequency: bookingData?.cleaningFrequency?.toString() || null,
+      bedrooms: bookingData?.bedrooms || "",
+      bathrooms: bookingData?.bathrooms || "",
+      squareFootage: bookingData?.approximateSquareFootage?.toString() || "",
       addOns: [],
       otherService: "",
       petType: "no-pets",
       petInstructions: "",
-      accessMethod: "home",
+      accessMethod: accessOptions[0].id,
       accessInstructions: "",
       preferredDate: undefined,
       timeWindow: undefined,
@@ -62,8 +88,9 @@ export default function ClientForm({
       email: userData?.email,
       phoneNumber: userData?.personalInformation.phoneNumber,
       billingAddress: userData?.personalInformation.address,
-      serviceAddress: userData?.personalInformation.address,
-      isServiceAreaValid: false,
+      serviceAddress:
+        bookingData?.address || userData?.personalInformation.address,
+      isServiceAreaValid: !!bookingData?.address,
       country: userData?.personalInformation.country,
       state: userData?.personalInformation.state,
       city: userData?.personalInformation.city,
@@ -218,20 +245,6 @@ export default function ClientForm({
     formValues.zipCode,
     validateCurrentStep
   ]);
-
-  // Calculate discount based on frequency
-  const getDiscountPercentage = (frequency: string | null): number => {
-    switch (frequency) {
-      case "MONTHLY":
-        return 0.1; // 10%
-      case "BIWEEKLY":
-        return 0.15; // 15%
-      case "WEEKLY":
-        return 0.1; // 10%
-      default:
-        return 0; // No discount
-    }
-  };
 
   // Calculate price based on form values
   const calculatePrice = () => {
@@ -417,6 +430,17 @@ export default function ClientForm({
       <h1 className="text-heading-3 lg:text-heading-2.5 text-center lg:text-start">
         Book Your Cleaning Service
       </h1>
+
+      {bookingData && (
+        <div className="bg-primary-50 border border-primary-700 text-primary-700 px-4 py-3 rounded-lg flex items-center gap-3">
+          <CheckCircleBroken className="w-5 h-5 flex-shrink-0" />
+          <p className="text-sm">
+            Rebooking <strong>{bookingData.serviceType.name}</strong> service.
+            Your previous preferences have been pre-filled. Please review and
+            update as needed.
+          </p>
+        </div>
+      )}
 
       <StepsViewer currStep={currStep} setCurrStep={setCurrStep} />
 

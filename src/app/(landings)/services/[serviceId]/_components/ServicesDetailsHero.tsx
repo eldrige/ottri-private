@@ -107,9 +107,11 @@ function HeroLeftSide({
             Book this service
           </Button>
         </Link>
-        <Button size="xs" variant="secondary-outline">
-          Get custom quote
-        </Button>
+        <Link href="/#quote-calculator">
+          <Button size="xs" variant="secondary-outline">
+            Get custom quote
+          </Button>
+        </Link>
       </div>
     </div>
   );
