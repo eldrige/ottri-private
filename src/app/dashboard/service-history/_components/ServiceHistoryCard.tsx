@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/Button";
 import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
-import { useGetBookingReview } from "../../_services/queries";
 import { useRouter } from "next/navigation";
 
 type ServiceHistoryCardProps = Booking;
@@ -25,6 +24,7 @@ export default function ServiceHistoryCard({
 
   return (
     <DesktopServiceHistoryCard
+      onBookAgain={handleBookAgain}
       cleanerName={service.cleaners[0]?.fullName || "No Cleaner"}
       date={formatDate(service.timeSlot.date)}
       location={service.address}

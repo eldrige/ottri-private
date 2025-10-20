@@ -1,5 +1,3 @@
-import { Cleaner } from "@/app/admin/types";
-
 export interface Profile {
   id: number;
   email: string;
