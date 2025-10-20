@@ -46,31 +46,35 @@ function DesktopServiceCard({
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex gap-4 items-center">
           <Image
-            className="rounded-full size-12"
+            className="object-cover rounded-full w-13.5 aspect-square"
             src={
-              cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+              cleaners[0]?.profile
+                ? cleaners[0].profile
+                : cleanerPlacholderImage
             }
-            alt={"user profile"}
+            alt={"cleaner profile"}
+            width={100}
+            height={100}
           />
           <div className="gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name || "No Cleaner"}</p>
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
               <p>{formatDate(timeSlot.date)}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <ClockIcon className="text-surface-500/50 *:size-5" />
+                <ClockIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">
                   {formatHour24To12(timeSlot.startTime)} -{" "}
                   {formatHour24To12(timeSlot.endTime)}
                 </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <LocationIcon className="text-surface-500/50 *:size-5" />
+                <LocationIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">{address}</p>
               </div>
             </div>
@@ -128,20 +132,20 @@ function MobileServiceCard({
             </div>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <p>{cleaners[0]?.name || "No Cleaner"} </p>
+            <p>{cleaners[0]?.fullName || "No Cleaner"} </p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <ClockIcon className="text-surface-500/50 *:size-5" />
+              <ClockIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">
                 {formatHour24To12(timeSlot.startTime)} -{" "}
                 {formatHour24To12(timeSlot.endTime)}
               </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <LocationIcon className="text-surface-500/50 *:size-5" />
+              <LocationIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">{address}</p>
             </div>
           </div>
@@ -203,31 +207,35 @@ function AppointmentCardDesktop({
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex gap-4 items-center">
           <Image
-            className="rounded-full size-12"
+            className="object-cover rounded-full w-13.5 aspect-square"
             src={
-              cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+              cleaners[0]?.profile
+                ? cleaners[0].profile
+                : cleanerPlacholderImage
             }
-            alt={"user profile"}
+            alt={"cleaner profile"}
+            width={100}
+            height={100}
           />
           <div className="flex gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name || "No Cleaner"}</p>
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
               <p>{formatDate(timeSlot.date)}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <ClockIcon className="text-surface-500/50 *:size-5" />
+                <ClockIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">
                   {formatHour24To12(timeSlot.startTime)} -{" "}
                   {formatHour24To12(timeSlot.endTime)}
                 </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <LocationIcon className="text-surface-500/50 *:size-5" />
+                <LocationIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">{address}</p>
               </div>
             </div>
@@ -272,31 +280,35 @@ function AppointmentCardMobile({
         <div className="flex gap-2 w-full flex-col">
           <div className="flex items-center gap-4 mb-2 w-full">
             <Image
-              className="rounded-full size-11"
+              className="object-cover rounded-full w-13.5 aspect-square"
               src={
-                cleaners[0]?.image ? cleaners[0].image : cleanerPlacholderImage
+                cleaners[0]?.profile
+                  ? cleaners[0].profile
+                  : cleanerPlacholderImage
               }
-              alt={"user profile"}
+              alt={"cleaner profile"}
+              width={100}
+              height={100}
             />
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <p>{cleaners[0]?.name || "No Cleaner"}</p>
+            <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <ClockIcon className="text-surface-500/50 *:size-5" />
+              <ClockIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">
                 {formatHour24To12(timeSlot.startTime)} -{" "}
                 {formatHour24To12(timeSlot.endTime)}
               </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <LocationIcon className="text-surface-500/50 *:size-5" />
+              <LocationIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">{address}</p>
             </div>
           </div>

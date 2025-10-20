@@ -27,13 +27,13 @@ export default function ServiceHistoryCard({
 
   return (
     <DesktopServiceHistoryCard
-      cleanerName={service.cleaners[0]?.name || "No Cleaner"}
+      cleanerName={service.cleaners[0]?.fullName || "No Cleaner"}
       date={formatDate(service.timeSlot.date)}
       location={service.address}
       price={service.price}
       serviceName={formatName(service.serviceType.name)}
       time={`${formatHour24To12(service.timeSlot.startTime)} - ${formatHour24To12(service.timeSlot.endTime)}`}
-      cleanerImage={service.cleaners[0]?.image || cleanerPlacholderImage}
+      cleanerImage={service.cleaners[0]?.profile || cleanerPlacholderImage}
       rating={review?.rating || 0}
       review={review?.comment || "No review provided"}
       onBookAgain={handleBookAgain}
@@ -69,9 +69,11 @@ function DesktopServiceHistoryCard({
       <div className="flex flex-col md:flex-row p-4 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex w-full gap-4">
           <Image
-            className="hidden md:flex rounded-full size-12"
+            className="hidden md:flex object-cover rounded-full w-13.5 aspect-square"
             src={cleanerImage}
-            alt={"user profile"}
+            alt={"cleaner profile"}
+            width={100}
+            height={100}
           />
           <div className="flex cursor-pointer w-full gap-2 flex-col">
             <div className="flex justify-between items-center md:items-start md:flex-col">
