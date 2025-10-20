@@ -1,47 +1,18 @@
-import { serverRequest } from "@/lib/serverRequest";
-import { Booking, Review, User } from "../_utils/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { cancelBooking, rateBooking } from "../_actions/bookings";
+import { updateProfile, updateUserSettings } from "../_actions/users";
+import axios from "axios";
 
-async function cancelBooking(bookingId: number) {
-  const response = await serverRequest(`/bookings/${bookingId}`, "DELETE");
-  return response.data as Booking;
-}
-
-export function useCancelBookingMutation() {
+export function useCancelBookingMutation(status?: string | null) {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   return useMutation({
     mutationFn: cancelBooking,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["bookings", searchParams.get("status") || ""]
+        queryKey: ["bookings", status || ""]
       });
     }
   });
-}
-
-async function rateBooking({
-  bookingId,
-  rating,
-  comment,
-  completionRate
-}: Pick<Review, "bookingId" | "rating" | "comment" | "completionRate">) {
-  console.log(bookingId, rating, comment, completionRate);
-  try {
-    const response = await serverRequest(
-      `/bookings/${bookingId}/reviews`,
-      "POST",
-      {
-        rating,
-        comment,
-        completionRate
-      }
-    );
-    return response.data as Review;
-  } catch (error) {
-    console.error("Error rating booking:", error);
-  }
 }
 
 export function useRateBookingMutation() {
@@ -55,32 +26,6 @@ export function useRateBookingMutation() {
       });
     }
   });
-}
-
-// '/api/v1/users/{id}'
-
-async function updateProfile({
-  fullName,
-  phoneNumber,
-  address,
-  userId
-}: {
-  fullName: string;
-  phoneNumber: string;
-  address: string;
-  userId: string;
-}) {
-  try {
-    console.log("there is something going on here");
-    const response = await serverRequest(`/users/profile/${userId}`, "PATCH", {
-      fullName,
-      phoneNumber,
-      address
-    });
-    return response.data as User;
-  } catch (error) {
-    console.error("Error updating user profile", error);
-  }
 }
 
 export function useUpdateProfileMutation() {
@@ -99,9 +44,21 @@ export function useLogoutMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async () => {
-      const response = await fetch(`/api/auth/logout`);
-      return response.json() as Promise<{ message: string }>;
+      const response = await axios.get(`/api/auth/logout`);
+      return response.data as Promise<{ message: string }>;
     },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["user-profile"]
+      });
+    }
+  });
+}
+
+export function useUpdateSettingMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateUserSettings,
     onSuccess: () => {
       queryClient.refetchQueries({
         queryKey: ["user-profile"]

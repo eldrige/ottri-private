@@ -8,6 +8,7 @@ import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
 import { useGetBookingReview } from "../../_services/queries";
+import { useRouter } from "next/navigation";
 
 type ServiceHistoryCardProps = Booking;
 
@@ -17,18 +18,25 @@ export default function ServiceHistoryCard({
   service: ServiceHistoryCardProps;
 }) {
   const { data: review } = useGetBookingReview(String(service.id));
-  console.log(review);
+  const router = useRouter();
+
+  const handleBookAgain = () => {
+    // Navigate to booking page with the booking ID as query param
+    router.push(`/booking/new?bookagain=${service.id}`);
+  };
+
   return (
     <DesktopServiceHistoryCard
-      cleanerName={service.cleaners[0]?.name || "No Cleaner"}
+      cleanerName={service.cleaners[0]?.fullName || "No Cleaner"}
       date={formatDate(service.timeSlot.date)}
       location={service.address}
       price={service.price}
       serviceName={formatName(service.serviceType.name)}
       time={`${formatHour24To12(service.timeSlot.startTime)} - ${formatHour24To12(service.timeSlot.endTime)}`}
-      cleanerImage={service.cleaners[0]?.image || cleanerPlacholderImage}
+      cleanerImage={service.cleaners[0]?.profile || cleanerPlacholderImage}
       rating={review?.rating || 0}
       review={review?.comment || "No review provided"}
+      onBookAgain={handleBookAgain}
     />
   );
 }
@@ -42,7 +50,8 @@ function DesktopServiceHistoryCard({
   location,
   price,
   rating,
-  review
+  review,
+  onBookAgain
 }: {
   serviceName: string;
   cleanerName: string;
@@ -53,15 +62,18 @@ function DesktopServiceHistoryCard({
   price: number;
   rating: number;
   review: string;
+  onBookAgain: () => void;
 }) {
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row p-4 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex w-full gap-4">
           <Image
-            className="hidden md:flex rounded-full size-12"
+            className="hidden md:flex object-cover rounded-full w-13.5 aspect-square"
             src={cleanerImage}
-            alt={"user profile"}
+            alt={"cleaner profile"}
+            width={100}
+            height={100}
           />
           <div className="flex cursor-pointer w-full gap-2 flex-col">
             <div className="flex justify-between items-center md:items-start md:flex-col">
@@ -114,6 +126,7 @@ function DesktopServiceHistoryCard({
               size={"xs"}
               className="w-full text-secondary-700 text-caption flex text-nowrap justify-center  gap-3 "
               variant={"outline"}
+              onClick={onBookAgain}
             >
               Book Again
             </Button>
@@ -124,6 +137,7 @@ function DesktopServiceHistoryCard({
           size={"xs"}
           className="w-full md:hidden text-secondary-700 text-caption  text-nowrap flex justify-center gap-3 "
           variant={"outline"}
+          onClick={onBookAgain}
         >
           Book Again
         </Button>

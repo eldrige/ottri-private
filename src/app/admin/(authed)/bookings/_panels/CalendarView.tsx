@@ -1,41 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "../calendar-styles.css";
-import { Booking } from "@/app/admin/types";
+import { useClientSearchParams } from "@/hooks/useClientSearchParams";
+import { useGetBookingsQuery } from "../../_services/queries";
+import ErrorComponent from "@/app/_components/ErrorComponent";
+import { cn } from "@/lib/utils";
 
-export default function CalendarView({ bookings }: { bookings: Booking[] }) {
-  // Sample booking data
-  // const events = [
-  //   {
-  //     title: "Maria Garcia",
-  //     start: "2025-08-29T09:00:00",
-  //     end: "2025-08-29T10:00:00",
-  //     extendedProps: {
-  //       status: "info"
-  //     }
-  //   },
-  //   {
-  //     title: "Jon Doe",
-  //     start: "2025-08-29T11:00:00",
-  //     end: "2025-08-29T12:00:00",
-  //     extendedProps: {
-  //       status: "warning"
-  //     }
-  //   },
-  //   {
-  //     title: "Emma Lee",
-  //     start: "2025-08-29T14:00:00",
-  //     end: "2025-08-29T15:00:00",
-  //     extendedProps: {
-  //       status: "success"
-  //     }
-  //   }
-  // ];
+export default function CalendarView() {
+  const [window, setWindow] = useState({
+    startTime: undefined as string | undefined,
+    endTime: undefined as string | undefined
+  });
 
-  const myEvents = bookings.map((booking) => ({
+  const statusFilter = useClientSearchParams().searchParams.get("status") || "";
+  const getBookingsQuery = useGetBookingsQuery({
+    statusFilter,
+    limit: 100,
+    startTime: window.startTime,
+    endTime: window.endTime,
+    enabled: !!(window.startTime && window.endTime)
+  });
+  const bookingsResponse = getBookingsQuery.data;
+
+  if (getBookingsQuery.error)
+    return (
+      <ErrorComponent
+        error={getBookingsQuery.error}
+        reset={getBookingsQuery.refetch}
+      />
+    );
+
+  const bookings = bookingsResponse?.data;
+
+  const myEvents = bookings?.map((booking) => ({
     title: booking.customer?.personalInformation?.fullName || "Guest",
     start: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.startTime}:00:00`,
     end: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.endTime}:00:00`,
@@ -50,8 +50,15 @@ export default function CalendarView({ bookings }: { bookings: Booking[] }) {
   }));
 
   return (
-    <div className="mt-8 p-6 lg:border border-black/10 rounded-lg overflow-auto">
+    <div
+      className={cn(
+        "mt-8 p-6 lg:border border-black/10 rounded-lg overflow-auto",
+        getBookingsQuery.isLoading && "opacity-25 pointer-events-none"
+      )}
+    >
       <h4 className="text-heading-5">Calendar Grid View</h4>
+
+      {getBookingsQuery.isLoading && <p>Loading bookings...</p>}
 
       <div className="mt-8 w-full min-w-4xl custom-calendar-container">
         <FullCalendar
@@ -90,6 +97,12 @@ export default function CalendarView({ bookings }: { bookings: Booking[] }) {
                 })}
               </div>
             );
+          }}
+          datesSet={(arg) => {
+            setWindow({
+              startTime: arg.startStr,
+              endTime: arg.endStr
+            });
           }}
         />
       </div>

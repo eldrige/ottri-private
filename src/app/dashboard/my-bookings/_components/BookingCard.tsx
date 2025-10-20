@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import userImage from "@/assets/user-profile-figure.png";
+
+import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
 import { ClockIcon } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Badge } from "@/components/ui/Badge";
@@ -11,6 +12,7 @@ import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
 import { useCancelBookingMutation } from "../../_services/mutations";
 import { useGetBookingReview } from "../../_services/queries";
+import { useSearchParams } from "next/navigation";
 // import { revalidatePath } from "next/cache";
 type BookingCardProps = Pick<
   Booking,
@@ -43,7 +45,10 @@ export default function BookingCard({
     >
   ) => void;
 }) {
-  const { mutateAsync: handleCancel } = useCancelBookingMutation();
+  const searchParams = useSearchParams();
+  const { mutateAsync: handleCancel, isPending } = useCancelBookingMutation(
+    searchParams.get("status")
+  );
 
   return (
     <>
@@ -54,8 +59,9 @@ export default function BookingCard({
           setBookedServiceOnRating={setBookedServiceOnRating}
           handleCancel={(e) => {
             e.preventDefault();
-            handleCancel(service.id);
+            handleCancel({ bookingId: service.id });
           }}
+          isPendingCancel={isPending}
         />
       </div>
       <div className="hidden xl:flex gap-4">
@@ -65,8 +71,9 @@ export default function BookingCard({
           setBookedServiceOnRating={setBookedServiceOnRating}
           handleCancel={(e) => {
             e.preventDefault();
-            handleCancel(service.id);
+            handleCancel({ bookingId: service.id });
           }}
+          isPendingCancel={isPending}
         />
       </div>
     </>
@@ -83,7 +90,8 @@ function DesktopBookingCard({
   price,
   setIsOpen,
   setBookedServiceOnRating,
-  handleCancel
+  handleCancel,
+  isPendingCancel
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (
@@ -99,6 +107,7 @@ function DesktopBookingCard({
     >
   ) => void;
   handleCancel?: (e: React.FormEvent) => void;
+  isPendingCancel?: boolean;
 }) {
   const { data: review, isLoading } = useGetBookingReview(String(id));
   return (
@@ -106,29 +115,31 @@ function DesktopBookingCard({
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
         <div className="flex gap-4 items-center">
           <Image
-            className="rounded-full size-12"
-            src={cleaners[0]?.image || userImage}
-            alt={"user profile"}
+            className="object-cover rounded-full w-13.5 aspect-square"
+            src={cleaners[0]?.profile || cleanerPlacholderImage}
+            alt={"cleaner profile"}
+            width={100}
+            height={100}
           />
           <div className="flex cursor-pointer gap-1 flex-col">
             <h1 className="font-medium text-body text-secondary-700">
               {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
-              <p>{cleaners[0]?.name || "No Cleaner"}</p>
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
               <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
               <p>{formatDate(timeSlot.date)}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <ClockIcon className="text-surface-500/50 *:size-5" />
+                <ClockIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">
                   {formatHour24To12(timeSlot.startTime)} -{" "}
                   {formatHour24To12(timeSlot.endTime)}
                 </p>
               </div>
               <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-                <LocationIcon className="text-surface-500/50 *:size-5" />
+                <LocationIcon className="text-surface-500/50 size-4" />
                 <p className="text-nowrap">{address}</p>
               </div>
             </div>
@@ -160,11 +171,12 @@ function DesktopBookingCard({
               ? handleCancel && (
                   <Button
                     onClick={handleCancel}
+                    disabled={isPendingCancel}
                     size={"xs"}
                     className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
                     variant={"outline"}
                   >
-                    Cancel
+                    {isPendingCancel ? "Cancelling..." : "Cancel"}
                   </Button>
                 )
               : setIsOpen &&
@@ -206,7 +218,8 @@ function MobileBookingCard({
   price,
   setIsOpen,
   setBookedServiceOnRating,
-  handleCancel
+  handleCancel,
+  isPendingCancel
 }: BookingCardProps & {
   setIsOpen?: (isOpen: boolean) => void;
   setBookedServiceOnRating?: (
@@ -222,6 +235,7 @@ function MobileBookingCard({
     >
   ) => void;
   handleCancel?: (e: React.FormEvent) => void;
+  isPendingCancel?: boolean;
 }) {
   const { data: review, isLoading } = useGetBookingReview(String(id));
   return (
@@ -246,12 +260,8 @@ function MobileBookingCard({
                   {formatName(status)}
                 </Badge>
               ) : (
-                handleCancel &&
                 status === "CANCELLED" && (
-                  <Badge
-                    onClick={handleCancel}
-                    className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2"
-                  >
+                  <Badge className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2">
                     Cancelled
                   </Badge>
                 )
@@ -260,20 +270,20 @@ function MobileBookingCard({
             <p className="text-body font-medium text-secondary-700">${price}</p>
           </div>
           <div className="flex *:text-surface-500 items-center *:text-caption">
-            <p>{cleaners[0]?.name || "No Cleaner"}</p>
+            <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
             <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
             <p>{formatDate(timeSlot.date)}</p>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <ClockIcon className="text-surface-500/50 *:size-5" />
+              <ClockIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">
                 {formatHour24To12(timeSlot.startTime)} -{" "}
                 {formatHour24To12(timeSlot.endTime)}
               </p>
             </div>
             <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
-              <LocationIcon className="text-surface-500/50 *:size-5" />
+              <LocationIcon className="text-surface-500/50 size-4" />
               <p className="text-nowrap">{address}</p>
             </div>
           </div>
@@ -283,11 +293,12 @@ function MobileBookingCard({
         ? handleCancel && (
             <Button
               onClick={handleCancel}
+              disabled={isPendingCancel}
               size={"xs"}
               className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
               variant={"outline"}
             >
-              Cancel
+              {isPendingCancel ? "Cancelling..." : "Cancel"}
             </Button>
           )
         : setIsOpen &&
@@ -300,9 +311,9 @@ function MobileBookingCard({
                   serviceType,
                   cleaners,
                   timeSlot,
-                  address: "",
-                  status: "PENDING",
-                  price: 0
+                  address,
+                  status,
+                  price
                 });
                 setIsOpen(true);
               }}

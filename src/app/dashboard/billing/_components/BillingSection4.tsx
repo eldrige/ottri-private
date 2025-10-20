@@ -1,12 +1,21 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import React from "react";
+import React, { useState } from "react";
 import { useGetBookingsQuery } from "../../_services/queries";
 import { formatDate } from "@/lib/utils";
 import { formatName } from "../../_utils/helpers";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function BillingSection4() {
-  const { data: bookings, isLoading } = useGetBookingsQuery();
+  const [page, setPage] = useState(0);
+  const { data: bookings, isLoading: bookingsIsLoading } = useGetBookingsQuery(
+    "",
+    4,
+    page
+  );
+
+  const totalPages = bookings ? Math.ceil(bookings.total / bookings.limit) : 0;
+
   return (
     <div className="flex flex-col gap-6">
       <div className="lg:p-6 lg:border border-surface-500/30 rounded-lg flex flex-col gap-6">
@@ -20,15 +29,15 @@ export default function BillingSection4() {
             </h3>
           </div>
         </div>
-        <div className="space-y-8">
-          {isLoading ? (
+        <div className="space-y-4">
+          {bookingsIsLoading ? (
             <p>Loading Bookings...</p>
           ) : (
             bookings?.data.map((booking) => (
               <TransactionCard
                 key={booking.id}
                 service={formatName(booking.serviceType.name)}
-                cleaner={booking.cleaners[0]?.name || "No Cleaner"}
+                cleaner={booking.cleaners[0]?.fullName || "No Cleaner"}
                 amount={booking.price}
                 date={formatDate(booking.timeSlot.date)}
                 state={formatName(booking.status)}
@@ -36,6 +45,27 @@ export default function BillingSection4() {
             ))
           )}
         </div>
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-4">
+            <Button
+              onClick={() => setPage((old) => Math.max(old - 1, 0))}
+              disabled={page === 0}
+              size={"2xs"}
+            >
+              <ChevronLeft className="size-4" />
+            </Button>
+            <span className="text-sm text-secondary-700">
+              Page {page + 1} of {totalPages}
+            </span>
+            <Button
+              onClick={() => setPage((old) => old + 1)}
+              disabled={page >= totalPages - 1}
+              size="2xs"
+            >
+              <ChevronRight className="size-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
