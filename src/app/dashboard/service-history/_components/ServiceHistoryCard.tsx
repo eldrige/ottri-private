@@ -17,11 +17,9 @@ export default function ServiceHistoryCard({
 }: {
   service: ServiceHistoryCardProps;
 }) {
-  const { data: review } = useGetBookingReview(String(service.id));
   const router = useRouter();
 
   const handleBookAgain = () => {
-    // Navigate to booking page with the booking ID as query param
     router.push(`/booking/new?bookagain=${service.id}`);
   };
 
@@ -34,9 +32,8 @@ export default function ServiceHistoryCard({
       serviceName={formatName(service.serviceType.name)}
       time={`${formatHour24To12(service.timeSlot.startTime)} - ${formatHour24To12(service.timeSlot.endTime)}`}
       cleanerImage={service.cleaners[0]?.profile || cleanerPlacholderImage}
-      rating={review?.rating || 0}
-      review={review?.comment || "No review provided"}
-      onBookAgain={handleBookAgain}
+      rating={service.review?.rating || 0}
+      review={service.review?.comment || "No review provided"}
     />
   );
 }
@@ -67,10 +64,10 @@ function DesktopServiceHistoryCard({
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row p-4 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
-        <div className="flex w-full gap-4">
+        <div className="flex gap-4 items-start">
           <Image
-            className="hidden md:flex object-cover rounded-full w-13.5 aspect-square"
-            src={cleanerImage}
+            className="object-cover rounded-full w-13.5 aspect-square"
+            src={cleanerImage || cleanerPlacholderImage}
             alt={"cleaner profile"}
             width={100}
             height={100}
@@ -99,20 +96,25 @@ function DesktopServiceHistoryCard({
                 <p className="text-nowrap">{location}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="flex *:size-5 gap-0.25">
-                {Array.from({ length: rating }).map((_, index) => (
-                  <StarIcon
-                    className="text-primary-700 fill-primary-700"
-                    key={index}
-                  />
-                ))}
-                {Array.from({ length: 5 - rating }).map((_, index) => (
-                  <StarIcon className="text-primary-700" key={index + rating} />
-                ))}
+            {Boolean(rating) && (
+              <div className="flex items-center gap-2">
+                <div className="flex *:size-5 gap-0.25">
+                  {Array.from({ length: rating }).map((_, index) => (
+                    <StarIcon
+                      className="text-primary-700 fill-primary-700"
+                      key={index}
+                    />
+                  ))}
+                  {Array.from({ length: 5 - rating }).map((_, index) => (
+                    <StarIcon
+                      className="text-primary-700"
+                      key={index + rating}
+                    />
+                  ))}
+                </div>
+                <p className="text-surface-500 text-caption">{rating}/5</p>
               </div>
-              <p className="text-surface-500 text-caption">{rating}/5</p>
-            </div>
+            )}
             <p className="text-surface-500/80 italic text-caption">{review}</p>
           </div>
         </div>

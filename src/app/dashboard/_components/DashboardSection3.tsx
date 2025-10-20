@@ -9,11 +9,12 @@ export default function DashboardSection3() {
   const [recentPage, setRecentPage] = useState(0);
   const [upcomingPage, setUpcomingPage] = useState(0);
 
+  const [today] = useState(() => new Date().toISOString());
   const { data: recentBookings, isLoading: recentBookingsLoading } =
-    useGetBookingsQuery("COMPLETED", 4, recentPage);
+    useGetBookingsQuery("COMPLETED", 4, recentPage, "", today);
 
   const { data: upcomingBookings, isLoading: upcomingBookingsLoading } =
-    useGetBookingsQuery("", 4, upcomingPage);
+    useGetBookingsQuery("", 4, upcomingPage, today);
 
   const recentTotalPages = recentBookings
     ? Math.ceil(recentBookings.total / recentBookings.limit)
