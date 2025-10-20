@@ -355,8 +355,7 @@ function DesktopLeftSection() {
 function LogoComponent() {
   return (
     <div className="flex gap-2.5 items-center">
-      <Image src={logo} alt="Ottri Logo" width={40} height={40} />
-      <h3 className="text-white font-medium text-2xl">Ottri</h3>
+      <Image src={logo} alt="Ottri Logo" className="h-12 max-w-fit" />
     </div>
   );
 }
