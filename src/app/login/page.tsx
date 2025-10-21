@@ -178,7 +178,7 @@ function DesktopLeftSection() {
       <LogoComponent />
 
       {/* Main background with rounded corners */}
-      <div className="absolute -z-10 top-0 left-0">
+      <Link href={"/"} className="absolute -z-10 top-0 left-0">
         <div className="bg-black/70 rounded-r-4xl absolute w-full h-full" />
         <Image
           alt="Login Image"
@@ -187,7 +187,7 @@ function DesktopLeftSection() {
           width={1000}
           height={1000}
         />
-      </div>
+      </Link>
 
       {/* White triangle overlay to create diagonal cut effect */}
       <div
@@ -229,8 +229,8 @@ function DesktopLeftSection() {
 
 function LogoComponent() {
   return (
-    <div className="flex gap-2.5 items-center">
+    <Link href={"/"} className="flex gap-2.5 items-center">
       <Image src={logo} alt="Ottri Logo" className="h-12 max-w-fit" />
-    </div>
+    </Link>
   );
 }
