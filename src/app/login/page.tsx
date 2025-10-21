@@ -39,10 +39,10 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const userRedirectPath = searchParams.get("from")?.includes("dashboard")
     ? searchParams.get("from") || ""
-    : "/dashboard";
+    : "dashboard";
   const adminRedirectPath = searchParams.get("from")?.includes("admin")
     ? searchParams.get("from") || ""
-    : "/admin";
+    : "admin";
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -60,8 +60,7 @@ function LoginForm() {
         }
       );
 
-      const data: UserData = response.data;
-
+      const data: UserData = response.data.user;
       // Redirect to the original page or admin dashboard
       if (data.role === "USER") {
         router.push(userRedirectPath);
