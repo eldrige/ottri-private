@@ -1,6 +1,12 @@
 import { Input } from "@/components/ui/Input";
 import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions
+} from "@headlessui/react";
 
 interface ApiResType {
   results: AddressDetails[];
@@ -65,8 +71,24 @@ export default function AddressInput({
   const [searchTerm, setSearchTerm] = useState(value);
   const [apiResults, setApiResults] = useState<AddressDetails[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const formatUSAddress = (address: string): string => {
+    return address
+      .replace(/, United States of America$/, "")
+      .replace(/, USA$/, "")
+      .replace(/, United States$/, "");
+  };
+  const handleSelectAddress = (address: AddressDetails | null) => {
+    if (address) {
+      const formattedAddress = formatUSAddress(address.formatted);
+      if (onChange) {
+        onChange(formattedAddress, address);
+      }
+      if (onSelectedAddress) {
+        onSelectedAddress(address);
+      }
+    }
+  };
 
   useEffect(() => {
     setSearchTerm(value);
@@ -78,7 +100,7 @@ export default function AddressInput({
         setApiResults([]);
         return;
       }
-      //777 Brockton Avenue, Abington MA 2351
+
       setIsLoading(true);
       try {
         const apiKey = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
@@ -87,6 +109,9 @@ export default function AddressInput({
         );
         const data = res.data as ApiResType;
         setApiResults(data.results);
+        if (formatUSAddress(data.results[0].formatted) === searchTerm) {
+          handleSelectAddress(data.results[0]);
+        }
       } catch (error) {
         console.error("Error fetching address suggestions:", error);
         setApiResults([]);
@@ -102,100 +127,67 @@ export default function AddressInput({
     }, 500);
 
     return () => clearTimeout(debounceTimer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setShowDropdown(true);
-    if (onChange && value.trim() === "") {
-      onChange("");
-    }
-  };
-
-  const formatUSAddress = (address: string): string => {
-    return address
-      .replace(/, United States of America$/, "")
-      .replace(/, USA$/, "")
-      .replace(/, United States$/, "");
-  };
-
-  const handleSelectAddress = (address: AddressDetails) => {
-    const formattedAddress = formatUSAddress(address.formatted);
-    setSearchTerm(formattedAddress);
-    if (onChange) {
-      onChange(formattedAddress, address);
-    }
-    if (onSelectedAddress) {
-      onSelectedAddress(address);
-    }
-    setShowDropdown(false);
-  };
   return (
     <div className="relative w-full">
-      <div className="relative w-full">
-        <Input
-          type="text"
-          value={searchTerm}
-          onChange={handleInputChange}
-          placeholder={placeholder}
-          onFocus={() => setShowDropdown(true)}
-          aria-label="Address search"
-          aria-autocomplete="list"
-          aria-controls="address-suggestions"
-          aria-expanded={showDropdown && apiResults.length > 0}
-          required={required}
-          label={label}
-        />
-        {isLoading && (
-          <div className="absolute right-3 bottom-3 transform">
-            <div className="animate-spin h-4 w-4 border-2 border-primary-500 rounded-full border-t-transparent"></div>
-          </div>
-        )}
-      </div>
+      <Combobox onChange={handleSelectAddress}>
+        <div className="relative w-full">
+          <ComboboxInput
+            as={Input}
+            value={searchTerm}
+            onChange={(e) => {
+              const value = e.target.value;
+              setIsLoading(true);
+              setSearchTerm(value);
+              if (onChange && value.trim() === "") {
+                onChange("");
+                setApiResults([]);
+              }
+              if (value.trim().length < 3) {
+                setIsLoading(false);
+              }
+            }}
+            placeholder={placeholder}
+            required={required}
+            label={label}
+            aria-label="Address search"
+            className="w-full"
+            displayValue={() => searchTerm}
+          />
 
-      {error && <p className="text-xs text-error mt-1">{error}</p>}
-
-      {showDropdown && apiResults.length > 0 && (
-        <div
-          ref={dropdownRef}
-          id="address-suggestions"
-          className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md border border-gray-200 overflow-auto"
-        >
-          <ul role="listbox">
-            {apiResults.map((result, index) => {
-              const formattedAddress = formatUSAddress(result.formatted);
-              return (
-                <li
-                  key={index}
-                  role="option"
-                  aria-selected={searchTerm === formattedAddress}
-                  className="px-4 py-2 hover:bg-primary-50 cursor-pointer text-sm"
-                  onClick={() => handleSelectAddress(result)}
-                >
-                  {formattedAddress}
-                </li>
-              );
-            })}
-          </ul>
+          {isLoading && (
+            <div className="absolute right-3 bottom-3 transform">
+              <div className="animate-spin h-4 w-4 border-2 border-primary-500 rounded-full border-t-transparent"></div>
+            </div>
+          )}
         </div>
-      )}
+
+        {error && <p className="text-xs text-error mt-1">{error}</p>}
+
+        <ComboboxOptions className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md border border-gray-200 overflow-auto">
+          {apiResults.length === 0 &&
+          searchTerm.trim().length >= 3 &&
+          !isLoading ? (
+            <div className="px-4 py-2 text-sm text-gray-500">
+              No results found
+            </div>
+          ) : (
+            apiResults.map((result, index) => (
+              <ComboboxOption
+                key={index}
+                value={result}
+                className={({ focus }) =>
+                  `px-4 py-2 cursor-pointer text-sm ${focus ? "bg-gray-100" : ""}`
+                }
+              >
+                {formatUSAddress(result.formatted)}
+              </ComboboxOption>
+            ))
+          )}
+        </ComboboxOptions>
+      </Combobox>
     </div>
   );
 }
