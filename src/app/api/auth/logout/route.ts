@@ -10,6 +10,7 @@ export async function GET() {
   cookieStore.delete("refreshToken");
 
   revalidatePath("/dashboard/");
+  revalidatePath("/admin/");
   return NextResponse.json({
     message: "Successfully logged out!"
   });

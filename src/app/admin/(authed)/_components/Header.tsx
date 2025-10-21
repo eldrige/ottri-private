@@ -6,8 +6,22 @@ import Link from "next/link";
 import AdminNavbar from "./AdminNavbar";
 import MenuIcon from "@/components/icons/MenuIcon";
 import { cn } from "@/lib/utils";
+import { useLogoutMutation } from "@/app/dashboard/_services/mutations";
+import { Button } from "@/components/ui/Button";
+import { LogOut, Loader2 } from "lucide-react";
 
 export default function Header() {
+  const { mutateAsync: logout, isPending: isLoggingOut } = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   const [showMobile, setShowMobile] = useState(false);
   useEffect(() => {
     if (showMobile) {
@@ -43,14 +57,34 @@ export default function Header() {
           <AdminNavbar />
 
           <hr className="text-black/10 mt-auto mb-6" />
-          <div className="flex gap-2 py-2">
-            <div className="h-10 aspect-square rounded-full bg-gray-900" />
-            <div>
-              <p className="text-sm font-medium">Jenny Murphy</p>
-              <p className="text-xs text-secondary-700/50">
-                jennymurphy@gmail.com
-              </p>
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2 py-2">
+              <div className="h-10 aspect-square rounded-full bg-gray-900" />
+              <div>
+                <p className="text-sm font-medium">Jenny Murphy</p>
+                <p className="text-xs text-secondary-700/50">
+                  jennymurphy@gmail.com
+                </p>
+              </div>
             </div>
+            <Button
+              onClick={handleLogout}
+              variant="ghost"
+              size={"2xs"}
+              className="flex justify-center text-red-600 hover:text-red-800 hover:bg-red-50"
+              disabled={isLoggingOut}
+            >
+              {isLoggingOut ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging
+                  out...
+                </>
+              ) : (
+                <>
+                  <LogOut className="mr-2 h-4 w-4" /> Logout
+                </>
+              )}
+            </Button>
           </div>
         </header>
       </div>
@@ -96,14 +130,34 @@ export default function Header() {
           onClick={(e) => e.stopPropagation()} // Prevent clicks inside nav from closing it
         >
           <AdminNavbar onNav={() => setShowMobile(false)} />
-          <div className="flex gap-2 py-2 mb-6 mt-auto">
-            <div className="h-10 aspect-square rounded-full bg-gray-500" />
-            <div>
-              <p className="text-sm font-medium">Jenny Murphy</p>
-              <p className="text-xs text-secondary-700/50">
-                jennymurphy@gmail.com
-              </p>
+          <div className="flex flex-col gap-2 mb-6 mt-auto">
+            <div className="flex gap-2 py-2">
+              <div className="h-10 aspect-square rounded-full bg-gray-500" />
+              <div>
+                <p className="text-sm font-medium">Jenny Murphy</p>
+                <p className="text-xs text-secondary-700/50">
+                  jennymurphy@gmail.com
+                </p>
+              </div>
             </div>
+            <Button
+              onClick={handleLogout}
+              variant="ghost"
+              className="flex justify-center text-red-600 hover:text-red-800 hover:bg-red-50"
+              disabled={isLoggingOut}
+              size={"2xs"}
+            >
+              {isLoggingOut ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging
+                  out...
+                </>
+              ) : (
+                <>
+                  <LogOut className="mr-2 h-4 w-4" /> Logout
+                </>
+              )}
+            </Button>
           </div>
         </div>
       </div>
