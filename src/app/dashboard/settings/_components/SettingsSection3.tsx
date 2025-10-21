@@ -9,6 +9,7 @@ import {
 } from "../../_services/mutations";
 import Select from "@/components/ui/Select";
 import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
+import ModalWrapper from "@/components/common/ModalWrapper";
 
 export default function SettingsSection3() {
   return (
@@ -222,26 +223,30 @@ function AccountActions() {
         </Button>
       </div>
       {showLogoutModal && (
-        <BasicConfirmationModal
-          setShowConfirmModal={setShowLogoutModal}
-          isUpdating={isLoggingOut}
-          handleSaveChanges={handleLogout}
-          title="Confirm Sign Out"
-          message="Are you sure you want to sign out of your account?"
-        />
+        <ModalWrapper onClose={() => setShowLogoutModal(false)}>
+          <BasicConfirmationModal
+            setShowConfirmModal={setShowLogoutModal}
+            isUpdating={isLoggingOut}
+            handleSaveChanges={handleLogout}
+            title="Confirm Sign Out"
+            message="Are you sure you want to sign out of your account?"
+          />
+        </ModalWrapper>
       )}
 
       {showDeleteModal && (
-        <BasicConfirmationModal
-          setShowConfirmModal={setShowDeleteModal}
-          isUpdating={false}
-          handleSaveChanges={handleDeleteAccount}
-          title="Delete Account"
-          message="Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed."
-          confirmationText="Delete"
-          cancellationText="Cancel"
-          isUpdatingText="Deleting..."
-        />
+        <ModalWrapper onClose={() => setShowDeleteModal(false)}>
+          <BasicConfirmationModal
+            setShowConfirmModal={setShowDeleteModal}
+            isUpdating={false}
+            handleSaveChanges={handleDeleteAccount}
+            title="Delete Account"
+            message="Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed."
+            confirmationText="Delete"
+            cancellationText="Cancel"
+            isUpdatingText="Deleting..."
+          />
+        </ModalWrapper>
       )}
     </div>
   );

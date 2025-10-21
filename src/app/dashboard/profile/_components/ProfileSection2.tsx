@@ -10,8 +10,11 @@ import { User } from "../../_utils/types";
 import { useUpdateProfileMutation } from "../../_services/mutations";
 import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
 import ModalWrapper from "@/components/common/ModalWrapper";
+import { useGetUserProfile } from "../../_services/queries";
 
-export default function ProfileSection2({ user }: { user: User }) {
+export default function ProfileSection2() {
+  const { data: user } = useGetUserProfile();
+  if (!user) return null;
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col gap-16">
