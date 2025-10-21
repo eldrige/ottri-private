@@ -64,8 +64,11 @@ function PersonalInfoForm({ user }: { user: User }) {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const { mutateAsync: updateProfile, isPending: isUpdating } =
-    useUpdateProfileMutation();
+  const {
+    mutateAsync: updateProfile,
+    isPending: isUpdating,
+    error
+  } = useUpdateProfileMutation();
 
   function handleOnchange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -135,6 +138,14 @@ function PersonalInfoForm({ user }: { user: User }) {
               onChange={handleOnchange}
             />
           </label>
+          {error && (
+            <div
+              className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+              role="alert"
+            >
+              {"Error: " + (error as Error).message || "An error occurred"}
+            </div>
+          )}
           <Button
             disabled={isUpdating}
             onClick={(e) => {

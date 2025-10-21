@@ -1,4 +1,3 @@
-"use server";
 import { User } from "../_utils/types";
 import { clientAxios } from "@/lib/axios";
 
@@ -23,6 +22,7 @@ export async function updateProfile({
     return response.data as User;
   } catch (error) {
     console.error("Error updating user profile", error);
+    throw error;
   }
 }
 
