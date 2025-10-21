@@ -7,4 +7,10 @@ yarn lint-staged ||
         false
     )
 
+yarn type-check || 
+    (
+        echo 'Type check also passed'
+        false
+    )
+
 echo '✅✅ You did good... I am committing this now. ✅✅'

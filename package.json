@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint --fix",
     "ts-check": "tsc --pretty --noEmit --watch",
+    "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
     "prepare": "husky",
     "lint-staged": "lint-staged"
@@ -15,8 +16,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --write",
-      "next lint --file",
-      "tsc --pretty --noEmit --watch"
+      "next lint --file"
     ],
     "*.{md,mdx,css,yml,yaml}": "prettier --write"
   },

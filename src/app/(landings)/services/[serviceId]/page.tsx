@@ -15,7 +15,7 @@ async function ServicesDetailsPage({
   const minPrice = Math.min(
     ...service.pricingDetails.map((detail) => detail.minPrice)
   );
-  const maxPrice = Math.min(
+  const maxPrice = Math.max(
     ...service.pricingDetails.map((detail) => detail.maxPrice)
   );
 
