@@ -10,6 +10,8 @@ import Reviewer from "@/assets/reviewer.png";
 import Sparkles from "@/components/icons/Sparkles";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
+import { UserData } from "@/lib/types";
 
 export default function Login() {
   return (
@@ -35,7 +37,12 @@ function LoginForm() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get("from") || "/dashboard";
+  const userRedirectPath = searchParams.get("from")?.includes("dashboard")
+    ? searchParams.get("from") || ""
+    : "/dashboard";
+  const adminRedirectPath = searchParams.get("from")?.includes("admin")
+    ? searchParams.get("from") || ""
+    : "/admin";
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -43,21 +50,24 @@ function LoginForm() {
     setError("");
 
     try {
-      const response = await fetch("/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      });
+      const response = await axios.post(
+        "/api/user/login",
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Login failed");
-      }
+      const data: UserData = response.data;
 
       // Redirect to the original page or admin dashboard
-      router.push(redirectPath);
+      if (data.role === "USER") {
+        router.push(userRedirectPath);
+      } else {
+        router.push(adminRedirectPath);
+      }
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "An error occurred during login"
@@ -151,7 +161,7 @@ function LoginForm() {
           <p className="text-white/80 md:text-secondary-800 text-sm">
             {"Don't have an account yet? "}
             <Link
-              href={`/register${redirectPath ? `?from=${redirectPath}` : ""}`}
+              href={`/register${userRedirectPath ? `?from=${userRedirectPath}` : ""}`}
               className="text-primary-700 hover:text-primary-800 font-medium"
             >
               Register here

@@ -2,17 +2,12 @@ import { axiosInstance } from "@/lib/axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function adminMiddleware(req: NextRequest) {
-  // Check if this is the login page itself
-  if (req.nextUrl.pathname === "/admin/login") {
-    return NextResponse.next();
-  }
-
   // Check if the user is authenticated
   const authResult = await isAuthenticated(req);
 
   if (authResult.isAuth === false) {
     const url = req.nextUrl.clone();
-    url.pathname = "/admin/login";
+    url.pathname = "/login";
     // Add the original URL as a query parameter to redirect after login
     url.searchParams.set("from", req.nextUrl.pathname);
     return NextResponse.redirect(url);

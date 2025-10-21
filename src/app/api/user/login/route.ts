@@ -28,16 +28,9 @@ export async function POST(req: NextRequest) {
       )
     ).data;
 
-    if (loginResponse.data.role !== "USER") {
-      return NextResponse.json(
-        { message: "Access denied. User privileges required." },
-        { status: 403 }
-      );
-    }
-
     // Create a response with tokens in HTTP-only cookies
     const response = NextResponse.json(
-      { message: "Login successful" },
+      { message: "Login successful", user: loginResponse.data },
       { status: 200 }
     );
 
