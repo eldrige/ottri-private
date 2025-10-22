@@ -183,7 +183,7 @@ function DesktopBookingCard({
               : setIsOpen &&
                 setBookedServiceOnRating && (
                   <Button
-                    disabled={isReviewed}
+                    disabled={isReviewed || status !== "COMPLETED"}
                     onClick={() => {
                       setBookedServiceOnRating({
                         id,

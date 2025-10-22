@@ -8,6 +8,7 @@ import { useGetBookingsQuery } from "../../_services/queries";
 import { useSearchParams } from "next/navigation";
 import Select from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
+import ModalWrapper from "@/components/common/ModalWrapper";
 
 export default function MyBookingSection4() {
   const searchParams = useSearchParams();
@@ -16,21 +17,13 @@ export default function MyBookingSection4() {
   );
   const [page, setPage] = useState(0);
 
-  const [today] = useState(() => new Date().toISOString());
-
   const { data: bookings, isLoading } = useGetBookingsQuery(
-    statusFilter,
-    10,
-    page,
-    "",
-    today
+    "COMPLETED",
+    4,
+    page
   );
 
-  const pastBookings = bookings
-    ? bookings.data.filter(
-        (booking) => booking.timeSlot.date < new Date().toISOString()
-      )
-    : [];
+  const pastBookings = bookings?.data || [];
 
   const [isOpen, setIsOpen] = useState(false);
   const [bookedServiceOnRating, setBookedServiceOnRating] = useState<
@@ -151,11 +144,14 @@ export default function MyBookingSection4() {
           </div>
         </div>
       </div>
-      <RatingPopUp
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        booking={bookedServiceOnRating}
-      />
+      {isOpen && (
+        <ModalWrapper onClose={() => setIsOpen(false)}>
+          <RatingPopUp
+            onClose={() => setIsOpen(false)}
+            booking={bookedServiceOnRating}
+          />
+        </ModalWrapper>
+      )}
     </>
   );
 }
