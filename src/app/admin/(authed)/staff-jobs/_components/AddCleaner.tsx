@@ -9,7 +9,7 @@ import { AddCleanerForm } from "@/app/admin/types";
 import { useAddCleanerMutation } from "../../_services/mutations";
 import CleanerForm from "./CleanerForm";
 import { ImageListType } from "react-images-uploading";
-import { uploadImage } from "@/app/_actions/uploadImage";
+import { uploadImage } from "@/utils/uploadImage";
 
 export default function AddCleaner({ onClose }: { onClose: () => void }) {
   const { mutateAsync } = useAddCleanerMutation();
