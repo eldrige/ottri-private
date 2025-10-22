@@ -31,7 +31,7 @@ export default function Footer() {
 const FooterBrand = () => (
   <div className="flex-1 gap-4 flex flex-col">
     <div className="w-64 flex items-center gap-2.5 text-heading-4">
-      <Image className="h-8 w-8" src={logo} alt="Ottri Logo" />
+      <Image className="h-8 max-w-fit" src={logo} alt="Ottri Logo" />
       <span className="text-white">Ottri</span>
     </div>
     <p className="text-surface-300">

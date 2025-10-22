@@ -24,14 +24,20 @@ export default async function ConfirmationPage({
     ? orderId.split("-")[1].slice(0, 9)
     : orderId.slice(0, 9);
 
-  const [response, pdfRes] = await Promise.all([
+  const [response, pdfRes] = await Promise.allSettled([
     axiosInstance.get(`bookings/${dispId}`),
     axiosInstance.get(`bookings/${dispId}/document`)
   ]);
 
-  const bookingData = response.data as BookingType;
+  const bookingData =
+    response.status === "fulfilled"
+      ? (response.value.data as BookingType)
+      : await Promise.reject(response.reason);
 
-  const pdfData = pdfRes.data;
+  const pdfData =
+    pdfRes.status === "fulfilled"
+      ? (pdfRes?.value.data as { signedUrl: string })
+      : null;
 
   const formattedDate = format(bookingData.timeSlot.date, "PP");
 
@@ -150,7 +156,7 @@ export default async function ConfirmationPage({
                   Preview Email
                 </Button>
                 <a
-                  href={pdfData.signedUrl}
+                  href={pdfData?.signedUrl || "#"}
                   download
                   target="_blank"
                   rel="noopener noreferrer"
