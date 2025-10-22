@@ -13,14 +13,17 @@ import { uploadImage } from "@/app/_actions/uploadImage";
 
 export default function ProfileSection2({ user }: { user: User }) {
   const [image, setImage] = useState<ImageListType>([]);
-  const { mutateAsync: updateProfile, isPending: isUpdating } =
-    useUpdateProfileMutation();
+  const {
+    mutateAsync: updateProfile,
+    isPending: isUpdating,
+    error: updateProfileError
+  } = useUpdateProfileMutation();
 
   const handleUpdatePicture = async () => {
     if (image.length < 1) return;
     const imageData = await uploadImage(image[0].file!);
     await updateProfile({
-      userId: String(user.id),
+      userId: "String(user.id)",
       imageUrl: imageData.data.url
     });
   };
@@ -28,13 +31,6 @@ export default function ProfileSection2({ user }: { user: User }) {
     <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col gap-16">
         <div className="w-full items-center flex flex-col">
-          {/* <Image
-            className="rounded-full size-25"
-            src={userImage}
-            alt={"user profile"}
-            width={100}
-            height={100}
-          /> */}
           <ImageUpload
             image={image}
             placeholderImageUrl={user.personalInformation?.imageUrl}
@@ -49,6 +45,13 @@ export default function ProfileSection2({ user }: { user: User }) {
               Joined since {new Date(user.createdAt).getFullYear()}
             </p>
           </div>
+          {updateProfileError && (
+            <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+              {(updateProfileError as Error).message ||
+                "Failed to update profile picture"}
+            </div>
+          )}
+
           <Button
             onClick={handleUpdatePicture}
             disabled={isUpdating || image.length === 0}

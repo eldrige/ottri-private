@@ -26,6 +26,7 @@ export async function updateProfile({
     return response.data as User;
   } catch (error) {
     console.error("Error updating user profile", error);
+    throw error;
   }
 }
 
