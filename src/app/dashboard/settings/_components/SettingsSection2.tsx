@@ -24,7 +24,11 @@ function NotificationSettings() {
   });
 
   const [isDebouncing, setIsDebouncing] = useState(false);
-  const { mutateAsync: updateSettings, isPending } = useUpdateSettingMutation();
+  const {
+    mutateAsync: updateSettings,
+    isPending,
+    error: updateSettingsError
+  } = useUpdateSettingMutation();
   const isUpdating = isPending || isDebouncing;
 
   if (!userData) return null;
@@ -122,6 +126,15 @@ function NotificationSettings() {
           </button>
         </div>
       </div>
+      {updateSettingsError && (
+        <div
+          className="p-4 mt-6 font-light text-sm text-red-700 bg-red-100 rounded-lg"
+          role="alert"
+        >
+          {"Error: " + (updateSettingsError as Error).message ||
+            "An error occurred"}
+        </div>
+      )}
     </div>
   );
 }
@@ -136,7 +149,11 @@ function PrivacySecuritySettings() {
   });
 
   const [isDebouncing, setIsDebouncing] = useState(false);
-  const { mutateAsync: updateSettings, isPending } = useUpdateSettingMutation();
+  const {
+    mutateAsync: updateSettings,
+    isPending,
+    error: updateSettingsError
+  } = useUpdateSettingMutation();
   const isUpdating = isPending || isDebouncing;
 
   if (!userData) return null;
@@ -228,6 +245,15 @@ function PrivacySecuritySettings() {
           </button>
         </div>
       </div>
+      {updateSettingsError && (
+        <div
+          className="p-4 mt-6 font-light text-sm text-red-700 bg-red-100 rounded-lg"
+          role="alert"
+        >
+          {"Error: " + (updateSettingsError as Error).message ||
+            "An error occurred"}
+        </div>
+      )}
     </div>
   );
 }

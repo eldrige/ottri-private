@@ -58,5 +58,6 @@ export async function updateUserSettings({
     return response.data;
   } catch (error) {
     console.error("Error updating user settings", error);
+    throw error;
   }
 }
