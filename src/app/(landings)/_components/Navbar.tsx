@@ -5,13 +5,13 @@ import logo from "@/assets/logo.png";
 import { Nav, NavLink } from "@/components/Nav";
 import CallIcon from "@/components/icons/CallIcon";
 import { Button } from "@/components/ui/Button";
-import { Menu, XIcon, Loader2 } from "lucide-react";
+import { Menu, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useGetUserProfile } from "@/app/dashboard/_services/queries";
 
 export default function Navbar() {
-  const { data: profileData, isLoading } = useGetUserProfile();
+  const { data: profileData } = useGetUserProfile();
   const isLoggedIn = !!profileData && profileData.role === "USER";
   const [showMobile, setShowMobile] = useState(false);
 
@@ -49,26 +49,11 @@ export default function Navbar() {
                 Book Now
               </Button>
             </Link>
-            {isLoading ? (
-              <Button
-                className="whitespace-nowrap flex items-center"
-                size="xs"
-                variant="outline"
-                disabled
-              >
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Loading...
+            <Link href={isLoggedIn ? "/dashboard" : "/login"}>
+              <Button className="whitespace-nowrap" size="xs" variant="outline">
+                {isLoggedIn ? "Dashboard" : "Login"}
               </Button>
-            ) : (
-              <Link href={isLoggedIn ? "/dashboard" : "/login"}>
-                <Button
-                  className="whitespace-nowrap"
-                  size="xs"
-                  variant="outline"
-                >
-                  {isLoggedIn ? "Dashboard" : "Login"}
-                </Button>
-              </Link>
-            )}
+            </Link>
           </div>
 
           {/* Mobile hamburger */}
@@ -86,7 +71,6 @@ export default function Navbar() {
         show={showMobile}
         setShow={setShowMobile}
         isLoggedIn={isLoggedIn}
-        isLoading={isLoading}
       />
     </>
   );
@@ -95,13 +79,11 @@ export default function Navbar() {
 function MobileNav({
   show,
   setShow,
-  isLoggedIn,
-  isLoading
+  isLoggedIn
 }: {
   show: boolean;
   setShow: (value: React.SetStateAction<boolean>) => void;
   isLoggedIn: boolean;
-  isLoading: boolean;
 }) {
   return (
     <>
@@ -153,26 +135,15 @@ function MobileNav({
               Book Now
             </Button>
           </Link>
-          {isLoading ? (
+          <Link href={isLoggedIn ? "/dashboard" : "/login"}>
             <Button
               className="whitespace-nowrap w-full mt-2.5"
               size="xs"
               variant="outline"
-              disabled
             >
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Loading...
+              {isLoggedIn ? "Dashboard" : "Login"}
             </Button>
-          ) : (
-            <Link href={isLoggedIn ? "/dashboard" : "/login"}>
-              <Button
-                className="whitespace-nowrap w-full mt-2.5"
-                size="xs"
-                variant="outline"
-              >
-                {isLoggedIn ? "Dashboard" : "Login"}
-              </Button>
-            </Link>
-          )}
+          </Link>
         </div>
       </div>
       <div
