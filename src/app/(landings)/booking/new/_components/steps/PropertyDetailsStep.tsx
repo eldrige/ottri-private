@@ -100,6 +100,9 @@ export default function PropertyDetailsStep() {
             if (result) {
               setValue("lng", result.lon);
               setValue("lat", result.lat);
+            } else {
+              setValue("lng", null);
+              setValue("lat", null);
             }
           }}
           placeholder="Start typing your address"
