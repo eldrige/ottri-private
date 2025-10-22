@@ -51,12 +51,12 @@ interface Rank {
 
 interface AddressInputProps {
   value?: string;
-  onChange?: (value: string, result?: AddressDetails) => void;
+  onChange?: (value: string | null, result?: AddressDetails) => void;
   placeholder?: string;
   error?: string;
   required?: boolean;
   label?: string;
-  onSelectedAddress?: (address: AddressDetails) => void;
+  onSelectedAddress?: (address: AddressDetails | null) => void;
 }
 
 export default function AddressInput({
@@ -83,16 +83,32 @@ export default function AddressInput({
       const formattedAddress = formatUSAddress(address.formatted);
       if (onChange) {
         onChange(formattedAddress, address);
+        setSearchTerm(formattedAddress);
       }
       if (onSelectedAddress) {
         onSelectedAddress(address);
       }
+    } else {
+      if (onChange) {
+        onChange(null);
+      }
+      if (onSelectedAddress) {
+        onSelectedAddress(null);
+      }
     }
   };
 
-  useEffect(() => {
+  const handleSearch = (value: string) => {
+    setIsLoading(true);
     setSearchTerm(value);
-  }, [value]);
+    if (onChange && value.trim() === "") {
+      onChange("");
+      setApiResults([]);
+    }
+    if (value.trim().length < 3) {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchAutocomplete = async () => {
@@ -109,8 +125,11 @@ export default function AddressInput({
         );
         const data = res.data as ApiResType;
         setApiResults(data.results);
-        if (formatUSAddress(data.results[0].formatted) === searchTerm) {
+        if (formatUSAddress(data.results[0].formatted) === value) {
           handleSelectAddress(data.results[0]);
+        } else if (value) {
+          handleSelectAddress(null);
+          handleSearch(value);
         }
       } catch (error) {
         console.error("Error fetching address suggestions:", error);
@@ -139,15 +158,7 @@ export default function AddressInput({
             value={searchTerm}
             onChange={(e) => {
               const value = e.target.value;
-              setIsLoading(true);
-              setSearchTerm(value);
-              if (onChange && value.trim() === "") {
-                onChange("");
-                setApiResults([]);
-              }
-              if (value.trim().length < 3) {
-                setIsLoading(false);
-              }
+              handleSearch(value);
             }}
             placeholder={placeholder}
             required={required}
