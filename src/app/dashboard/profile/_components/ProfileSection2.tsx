@@ -75,7 +75,7 @@ function PersonalInfoForm({ user }: { user: User }) {
 
   async function handleSaveChanges() {
     await updateProfile({
-      userId: String(user.id),
+      userId: String(user.personalInformation?.id),
       fullName: formData.fullName,
       phoneNumber: formData.phone,
       address: formData.address

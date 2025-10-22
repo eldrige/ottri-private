@@ -10,6 +10,8 @@ import Reviewer from "@/assets/reviewer.png";
 import Sparkles from "@/components/icons/Sparkles";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
+import { UserData } from "@/lib/types";
 
 export default function Login() {
   return (
@@ -35,7 +37,12 @@ function LoginForm() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get("from") || "/dashboard";
+  const userRedirectPath = searchParams.get("from")?.includes("dashboard")
+    ? searchParams.get("from") || ""
+    : "dashboard";
+  const adminRedirectPath = searchParams.get("from")?.includes("admin")
+    ? searchParams.get("from") || ""
+    : "admin";
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -43,21 +50,23 @@ function LoginForm() {
     setError("");
 
     try {
-      const response = await fetch("/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      });
+      const response = await axios.post(
+        "/api/user/login",
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Login failed");
-      }
-
+      const data: UserData = response.data.user;
       // Redirect to the original page or admin dashboard
-      router.push(redirectPath);
+      if (data.role === "USER") {
+        router.push(userRedirectPath);
+      } else {
+        router.push(adminRedirectPath);
+      }
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "An error occurred during login"
@@ -151,7 +160,7 @@ function LoginForm() {
           <p className="text-white/80 md:text-secondary-800 text-sm">
             {"Don't have an account yet? "}
             <Link
-              href={`/register${redirectPath ? `?from=${redirectPath}` : ""}`}
+              href={`/register${userRedirectPath ? `?from=${userRedirectPath}` : ""}`}
               className="text-primary-700 hover:text-primary-800 font-medium"
             >
               Register here
@@ -169,7 +178,7 @@ function DesktopLeftSection() {
       <LogoComponent />
 
       {/* Main background with rounded corners */}
-      <div className="absolute -z-10 top-0 left-0">
+      <Link href={"/"} className="absolute -z-10 top-0 left-0">
         <div className="bg-black/70 rounded-r-4xl absolute w-full h-full" />
         <Image
           alt="Login Image"
@@ -178,7 +187,7 @@ function DesktopLeftSection() {
           width={1000}
           height={1000}
         />
-      </div>
+      </Link>
 
       {/* White triangle overlay to create diagonal cut effect */}
       <div
@@ -220,8 +229,8 @@ function DesktopLeftSection() {
 
 function LogoComponent() {
   return (
-    <div className="flex gap-2.5 items-center">
+    <Link href={"/"} className="flex gap-2.5 items-center">
       <Image src={logo} alt="Ottri Logo" className="h-12 max-w-fit" />
-    </div>
+    </Link>
   );
 }

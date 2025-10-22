@@ -2,6 +2,14 @@ import { LucideProps } from "lucide-react";
 import { StaticImageData } from "next/image";
 import { RefAttributes } from "react";
 
+export interface DecodedJWT {
+  id: number;
+  email: string;
+  role: "USER" | "ADMIN";
+  iat: number;
+  exp: number;
+}
+
 export interface TeamMember {
   id: number;
   name: string;
@@ -132,6 +140,14 @@ interface TimeSlotType {
   instances: number;
   repetition: string;
   freeInstances: number;
+}
+
+export interface TimeSlotFormDataType {
+  startTime: string | null;
+  maxCapacity: number | null;
+  serviceIds: number[];
+  daysOfWeek: number[];
+  isActive: boolean;
 }
 
 interface BookingSpecificType {

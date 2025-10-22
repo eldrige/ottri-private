@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/Button";
 import React, { useState } from "react";
 import SlotForm from "./SlotForm";
-import { FormDataType } from "../types";
 import ModalWrapper from "@/components/common/ModalWrapper";
 import { useAddTimeSlotMutation } from "../../../_services/mutations";
 import { toast } from "react-hot-toast";
+import { TimeSlotFormDataType } from "@/lib/types";
 
 type FormErrorsType = {
-  [key in keyof FormDataType]?: string;
+  [key in keyof TimeSlotFormDataType]?: string;
 };
 
 export default function AddSlot({ onClose }: { onClose: () => void }) {
   const { mutateAsync, isPending, isError, error } = useAddTimeSlotMutation();
-  const [formData, setFormData] = useState<FormDataType>(() => ({
+  const [formData, setFormData] = useState<TimeSlotFormDataType>(() => ({
     startTime: null,
     maxCapacity: null,
     serviceIds: [],
@@ -21,7 +22,7 @@ export default function AddSlot({ onClose }: { onClose: () => void }) {
   }));
   const [errors, setErrors] = useState<FormErrorsType>({});
 
-  const setField = (field: keyof FormDataType, value: unknown) => {
+  const setField = (field: keyof TimeSlotFormDataType, value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value
@@ -73,13 +74,13 @@ export default function AddSlot({ onClose }: { onClose: () => void }) {
 
   return (
     <ModalWrapper onClose={onClose}>
-      <div className="p-4 flex flex-col gap-6 w-full bg-white rounded-lg max-w-xl">
+      <div className="p-4 flex flex-col gap-6 w-full bg-white rounded-lg max-w-xl text-secondary-700">
         <h4 className="text-heading-5">Add Slot</h4>
         <SlotForm formData={formData} setField={setField} errors={errors} />
 
         {isError && (
-          <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md border border-red-200">
-            {error.message}
+          <div className="text-error text-sm bg-red-50 p-3 rounded-md border border-red-200">
+            {(error as any).response.data.message}
           </div>
         )}
 

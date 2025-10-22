@@ -8,9 +8,13 @@ import { Button } from "@/components/ui/Button";
 import { Menu, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useGetUserProfile } from "@/app/dashboard/_services/queries";
 
 export default function Navbar() {
+  const { data: profileData } = useGetUserProfile();
+  const isLoggedIn = !!profileData && profileData.role === "USER";
   const [showMobile, setShowMobile] = useState(false);
+
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white px-6 py-5 shadow-lg">
@@ -41,8 +45,13 @@ export default function Navbar() {
               (555) 123-4567
             </span>
             <Link href={"/booking/new"}>
-              <Button className="whitespace-nowrap" size="xs">
+              <Button className="whitespace-nowrap mr-2" size="xs">
                 Book Now
+              </Button>
+            </Link>
+            <Link href={isLoggedIn ? "/dashboard" : "/login"}>
+              <Button className="whitespace-nowrap" size="xs" variant="outline">
+                {isLoggedIn ? "Dashboard" : "Login"}
               </Button>
             </Link>
           </div>
@@ -58,17 +67,23 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile menu */}
-      <MobileNav show={showMobile} setShow={setShowMobile} />
+      <MobileNav
+        show={showMobile}
+        setShow={setShowMobile}
+        isLoggedIn={isLoggedIn}
+      />
     </>
   );
 }
 
 function MobileNav({
   show,
-  setShow
+  setShow,
+  isLoggedIn
 }: {
   show: boolean;
   setShow: (value: React.SetStateAction<boolean>) => void;
+  isLoggedIn: boolean;
 }) {
   return (
     <>
@@ -118,6 +133,15 @@ function MobileNav({
           <Link href={"/booking/new"}>
             <Button className="whitespace-nowrap w-full mt-2.5" size="xs">
               Book Now
+            </Button>
+          </Link>
+          <Link href={isLoggedIn ? "/dashboard" : "/login"}>
+            <Button
+              className="whitespace-nowrap w-full mt-2.5"
+              size="xs"
+              variant="outline"
+            >
+              {isLoggedIn ? "Dashboard" : "Login"}
             </Button>
           </Link>
         </div>

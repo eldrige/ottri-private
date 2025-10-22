@@ -9,7 +9,7 @@ import { AddCleanerForm, Cleaner } from "@/app/admin/types";
 import { useUpdateCleanerMutation } from "../../_services/mutations";
 import CleanerForm from "./CleanerForm";
 import { ImageListType } from "react-images-uploading";
-import { uploadImage } from "@/app/_actions/uploadImage";
+import { uploadImage } from "@/utils/uploadImage";
 
 export default function EditCleaner({
   onClose,
@@ -220,7 +220,8 @@ export default function EditCleaner({
 
       setErrors((prev) => ({
         ...prev,
-        form: error?.message || "Network error. Please try again."
+        form:
+          error?.response?.data?.message || "Network error. Please try again."
       }));
     } finally {
       setIsPending(false);

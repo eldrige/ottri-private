@@ -5,19 +5,12 @@ import { revalidatePath } from "next/cache";
 export async function GET() {
   const cookieStore = await cookies();
 
-  cookieStore.set("accessToken", "", {
-    httpOnly: true,
-    expires: new Date(0),
-    path: "/"
-  });
+  cookieStore.delete("accessToken");
 
-  cookieStore.set("refreshToken", "", {
-    httpOnly: true,
-    expires: new Date(0),
-    path: "/"
-  });
+  cookieStore.delete("refreshToken");
 
   revalidatePath("/dashboard/");
+  revalidatePath("/admin/");
   return NextResponse.json({
     message: "Successfully logged out!"
   });

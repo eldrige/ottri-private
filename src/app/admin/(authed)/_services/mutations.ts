@@ -4,35 +4,32 @@ import {
   useQueryClient
 } from "@tanstack/react-query";
 import {
-  assignCleaner,
-  cancelBooking,
-  completeBooking,
-  rescheduleBooking,
-  startBooking,
-  updateBooking
-} from "../_actions/bookings";
-import {
   BookingsResponse,
   ServiceArea,
   Cleaner,
-  Booking
+  Booking,
+  AddCleanerForm
 } from "@/app/admin/types";
-import {
-  createServiceAreas,
-  deleteServiceAreas,
-  updateServiceAreas
-} from "../_actions/ServiceAreas";
 import axios from "axios";
-import {
-  addTimeSlot,
-  deleteTimeSlot,
-  updateTimeSlot
-} from "../_actions/timeSlots";
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
-import { addCleaner, updateCleaner } from "../_actions/cleaners";
 import { clientAxios } from "@/lib/axios";
+import { getSlotBody } from "../_utils/timeSlots";
+import { TimeSlotFormDataType } from "@/lib/types";
+import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
 
 // Assign cleaner
+async function assignCleaner({
+  bookingId,
+  cleanerId
+}: {
+  bookingId: string;
+  cleanerId: string;
+}) {
+  const booking = await clientAxios.post(`bookings/${bookingId}/assign`, {
+    cleanerId: +cleanerId
+  });
+  return booking.data as Booking;
+}
 export function useAssignCleanerMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -44,6 +41,10 @@ export function useAssignCleanerMutation() {
 }
 
 // Bookings
+export async function cancelBooking({ bookingId }: { bookingId: number }) {
+  const booking = await clientAxios.delete(`bookings/${bookingId}`);
+  return booking.data;
+}
 export function useCancelBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -54,6 +55,10 @@ export function useCancelBookingMutation() {
   });
 }
 
+async function startBooking({ bookingId }: { bookingId: number }) {
+  const booking = await clientAxios.post(`bookings/${bookingId}/start`);
+  return booking.data;
+}
 export function useStartBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -64,6 +69,11 @@ export function useStartBookingMutation() {
   });
 }
 
+async function completeBooking({ bookingId }: { bookingId: number }) {
+  console.log({ bookingId });
+  const booking = await clientAxios.post(`bookings/${bookingId}/complete`);
+  return booking.data;
+}
 export function useCompleteBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -74,6 +84,16 @@ export function useCompleteBookingMutation() {
   });
 }
 
+async function updateBooking({
+  bookingId,
+  ...data
+}: { bookingId: number } & Partial<OrderFormValues>) {
+  const booking = await clientAxios.patch<Booking>(
+    `bookings/${bookingId}`,
+    data
+  );
+  return booking.data;
+}
 export function useUpdateBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -96,6 +116,20 @@ export function useAddBookingMutation() {
   });
 }
 
+async function rescheduleBooking({
+  bookingId,
+  ...data
+}: {
+  bookingId: number;
+  timeSlotId: number;
+  date: string;
+}) {
+  const booking = await clientAxios.patch<Booking>(
+    `bookings/${bookingId}/reschedule`,
+    data
+  );
+  return booking.data;
+}
 export function useRescheduleBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -107,6 +141,19 @@ export function useRescheduleBookingMutation() {
 }
 
 // Service Areas
+
+async function deleteServiceAreas({
+  serviceAreaIds
+}: {
+  serviceAreaIds: number[];
+}) {
+  const res = await Promise.all(
+    serviceAreaIds.map((id) =>
+      clientAxios.delete<ServiceArea>(`service-areas/${id}`)
+    )
+  );
+  return res.map((i) => i.data);
+}
 export function useDeleteServiceAreaMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -121,6 +168,21 @@ export function useDeleteServiceAreaMutation() {
   });
 }
 
+async function createServiceAreas({
+  newServiceAreas
+}: {
+  newServiceAreas: Pick<
+    ServiceArea,
+    "location" | "name" | "popular" | "nickName"
+  >[];
+}) {
+  const res = await Promise.all(
+    newServiceAreas.map((newSA) =>
+      clientAxios.post<ServiceArea>(`service-areas`, newSA)
+    )
+  );
+  return res.map((i) => i.data);
+}
 export function useCreateServiceAreaMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -131,6 +193,21 @@ export function useCreateServiceAreaMutation() {
   });
 }
 
+async function updateServiceAreas({
+  serviceAreasData: serviceAreaData
+}: {
+  serviceAreasData: Partial<
+    Pick<ServiceArea, "id" | "location" | "name" | "popular" | "nickName">
+  >[];
+}) {
+  const res = await Promise.all(
+    serviceAreaData.map(({ id, ...serviceArea }) =>
+      clientAxios.patch<ServiceArea>(`service-areas/${id}`, serviceArea)
+    )
+  );
+
+  return res.map((i) => i.data);
+}
 export function useUpdateServiceAreaMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -142,6 +219,14 @@ export function useUpdateServiceAreaMutation() {
 }
 
 // TimeSlots
+async function updateTimeSlot({
+  timeSlotId,
+  ...data
+}: { timeSlotId: number } & Partial<TimeSlotFormDataType>) {
+  const body = getSlotBody(data);
+  const timeSlot = await clientAxios.patch(`timeslots/${timeSlotId}`, body);
+  return timeSlot.data as TimeSlot;
+}
 export function useUpdateTimeSlotMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -152,6 +237,12 @@ export function useUpdateTimeSlotMutation() {
     }
   });
 }
+
+async function addTimeSlot(data: TimeSlotFormDataType) {
+  const body = getSlotBody(data);
+  const timeSlot = await clientAxios.post<TimeSlot>(`timeslots`, body);
+  return timeSlot.data;
+}
 export function useAddTimeSlotMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -161,6 +252,11 @@ export function useAddTimeSlotMutation() {
       queryClient.invalidateQueries({ queryKey: ["timeslots"] });
     }
   });
+}
+
+async function deleteTimeSlot({ timeSlotId }: { timeSlotId: number }) {
+  await clientAxios.delete(`timeslots/${timeSlotId}`);
+  return { id: timeSlotId };
 }
 export function useDeleteTimeSlotMutation() {
   const queryClient = useQueryClient();
@@ -173,6 +269,17 @@ export function useDeleteTimeSlotMutation() {
 }
 
 // Cleaners
+const updateCleaner = async ({
+  cleanerId,
+  ...cleanerData
+}: Partial<Cleaner> & { cleanerId: number }) => {
+  const cleaner = await clientAxios.patch<Cleaner>(
+    `cleaners/${cleanerId}`,
+    cleanerData
+  );
+  return cleaner.data;
+};
+
 export function useUpdateCleanerMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -183,15 +290,14 @@ export function useUpdateCleanerMutation() {
   });
 }
 
+const addCleaner = async (cleanerData: AddCleanerForm) => {
+  const res = await clientAxios.post<Cleaner>(`cleaners`, cleanerData);
+  return res.data;
+};
 export function useAddCleanerMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (...data: Parameters<typeof addCleaner>) => {
-      const res = await addCleaner(...data);
-      if (res.error || !res.data) throw await Promise.reject(res.error);
-
-      return res.data;
-    },
+    mutationFn: addCleaner,
     onSuccess: (data) => {
       addCleanerHelper(queryClient, data);
     }
@@ -318,7 +424,7 @@ function addCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
   const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
   if (!queryData) return;
 
-  const newCleaners = [newCleaner, ...queryData];
+  const newCleaners = [...queryData, newCleaner];
 
   queryClient.setQueryData(["cleaners"], newCleaners);
 }
