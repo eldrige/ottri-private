@@ -23,7 +23,7 @@ export default function ProfileSection2({ user }: { user: User }) {
     if (image.length < 1) return;
     const imageData = await uploadImage(image[0].file!);
     await updateProfile({
-      userId: "String(user.id)",
+      userId: String(user.id),
       imageUrl: imageData.data.url
     });
   };
