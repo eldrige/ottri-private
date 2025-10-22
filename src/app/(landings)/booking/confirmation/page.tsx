@@ -27,11 +27,17 @@ export default async function ConfirmationPage({
   const [response, pdfRes] = await Promise.allSettled([
     axiosInstance.get(`bookings/${dispId}`),
     axiosInstance.get(`bookings/${dispId}/document`)
-  ]).then((res) => res.map((i) => (i.status === "fulfilled" ? i.value : null)));
+  ]);
 
-  const bookingData = response!.data as BookingType;
+  const bookingData =
+    response.status === "fulfilled"
+      ? (response.value.data as BookingType)
+      : await Promise.reject(response.reason);
 
-  const pdfData = pdfRes?.data as { signedUrl: string } | null;
+  const pdfData =
+    pdfRes.status === "fulfilled"
+      ? (pdfRes?.value.data as { signedUrl: string })
+      : null;
 
   const formattedDate = format(bookingData.timeSlot.date, "PP");
 
