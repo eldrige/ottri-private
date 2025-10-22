@@ -3,19 +3,22 @@ import { serverRequest } from "@/lib/serverRequest";
 import { User } from "../_utils/types";
 
 export async function updateProfile({
+  imageUrl,
   fullName,
   phoneNumber,
   address,
   userId
 }: {
-  fullName: string;
-  phoneNumber: string;
-  address: string;
+  imageUrl?: string;
+  fullName?: string;
+  phoneNumber?: string;
+  address?: string;
   userId: string;
 }) {
   try {
     console.log("there is something going on here");
     const response = await serverRequest(`/users/profile/${userId}`, "PATCH", {
+      imageUrl,
       fullName,
       phoneNumber,
       address

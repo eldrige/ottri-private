@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
-import userImage from "@/assets/cleaner-placeholder.png";
 import { MailIcon, Phone } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Input } from "@/components/ui/Input";
@@ -9,18 +7,41 @@ import { Button } from "@/components/ui/Button";
 import { User } from "../../_utils/types";
 import { useUpdateProfileMutation } from "../../_services/mutations";
 import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
+import { ImageUpload } from "@/app/_components/ImageUpload";
+import { ImageListType } from "react-images-uploading";
+import { uploadImage } from "@/app/_actions/uploadImage";
 
 export default function ProfileSection2({ user }: { user: User }) {
+  const [image, setImage] = useState<ImageListType>([]);
+  const { mutateAsync: updateProfile, isPending: isUpdating } =
+    useUpdateProfileMutation();
+
+  const handleUpdatePicture = async () => {
+    if (image.length < 1) return;
+    const imageData = await uploadImage(image[0].file!);
+    await updateProfile({
+      userId: String(user.id),
+      imageUrl: imageData.data.url
+    });
+  };
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col gap-16">
         <div className="w-full items-center flex flex-col">
-          <Image
+          {/* <Image
             className="rounded-full size-25"
             src={userImage}
             alt={"user profile"}
+            width={100}
+            height={100}
+          /> */}
+          <ImageUpload
+            image={image}
+            placeholderImageUrl={user.personalInformation?.imageUrl}
+            setImage={setImage}
+            rounded
           />
-          <div className="flex items-center flex-col">
+          <div className="flex items-center flex-col pt-5">
             <h1 className="font-medium text-2xl text-secondary-700">
               {user.personalInformation?.fullName}
             </h1>
@@ -28,6 +49,15 @@ export default function ProfileSection2({ user }: { user: User }) {
               Joined since {new Date(user.createdAt).getFullYear()}
             </p>
           </div>
+          <Button
+            onClick={handleUpdatePicture}
+            disabled={isUpdating || image.length === 0}
+            variant={"secondary"}
+            className="my-4 text-sm"
+            size={"sm"}
+          >
+            Update Picture
+          </Button>
         </div>
         <div className="flex gap-4 text-surface-500 *:items-center *:flex *:gap-2 flex-col">
           <div>
