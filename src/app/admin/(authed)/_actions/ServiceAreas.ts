@@ -50,7 +50,6 @@ export async function updateServiceAreas({
   >[];
 }) {
   try {
-    console.log(serviceAreaData);
     const res = await Promise.all(
       serviceAreaData.map(({ id, ...sa }) =>
         serverRequest(`service-areas/${id}`, "PATCH", sa)

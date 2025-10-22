@@ -149,7 +149,8 @@ export default function AddCleaner({ onClose }: { onClose: () => void }) {
 
       setErrors((prev) => ({
         ...prev,
-        form: error?.message || "Network error. Please try again."
+        form:
+          error?.response?.data?.message || "Network error. Please try again."
       }));
     } finally {
       setIsPending(false);

@@ -142,6 +142,14 @@ interface TimeSlotType {
   freeInstances: number;
 }
 
+export interface TimeSlotFormDataType {
+  startTime: string | null;
+  maxCapacity: number | null;
+  serviceIds: number[];
+  daysOfWeek: number[];
+  isActive: boolean;
+}
+
 interface BookingSpecificType {
   id: number;
   name: string;

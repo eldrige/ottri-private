@@ -1,15 +1,15 @@
 import Checkbox from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import React, { useState } from "react";
-import { FormDataType } from "../types";
 import { cn } from "@/lib/utils";
 import { useServicesQuery } from "../../../_services/queries";
+import { TimeSlotFormDataType } from "@/lib/types";
 
 interface SlotFormProps {
-  formData: FormDataType;
-  setField: (field: keyof FormDataType, value: unknown) => void;
+  formData: TimeSlotFormDataType;
+  setField: (field: keyof TimeSlotFormDataType, value: unknown) => void;
   errors: {
-    [key in keyof FormDataType]?: string;
+    [key in keyof TimeSlotFormDataType]?: string;
   };
 }
 
@@ -41,7 +41,7 @@ export default function SlotForm({
     }))
   ];
 
-  const toggleCheckbox = (key: keyof FormDataType, value: number) => {
+  const toggleCheckbox = (key: keyof TimeSlotFormDataType, value: number) => {
     if (key === "serviceIds" || key === "daysOfWeek") {
       const newArr = formData[key].includes(value)
         ? formData[key].filter((i) => i !== value)

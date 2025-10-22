@@ -15,7 +15,8 @@ import {
   BookingsResponse,
   ServiceArea,
   Cleaner,
-  Booking
+  Booking,
+  AddCleanerForm
 } from "@/app/admin/types";
 import {
   createServiceAreas,
@@ -23,14 +24,10 @@ import {
   updateServiceAreas
 } from "../_actions/ServiceAreas";
 import axios from "axios";
-import {
-  addTimeSlot,
-  deleteTimeSlot,
-  updateTimeSlot
-} from "../_actions/timeSlots";
 import { TimeSlot } from "@/app/(landings)/booking/new/types";
-import { addCleaner, updateCleaner } from "../_actions/cleaners";
 import { clientAxios } from "@/lib/axios";
+import { getSlotBody } from "../_utils/timeSlots";
+import { TimeSlotFormDataType } from "@/lib/types";
 
 // Assign cleaner
 export function useAssignCleanerMutation() {
@@ -142,6 +139,14 @@ export function useUpdateServiceAreaMutation() {
 }
 
 // TimeSlots
+async function updateTimeSlot({
+  timeSlotId,
+  ...data
+}: { timeSlotId: number } & Partial<TimeSlotFormDataType>) {
+  const body = getSlotBody(data);
+  const timeSlot = await clientAxios.patch(`timeslots/${timeSlotId}`, body);
+  return timeSlot.data as TimeSlot;
+}
 export function useUpdateTimeSlotMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -152,6 +157,12 @@ export function useUpdateTimeSlotMutation() {
     }
   });
 }
+
+async function addTimeSlot(data: TimeSlotFormDataType) {
+  const body = getSlotBody(data);
+  const timeSlot = await clientAxios.post<TimeSlot>(`timeslots`, body);
+  return timeSlot.data;
+}
 export function useAddTimeSlotMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -161,6 +172,11 @@ export function useAddTimeSlotMutation() {
       queryClient.invalidateQueries({ queryKey: ["timeslots"] });
     }
   });
+}
+
+async function deleteTimeSlot({ timeSlotId }: { timeSlotId: number }) {
+  await clientAxios.delete(`timeslots/${timeSlotId}`);
+  return { id: timeSlotId };
 }
 export function useDeleteTimeSlotMutation() {
   const queryClient = useQueryClient();
@@ -173,6 +189,17 @@ export function useDeleteTimeSlotMutation() {
 }
 
 // Cleaners
+const updateCleaner = async ({
+  cleanerId,
+  ...cleanerData
+}: Partial<Cleaner> & { cleanerId: number }) => {
+  const cleaner = await clientAxios.patch<Cleaner>(
+    `cleaners/${cleanerId}`,
+    cleanerData
+  );
+  return cleaner.data;
+};
+
 export function useUpdateCleanerMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -183,15 +210,14 @@ export function useUpdateCleanerMutation() {
   });
 }
 
+const addCleaner = async (cleanerData: AddCleanerForm) => {
+  const res = await clientAxios.post<Cleaner>(`cleaners`, cleanerData);
+  return res.data;
+};
 export function useAddCleanerMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (...data: Parameters<typeof addCleaner>) => {
-      const res = await addCleaner(...data);
-      if (res.error || !res.data) throw await Promise.reject(res.error);
-
-      return res.data;
-    },
+    mutationFn: addCleaner,
     onSuccess: (data) => {
       addCleanerHelper(queryClient, data);
     }
@@ -318,7 +344,7 @@ function addCleanerHelper(queryClient: QueryClient, newCleaner: Cleaner) {
   const queryData = queryClient.getQueryData(["cleaners"]) as Cleaner[];
   if (!queryData) return;
 
-  const newCleaners = [newCleaner, ...queryData];
+  const newCleaners = [...queryData, newCleaner];
 
   queryClient.setQueryData(["cleaners"], newCleaners);
 }
