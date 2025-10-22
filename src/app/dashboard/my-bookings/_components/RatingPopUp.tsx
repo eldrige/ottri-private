@@ -27,7 +27,11 @@ export default function RatingPopUp({
   const [hover, setHover] = useState(0);
   const [value, setValue] = useState(50);
   const [comment, setComment] = useState("");
-  const { mutateAsync: rateBooking, isPending } = useRateBookingMutation();
+  const {
+    mutateAsync: rateBooking,
+    isPending,
+    error: rateError
+  } = useRateBookingMutation();
 
   return (
     <div className="bg-white p-3 md:p-6 rounded-lg shadow-lg w-full md:max-w-2xl">
@@ -98,6 +102,14 @@ export default function RatingPopUp({
           />
         </div>
       </div>
+      {rateError && (
+        <div
+          className="p-4 my-3 font-light text-sm text-red-700 bg-red-100 rounded-lg"
+          role="alert"
+        >
+          {"Error: " + (rateError as Error).message || "An error occurred"}
+        </div>
+      )}
       <Button
         disabled={isPending || rating === 0 || comment.trim().length === 0}
         onClick={async () => {
