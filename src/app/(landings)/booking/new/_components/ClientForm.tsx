@@ -30,6 +30,7 @@ import AlertLineIcon from "@/components/icons/AlertLineIcon";
 import { X } from "lucide-react";
 import { accessOptions } from "../formData";
 import { Booking } from "@/app/dashboard/_utils/types";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ClientForm({
   preflight,
@@ -40,6 +41,7 @@ export default function ClientForm({
   userData: Partial<UserData> | undefined;
   bookingData?: Booking;
 }) {
+  const queryClient = useQueryClient();
   const [currStep, setCurrStep] = useState(0);
   const [processing, setProcessing] = useState(false);
   const router = useRouter();
@@ -320,6 +322,10 @@ export default function ClientForm({
         paymentMethodId,
         isAdminBooking: data.isAdmin
       });
+
+      if (data.createAccount) {
+        queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+      }
 
       // If we get here, request was successful
       router.push(`/booking/confirmation?orderId=${response.data.orderId}`);
