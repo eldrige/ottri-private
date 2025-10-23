@@ -122,8 +122,15 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
   };
 
   // Handle address selection with coordinates
-  const handleAddressSelected = (address: string, details?: AddressDetails) => {
-    setField("serviceAddress", address);
+  const handleAddressSelected = (
+    address: string | null,
+    details?: AddressDetails
+  ) => {
+    if (address) {
+      setField("serviceAddress", address);
+    } else {
+      setField("serviceAddress", undefined);
+    }
     console.log(details);
     if (details) {
       setField("lat", details.lat);
@@ -131,6 +138,12 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       setField("city", details.city);
       setField("state", details.state);
       setField("zipCode", details.postcode);
+    } else {
+      setField("lat", undefined);
+      setField("lng", undefined);
+      setField("city", undefined);
+      setField("state", undefined);
+      setField("zipCode", undefined);
     }
   };
 

@@ -137,15 +137,16 @@ export default function EditBooking({
   };
 
   // Handle address selection with coordinates
-  const handleAddressSelected = (address: string, details?: AddressDetails) => {
-    setField("serviceAddress", address);
-    if (details) {
-      setField("lat", details.lat);
-      setField("lng", details.lon);
-      setField("city", details.city);
-      setField("state", details.state);
-      setField("zipCode", details.postcode);
-    }
+  const handleAddressSelected = (
+    address: string | null,
+    details?: AddressDetails
+  ) => {
+    setField("serviceAddress", address || undefined);
+    setField("lat", details?.lat);
+    setField("lng", details?.lon);
+    setField("city", details?.city);
+    setField("state", details?.state);
+    setField("zipCode", details?.postcode);
   };
 
   const handleSelectedDate = (date: Date | null) => {

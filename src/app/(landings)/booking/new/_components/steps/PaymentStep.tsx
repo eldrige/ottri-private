@@ -186,7 +186,9 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
             label="Billing Address"
             value={billingAddress}
             onChange={(value) => {
-              setValue("billingAddress", value, { shouldValidate: true });
+              if (value)
+                setValue("billingAddress", value, { shouldValidate: true });
+              else setValue("billingAddress", "", { shouldValidate: true });
             }}
             placeholder="Start typing your address"
             error={errors.billingAddress?.message}

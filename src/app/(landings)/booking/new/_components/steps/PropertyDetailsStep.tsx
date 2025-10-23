@@ -94,22 +94,37 @@ export default function PropertyDetailsStep() {
         <AddressInput
           value={serviceAddress}
           onChange={(fAddress, result) => {
-            setValue("serviceAddress", fAddress, { shouldValidate: true });
-            if (useSameForBilling) setValue("billingAddress", fAddress);
+            if (fAddress) {
+              setValue("serviceAddress", fAddress, { shouldValidate: true });
+              if (useSameForBilling) setValue("billingAddress", fAddress);
+            } else {
+              setValue("serviceAddress", "");
+              if (useSameForBilling) setValue("billingAddress", "");
+            }
             // Set coords
             if (result) {
               setValue("lng", result.lon);
               setValue("lat", result.lat);
+            } else {
+              setValue("lng", null);
+              setValue("lat", null);
             }
           }}
           placeholder="Start typing your address"
           error={errors.serviceAddress?.message}
           required
           onSelectedAddress={(address) => {
-            setValue("country", address.country);
-            setValue("state", address.state);
-            setValue("city", address.city);
-            setValue("zipCode", address.postcode);
+            if (address) {
+              setValue("country", address.country);
+              setValue("state", address.state);
+              setValue("city", address.city);
+              setValue("zipCode", address.postcode);
+            } else {
+              setValue("country", "");
+              setValue("state", "");
+              setValue("city", "");
+              setValue("zipCode", "");
+            }
           }}
         />
         {isValidating && (
