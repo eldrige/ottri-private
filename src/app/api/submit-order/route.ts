@@ -10,6 +10,7 @@ import {
 } from "../../../utils/priceCalculation";
 import { serverRequest } from "@/lib/serverRequest";
 import { User } from "@/app/dashboard/_utils/types";
+import { setAuthCookies } from "@/lib/auth";
 
 // Extend the type to include the paymentMethodId and admin booking flag
 interface OrderRequest extends OrderFormValues {
@@ -55,7 +56,6 @@ export async function POST(request: Request) {
         email: orderData.email,
         name: orderData.fullName
       });
-      // FIX: customer id shit for guest bookings
       customerId = customer.id;
     }
 
@@ -74,7 +74,6 @@ export async function POST(request: Request) {
     }
 
     const bodyObj = {
-      // TODO: get rid of empty string later
       cleaningFrequency: orderData.frequency || null,
       servicesPrice: servicesPrice,
       addOnsPrice: addOnsPrice,
@@ -138,11 +137,7 @@ export async function POST(request: Request) {
       const data = apiResponse.data as {
         userSession: { accessToken: string; refreshToken: string };
       };
-      setTokens(
-        response,
-        data.userSession.refreshToken,
-        data.userSession.accessToken
-      );
+      setAuthCookies(response.cookies, data.userSession);
     }
 
     return response;
@@ -169,27 +164,4 @@ export async function POST(request: Request) {
       { status: errorCode }
     );
   }
-}
-
-function setTokens(
-  response: NextResponse,
-  refreshToken: string,
-  accessToken: string
-) {
-  // Set cookies for the tokens
-  response.cookies.set("accessToken", accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    // maxAge: 15 * 60, // 15 minutes in seconds
-    path: "/"
-  });
-
-  response.cookies.set("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    // maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
-    path: "/"
-  });
 }

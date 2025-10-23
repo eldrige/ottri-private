@@ -37,7 +37,7 @@ export default function ClientForm({
   bookingData
 }: {
   preflight: PreflightType;
-  userData: UserData | undefined;
+  userData: Partial<UserData> | undefined;
   bookingData?: Booking;
 }) {
   const [currStep, setCurrStep] = useState(0);
@@ -84,18 +84,19 @@ export default function ClientForm({
       tipPercentage: 0,
       paymentMethodId: "",
       createAccount: false,
-      fullName: userData?.personalInformation.fullName,
+      fullName: userData?.personalInformation?.fullName,
       email: userData?.email,
-      phoneNumber: userData?.personalInformation.phoneNumber,
-      billingAddress: userData?.personalInformation.address,
+      phoneNumber: userData?.personalInformation?.phoneNumber,
+      billingAddress: userData?.personalInformation?.address,
       serviceAddress:
-        bookingData?.address || userData?.personalInformation.address,
+        bookingData?.address || userData?.personalInformation?.address,
       isServiceAreaValid: !!bookingData?.address,
-      country: userData?.personalInformation.country,
-      state: userData?.personalInformation.state,
-      city: userData?.personalInformation.city,
-      zipCode: userData?.personalInformation.zipCode,
-      useSameForBilling: !!userData
+      country: userData?.personalInformation?.country,
+      state: userData?.personalInformation?.state,
+      city: userData?.personalInformation?.city,
+      zipCode: userData?.personalInformation?.zipCode,
+      useSameForBilling: !!userData,
+      isAdmin: userData?.role === "ADMIN"
     }
   });
 
@@ -298,9 +299,9 @@ export default function ClientForm({
     }
 
     // For the payment step, we need to process the payment first
-    let paymentMethodId = formValues.paymentMethodId || "";
+    let paymentMethodId = formValues.paymentMethodId;
 
-    if (currStep === 7 && !paymentMethodId) {
+    if (currStep === 7 && !paymentMethodId && !data.isAdmin) {
       // Process the payment
       const result = await processPaymentRef.current();
 
@@ -309,15 +310,15 @@ export default function ClientForm({
         setProcessing(false);
         return;
       }
-
-      paymentMethodId = result.toString();
+      if (typeof result === "string") paymentMethodId = result.toString();
     }
 
     // Process the final form submission using axios
     try {
       const response = await axios.post("/api/submit-order", {
         ...data,
-        paymentMethodId
+        paymentMethodId,
+        isAdminBooking: data.isAdmin
       });
 
       // If we get here, request was successful

@@ -39,6 +39,7 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
     setValue
   } = useFormContext<OrderFormValues>();
   const billingAddress = watch("billingAddress");
+  const isAdmin = watch("isAdmin");
   const [createAccount, setCreateAccount] = useState(false);
 
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -91,12 +92,20 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
       if (
         !isPersonalInfoValid ||
         !isBillingInfoValid ||
-        !cardComplete ||
         (createAccount && !isPasswordValid)
       ) {
         setPaymentError(
           "Please fill in all required fields and complete card information."
         );
+        return false;
+      }
+
+      if (isAdmin) {
+        return true;
+      }
+
+      if (!cardComplete) {
+        setPaymentError("Please complete card information.");
         return false;
       }
 
@@ -142,7 +151,8 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
     processPaymentRef,
     trigger,
     cardComplete,
-    createAccount
+    createAccount,
+    isAdmin
   ]);
 
   return (
@@ -174,14 +184,9 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
             {...register("email")}
             error={errors.email?.message}
             required
+            disabled={isUser && !isAdmin}
+            className="disabled:opacity-50"
           />
-          {/* <Input
-            label="Billing Address"
-            placeholder="Enter text..."
-            {...register("billingAddress")}
-            error={errors.billingAddress?.message}
-            required
-          /> */}
           <AddressInput
             label="Billing Address"
             value={billingAddress}
@@ -202,36 +207,39 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
           Payment Information
         </h4>
         <div className="grid grid-cols-1 gap-4 mt-4">
-          {/* Replace credit card fields with Stripe Card Element */}
-          <div className="rounded bg-white">
-            <label className="block mb-3 text-sm">
-              Card Details<span className="text-red-500">*</span>
-            </label>
-            <CardElement
-              options={{
-                hidePostalCode: true,
-                style: {
-                  base: {
-                    fontSize: "16px",
-                    color: "#32325d",
-                    "::placeholder": {
-                      color: "#aab7c4"
+          {isAdmin ? (
+            <p className="text-info text-center">Logged in as admin</p>
+          ) : (
+            <div className="rounded bg-white">
+              <label className="block mb-3 text-sm">
+                Card Details<span className="text-red-500">*</span>
+              </label>
+              <CardElement
+                options={{
+                  hidePostalCode: true,
+                  style: {
+                    base: {
+                      fontSize: "16px",
+                      color: "#32325d",
+                      "::placeholder": {
+                        color: "#aab7c4"
+                      },
+                      padding: "16px"
                     },
-                    padding: "16px"
-                  },
-                  invalid: {
-                    color: "#9e2146"
+                    invalid: {
+                      color: "#9e2146"
+                    }
                   }
-                }
-              }}
-              onChange={(e) => setCardComplete(e.complete)}
-            />
-            {!cardComplete && (
-              <p className="text-xs text-red-500 mt-1">
-                Card information is required
-              </p>
-            )}
-          </div>
+                }}
+                onChange={(e) => setCardComplete(e.complete)}
+              />
+              {!cardComplete && (
+                <p className="text-xs text-red-500 mt-1">
+                  Card information is required
+                </p>
+              )}
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Input
