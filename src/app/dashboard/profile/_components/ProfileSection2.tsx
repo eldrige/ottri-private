@@ -10,8 +10,11 @@ import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal
 import { ImageUpload } from "@/app/_components/ImageUpload";
 import { ImageListType } from "react-images-uploading";
 import { uploadImage } from "@/app/_actions/uploadImage";
+import ModalWrapper from "@/components/common/ModalWrapper";
+import { useGetUserProfile } from "../../_services/queries";
 
-export default function ProfileSection2({ user }: { user: User }) {
+export default function ProfileSection2() {
+  const { data: user } = useGetUserProfile();
   const [image, setImage] = useState<ImageListType>([]);
   const {
     mutateAsync: updateProfile,
@@ -19,6 +22,7 @@ export default function ProfileSection2({ user }: { user: User }) {
     error: updateProfileError
   } = useUpdateProfileMutation();
 
+  if (!user) return null;
   const handleUpdatePicture = async () => {
     if (image.length < 1) return;
     const imageData = await uploadImage(image[0].file!);
@@ -93,8 +97,11 @@ function PersonalInfoForm({ user }: { user: User }) {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const { mutateAsync: updateProfile, isPending: isUpdating } =
-    useUpdateProfileMutation();
+  const {
+    mutateAsync: updateProfile,
+    isPending: isUpdating,
+    error
+  } = useUpdateProfileMutation();
 
   function handleOnchange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -108,7 +115,7 @@ function PersonalInfoForm({ user }: { user: User }) {
 
   async function handleSaveChanges() {
     await updateProfile({
-      userId: String(user.id),
+      userId: String(user.personalInformation?.id),
       fullName: formData.fullName,
       phoneNumber: formData.phone,
       address: formData.address
@@ -118,7 +125,10 @@ function PersonalInfoForm({ user }: { user: User }) {
 
   return (
     <>
-      <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col justify-between gap-8">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="p-6 border border-surface-500/30 rounded-lg flex flex-col justify-between gap-8"
+      >
         <div>
           <h1 className="font-medium text-2xl text-secondary-700">
             Personal Information
@@ -161,6 +171,14 @@ function PersonalInfoForm({ user }: { user: User }) {
               onChange={handleOnchange}
             />
           </label>
+          {error && (
+            <div
+              className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+              role="alert"
+            >
+              {"Error: " + (error as Error).message || "An error occurred"}
+            </div>
+          )}
           <Button
             disabled={isUpdating}
             onClick={(e) => {
@@ -174,16 +192,17 @@ function PersonalInfoForm({ user }: { user: User }) {
           </Button>
         </form>
       </div>
-
       {/* Confirmation Modal */}
       {showConfirmModal && (
-        <BasicConfirmationModal
-          setShowConfirmModal={setShowConfirmModal}
-          isUpdating={isUpdating}
-          handleSaveChanges={handleSaveChanges}
-          title="Confirm Changes"
-          message="Are you sure you want to save these changes to your profile?"
-        />
+        <ModalWrapper onClose={() => setShowConfirmModal(false)}>
+          <BasicConfirmationModal
+            setShowConfirmModal={setShowConfirmModal}
+            isUpdating={isUpdating}
+            handleSaveChanges={handleSaveChanges}
+            title="Confirm Changes"
+            message="Are you sure you want to save these changes to your profile?"
+          />
+        </ModalWrapper>
       )}
     </>
   );

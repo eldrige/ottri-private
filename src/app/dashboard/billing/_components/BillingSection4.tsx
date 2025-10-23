@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useGetBookingsQuery } from "../../_services/queries";
 import { formatDate } from "@/lib/utils";
 import { formatName } from "../../_utils/helpers";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 export default function BillingSection4() {
   const [page, setPage] = useState(0);
@@ -31,7 +31,9 @@ export default function BillingSection4() {
         </div>
         <div className="space-y-4">
           {bookingsIsLoading ? (
-            <p>Loading Bookings...</p>
+            <div className="text-caption w-full flex items-center justify-center text-center text-secondary-800">
+              <Loader2 className="animate-spin w-4 h-4" />
+            </div>
           ) : (
             bookings?.data.map((booking) => (
               <TransactionCard
