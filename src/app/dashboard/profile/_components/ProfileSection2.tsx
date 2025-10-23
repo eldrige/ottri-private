@@ -9,7 +9,7 @@ import { useUpdateProfileMutation } from "../../_services/mutations";
 import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
 import { ImageUpload } from "@/app/_components/ImageUpload";
 import { ImageListType } from "react-images-uploading";
-import { uploadImage } from "@/app/_actions/uploadImage";
+import { uploadImage } from "@/utils/uploadImage";
 import ModalWrapper from "@/components/common/ModalWrapper";
 import { useGetUserProfile } from "../../_services/queries";
 

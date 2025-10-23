@@ -9,7 +9,7 @@ export default function DashboardSection3() {
   const [recentPage, setRecentPage] = useState(0);
   const [upcomingPage, setUpcomingPage] = useState(0);
 
-  const [today] = useState(() => new Date().toISOString());
+  const [today] = useState(() => new Date().toISOString().split("T")[0]);
   const { data: recentBookings, isLoading: recentBookingsLoading } =
     useGetBookingsQuery("COMPLETED", 4, recentPage, "", today);
 

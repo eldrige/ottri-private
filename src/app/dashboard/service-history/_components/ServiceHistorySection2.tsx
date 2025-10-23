@@ -6,12 +6,15 @@ import MoneyIcon from "@/components/icons/MoneyIcon";
 import { useGetBookingsQuery } from "../../_services/queries";
 
 export default function ServiceHistorySection2() {
-  const { data: bookings } = useGetBookingsQuery("COMPLETED");
-  const completedBookings = bookings?.data || [];
+  const { data: bookingsCompleted, isLoading: isLoadingCompleted } =
+    useGetBookingsQuery("COMPLETED");
+  const { data: bookings, isLoading: isLoadingAll } = useGetBookingsQuery();
+  const completedBookings = bookingsCompleted?.data || [];
+  const loading = isLoadingCompleted || isLoadingAll;
 
   const totalServices = bookings?.total || 0;
   const totalSpent =
-    completedBookings.reduce((total, booking) => total + booking.price, 0) | 0;
+    bookings?.data?.reduce((total, booking) => total + booking.price, 0) || 0;
   const averageRating =
     completedBookings.reduce((cum, booking) => {
       return cum + (booking.review?.rating || 0);
@@ -22,18 +25,18 @@ export default function ServiceHistorySection2() {
       <StatCard
         title="Total Services"
         content="Since joining"
-        value={totalServices.toString()}
+        value={loading ? "Loading..." : totalServices.toString()}
         Icon={CalendarIcon}
       />
       <StatCard
         title="Average Rating"
-        value={averageRating.toFixed(1)}
+        value={loading ? "Loading..." : averageRating.toFixed(1)}
         content="Out of 5 stars"
         Icon={StarIcon}
       />
       <StatCard
         title="Total Spent"
-        value={`$${totalSpent.toFixed(2)}`}
+        value={loading ? "Loading..." : `$${totalSpent.toFixed(2)}`}
         content="All Spent"
         Icon={MoneyIcon}
       />
