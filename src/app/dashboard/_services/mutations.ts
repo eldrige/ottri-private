@@ -3,13 +3,13 @@ import { cancelBooking, rateBooking } from "../_actions/bookings";
 import { updateProfile, updateUserSettings } from "../_actions/users";
 import axios from "axios";
 
-export function useCancelBookingMutation(status?: string | null) {
+export function useCancelBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: cancelBooking,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["bookings", status || ""]
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["bookings"]
       });
     }
   });

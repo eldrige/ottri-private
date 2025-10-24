@@ -12,7 +12,6 @@ import { Booking } from "../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../_utils/helpers";
 import { useCancelBookingMutation } from "../_services/mutations";
-import { useSearchParams } from "next/navigation";
 
 export default function ServiceCard({
   service
@@ -160,10 +159,7 @@ export function AppointmentCard({
 }: Readonly<{
   service: ServiceCardProps;
 }>) {
-  const searchParams = useSearchParams();
-  const { mutateAsync: handleCancel, isPending } = useCancelBookingMutation(
-    searchParams.get("status")
-  );
+  const { mutateAsync: handleCancel, isPending } = useCancelBookingMutation();
 
   const handleCancelClick = (e: React.FormEvent) => {
     e.preventDefault();
