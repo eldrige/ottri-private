@@ -1,6 +1,5 @@
-"use server";
-import { serverRequest } from "@/lib/serverRequest";
 import { User } from "../_utils/types";
+import { clientAxios } from "@/lib/axios";
 
 export async function updateProfile({
   fullName,
@@ -15,7 +14,7 @@ export async function updateProfile({
 }) {
   try {
     console.log("there is something going on here");
-    const response = await serverRequest(`/users/profile/${userId}`, "PATCH", {
+    const response = await clientAxios.patch(`/users/profile/${userId}`, {
       fullName,
       phoneNumber,
       address
@@ -23,6 +22,7 @@ export async function updateProfile({
     return response.data as User;
   } catch (error) {
     console.error("Error updating user profile", error);
+    throw error;
   }
 }
 
@@ -46,7 +46,7 @@ export async function updateUserSettings({
   twoFactorAuth?: boolean;
 }) {
   try {
-    const response = await serverRequest(`/users/${userId}/settings`, "PATCH", {
+    const response = await clientAxios.patch(`/users/${userId}/settings`, {
       bookingReminder,
       currency,
       language,
@@ -58,5 +58,6 @@ export async function updateUserSettings({
     return response.data;
   } catch (error) {
     console.error("Error updating user settings", error);
+    throw error;
   }
 }

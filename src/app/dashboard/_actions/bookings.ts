@@ -38,5 +38,6 @@ export async function rateBooking({
     return response.data as Review;
   } catch (error) {
     console.error("Error rating booking:", error);
+    throw error;
   }
 }
