@@ -10,7 +10,7 @@ type ConfirmModalProps = {
   onConfirm: () => void;
   onCancel: () => void;
   loading?: boolean;
-  accent?: "primary" | "secondary" | "distructive";
+  accent?: "primary" | "secondary" | "destructive";
 };
 
 export default function ConfirmModal({
@@ -47,7 +47,7 @@ export default function ConfirmModal({
               accent === "primary" && "bg-primary-700 hover:bg-primary-900",
               accent === "secondary" &&
                 "bg-secondary-700 hover:bg-secondary-900",
-              accent === "distructive" && "bg-error hover:bg-red-500"
+              accent === "destructive" && "bg-error hover:bg-red-500"
             )}
             onClick={onConfirm}
             disabled={loading}

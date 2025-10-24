@@ -84,7 +84,7 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
             await deleteCleaner({ cleanerId: cleaner.id });
             setShowConfirm(false);
           }}
-          accent="distructive"
+          accent="destructive"
         />
       )}
       <div className="flex items-center gap-3">

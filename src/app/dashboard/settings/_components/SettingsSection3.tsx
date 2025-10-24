@@ -230,7 +230,7 @@ function AccountActions() {
           onConfirm={handleLogout}
           loading={isLoggingOut}
           confirmText="Sign Out"
-          accent="distructive"
+          accent="destructive"
         />
       )}
 
@@ -243,7 +243,7 @@ function AccountActions() {
           onConfirm={handleDeleteAccount}
           loading={false}
           confirmText="Delete"
-          accent="distructive"
+          accent="destructive"
         />
       )}
     </div>
