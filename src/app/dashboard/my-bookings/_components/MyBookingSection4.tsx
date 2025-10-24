@@ -17,11 +17,7 @@ export default function MyBookingSection4() {
   );
   const [page, setPage] = useState(0);
 
-  const { data: bookings, isLoading } = useGetBookingsQuery(
-    "COMPLETED",
-    4,
-    page
-  );
+  const { data: bookings, isLoading } = useGetBookingsQuery("", 4, page);
 
   const pastBookings = bookings?.data || [];
 
