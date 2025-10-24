@@ -20,7 +20,9 @@ import TipStep from "./steps/TipStep";
 import PaymentStep from "./steps/PaymentStep";
 import {
   calculateBasePrice,
-  getDiscountPercentage
+  calculateTax,
+  getDiscountPercentage,
+  TAX_RATE
 } from "@/utils/priceCalculation";
 import { PreflightType } from "../types";
 import { cn } from "@/lib/utils";
@@ -266,12 +268,20 @@ export default function ClientForm({
     const basePrice = calculatePrice();
     const tipAmount = formValues.tipAmount || 0;
     const discountAmount = calculateDiscount();
+    const tax = calculateTax(basePrice - discountAmount);
 
-    return basePrice - discountAmount + tipAmount;
+    return basePrice - discountAmount + tipAmount + tax;
   };
 
   const estimatedPrice = calculatePrice();
   const discountAmount = calculateDiscount();
+
+  // Calculate tax (example: 8% tax rate)
+  const subtotal = estimatedPrice - discountAmount;
+  const taxAmount = calculateTax(subtotal);
+
+  const tipAmount = formValues.tipAmount || 0;
+
   const totalWithTip = calculateTotal();
 
   // Navigation functions
@@ -591,12 +601,6 @@ export default function ClientForm({
                   })}
                 </div>
               )}
-              {/* {formValues.tipAmount !== undefined && formValues.tipAmount > 0 && (
-                  <p className="text-caption flex justify-between">
-                    Tip:
-                    <span>${formValues.tipAmount.toFixed(2)}</span>
-                  </p>
-                )} */}
             </div>
 
             <hr className="text-surface-500/10" />
@@ -609,15 +613,27 @@ export default function ClientForm({
                       ${estimatedPrice}
                     </span>
                     <span className="text-success-700 font-medium">
-                      ${(estimatedPrice - discountAmount).toFixed(2)}
+                      ${subtotal.toFixed(2)}
                     </span>
                   </span>
                 ) : (
-                  <span className="font-medium">
-                    ${estimatedPrice.toFixed(2)}
-                  </span>
+                  <span className="font-medium">${subtotal.toFixed(2)}</span>
                 )}
               </p>
+              {/* Tax display */}
+              <p className="text-caption flex justify-between">
+                <span>
+                  Tax <span className="text-xs">({TAX_RATE * 100}%)</span>:
+                </span>
+                <span>${taxAmount.toFixed(2)}</span>
+              </p>
+              {/* Tip display (already shown above, but can be repeated here if preferred) */}
+              {tipAmount > 0 && (
+                <p className="text-caption flex justify-between">
+                  Tip:
+                  <span>${tipAmount.toFixed(2)}</span>
+                </p>
+              )}
             </div>
             <hr className="text-surface-500/10" />
             <p className="text-caption font-medium flex justify-between">

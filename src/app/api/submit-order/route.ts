@@ -6,6 +6,7 @@ import Stripe from "stripe";
 import {
   calculateAddOnsPrice,
   calculateServicesPrice,
+  calculateTax,
   calculateTotal
 } from "../../../utils/priceCalculation";
 import { serverRequest } from "@/lib/serverRequest";
@@ -77,7 +78,7 @@ export async function POST(request: Request) {
       cleaningFrequency: orderData.frequency || null,
       servicesPrice: servicesPrice,
       addOnsPrice: addOnsPrice,
-      tax: (servicesPrice + addOnsPrice) * 0.08,
+      tax: calculateTax(servicesPrice + addOnsPrice),
       timeSlotId: Number(orderData.timeWindow),
       addOnIds: orderData.addOns?.map((i) => i.id) || [],
       fullName: orderData.fullName,
