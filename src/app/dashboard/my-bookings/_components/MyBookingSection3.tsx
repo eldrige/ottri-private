@@ -26,9 +26,9 @@ export default function MyBookingSection3() {
     { label: "Today", value: "today" }
   ];
 
-  const [today] = useState(() => new Date().toISOString());
-  const [dayAfterToday] = useState(() =>
-    new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+  const [today] = useState(() => new Date().toISOString().split("T")[0]);
+  const [dayAfterToday] = useState(
+    () => new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0]
   );
 
   const { data: bookings, isLoading: bookingsIsLoading } = useGetBookingsQuery(

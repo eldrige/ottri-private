@@ -9,13 +9,15 @@ interface ImageUploadProps {
   image: ImageListType;
   setImage: (value: ImageListType) => void;
   error?: string;
+  rounded?: boolean;
 }
 
 export function ImageUpload({
   placeholderImageUrl,
   image,
   setImage,
-  error
+  error,
+  rounded = false
 }: ImageUploadProps) {
   const onChange = (imageList: ImageListType) => {
     setImage(imageList);
@@ -34,22 +36,27 @@ export function ImageUpload({
             isDragging,
             dragProps
           }) => (
-            <div>
+            <div className={rounded ? "flex justify-center" : ""}>
               {imageList.length === 0 ? (
                 placeholderImageUrl ? (
                   <div className="relative rounded-xl overflow-hidden group">
-                    <div className="aspect-video relative">
+                    <div
+                      className={`${rounded ? "aspect-square size-52" : "aspect-video"} relative`}
+                    >
                       <Image
                         src={placeholderImageUrl}
-                        alt="Placeholder image"
+                        alt="Uploaded image"
                         fill
-                        className="object-cover opacity-80"
+                        className={`object-cover ${rounded ? "rounded-full" : ""}`}
                       />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                      <div
+                        className={`absolute inset-0 flex items-center justify-center ${rounded ? "" : "bg-black/20"}`}
+                      >
                         <Button
                           type="button"
                           variant="outline"
-                          className="bg-white/90 hover:bg-white"
+                          className={`bg-white/90 hover:bg-white ${rounded ? "flex self-end mb-2 items-center p-2 px-3" : ""}`}
+                          size="sm"
                           onClick={onImageUpload}
                         >
                           <Camera className="h-4 w-4 mr-2" />
@@ -89,12 +96,14 @@ export function ImageUpload({
                 )
               ) : (
                 <div className="relative rounded-xl overflow-hidden group">
-                  <div className="aspect-video relative">
+                  <div
+                    className={`${rounded ? "aspect-square size-52" : "aspect-video"} relative`}
+                  >
                     <Image
                       src={imageList[0]["data_url"]}
                       alt="Uploaded image"
                       fill
-                      className="object-cover"
+                      className={`object-cover ${rounded ? "rounded-full" : ""}`}
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">

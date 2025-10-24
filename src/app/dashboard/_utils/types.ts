@@ -47,6 +47,7 @@ export type User = {
     state: string;
     zipCode: string;
     city: string;
+    imageUrl: string;
     stripeCustomerId: string;
     userId: number;
     createdAt: string;

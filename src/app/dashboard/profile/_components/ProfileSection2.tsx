@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
-import userImage from "@/assets/cleaner-placeholder.png";
 import { MailIcon, Phone } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { Input } from "@/components/ui/Input";
@@ -9,22 +7,41 @@ import { Button } from "@/components/ui/Button";
 import { User } from "../../_utils/types";
 import { useUpdateProfileMutation } from "../../_services/mutations";
 import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
+import { ImageUpload } from "@/app/_components/ImageUpload";
+import { ImageListType } from "react-images-uploading";
+import { uploadImage } from "@/utils/uploadImage";
 import ModalWrapper from "@/components/common/ModalWrapper";
 import { useGetUserProfile } from "../../_services/queries";
 
 export default function ProfileSection2() {
   const { data: user } = useGetUserProfile();
+  const [image, setImage] = useState<ImageListType>([]);
+  const {
+    mutateAsync: updateProfile,
+    isPending: isUpdating,
+    error: updateProfileError
+  } = useUpdateProfileMutation();
+
   if (!user) return null;
+  const handleUpdatePicture = async () => {
+    if (image.length < 1) return;
+    const imageData = await uploadImage(image[0].file!);
+    await updateProfile({
+      userId: String(user.id),
+      imageUrl: imageData.data.url
+    });
+  };
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col gap-16">
         <div className="w-full items-center flex flex-col">
-          <Image
-            className="rounded-full size-25"
-            src={userImage}
-            alt={"user profile"}
+          <ImageUpload
+            image={image}
+            placeholderImageUrl={user.personalInformation?.imageUrl}
+            setImage={setImage}
+            rounded
           />
-          <div className="flex items-center flex-col">
+          <div className="flex items-center flex-col pt-5">
             <h1 className="font-medium text-2xl text-secondary-700">
               {user.personalInformation?.fullName}
             </h1>
@@ -32,6 +49,22 @@ export default function ProfileSection2() {
               Joined since {new Date(user.createdAt).getFullYear()}
             </p>
           </div>
+          {updateProfileError && (
+            <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+              {(updateProfileError as Error).message ||
+                "Failed to update profile picture"}
+            </div>
+          )}
+
+          <Button
+            onClick={handleUpdatePicture}
+            disabled={isUpdating || image.length === 0}
+            variant={"secondary"}
+            className="my-4 text-sm"
+            size={"sm"}
+          >
+            Update Picture
+          </Button>
         </div>
         <div className="flex gap-4 text-surface-500 *:items-center *:flex *:gap-2 flex-col">
           <div>
