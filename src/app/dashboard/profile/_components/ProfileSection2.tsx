@@ -199,6 +199,7 @@ function PersonalInfoForm({ user }: { user: User }) {
           onCancel={() => setShowConfirmModal(false)}
           onConfirm={handleSaveChanges}
           loading={isUpdating}
+          confirmText="Save Changes"
           accent="destructive"
         />
       )}
