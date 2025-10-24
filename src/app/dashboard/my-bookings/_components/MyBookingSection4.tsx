@@ -12,6 +12,8 @@ import ModalWrapper from "@/components/common/ModalWrapper";
 
 export default function MyBookingSection4() {
   const searchParams = useSearchParams();
+
+  const today = new Date().toISOString().split("T")[0];
   const [statusFilter, setStatusFilter] = useState(
     searchParams.get("status") || ""
   );
@@ -20,7 +22,9 @@ export default function MyBookingSection4() {
   const { data: bookings, isLoading } = useGetBookingsQuery(
     statusFilter,
     4,
-    page
+    page,
+    "",
+    today
   );
 
   const pastBookings = bookings?.data || [];

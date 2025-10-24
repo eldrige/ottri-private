@@ -19,9 +19,9 @@ export function useRateBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: rateBooking,
-    onSuccess: (review) => {
-      queryClient.invalidateQueries({
-        queryKey: ["booking-review", review?.bookingId],
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["bookings"],
         exact: true
       });
     }
@@ -32,8 +32,8 @@ export function useUpdateProfileMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateProfile,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
         queryKey: ["user-profile"]
       });
     }
@@ -47,8 +47,8 @@ export function useLogoutMutation() {
       const response = await axios.get(`/api/auth/logout`);
       return response.data as Promise<{ message: string }>;
     },
-    onSuccess: () => {
-      queryClient.refetchQueries({
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
         queryKey: ["user-profile"]
       });
     }
@@ -59,8 +59,8 @@ export function useUpdateSettingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateUserSettings,
-    onSuccess: () => {
-      queryClient.refetchQueries({
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
         queryKey: ["user-profile"]
       });
     }
