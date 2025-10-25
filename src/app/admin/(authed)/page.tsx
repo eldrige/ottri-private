@@ -19,6 +19,8 @@ import {
 } from "./_services/queries";
 import { subDays } from "date-fns";
 import OverviewItem from "./_components/OverviewItem";
+import ErrorComponent from "@/app/_components/ErrorComponent";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboardPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,21 +29,21 @@ export default function AdminDashboardPage() {
   const yesterdayDate = subDays(new Date(todayDate), 1)
     .toISOString()
     .slice(0, 10);
-  const { data: stats } = useStatsQuery({
+  const { data: stats, error: statsError } = useStatsQuery({
     startDate: todayDate,
     endDate: todayDate
   });
-  const { data: yesterdayStats } = useStatsQuery({
+  const { data: yesterdayStats, error: yestStatsError } = useStatsQuery({
     startDate: yesterdayDate,
     endDate: yesterdayDate
   });
-  const { data: bookings } = useGetBookingsQuery({
+  const { data: bookings, error: bookingsError } = useGetBookingsQuery({
     startDate: todayDate,
     endDate: todayDate,
     limit: 500
   });
 
-  const { data: cleaners } = useCleanersQuery({});
+  const { data: cleaners, error: cleanersError } = useCleanersQuery({});
 
   const completedBookings = useMemo(() => {
     return bookings?.data.filter((i) => i.status === "COMPLETED").length;
@@ -58,6 +60,14 @@ export default function AdminDashboardPage() {
     if (!bookings?.data) return 0;
     return Math.ceil(bookings.data.length / itemsPerPage);
   }, [bookings?.data, itemsPerPage]);
+
+  const router = useRouter();
+
+  const error = statsError || yestStatsError || bookingsError || cleanersError;
+
+  if (error) {
+    return <ErrorComponent error={error} reset={router.refresh} />;
+  }
 
   const isLoading =
     !stats ||
