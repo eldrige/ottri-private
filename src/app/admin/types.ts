@@ -16,10 +16,17 @@ export interface MapBookingsResponse {
   >[];
 }
 
+export enum BookingStatusLabels {
+  COMPLETED = "Completed",
+  CANCELLED = "Cancelled",
+  PENDING = "Pending",
+  INPROGRESS = "In Progress"
+}
+
 export interface Booking {
   id: number;
   displayId: string;
-  status: "DRAFT" | "PENDING" | "CONFIRMED" | "COMPLETED" | "FAILED";
+  status: "PENDING" | "COMPLETED" | "CANCELLED" | "INPROGRESS";
   servicesPrice: number;
   addOnsPrice: number;
   tip: number;

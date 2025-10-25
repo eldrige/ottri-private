@@ -65,6 +65,7 @@ export function useStartBookingMutation() {
     mutationFn: startBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -80,6 +81,7 @@ export function useCompleteBookingMutation() {
     mutationFn: completeBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -100,6 +102,7 @@ export function useUpdateBookingMutation() {
     mutationFn: updateBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -112,6 +115,7 @@ export function useAddBookingMutation() {
       axios.post("/api/submit-order", formData),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -136,6 +140,7 @@ export function useRescheduleBookingMutation() {
     mutationFn: rescheduleBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }

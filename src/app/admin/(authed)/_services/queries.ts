@@ -14,31 +14,31 @@ import axios from "axios";
 type GBQParamsType = {
   statusFilter?: string;
   limit?: number;
-  startTime?: string;
-  endTime?: string;
+  startDate?: string;
+  endDate?: string;
   page?: number;
   enabled?: boolean;
 };
 export function useGetBookingsQuery({
   statusFilter = "",
   limit = 50,
-  startTime,
-  endTime,
+  startDate,
+  endDate,
   page = 0,
   enabled = true
 }: GBQParamsType) {
   const sp = new URLSearchParams();
   if (limit) sp.append("limit", String(limit));
   if (statusFilter) sp.append("status", statusFilter);
-  if (startTime) sp.append("startTime", startTime);
-  if (endTime) sp.append("endTime", endTime);
+  if (startDate) sp.append("startDate", startDate);
+  if (endDate) sp.append("endDate", endDate);
   if (page) sp.append("page", String(page));
 
   return useQuery({
-    queryKey: ["bookings", { statusFilter, limit, startTime, endTime, page }],
+    queryKey: ["bookings", { statusFilter, limit, startDate, endDate, page }],
     queryFn: () =>
-      axios
-        .get(`/api/bookings?${sp}`)
+      clientAxios
+        .get(`/bookings?${sp}`)
         .then((i) => i.data) as Promise<BookingsResponse>,
     enabled: enabled
   });
@@ -61,12 +61,20 @@ export function useMapBookingsQuery({
   });
 }
 
-export function useStatsQuery() {
+export function useStatsQuery({
+  statusFilter,
+  startDate,
+  endDate
+}: Pick<GBQParamsType, "startDate" | "endDate" | "statusFilter">) {
+  const sp = new URLSearchParams();
+  if (statusFilter) sp.append("status", statusFilter);
+  if (startDate) sp.append("startDate", startDate);
+  if (endDate) sp.append("endDate", endDate);
   return useQuery({
-    queryKey: ["booking-stats"],
+    queryKey: ["bookings-stats", { statusFilter, startDate, endDate }],
     queryFn: () => {
       return axios
-        .get("/api/proxy?path=/bookings/stats")
+        .get(`/api/proxy?path=/bookings/stats?${sp}`)
         .then((i) => i.data) as Promise<BookingStats>;
     }
   });
