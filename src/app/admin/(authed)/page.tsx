@@ -4,8 +4,14 @@ import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
 import ClockIcon from "@/components/icons/ClockIcon";
 import DollarIcon2 from "@/components/icons/DollarIcon2";
 import LineGraphIncreaseIcon from "@/components/icons/LineGraphIncreaseIcon";
-import { AlertCircleIcon, Loader2, Users } from "lucide-react";
-import React, { useMemo } from "react";
+import {
+  AlertCircleIcon,
+  Loader2,
+  Users,
+  ChevronLeft,
+  ChevronRight
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
 import {
   useCleanersQuery,
   useGetBookingsQuery,
@@ -15,6 +21,8 @@ import { subDays } from "date-fns";
 import OverviewItem from "./_components/OverviewItem";
 
 export default function AdminDashboardPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const todayDate = new Date().toISOString().slice(0, 10);
   const yesterdayDate = subDays(new Date(todayDate), 1)
     .toISOString()
@@ -38,6 +46,18 @@ export default function AdminDashboardPage() {
   const completedBookings = useMemo(() => {
     return bookings?.data.filter((i) => i.status === "COMPLETED").length;
   }, [bookings]);
+
+  const paginatedBookings = useMemo(() => {
+    if (!bookings?.data) return [];
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return bookings.data.slice(startIndex, endIndex);
+  }, [bookings?.data, currentPage, itemsPerPage]);
+
+  const totalPages = useMemo(() => {
+    if (!bookings?.data) return 0;
+    return Math.ceil(bookings.data.length / itemsPerPage);
+  }, [bookings?.data, itemsPerPage]);
 
   const isLoading =
     !stats ||
@@ -183,12 +203,39 @@ export default function AdminDashboardPage() {
           </h4>
 
           <div className="mt-6 space-y-2.5">
-            {bookings.data.map((item) => (
+            {paginatedBookings.map((item) => (
               <OverviewItem key={item.id} booking={item} />
             ))}
           </div>
+
+          {totalPages > 1 && (
+            <div className="mt-4 flex items-center justify-between">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1 px-3 py-2 text-sm border border-black/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft className="size-4" />
+                Previous
+              </button>
+
+              <span className="text-sm text-secondary-700/70">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-1 px-3 py-2 text-sm border border-black/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+                <ChevronRight className="size-4" />
+              </button>
+            </div>
+          )}
         </div>
-        {/* TODO: FINISH THIS OVERVIEW ITEM THING FOR BOOKINGS */}
         <div className="lg:border border-black/10 lg:p-6 rounded-lg">
           <h4 className="flex items-center gap-2 text-subtitle font-medium">
             <AlertCircleIcon className="size-5" />
