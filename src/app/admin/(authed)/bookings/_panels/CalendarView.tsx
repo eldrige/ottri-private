@@ -52,7 +52,9 @@ export default function CalendarView() {
           ? "warning"
           : booking.status === "COMPLETED"
             ? "success"
-            : "info"
+            : booking.status === "CANCELLED"
+              ? "error"
+              : "info"
     }
   }));
 
@@ -83,7 +85,8 @@ export default function CalendarView() {
             const statusClasses = {
               info: "bg-info/10 text-info-text",
               warning: "bg-warning/10 text-warning-text",
-              success: "bg-success/10 text-success"
+              success: "bg-success/10 text-success",
+              error: "bg-error/10 text-error"
             };
 
             // Only show time and name
