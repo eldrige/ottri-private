@@ -78,10 +78,12 @@ export default function AdminDashboardPage() {
 
   if (isLoading) return <Loader2 className="animate-spin my-8 mx-auto" />;
 
-  const vsYesterday =
+  const vsYesterday = Math.min(
     ((stats.baseRevenue - yesterdayStats?.baseRevenue) /
       yesterdayStats.baseRevenue) *
-    100;
+      100,
+    1000
+  );
 
   const completedPercentage = (completedBookings / bookings.data.length) * 100;
 
@@ -106,7 +108,7 @@ export default function AdminDashboardPage() {
       title: "Today's Revenue",
       value: stats.baseRevenue,
       icon: <DollarIcon2 className="size-6" />,
-      statusText: `${vsYesterday > 0 ? "+" : ""}${Math.trunc(vsYesterday)}% vs yesterday`,
+      statusText: `${vsYesterday > 0 ? "+" : ""}${Math.trunc(vsYesterday || 0)}% vs yesterday`,
       statusIcon: <LineGraphIncreaseIcon className="size-3.5" />,
       statusColor:
         vsYesterday > 0
@@ -117,7 +119,7 @@ export default function AdminDashboardPage() {
     },
     {
       title: "Completion Rate",
-      value: `${completedPercentage}%`,
+      value: `${completedPercentage || 0}%`,
       icon: <LineGraphIncreaseIcon className="size-6" />,
       statusText: "On track",
       statusIcon: <CheckBrokenIcon className="size-3.5" />,
@@ -212,38 +214,52 @@ export default function AdminDashboardPage() {
             Today&apos;s Schedule ({bookings.data.length})
           </h4>
 
-          <div className="mt-6 space-y-2.5">
-            {paginatedBookings.map((item) => (
-              <OverviewItem key={item.id} booking={item} />
-            ))}
-          </div>
-
-          {totalPages > 1 && (
-            <div className="mt-4 flex items-center justify-between">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="flex items-center gap-1 px-3 py-2 text-sm border border-black/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <ChevronLeft className="size-4" />
-                Previous
-              </button>
-
-              <span className="text-sm text-secondary-700/70">
-                Page {currentPage} of {totalPages}
-              </span>
-
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-                className="flex items-center gap-1 px-3 py-2 text-sm border border-black/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-                <ChevronRight className="size-4" />
-              </button>
+          {bookings.data.length === 0 ? (
+            <div className="mt-6 p-6 flex flex-col items-center justify-center text-secondary-700/70">
+              <ClockIcon className="size-8 mb-2" />
+              <p className="font-medium">No bookings for today</p>
+              <p className="text-sm mt-1">
+                There are no scheduled bookings for today.
+              </p>
             </div>
+          ) : (
+            <>
+              <div className="mt-6 space-y-2.5">
+                {paginatedBookings.map((item) => (
+                  <OverviewItem key={item.id} booking={item} />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="mt-4 flex items-center justify-between">
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}
+                    className="flex items-center gap-1 px-3 py-2 text-sm border border-black/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ChevronLeft className="size-4" />
+                    Previous
+                  </button>
+
+                  <span className="text-sm text-secondary-700/70">
+                    Page {currentPage} of {totalPages}
+                  </span>
+
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                    className="flex items-center gap-1 px-3 py-2 text-sm border border-black/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                    <ChevronRight className="size-4" />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="lg:border border-black/10 lg:p-6 rounded-lg">
