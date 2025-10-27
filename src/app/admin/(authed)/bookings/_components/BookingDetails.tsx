@@ -152,9 +152,9 @@ export default function BookingDetails({
                     booking.customer?.personalInformation?.fullName}
                 </span>
               </div>
-              <div>
-                <span className="font-medium ">Email:</span>
-                <span className="ml-2 ">
+              <div className="truncate">
+                <span className="font-medium">Email:</span>
+                <span className="ml-2 w-full">
                   {booking.guest?.email || booking.customer?.email}
                 </span>
               </div>

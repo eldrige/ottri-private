@@ -11,7 +11,13 @@ interface Location {
     lng: number;
   };
 }
-export default function Map({ locations = [] }: { locations?: Location[] }) {
+export default function Map({
+  locations = [],
+  onMarkerClick
+}: {
+  locations?: Location[];
+  onMarkerClick?: (id: number) => void;
+}) {
   const mapRef = useRef<HTMLDivElement>(null);
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
@@ -44,7 +50,6 @@ export default function Map({ locations = [] }: { locations?: Location[] }) {
       .then((google) => {
         if (mapRef.current) {
           const map = new google.maps.Map(mapRef.current, mapOptions);
-          const infoWindow = new google.maps.InfoWindow();
 
           // Add markers for each location
           locations.forEach((location) => {
@@ -65,20 +70,9 @@ export default function Map({ locations = [] }: { locations?: Location[] }) {
               icon: location.status ? markerColors[location.status] : undefined
             });
             marker.addListener("click", () => {
-              const content = `
-                <div style="color: black; text-transform: capitalize;">
-                  <small>#${location.id}</small>
-                  <h3 style="font-weight: 600;">${location.title.toLowerCase()}</h3>
-                  ${
-                    location.status
-                      ? `<p>${location.status.toLowerCase()}</p>`
-                      : ""
-                  }
-                </div>
-              `;
-              infoWindow.setContent(content);
-
-              infoWindow.open(map, marker);
+              if (onMarkerClick) {
+                onMarkerClick(location.id);
+              }
             });
           });
         }
@@ -86,6 +80,7 @@ export default function Map({ locations = [] }: { locations?: Location[] }) {
       .catch((e) => {
         console.error("Error loading Google Maps:", e);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiKey, locations]);
   return (
     <div
