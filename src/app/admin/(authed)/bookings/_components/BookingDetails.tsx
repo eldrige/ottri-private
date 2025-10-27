@@ -119,10 +119,6 @@ export default function BookingDetails({
           </button>
         </div>
 
-        <p className=" mb-6">
-          Complete booking information and payment details
-        </p>
-
         {/* Service Header */}
         <div className="bg-gray-50 rounded-lg p-4 mb-6 flex justify-between items-center">
           <div>
