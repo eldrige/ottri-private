@@ -106,24 +106,26 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
           </div>
         )}
         <h3 className="font-medium text-xl">{cleaner.fullName}</h3>
-        <Select
-          options={options}
-          value={status}
-          disabled={isUpdating}
-          onChange={(status) => {
-            setStatus(status);
-          }}
-          accent="secondary"
-          className="ml-auto text-sm"
-          buttonClassName={cn(
-            "py-2 px-3 gap-2 border-none",
-            status.value === "AVAILABLE"
-              ? "bg-success/10 *:text-success"
-              : status.value === "UNAVAILABLE"
-                ? "bg-error/10 *:text-error"
-                : ""
-          )}
-        />
+        {!cleaner.deletedAt && (
+          <Select
+            options={options}
+            value={status}
+            disabled={isUpdating}
+            onChange={(status) => {
+              setStatus(status);
+            }}
+            accent="secondary"
+            className="ml-auto text-sm"
+            buttonClassName={cn(
+              "py-2 px-3 gap-2 border-none",
+              status.value === "AVAILABLE"
+                ? "bg-success/10 *:text-success"
+                : status.value === "UNAVAILABLE"
+                  ? "bg-error/10 *:text-error"
+                  : ""
+            )}
+          />
+        )}
       </div>
       <div className="mt-6 space-y-3">
         <div className="flex justify-between">
@@ -165,23 +167,23 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
           ))}
         </div>
       </div>
-      <div className="mt-8 flex gap-3 *:flex-1">
-        <Button
-          onClick={() => setShowEdit(true)}
-          className="flex items-center justify-center gap-1 border-secondary-700/10"
-          size={"2xs"}
-          variant={"secondary-outline"}
-        >
-          <EditIcon className="size-4" /> Edit
-        </Button>
-        <Button
-          className="flex items-center justify-center gap-1 border-secondary-700/10"
-          size={"2xs"}
-          variant={"secondary-outline"}
-        >
-          <CallIcon className="size-4" /> Call
-        </Button>
-        {!cleaner.deletedAt && (
+      {!cleaner.deletedAt && (
+        <div className="mt-8 flex gap-3 *:flex-1">
+          <Button
+            onClick={() => setShowEdit(true)}
+            className="flex items-center justify-center gap-1 border-secondary-700/10"
+            size={"2xs"}
+            variant={"secondary-outline"}
+          >
+            <EditIcon className="size-4" /> Edit
+          </Button>
+          <Button
+            className="flex items-center justify-center gap-1 border-secondary-700/10"
+            size={"2xs"}
+            variant={"secondary-outline"}
+          >
+            <CallIcon className="size-4" /> Call
+          </Button>
           <Button
             onClick={() => setShowConfirm(true)}
             className="flex items-center justify-center gap-1"
@@ -191,8 +193,8 @@ function StaffBox({ cleaner }: { cleaner: Cleaner }) {
             <TrashIcon className="size-4" />
             Archive
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

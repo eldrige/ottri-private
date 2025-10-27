@@ -36,6 +36,7 @@ export function useAssignCleanerMutation() {
     mutationFn: assignCleaner,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
     }
   });
 }
@@ -51,6 +52,8 @@ export function useCancelBookingMutation() {
     mutationFn: cancelBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -65,6 +68,7 @@ export function useStartBookingMutation() {
     mutationFn: startBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
       queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
@@ -81,6 +85,7 @@ export function useCompleteBookingMutation() {
     mutationFn: completeBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
       queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
@@ -102,6 +107,7 @@ export function useUpdateBookingMutation() {
     mutationFn: updateBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
       queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
@@ -140,6 +146,7 @@ export function useRescheduleBookingMutation() {
     mutationFn: rescheduleBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
       queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });

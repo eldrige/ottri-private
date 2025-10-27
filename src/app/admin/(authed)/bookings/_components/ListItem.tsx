@@ -16,6 +16,7 @@ import EditIcon from "@/components/icons/EditIcon";
 import EditBooking from "./EditBooking";
 import AssignCleaner from "./AssignCleaner";
 import ConfirmModal from "@/components/common/ConfirmModal";
+import BookingDetails from "./BookingDetails";
 
 interface StatusType {
   label: string;
@@ -39,6 +40,7 @@ export default function ListItem({
   const [editBooking, setEditBooking] = useState(false);
   const [assignCleaners, setAssignCleaners] = useState<Booking | null>(null);
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   const bookingName =
     booking.guest?.fullName ||
@@ -202,6 +204,13 @@ export default function ListItem({
                 Assign Cleaner
               </Button>
             )}
+            <Button
+              size={"2xs"}
+              variant={"secondary"}
+              onClick={() => setShowDetails(true)}
+            >
+              Details
+            </Button>
           </div>
         </div>
       </div>
@@ -226,6 +235,12 @@ export default function ListItem({
           }}
           loading={isCancelling}
           open={confirmCancel}
+        />
+      )}
+      {showDetails && (
+        <BookingDetails
+          bookingId={booking.id}
+          onClose={() => setShowDetails(false)}
         />
       )}
     </>

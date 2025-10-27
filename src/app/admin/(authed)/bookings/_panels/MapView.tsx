@@ -1,14 +1,17 @@
 import Map from "@/app/(landings)/_components/Map";
 import { useClientSearchParams } from "@/hooks/useClientSearchParams";
-import React from "react";
+import React, { useState } from "react";
 import { useMapBookingsQuery } from "../../_services/queries";
 import ErrorComponent from "@/app/_components/ErrorComponent";
 import { Loader2 } from "lucide-react";
+import BookingDetails from "../_components/BookingDetails";
 
 export default function MapView() {
   const statusFilter = useClientSearchParams().searchParams.get("status") || "";
   const mapBookings = useMapBookingsQuery({ statusFilter });
   const bookingsResponse = mapBookings.data;
+
+  const [showDetails, setShowDetails] = useState<number | null>(null);
 
   if (mapBookings.error)
     return (
@@ -39,7 +42,7 @@ export default function MapView() {
       </h4>
 
       <div className="w-full h-[540px] mt-4 lg:mt-8 flex items-center justify-center outline-2 outline-primary-700 outline-dashed outline-offset-2 rounded-lg">
-        <Map locations={locations} />
+        <Map locations={locations} onMarkerClick={(id) => setShowDetails(id)} />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4 lg:mt-8">
@@ -60,6 +63,12 @@ export default function MapView() {
           Cancelled
         </p>
       </div>
+      {showDetails && (
+        <BookingDetails
+          bookingId={showDetails}
+          onClose={() => setShowDetails(null)}
+        />
+      )}
     </div>
   );
 }

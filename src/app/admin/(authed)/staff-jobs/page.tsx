@@ -13,14 +13,14 @@ import { useClientSearchParams } from "@/hooks/useClientSearchParams";
 import ErrorComponent from "@/app/_components/ErrorComponent";
 
 const filterOptions = [
-  { label: "All Cleaners", value: "all-cleaners" },
-  { label: "Archived Cleaners", value: "archive" }
+  { label: "All Cleaners", value: "" },
+  { label: "Archived Cleaners", value: "archived" }
 ];
 
 export default function StaffJobsPage() {
   const { searchParams, setSearchParam } = useClientSearchParams();
-  const isArchive = searchParams.get("archive");
-  const cleanersQuery = useCleanersQuery({ archive: !!isArchive });
+  const filter = searchParams.get("filter") || "";
+  const cleanersQuery = useCleanersQuery({ archived: filter === "archived" });
 
   const [activeView, setActiveView] = useState<string>("staff-overview");
   const [addCleaner, setAddCleaner] = useState(false);
@@ -38,10 +38,11 @@ export default function StaffJobsPage() {
           <Filter className="size-4" />
           <Select
             options={filterOptions}
-            value={filterOptions[0]}
+            value={filterOptions.find((i) => i.value === filter)}
             onChange={(option) => {
-              if (option.value === "archive") setSearchParam("archive", "true");
-              else setSearchParam("archive", "");
+              if (option.value === "archived")
+                setSearchParam("filter", "archived");
+              else setSearchParam("filter", "");
             }}
             placeholder="All Cleaners"
             buttonClassName="border-none gap-2 font-medium"

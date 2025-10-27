@@ -14,6 +14,7 @@ import ConfirmModal from "@/components/common/ConfirmModal";
 import AssignCleaner from "../bookings/_components/AssignCleaner";
 import EditBooking from "../bookings/_components/EditBooking";
 import { format } from "date-fns";
+import BookingDetails from "../bookings/_components/BookingDetails";
 
 export default function OverviewItem({ booking }: { booking: Booking }) {
   const { mutateAsync: mutateCancel, isPending: isCancelling } =
@@ -26,6 +27,7 @@ export default function OverviewItem({ booking }: { booking: Booking }) {
   const [editBooking, setEditBooking] = useState(false);
   const [assignCleaners, setAssignCleaners] = useState<Booking | null>(null);
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   const formattedFrom = format(
     new Date().setHours(booking.timeSlot.startTime, 0, 0, 0),
@@ -130,6 +132,13 @@ export default function OverviewItem({ booking }: { booking: Booking }) {
             Assign Cleaner
           </Button>
         )}
+        <Button
+          size={"2xs"}
+          variant={"secondary"}
+          onClick={() => setShowDetails(true)}
+        >
+          Details
+        </Button>
       </div>
       {editBooking && (
         <EditBooking booking={booking} onClose={() => setEditBooking(false)} />
@@ -152,6 +161,12 @@ export default function OverviewItem({ booking }: { booking: Booking }) {
           }}
           loading={isCancelling}
           open={confirmCancel}
+        />
+      )}
+      {showDetails && (
+        <BookingDetails
+          bookingId={booking.id}
+          onClose={() => setShowDetails(false)}
         />
       )}
     </div>
