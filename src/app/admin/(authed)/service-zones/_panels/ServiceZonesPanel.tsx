@@ -126,7 +126,7 @@ function ZoneCard({ serviceArea }: { serviceArea: ServiceArea }) {
           title="Delete Service Zone"
           description="This action cannot be undone. Are you sure you want to delete this service zone?"
           confirmText="Delete"
-          accent="distructive"
+          accent="destructive"
         />
       )}
     </div>

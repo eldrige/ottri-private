@@ -216,7 +216,7 @@ export default function ListItem({
       )}
       {confirmCancel && (
         <ConfirmModal
-          accent="distructive"
+          accent="destructive"
           title="Cancel Booking"
           description={`Are you sure you want to cancel booking #${bookingNumber.toString().padStart(3, "0")}? This action cannot be undone.`}
           onCancel={() => setConfirmCancel(false)}

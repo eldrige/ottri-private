@@ -3,13 +3,13 @@ import { cancelBooking, rateBooking } from "../_actions/bookings";
 import { updateProfile, updateUserSettings } from "../_actions/users";
 import axios from "axios";
 
-export function useCancelBookingMutation(status?: string | null) {
+export function useCancelBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: cancelBooking,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["bookings", status || ""]
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["bookings"]
       });
     }
   });
@@ -19,9 +19,9 @@ export function useRateBookingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: rateBooking,
-    onSuccess: (review) => {
-      queryClient.invalidateQueries({
-        queryKey: ["booking-review", review?.bookingId],
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["bookings"],
         exact: true
       });
     }
@@ -32,8 +32,8 @@ export function useUpdateProfileMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateProfile,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
         queryKey: ["user-profile"]
       });
     }
@@ -47,8 +47,8 @@ export function useLogoutMutation() {
       const response = await axios.get(`/api/auth/logout`);
       return response.data as Promise<{ message: string }>;
     },
-    onSuccess: () => {
-      queryClient.refetchQueries({
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
         queryKey: ["user-profile"]
       });
     }
@@ -59,8 +59,8 @@ export function useUpdateSettingMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateUserSettings,
-    onSuccess: () => {
-      queryClient.refetchQueries({
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
         queryKey: ["user-profile"]
       });
     }

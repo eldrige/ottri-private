@@ -52,7 +52,7 @@ export default function SlotItem({ timeSlot }: { timeSlot: TimeSlot }) {
           title="Delete Time Slot"
           description={`Are you sure you want to delete the time slot ${formatHour(timeSlot.startTime)} - ${formatHour(timeSlot.endTime)}? This action cannot be undone.`}
           confirmText="Delete"
-          accent="distructive"
+          accent="destructive"
           loading={isDeleting}
           onConfirm={handleDelete}
         />
