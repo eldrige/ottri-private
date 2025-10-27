@@ -30,11 +30,11 @@ export default async function NewOrderPage({
 
   const preflightData = data[0].data as PreflightType;
 
-  let userData = data[1]?.data as UserData | undefined;
+  let userData = data[1]?.data as Partial<UserData> | undefined;
   const bookingData = data[2]?.data as Booking | undefined;
 
-  if (userData?.role !== "USER") {
-    userData = undefined;
+  if (userData && userData.role !== "USER") {
+    userData = { role: "ADMIN" };
   }
 
   return (

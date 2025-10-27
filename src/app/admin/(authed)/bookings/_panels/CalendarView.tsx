@@ -11,17 +11,17 @@ import { cn } from "@/lib/utils";
 
 export default function CalendarView() {
   const [window, setWindow] = useState({
-    startTime: undefined as string | undefined,
-    endTime: undefined as string | undefined
+    startDate: undefined as string | undefined,
+    endDate: undefined as string | undefined
   });
 
   const statusFilter = useClientSearchParams().searchParams.get("status") || "";
   const getBookingsQuery = useGetBookingsQuery({
     statusFilter,
     limit: 100,
-    startTime: window.startTime,
-    endTime: window.endTime,
-    enabled: !!(window.startTime && window.endTime)
+    startDate: window.startDate,
+    endDate: window.endDate,
+    enabled: !!(window.startDate && window.endDate)
   });
   const bookingsResponse = getBookingsQuery.data;
 
@@ -100,8 +100,8 @@ export default function CalendarView() {
           }}
           datesSet={(arg) => {
             setWindow({
-              startTime: arg.startStr,
-              endTime: arg.endStr
+              startDate: arg.startStr,
+              endDate: arg.endStr
             });
           }}
         />

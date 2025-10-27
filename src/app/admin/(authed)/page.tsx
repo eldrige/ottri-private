@@ -1,80 +1,127 @@
 "use client";
 import CalendarIcon from "@/components/icons/CalendarIcon";
-import CallIcon from "@/components/icons/CallIcon";
 import CheckBrokenIcon from "@/components/icons/CheckBrokenIcon";
 import ClockIcon from "@/components/icons/ClockIcon";
 import DollarIcon2 from "@/components/icons/DollarIcon2";
 import LineGraphIncreaseIcon from "@/components/icons/LineGraphIncreaseIcon";
-import { AlertCircleIcon, Users } from "lucide-react";
-import React from "react";
-import { useStatsQuery } from "./_services/queries";
+import {
+  AlertCircleIcon,
+  Loader2,
+  Users,
+  ChevronLeft,
+  ChevronRight
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
+import {
+  useCleanersQuery,
+  useGetBookingsQuery,
+  useStatsQuery
+} from "./_services/queries";
+import { subDays } from "date-fns";
+import OverviewItem from "./_components/OverviewItem";
+import ErrorComponent from "@/app/_components/ErrorComponent";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboardPage() {
-  const { data: stats } = useStatsQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const todayDate = new Date().toISOString().slice(0, 10);
+  const yesterdayDate = subDays(new Date(todayDate), 1)
+    .toISOString()
+    .slice(0, 10);
+  const { data: stats, error: statsError } = useStatsQuery({
+    startDate: todayDate,
+    endDate: todayDate
+  });
+  const { data: yesterdayStats, error: yestStatsError } = useStatsQuery({
+    startDate: yesterdayDate,
+    endDate: yesterdayDate
+  });
+  const { data: bookings, error: bookingsError } = useGetBookingsQuery({
+    startDate: todayDate,
+    endDate: todayDate,
+    limit: 500
+  });
 
-  if (!stats) return null;
+  const { data: cleaners, error: cleanersError } = useCleanersQuery({});
+
+  const completedBookings = useMemo(() => {
+    return bookings?.data.filter((i) => i.status === "COMPLETED").length;
+  }, [bookings]);
+
+  const paginatedBookings = useMemo(() => {
+    if (!bookings?.data) return [];
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return bookings.data.slice(startIndex, endIndex);
+  }, [bookings?.data, currentPage, itemsPerPage]);
+
+  const totalPages = useMemo(() => {
+    if (!bookings?.data) return 0;
+    return Math.ceil(bookings.data.length / itemsPerPage);
+  }, [bookings?.data, itemsPerPage]);
+
+  const router = useRouter();
+
+  const error = statsError || yestStatsError || bookingsError || cleanersError;
+
+  if (error) {
+    return <ErrorComponent error={error} reset={router.refresh} />;
+  }
+
+  const isLoading =
+    !stats ||
+    !bookings ||
+    typeof completedBookings !== "number" ||
+    !cleaners ||
+    !yesterdayStats;
+
+  if (isLoading) return <Loader2 className="animate-spin my-8 mx-auto" />;
+
+  const vsYesterday =
+    ((stats.baseRevenue - yesterdayStats?.baseRevenue) /
+      yesterdayStats.baseRevenue) *
+    100;
+
+  const completedPercentage = (completedBookings / bookings.data.length) * 100;
+
   const statsBoxes = [
     {
       title: "Today's Booking",
-      value: "0",
+      value: bookings.data.length,
       icon: <CalendarIcon className="size-6" />,
-      statusText: "0 Complete",
+      statusText: `${completedBookings} Complete`,
       statusIcon: <LineGraphIncreaseIcon className="size-3.5" />,
       statusColor: "text-success"
     },
     {
       title: "Available Cleaners",
-      value: "2",
+      value: cleaners.filter((i) => i.status === "AVAILABLE").length,
       icon: <Users className="size-6" />,
-      statusText: "of 4 Total",
+      statusText: `of ${cleaners.length} Total`,
       statusColor: "text-secondary-700/70",
       noStatusIcon: true
     },
     {
       title: "Today's Revenue",
-      value: "$0.00",
+      value: stats.baseRevenue,
       icon: <DollarIcon2 className="size-6" />,
-      statusText: "+15% vs yesterday",
+      statusText: `${vsYesterday > 0 ? "+" : ""}${Math.trunc(vsYesterday)}% vs yesterday`,
       statusIcon: <LineGraphIncreaseIcon className="size-3.5" />,
-      statusColor: "text-success"
+      statusColor:
+        vsYesterday > 0
+          ? "text-success"
+          : vsYesterday < 0
+            ? "text-error"
+            : "text-warning-text"
     },
     {
       title: "Completion Rate",
-      value: "0%",
+      value: `${completedPercentage}%`,
       icon: <LineGraphIncreaseIcon className="size-6" />,
       statusText: "On track",
       statusIcon: <CheckBrokenIcon className="size-3.5" />,
       statusColor: "text-success"
-    }
-  ];
-
-  const scheduleItems = [
-    {
-      customerName: "Jenny murphy",
-      status: "In Progress",
-      statusColor: "bg-info/20 text-info-text",
-      serviceType: "Deep cleaning",
-      time: "9:00 AM - 11:00 AM",
-      cleaner: "Maria Garcia",
-      buttonText: "Complete"
-    },
-    {
-      customerName: "Jenny murphy",
-      status: "Pending",
-      statusColor: "bg-warning/20 text-warning-text",
-      serviceType: "Deep cleaning",
-      time: "9:00 AM - 11:00 AM",
-      cleaner: "Maria Garcia",
-      buttonText: "Start"
-    },
-    {
-      customerName: "Jenny murphy",
-      status: "Completed",
-      statusColor: "bg-success/20 text-success",
-      serviceType: "Deep cleaning",
-      time: "9:00 AM - 11:00 AM",
-      cleaner: "Maria Garcia",
-      buttonText: null
     }
   ];
 
@@ -162,51 +209,43 @@ export default function AdminDashboardPage() {
         <div className="lg:border border-black/10 lg:p-6 rounded-lg">
           <h4 className="flex items-center gap-2 text-subtitle font-medium">
             <ClockIcon className="size-6" />
-            Today&apos;s Schedule ({scheduleItems.length})
+            Today&apos;s Schedule ({bookings.data.length})
           </h4>
 
           <div className="mt-6 space-y-2.5">
-            {scheduleItems.map((item, index) => (
-              <div
-                key={index}
-                className="border border-black/10 rounded-lg py-2 px-4 flex flex-col lg:flex-row lg:items-center gap-3 justify-between"
-              >
-                <div className="space-y-1">
-                  <p>
-                    <span className="font-medium">{item.customerName}</span>
-                    <span
-                      className={`text-sm py-1 px-4 ml-3 rounded-lg ${item.statusColor}`}
-                    >
-                      {item.status}
-                    </span>
-                  </p>
-                  <p className="text-xs text-secondary-700/70">
-                    {item.serviceType}
-                    <span className="h-2 w-2 bg-surface-300 inline-block rounded-full mx-2" />
-                    {item.time}
-                  </p>
-                  <p className="text-xs text-secondary-700/70">
-                    Cleaner:<span className="ml-2">{item.cleaner}</span>
-                  </p>
-                </div>
-                <div className="flex gap-3 *:flex-1 lg:*:flex-0">
-                  {item.buttonText && (
-                    <button className="py-2 px-4 text-xs rounded-lg border border-black/10 bg-white">
-                      {item.buttonText}
-                    </button>
-                  )}
-                  <button className="py-2 px-4 text-xs rounded-lg border border-black/10 bg-error text-white">
-                    <span className="flex gap-1 justify-center">
-                      <CallIcon className="size-4 inline" />
-                      Call
-                    </span>
-                  </button>
-                </div>
-              </div>
+            {paginatedBookings.map((item) => (
+              <OverviewItem key={item.id} booking={item} />
             ))}
           </div>
-        </div>
 
+          {totalPages > 1 && (
+            <div className="mt-4 flex items-center justify-between">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1 px-3 py-2 text-sm border border-black/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft className="size-4" />
+                Previous
+              </button>
+
+              <span className="text-sm text-secondary-700/70">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-1 px-3 py-2 text-sm border border-black/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+                <ChevronRight className="size-4" />
+              </button>
+            </div>
+          )}
+        </div>
         <div className="lg:border border-black/10 lg:p-6 rounded-lg">
           <h4 className="flex items-center gap-2 text-subtitle font-medium">
             <AlertCircleIcon className="size-5" />
@@ -230,19 +269,19 @@ export default function AdminDashboardPage() {
       <div className="mt-6 flex gap-6 *:flex-1 flex-col lg:flex-row">
         <div className="flex flex-col items-center gap-4 px-4 py-3 border border-black/10 rounded-lg">
           <p className="text-2xl text-success">
-            {stats.statusBreakdown.COMPLETED}
+            {stats.statusBreakdown.COMPLETED || 0}
           </p>
           <p>Total Completed</p>
         </div>
         <div className="flex flex-col items-center gap-4 px-4 py-3 border border-black/10 rounded-lg">
           <p className="text-2xl text-info-text">
-            {stats.statusBreakdown.INPROGRESS}
+            {stats.statusBreakdown.INPROGRESS || 0}
           </p>
           <p>Total Progress</p>
         </div>
         <div className="flex flex-col items-center gap-4 px-4 py-3 border border-black/10 rounded-lg">
           <p className="text-2xl text-primary-700">
-            {stats.statusBreakdown.PENDING}
+            {stats.statusBreakdown.PENDING || 0}
           </p>
           <p>Pending</p>
         </div>

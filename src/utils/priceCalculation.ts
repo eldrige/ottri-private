@@ -127,3 +127,8 @@ export const getDiscountPercentage = (frequency: string | null): number => {
       return 0; // No discount
   }
 };
+
+export const TAX_RATE = 0.06;
+export const calculateTax = (subtotal: number) => {
+  return subtotal * TAX_RATE;
+};
