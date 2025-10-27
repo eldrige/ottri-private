@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/Button";
 
 export default function CleanerProfile({ cleaner }: { cleaner: Cleaner }) {
   return (
-    <div className="bg-white text-secondary-700 rounded-lg shadow-lg overflow-hidden">
+    <div className="bg-white text-secondary-700 h-fit py-5 rounded-lg shadow-lg overflow-hidden">
       {/* Header Image */}
       <div className="relative h-32">
         <Image
