@@ -1,7 +1,7 @@
 import { Booking, BookingStatusLabels } from "@/app/admin/types";
 import { Button } from "@/components/ui/Button";
 import { format } from "date-fns";
-import { X, User, Calendar, CreditCard, Receipt } from "lucide-react";
+import { X, User, Calendar, CreditCard, Loader2, InfoIcon } from "lucide-react";
 import React, { useState } from "react";
 import ModalWrapper from "@/components/common/ModalWrapper";
 import CallIcon from "@/components/icons/CallIcon";
@@ -15,14 +15,17 @@ import {
 import EditBooking from "./EditBooking";
 import AssignCleaner from "./AssignCleaner";
 import ConfirmModal from "@/components/common/ConfirmModal";
+import { useGetBookingQuery } from "../../_services/queries";
 
 export default function BookingDetails({
-  booking,
+  bookingId,
   onClose
 }: {
-  booking: Booking;
+  bookingId: number | string;
   onClose: () => void;
 }) {
+  const { data: booking, error, isLoading } = useGetBookingQuery(bookingId);
+
   const { mutateAsync: mutateCancel, isPending: isCancelling } =
     useCancelBookingMutation();
   const { mutateAsync: mutateStart, isPending: isStarting } =
@@ -33,6 +36,49 @@ export default function BookingDetails({
   const [editBooking, setEditBooking] = useState(false);
   const [assignCleaners, setAssignCleaners] = useState<Booking | null>(null);
   const [confirmCancel, setConfirmCancel] = useState(false);
+
+  if (isLoading) {
+    return (
+      <ModalWrapper onClose={onClose}>
+        <div
+          className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto flex items-center justify-center"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="text-center py-8">
+            <Loader2 className="animate-spin size-8 mx-auto"></Loader2>
+            <p className="mt-4 text-gray-600">Loading booking details...</p>
+          </div>
+        </div>
+      </ModalWrapper>
+    );
+  }
+
+  if (error || !booking) {
+    return (
+      <ModalWrapper onClose={onClose}>
+        <div
+          className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Error</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <X className="size-6" />
+            </button>
+          </div>
+          <div className="text-center py-8">
+            <p className="text-red-600 mb-4">Failed to load booking details</p>
+            <Button variant="outline" size="sm" onClick={onClose}>
+              Close
+            </Button>
+          </div>
+        </div>
+      </ModalWrapper>
+    );
+  }
 
   const dateTime = format(
     new Date(booking.timeSlot.date),
@@ -65,7 +111,7 @@ export default function BookingDetails({
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-3">
-            <Receipt className="size-6 " />
+            <InfoIcon className="size-6 " />
             <h2 className="text-xl font-bold">Booking Details - {displayId}</h2>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:">
@@ -88,11 +134,9 @@ export default function BookingDetails({
           <div className="text-right">
             <p className="font-medium ">{displayId}</p>
             <span
-              className={`inline-block px-2 py-1 rounded text-xs font-medium ${getStatusColor(booking.status)}`}
+              className={`inline-block px-2 py-1 rounded text-xs font-medium mt-1 ${getStatusColor(booking.status)}`}
             >
-              {booking.status === "COMPLETED"
-                ? "Paid"
-                : BookingStatusLabels[booking.status]}
+              {BookingStatusLabels[booking.status]}
             </span>
           </div>
         </div>

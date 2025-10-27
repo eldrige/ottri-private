@@ -239,7 +239,7 @@ export default function ListItem({
       )}
       {showDetails && (
         <BookingDetails
-          booking={booking}
+          bookingId={booking.id}
           onClose={() => setShowDetails(false)}
         />
       )}

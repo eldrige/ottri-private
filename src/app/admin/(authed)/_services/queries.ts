@@ -1,5 +1,6 @@
 import { ServiceAddOn, TimeSlot } from "@/app/(landings)/booking/new/types";
 import {
+  Booking,
   BookingsResponse,
   BookingStats,
   Cleaner,
@@ -41,6 +42,16 @@ export function useGetBookingsQuery({
         .get(`/bookings?${sp}`)
         .then((i) => i.data) as Promise<BookingsResponse>,
     enabled: enabled
+  });
+}
+
+export function useGetBookingQuery(bookingId: string | number) {
+  return useQuery({
+    queryKey: ["booking", bookingId],
+    queryFn: () =>
+      clientAxios
+        .get(`/bookings/${bookingId}`)
+        .then((i) => i.data) as Promise<Booking>
   });
 }
 
