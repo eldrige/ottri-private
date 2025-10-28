@@ -7,16 +7,34 @@ import {
   ArrowLeftIcon,
   CalendarIcon,
   ClockIcon,
-  ShieldCheck
+  ShieldCheck,
+  StarIcon
 } from "lucide-react";
 import LocationIcon from "@/components/icons/LocationIcon";
 import ChatIcon from "@/components/icons/ChatIcon";
 import Image from "next/image";
+import { formatDate } from "@/lib/utils";
 
 const certificationsAndQualifications = [
   "Certified Professional Cleaner (CPC)",
   "First Aid and CPR Certified",
   "Specialized Carpet Cleaning Training"
+];
+
+const reviews = [
+  {
+    rating: 5,
+    reviewer: "Jane Doe",
+    date: "2025-08-15",
+    review: "Excellent service! My home has never been cleaner."
+  },
+  {
+    rating: 5,
+    reviewer: "Jennifer L.",
+    date: "2025-08-15",
+    review:
+      "Maria is absolutely incredible! She transformed our home before our holiday party. Every detail was perfect, and she even organized areas we didn't ask for. Highly recommend!"
+  }
 ];
 
 async function ServicesDetailsPage({
@@ -43,7 +61,7 @@ async function ServicesDetailsPage({
       <div className="grid grid-cols-3 gap-20">
         <CleanerProfile cleaner={cleaner} />
         <div className="col-span-2 space-y-10">
-          <div className="space-y-2">
+          <div className="space-y-2 pt-12">
             <h3 className="text-3xl text-secondary-700 font-nunito-sans font-semibold">
               About {cleaner.fullName.split(" ")[0]}
             </h3>
@@ -56,7 +74,7 @@ async function ServicesDetailsPage({
               </p>
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 pt-12">
             <h3 className=" text-secondary-700 text-heading-3 font-nunito-sans font-semibold">
               Availability & Booking
             </h3>
@@ -83,7 +101,7 @@ async function ServicesDetailsPage({
               />
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 pt-12">
             <h3 className=" text-secondary-700 text-heading-3 font-nunito-sans font-semibold">
               Certifications & Qualifications
             </h3>
@@ -93,7 +111,7 @@ async function ServicesDetailsPage({
               ))}
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 pt-12">
             <h3 className=" text-secondary-700 text-heading-3 font-nunito-sans font-semibold">
               Work Examples
             </h3>
@@ -116,6 +134,22 @@ async function ServicesDetailsPage({
                   "https://cdn.prod.website-files.com/640051ce8a159067e1042e74/65d5b19950d874f282b5c35f_woman-with-gloves-cleaning-floor_23-2148520978.jpg"
                 }
               />
+            </div>
+          </div>
+          <div className="space-y-2 pt-12">
+            <h3 className=" text-secondary-700 text-heading-3 font-nunito-sans font-semibold">
+              Recent Reviews
+            </h3>
+            <div className="space-y-8 w-full">
+              {reviews.map((review, idx) => (
+                <ReviewCard
+                  key={idx}
+                  rating={review.rating}
+                  reviewer={review.reviewer}
+                  date={review.date}
+                  review={review.review}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -152,7 +186,7 @@ function AvailabilityBookingsCard({
 
 function CertificationItem({ certification }: { certification: string }) {
   return (
-    <div className="flex gap-2.5 ">
+    <div className="flex gap-1.5">
       <ShieldCheck className="size-6 text-primary-700 mb-2" />
       <p className="text-surface-500">{certification}</p>
     </div>
@@ -193,6 +227,33 @@ function WorkExampleItem({
           />
         </div>
       </div>
+    </div>
+  );
+}
+interface ReviewCardProps {
+  rating: number;
+  reviewer: string;
+  date: string;
+  review: string;
+}
+function ReviewCard({ rating, reviewer, date, review }: ReviewCardProps) {
+  return (
+    <div>
+      <div className="flex justify-between">
+        <div className="flex items-center gap-2">
+          <p className="text-surface-500">{reviewer}</p>
+          <div className="flex">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <StarIcon
+                key={index}
+                className={`stroke-[1.5px] cursor-pointer size-4 ${index < rating ? "fill-[#FBC503] text-[#FBC503]" : "text-secondary-700"}`}
+              />
+            ))}
+          </div>
+        </div>
+        <p className="text-surface-500">{formatDate(date)}</p>
+      </div>
+      <p className="text-surface-500">{review}</p>
     </div>
   );
 }
