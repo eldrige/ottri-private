@@ -20,13 +20,13 @@ import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
 // Assign cleaner
 async function assignCleaner({
   bookingId,
-  cleanerId
+  cleanerIds
 }: {
   bookingId: string;
-  cleanerId: string;
+  cleanerIds: string[];
 }) {
   const booking = await clientAxios.post(`bookings/${bookingId}/assign`, {
-    cleanerId: +cleanerId
+    cleanerIds: cleanerIds
   });
   return booking.data as Booking;
 }

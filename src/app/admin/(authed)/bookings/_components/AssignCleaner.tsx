@@ -4,11 +4,12 @@ import StarIcon from "@/components/icons/StarIcon";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { X } from "lucide-react";
+import { X, Check } from "lucide-react";
 import React, { useState } from "react";
 import { useAssignCleanerMutation } from "../../_services/mutations";
 import { useCleanersQuery } from "../../_services/queries";
 import ModalWrapper from "@/components/common/ModalWrapper";
+import axios from "axios";
 
 export default function AssignCleaner({
   booking,
@@ -18,10 +19,12 @@ export default function AssignCleaner({
   onClose: () => void;
 }) {
   const { data: cleaners } = useCleanersQuery({});
-  const { mutateAsync: cleanerMutate, isPending } = useAssignCleanerMutation();
-  const [selectedCleanerId, setSelectedCleanerId] = useState<string | null>(
-    null
-  );
+  const {
+    mutateAsync: cleanerMutate,
+    isPending,
+    error
+  } = useAssignCleanerMutation();
+  const [selectedCleanerIds, setSelectedCleanerIds] = useState<string[]>([]);
 
   if (!cleaners) return null;
 
@@ -30,13 +33,21 @@ export default function AssignCleaner({
     "dd-MM-yyyy 'at' h:mm a"
   );
 
+  const handleCleanerToggle = (cleanerId: string) => {
+    setSelectedCleanerIds((prev) =>
+      prev.includes(cleanerId)
+        ? prev.filter((id) => id !== cleanerId)
+        : [...prev, cleanerId]
+    );
+  };
+
   const handleAssignCleaner = async () => {
-    if (!selectedCleanerId) return;
+    if (selectedCleanerIds.length === 0) return;
 
     try {
       await cleanerMutate({
         bookingId: booking.id.toString(),
-        cleanerId: selectedCleanerId
+        cleanerIds: selectedCleanerIds
       });
 
       onClose();
@@ -53,15 +64,15 @@ export default function AssignCleaner({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center">
-          <p className="text-heading-5 font-bold">Assign Cleaner</p>
+          <p className="text-heading-5 font-bold">Assign Cleaners</p>
           <button onClick={onClose}>
             <X className="size-8 text-secondary-700/70" />
           </button>
         </div>
 
         <p>
-          Select a new cleaner for this booking. The system will recommend the
-          best matches based on availability and specialty.
+          Select cleaners for this booking. The system will recommend the best
+          matches based on availability and specialty.
         </p>
 
         <div className="p-4 bg-secondary-700/5 text-xs rounded-lg">
@@ -104,62 +115,95 @@ export default function AssignCleaner({
           </div>
         </div>
 
-        <p className="font-semibold">Available Cleaners</p>
+        <p className="font-semibold">
+          Available Cleaners{" "}
+          {selectedCleanerIds.length > 0 && (
+            <span className="text-sm font-normal text-secondary-700/70">
+              ({selectedCleanerIds.length} selected)
+            </span>
+          )}
+        </p>
 
         <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
           {!!cleaners.length &&
-            cleaners.map((cleaner) => (
-              <button
-                key={cleaner.id}
-                disabled={cleaner.status === "UNAVAILABLE"}
-                className={cn(
-                  "p-4 border rounded-lg cursor-pointer transition-colors disabled:opacity-50",
-                  selectedCleanerId === cleaner.id.toString()
-                    ? "border-secondary-700 bg-secondary-700/5"
-                    : "border-black/10 hover:border-secondary-700/50"
-                )}
-                onClick={() => setSelectedCleanerId(cleaner.id.toString())}
-              >
-                <div className="flex items-center justify-between font-medium">
-                  <p className="capitalize">{cleaner.fullName}</p>
-                  <p>{cleaner.stats.totalBookings} Jobs</p>
-                </div>
-                <div className="mt-2 text-sm flex items-center gap-4">
-                  <p className="flex gap-2">
-                    <StarIcon className="size-4" />
-                    {cleaner.stats.averageRating}
-                  </p>
-                  <p className="flex gap-2">
-                    <ClockIcon2 className="size-4 text-black/25" />
-                    {cleaner.status === "AVAILABLE" ? (
-                      <span className="text-success">available</span>
-                    ) : (
-                      <span className="text-error">unavailable</span>
-                    )}
-                  </p>
-                  <p className="text-secondary-700/70 ml-auto">0 Complaints</p>
-                </div>
-                {cleaner.specialties.length > 0 && (
-                  <div className="mt-4 flex gap-2.5">
-                    {cleaner.specialties.map((item, idx) => (
-                      <p
-                        key={idx}
-                        className={cn(
-                          "text-xs py-1 px-2 rounded-lg capitalize",
-                          idx % 2 === 0
-                            ? "border text-info-text bg-info/10 border-info/20"
-                            : "bg-secondary-700/10"
-                        )}
-                      >
-                        {item}
-                      </p>
-                    ))}
-                  </div>
-                )}
-              </button>
-            ))}
-        </div>
+            cleaners.map((cleaner) => {
+              const isSelected = selectedCleanerIds.includes(
+                cleaner.id.toString()
+              );
+              const isDisabled = cleaner.status === "UNAVAILABLE";
 
+              return (
+                <button
+                  key={cleaner.id}
+                  disabled={isDisabled}
+                  className={cn(
+                    "p-4 border rounded-lg cursor-pointer transition-colors disabled:opacity-50 relative",
+                    isSelected
+                      ? "border-secondary-700 bg-secondary-700/5"
+                      : "border-black/10 hover:border-secondary-700/50"
+                  )}
+                  onClick={() => handleCleanerToggle(cleaner.id.toString())}
+                >
+                  {/* Selection indicator */}
+                  <div
+                    className={cn(
+                      "absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
+                      isSelected
+                        ? "bg-secondary-700 border-secondary-700"
+                        : "border-gray-300"
+                    )}
+                  >
+                    {isSelected && <Check className="w-3 h-3 text-white" />}
+                  </div>
+
+                  <div className="flex items-center justify-between font-medium pr-8">
+                    <p className="capitalize">{cleaner.fullName}</p>
+                    <p>{cleaner.stats.totalBookings} Jobs</p>
+                  </div>
+                  <div className="mt-2 text-sm flex items-center gap-4">
+                    <p className="flex gap-2">
+                      <StarIcon className="size-4" />
+                      {cleaner.stats.averageRating}
+                    </p>
+                    <p className="flex gap-2">
+                      <ClockIcon2 className="size-4 text-black/25" />
+                      {cleaner.status === "AVAILABLE" ? (
+                        <span className="text-success">available</span>
+                      ) : (
+                        <span className="text-error">unavailable</span>
+                      )}
+                    </p>
+                    <p className="text-secondary-700/70 ml-auto">
+                      0 Complaints
+                    </p>
+                  </div>
+                  {cleaner.specialties.length > 0 && (
+                    <div className="mt-4 flex gap-2.5">
+                      {cleaner.specialties.map((item, idx) => (
+                        <p
+                          key={idx}
+                          className={cn(
+                            "text-xs py-1 px-2 rounded-lg capitalize",
+                            idx % 2 === 0
+                              ? "border text-info-text bg-info/10 border-info/20"
+                              : "bg-secondary-700/10"
+                          )}
+                        >
+                          {item}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+        </div>
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-md text-red-600">
+            {axios.isAxiosError(error) &&
+              error.response?.data?.message?.join(", ")}
+          </div>
+        )}
         <div className="mt-4 space-y-4">
           <div className="mt-8 flex gap-8 *:flex-1">
             <Button variant={"secondary-outline"} size={"xs"} onClick={onClose}>
@@ -169,9 +213,13 @@ export default function AssignCleaner({
               variant={"secondary"}
               size={"xs"}
               onClick={handleAssignCleaner}
-              disabled={!selectedCleanerId || isPending}
+              disabled={selectedCleanerIds.length === 0 || isPending}
             >
-              {isPending ? "Assigning..." : "Assign Cleaner"}
+              {isPending
+                ? "Assigning..."
+                : `Assign ${selectedCleanerIds.length} Cleaner${
+                    selectedCleanerIds.length !== 1 ? "s" : ""
+                  }`}
             </Button>
           </div>
         </div>
