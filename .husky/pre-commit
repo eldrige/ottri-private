@@ -9,7 +9,12 @@ yarn lint-staged ||
 
 yarn type-check || 
     (
-        echo 'Type check also passed'
+        echo '👋😤 Please fix your type errors'
+        false
+    )
+yarn build || 
+    (
+        echo '👋😤 Please fix your build errors'
         false
     )
 
