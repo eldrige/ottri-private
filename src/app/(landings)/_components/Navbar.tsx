@@ -12,7 +12,8 @@ import { useGetUserProfile } from "@/app/dashboard/_services/queries";
 
 export default function Navbar() {
   const { data: profileData } = useGetUserProfile();
-  const isLoggedIn = !!profileData && profileData.role === "USER";
+  const dashboardLink =
+    profileData && (profileData?.role === "ADMIN" ? "/admin" : "/dashboard");
   const [showMobile, setShowMobile] = useState(false);
 
   return (
@@ -49,9 +50,9 @@ export default function Navbar() {
                 Book Now
               </Button>
             </Link>
-            <Link href={isLoggedIn ? "/dashboard" : "/login"}>
+            <Link href={dashboardLink || "/login"}>
               <Button className="whitespace-nowrap" size="xs" variant="outline">
-                {isLoggedIn ? "Dashboard" : "Login"}
+                {dashboardLink ? "Dashboard" : "Login"}
               </Button>
             </Link>
           </div>
@@ -70,7 +71,7 @@ export default function Navbar() {
       <MobileNav
         show={showMobile}
         setShow={setShowMobile}
-        isLoggedIn={isLoggedIn}
+        dashboardLink={dashboardLink}
       />
     </>
   );
@@ -79,11 +80,11 @@ export default function Navbar() {
 function MobileNav({
   show,
   setShow,
-  isLoggedIn
+  dashboardLink
 }: {
   show: boolean;
   setShow: (value: React.SetStateAction<boolean>) => void;
-  isLoggedIn: boolean;
+  dashboardLink: string | undefined;
 }) {
   return (
     <>
@@ -135,13 +136,13 @@ function MobileNav({
               Book Now
             </Button>
           </Link>
-          <Link href={isLoggedIn ? "/dashboard" : "/login"}>
+          <Link href={dashboardLink || "/login"}>
             <Button
               className="whitespace-nowrap w-full mt-2.5"
               size="xs"
               variant="outline"
             >
-              {isLoggedIn ? "Dashboard" : "Login"}
+              {dashboardLink ? "Dashboard" : "Login"}
             </Button>
           </Link>
         </div>

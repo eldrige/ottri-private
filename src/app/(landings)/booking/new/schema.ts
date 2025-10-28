@@ -83,8 +83,8 @@ export const orderFormSchema = z
     paymentMethodId: z.string().optional(),
     createAccount: z.boolean().optional(),
     password: z.string().optional(),
-    confirmPassword: z.string().optional()
-    // stripePaymentId: string
+    confirmPassword: z.string().optional(),
+    isAdmin: z.boolean()
   })
   .superRefine((data, ctx) => {
     if (!data.createAccount) return;

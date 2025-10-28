@@ -37,7 +37,7 @@ export default function PropertyDetailsStep() {
 
       setIsValidating(true);
       try {
-        const res = await axiosInstance.get(`service-areas/${lat}/${lng}`);
+        const res = await axiosInstance.get(`service-areas/${lng}/${lat}`);
         const isValid = res.data.length > 0;
         setValue("isServiceAreaValid", isValid);
 

@@ -23,10 +23,12 @@ export default function RootLayout({
     <main className=" relative">
       <DashboardNavbar />
       <div className="flex px-4">
-        <section className="hidden md:block flex-15/100 h-full">
+        <section className="hidden md:block fixed flex-15/100 h-full">
           <SideNavBar user={profile || {}} />
         </section>
-        <section className="flex-85/100 ">{children}</section>
+        <section className="flex-85/100 ml-[16%] overflow-y-auto pt-0.5 pb-2">
+          {children}
+        </section>
       </div>
     </main>
   );

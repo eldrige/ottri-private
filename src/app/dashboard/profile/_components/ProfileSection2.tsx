@@ -6,12 +6,11 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { User } from "../../_utils/types";
 import { useUpdateProfileMutation } from "../../_services/mutations";
-import { BasicConfirmationModal } from "../../_components/BasicConfirmationModal";
 import { ImageUpload } from "@/app/_components/ImageUpload";
 import { ImageListType } from "react-images-uploading";
 import { uploadImage } from "@/utils/uploadImage";
-import ModalWrapper from "@/components/common/ModalWrapper";
 import { useGetUserProfile } from "../../_services/queries";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 export default function ProfileSection2() {
   const { data: user } = useGetUserProfile();
@@ -115,7 +114,7 @@ function PersonalInfoForm({ user }: { user: User }) {
 
   async function handleSaveChanges() {
     await updateProfile({
-      userId: String(user.personalInformation?.id),
+      userId: String(user.id),
       fullName: formData.fullName,
       phoneNumber: formData.phone,
       address: formData.address
@@ -192,17 +191,17 @@ function PersonalInfoForm({ user }: { user: User }) {
           </Button>
         </form>
       </div>
-      {/* Confirmation Modal */}
       {showConfirmModal && (
-        <ModalWrapper onClose={() => setShowConfirmModal(false)}>
-          <BasicConfirmationModal
-            setShowConfirmModal={setShowConfirmModal}
-            isUpdating={isUpdating}
-            handleSaveChanges={handleSaveChanges}
-            title="Confirm Changes"
-            message="Are you sure you want to save these changes to your profile?"
-          />
-        </ModalWrapper>
+        <ConfirmModal
+          open={showConfirmModal}
+          title="Confirm Change"
+          description="Are you sure you want to save these changes to your profile?"
+          onCancel={() => setShowConfirmModal(false)}
+          onConfirm={handleSaveChanges}
+          loading={isUpdating}
+          confirmText="Save Changes"
+          accent="destructive"
+        />
       )}
     </>
   );

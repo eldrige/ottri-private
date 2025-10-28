@@ -125,7 +125,10 @@ export default function AddressInput({
         );
         const data = res.data as ApiResType;
         setApiResults(data.results);
-        if (formatUSAddress(data.results[0].formatted) === value) {
+        if (
+          data.results.length > 0 &&
+          formatUSAddress(data.results[0].formatted) === value
+        ) {
           handleSelectAddress(data.results[0]);
         } else if (value) {
           handleSelectAddress(null);

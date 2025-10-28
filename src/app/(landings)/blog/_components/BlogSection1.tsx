@@ -8,15 +8,27 @@ import Image from "next/image";
 import React, { useState } from "react";
 import LatestArticles, { CategoryFilter } from "./LatestArticles";
 import Link from "next/link";
+import { useGetArticleQuery } from "../_utils/queries";
 
-export default function BlogSection1({ articles }: { articles: Article[] }) {
+export default function BlogSection1({}: { articles?: Article[] }) {
+  const { data: articles, isLoading } = useGetArticleQuery();
   const [category, setCategory] = useState("All Posts");
-  const [popularArticle] = articles.filter((article) => article.isFeatured);
-  const filteredArticles = articles.filter(
-    (article) =>
-      !article.isFeatured &&
-      (category === "All Posts" ? true : article.category === category)
-  );
+  const [popularArticle] =
+    articles?.filter((article) => article.isFeatured) || [];
+  const filteredArticles =
+    articles?.filter(
+      (article) =>
+        !article.isFeatured &&
+        (category === "All Posts" ? true : article.category === category)
+    ) || [];
+
+  if (isLoading) {
+    return (
+      <div className="py-16 flex justify-center items-center">
+        <p>Loading articles...</p>
+      </div>
+    );
+  }
   return (
     <>
       <section className="py-8 lg:py-24 flex flex-col gap-8">
@@ -24,13 +36,15 @@ export default function BlogSection1({ articles }: { articles: Article[] }) {
           <h2 className="text-heading-3 md:text-heading-2 font-semibold">
             Featured Article
           </h2>
-          <FeaturedArticle {...popularArticle} />
+          {popularArticle && <FeaturedArticle {...popularArticle} />}
         </div>
       </section>
-      <section className="py-8 lg:py-24 flex flex-col gap-12">
-        <CategoryFilter category={category} setCategory={setCategory} />
-        <LatestArticles articlesData={filteredArticles} />
-      </section>
+      {articles && (
+        <section className="py-8 lg:py-24 flex flex-col gap-12">
+          <CategoryFilter category={category} setCategory={setCategory} />
+          <LatestArticles articlesData={filteredArticles} />
+        </section>
+      )}
     </>
   );
 }
@@ -70,7 +84,7 @@ function FeaturedArticle({
           </h2>
         </Link>
         <p className="text-subtitle  text-surface-500 max-w-6xl mx-auto">
-          {description.slice(0, 200)}...
+          {description?.slice(0, 200)}...
         </p>
         <div className="flex flex-col md:flex-row md:items-center gap-4 mt-2 text-surface-500 text-nowrap *:flex *:gap-2 *:items-center">
           <div>

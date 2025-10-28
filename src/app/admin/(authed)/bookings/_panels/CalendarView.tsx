@@ -8,20 +8,24 @@ import { useClientSearchParams } from "@/hooks/useClientSearchParams";
 import { useGetBookingsQuery } from "../../_services/queries";
 import ErrorComponent from "@/app/_components/ErrorComponent";
 import { cn } from "@/lib/utils";
+import { EventSourceInput } from "@fullcalendar/core/index.js";
+import BookingDetails from "../_components/BookingDetails";
 
 export default function CalendarView() {
   const [window, setWindow] = useState({
-    startTime: undefined as string | undefined,
-    endTime: undefined as string | undefined
+    startDate: undefined as string | undefined,
+    endDate: undefined as string | undefined
   });
+
+  const [showDetails, setShowDetails] = useState<string | null>(null);
 
   const statusFilter = useClientSearchParams().searchParams.get("status") || "";
   const getBookingsQuery = useGetBookingsQuery({
     statusFilter,
     limit: 100,
-    startTime: window.startTime,
-    endTime: window.endTime,
-    enabled: !!(window.startTime && window.endTime)
+    startDate: window.startDate,
+    endDate: window.endDate,
+    enabled: !!(window.startDate && window.endDate)
   });
   const bookingsResponse = getBookingsQuery.data;
 
@@ -35,8 +39,11 @@ export default function CalendarView() {
 
   const bookings = bookingsResponse?.data;
 
-  const myEvents = bookings?.map((booking) => ({
-    title: booking.customer?.personalInformation?.fullName || "Guest",
+  const myEvents: EventSourceInput | undefined = bookings?.map((booking) => ({
+    id: booking.id.toString(),
+    title: (
+      booking.guest?.fullName || booking.customer?.personalInformation?.fullName
+    )?.slice(0, 10),
     start: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.startTime}:00:00`,
     end: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.endTime}:00:00`,
     extendedProps: {
@@ -45,7 +52,9 @@ export default function CalendarView() {
           ? "warning"
           : booking.status === "COMPLETED"
             ? "success"
-            : "info"
+            : booking.status === "CANCELLED"
+              ? "error"
+              : "info"
     }
   }));
 
@@ -76,7 +85,8 @@ export default function CalendarView() {
             const statusClasses = {
               info: "bg-info/10 text-info-text",
               warning: "bg-warning/10 text-warning-text",
-              success: "bg-success/10 text-success"
+              success: "bg-success/10 text-success",
+              error: "bg-error/10 text-error"
             };
 
             // Only show time and name
@@ -100,12 +110,21 @@ export default function CalendarView() {
           }}
           datesSet={(arg) => {
             setWindow({
-              startTime: arg.startStr,
-              endTime: arg.endStr
+              startDate: arg.startStr,
+              endDate: arg.endStr
             });
+          }}
+          eventClick={(calData) => {
+            setShowDetails(calData.event._def.publicId);
           }}
         />
       </div>
+      {showDetails && (
+        <BookingDetails
+          bookingId={showDetails}
+          onClose={() => setShowDetails(null)}
+        />
+      )}
     </div>
   );
 }

@@ -16,6 +16,7 @@ import EditIcon from "@/components/icons/EditIcon";
 import EditBooking from "./EditBooking";
 import AssignCleaner from "./AssignCleaner";
 import ConfirmModal from "@/components/common/ConfirmModal";
+import BookingDetails from "./BookingDetails";
 
 interface StatusType {
   label: string;
@@ -39,6 +40,7 @@ export default function ListItem({
   const [editBooking, setEditBooking] = useState(false);
   const [assignCleaners, setAssignCleaners] = useState<Booking | null>(null);
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   const bookingName =
     booking.guest?.fullName ||
@@ -105,9 +107,7 @@ export default function ListItem({
               <p>
                 <span className="font-medium mr-2">Cleaners:</span>
                 {cleaners?.length ? (
-                  cleaners.map((cleaner) => (
-                    <span key={cleaner.id}>{cleaner.fullName}</span>
-                  ))
+                  cleaners.map((i) => i.fullName).join(", ")
                 ) : (
                   <span className="text-error">Unassigned</span>
                 )}
@@ -137,7 +137,7 @@ export default function ListItem({
         </div>
 
         <div className="w-full lg:w-auto">
-          <div className="flex items-start justify-end gap-3 *:flex-1 lg:*:flex-0">
+          <div className="flex items-start justify-end gap-3 *:flex-1 lg:*:flex-0 flex-wrap">
             {booking.customer?.role === "ADMIN" && (
               <Button
                 size="2xs"
@@ -202,6 +202,13 @@ export default function ListItem({
                 Assign Cleaner
               </Button>
             )}
+            <Button
+              size={"2xs"}
+              variant={"secondary"}
+              onClick={() => setShowDetails(true)}
+            >
+              Details
+            </Button>
           </div>
         </div>
       </div>
@@ -216,7 +223,7 @@ export default function ListItem({
       )}
       {confirmCancel && (
         <ConfirmModal
-          accent="distructive"
+          accent="destructive"
           title="Cancel Booking"
           description={`Are you sure you want to cancel booking #${bookingNumber.toString().padStart(3, "0")}? This action cannot be undone.`}
           onCancel={() => setConfirmCancel(false)}
@@ -226,6 +233,12 @@ export default function ListItem({
           }}
           loading={isCancelling}
           open={confirmCancel}
+        />
+      )}
+      {showDetails && (
+        <BookingDetails
+          bookingId={booking.id}
+          onClose={() => setShowDetails(false)}
         />
       )}
     </>

@@ -27,16 +27,13 @@ export default function MyBookingSection3() {
   ];
 
   const [today] = useState(() => new Date().toISOString().split("T")[0]);
-  const [dayAfterToday] = useState(
-    () => new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0]
-  );
 
   const { data: bookings, isLoading: bookingsIsLoading } = useGetBookingsQuery(
     "",
     4,
     page,
     today,
-    `${statusFilter === "today" ? dayAfterToday : ""}`
+    `${statusFilter === "today" ? today : ""}`
   );
 
   const upcomingBookings = bookings ? bookings.data : [];

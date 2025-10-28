@@ -20,13 +20,13 @@ import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
 // Assign cleaner
 async function assignCleaner({
   bookingId,
-  cleanerId
+  cleanerIds
 }: {
   bookingId: string;
-  cleanerId: string;
+  cleanerIds: string[];
 }) {
   const booking = await clientAxios.post(`bookings/${bookingId}/assign`, {
-    cleanerId: +cleanerId
+    cleanerIds: cleanerIds
   });
   return booking.data as Booking;
 }
@@ -36,6 +36,7 @@ export function useAssignCleanerMutation() {
     mutationFn: assignCleaner,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
     }
   });
 }
@@ -51,6 +52,8 @@ export function useCancelBookingMutation() {
     mutationFn: cancelBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -65,6 +68,8 @@ export function useStartBookingMutation() {
     mutationFn: startBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -80,6 +85,8 @@ export function useCompleteBookingMutation() {
     mutationFn: completeBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -100,6 +107,8 @@ export function useUpdateBookingMutation() {
     mutationFn: updateBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -112,6 +121,7 @@ export function useAddBookingMutation() {
       axios.post("/api/submit-order", formData),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
@@ -136,6 +146,8 @@ export function useRescheduleBookingMutation() {
     mutationFn: rescheduleBooking,
     onSuccess: (data) => {
       updateBookingHelper(queryClient, data);
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
     }
   });
 }
