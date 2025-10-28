@@ -107,9 +107,7 @@ export default function ListItem({
               <p>
                 <span className="font-medium mr-2">Cleaners:</span>
                 {cleaners?.length ? (
-                  cleaners.map((cleaner) => (
-                    <span key={cleaner.id}>{cleaner.fullName}</span>
-                  ))
+                  cleaners.map((i) => i.fullName).join(", ")
                 ) : (
                   <span className="text-error">Unassigned</span>
                 )}
@@ -139,7 +137,7 @@ export default function ListItem({
         </div>
 
         <div className="w-full lg:w-auto">
-          <div className="flex items-start justify-end gap-3 *:flex-1 lg:*:flex-0">
+          <div className="flex items-start justify-end gap-3 *:flex-1 lg:*:flex-0 flex-wrap">
             {booking.customer?.role === "ADMIN" && (
               <Button
                 size="2xs"
