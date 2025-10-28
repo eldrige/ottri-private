@@ -1,0 +1,7 @@
+yarn build || 
+    (
+        echo '👋😤 Please fix your build errors'
+        false
+    )
+
+echo '✅✅ You did good... I am pushing this now.✅✅ '
