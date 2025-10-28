@@ -16,7 +16,7 @@ export async function updateProfile({
 }) {
   try {
     console.log("there is something going on here");
-    const response = await clientAxios.patch(`/users/profile/${userId}`, {
+    const response = await clientAxios.patch(`/users/${userId}/profile`, {
       imageUrl,
       fullName,
       phoneNumber,
