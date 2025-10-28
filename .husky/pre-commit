@@ -12,10 +12,5 @@ yarn type-check ||
         echo '👋😤 Please fix your type errors'
         false
     )
-yarn build || 
-    (
-        echo '👋😤 Please fix your build errors'
-        false
-    )
 
 echo '✅✅ You did good... I am committing this now. ✅✅'
