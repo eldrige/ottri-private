@@ -26,13 +26,17 @@ export interface InputProps
   helperText?: string;
   error?: string | boolean;
   labelClassName?: string;
+  icon?: React.ReactNode; // Add icon prop
 }
 
 /**
  * Input component with multiple variants
  */
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, label, error, labelClassName, ...props }, ref) => {
+  (
+    { className, variant, label, error, labelClassName, icon, ...props },
+    ref
+  ) => {
     // If there's an error, force the variant to error
     const inputVariant = error ? "error" : variant;
 
@@ -54,9 +58,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <div className="relative">
+        <div className="relative flex items-center">
+          {icon && (
+            <span className="absolute left-0 pl-3 flex items-center pointer-events-none">
+              {icon}
+            </span>
+          )}
           <input
-            className={cn(inputVariants({ variant: inputVariant }), className)}
+            className={cn(
+              inputVariants({ variant: inputVariant }),
+              icon ? "pl-10" : "",
+              className
+            )}
             ref={ref}
             {...props}
             type={inputType}
