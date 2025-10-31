@@ -1,53 +1,54 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Minus, Plus } from "lucide-react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Transition
+} from "@headlessui/react";
 
 export default function QAndA({
   question,
-  answer,
-  show,
-  onClick
+  answer
 }: {
   question: string;
   answer: string;
-  show?: boolean;
-  onClick?: () => void;
 }) {
-  // const [show, setShow] = useState(false);
   return (
-    <div
-      tabIndex={0}
-      onClick={onClick}
-      className={cn(
-        "flex justify-between items-start p-3 rounded-lg max-w-3xl mx-auto border transition duration-200 border-surface-500/10",
-        !show ? "bg-white text-secondary-700" : "bg-secondary-700 text-white"
-      )}
-    >
-      <div className="flex-1">
-        <p className="font-medium cursor-pointer">{question}</p>
+    <Disclosure>
+      {({ open }) => (
         <div
           className={cn(
-            "overflow-hidden transition-[max-height] duration-200",
-            show ? "max-h-[500px]" : "max-h-0"
+            "flex flex-col p-3 rounded-lg max-w-3xl mx-auto border transition duration-200 border-surface-500/10",
+            !open
+              ? "bg-white text-secondary-700"
+              : "bg-secondary-700 text-white"
           )}
         >
-          <div
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
+          <DisclosureButton className="flex justify-between items-start w-full text-left focus:outline-none">
+            <p className="font-medium">{question}</p>
+            <div
+              className={`cursor-pointer ${open ? "text-white" : "text-surface-500"}`}
+            >
+              {open ? <Minus size={24} /> : <Plus size={24} />}
+            </div>
+          </DisclosureButton>
+
+          <Transition
+            enter="transition duration-200 ease-out"
+            enterFrom="transform scale-95 opacity-0"
+            enterTo="transform scale-100 opacity-100"
+            leave="transition duration-200 ease-out"
+            leaveFrom="transform scale-100 opacity-100"
+            leaveTo="transform scale-95 opacity-0"
           >
-            <p className={"pt-4 max-w-xl text-caption tracking-wider"}>
-              {answer}
-            </p>
-          </div>
+            <DisclosurePanel className="pt-4">
+              <p className="max-w-xl text-caption tracking-wider">{answer}</p>
+            </DisclosurePanel>
+          </Transition>
         </div>
-      </div>
-      <div
-        className={`cursor-pointer ${show ? "text-white" : "text-surface-500"}`}
-      >
-        {show ? <Minus size={24} /> : <Plus size={24} />}
-      </div>
-    </div>
+      )}
+    </Disclosure>
   );
 }
