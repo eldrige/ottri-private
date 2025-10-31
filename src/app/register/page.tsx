@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, FormEvent, Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/Button";
 import {
   LockIcon,
@@ -17,6 +18,8 @@ import Reviewer from "@/assets/reviewer.png";
 import Sparkles from "@/components/icons/Sparkles";
 import Image from "next/image";
 import Link from "next/link";
+import AddressInput from "../(landings)/booking/new/_components/AddressInput";
+import axios, { AxiosError } from "axios";
 
 export default function Signup() {
   return (
@@ -35,59 +38,46 @@ export default function Signup() {
   );
 }
 
+interface FormData {
+  email: string;
+  password: string;
+  fullName: string;
+  phoneNumber: string;
+  address: string;
+  country: string;
+  state: string;
+  zipCode: string;
+  city: string;
+}
+
 function SignupForm() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    fullName: "",
-    phoneNumber: "",
-    address: "",
-    country: "",
-    state: "",
-    zipCode: "",
-    city: ""
-  });
-  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting }
+  } = useForm<FormData>();
   const [error, setError] = useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("from") || "/dashboard";
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const addressValue = watch("address");
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const onSubmit = async (data: FormData) => {
     setError("");
 
     try {
-      const response = await fetch("/api/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Signup failed");
-      }
-
-      // Redirect to login or dashboard
+      await axios.post("/api/user/register", data);
       router.push("/login");
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "An error occurred during signup"
+        err instanceof AxiosError
+          ? err.response?.data.message
+          : "An error occurred during signup"
       );
-      setLoading(false);
     }
   };
 
@@ -127,22 +117,24 @@ function SignupForm() {
           </div>
         )}
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {/* Full Name */}
           <div>
             <div className="mt-1 relative">
               <input
                 id="fullName"
-                name="fullName"
                 type="text"
-                required
-                value={formData.fullName}
                 placeholder="Full Name"
-                onChange={handleInputChange}
+                {...register("fullName", { required: "Full name is required" })}
                 className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <UserIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
+            {errors.fullName && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.fullName.message}
+              </p>
+            )}
           </div>
 
           {/* Email */}
@@ -150,17 +142,25 @@ function SignupForm() {
             <div className="mt-1 relative">
               <input
                 id="email"
-                name="email"
                 type="email"
                 autoComplete="email"
-                required
-                value={formData.email}
                 placeholder="Email"
-                onChange={handleInputChange}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address"
+                  }
+                })}
                 className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <MailIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           {/* Password */}
@@ -168,17 +168,25 @@ function SignupForm() {
             <div className="mt-1 relative">
               <input
                 id="password"
-                name="password"
                 type="password"
                 placeholder="Password"
                 autoComplete="new-password"
-                required
-                value={formData.password}
-                onChange={handleInputChange}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters"
+                  }
+                })}
                 className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <LockIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           {/* Phone Number */}
@@ -186,29 +194,38 @@ function SignupForm() {
             <div className="mt-1 relative">
               <input
                 id="phoneNumber"
-                name="phoneNumber"
                 type="tel"
-                required
-                value={formData.phoneNumber}
                 placeholder="Phone Number"
-                onChange={handleInputChange}
+                {...register("phoneNumber", {
+                  required: "Phone number is required"
+                })}
                 className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <PhoneIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
+            {errors.phoneNumber && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.phoneNumber.message}
+              </p>
+            )}
           </div>
 
           {/* Address */}
           <div>
             <div className="mt-1 relative">
               <input
-                id="address"
-                name="address"
-                type="text"
-                value={formData.address}
+                type="hidden"
+                {...register("address", {
+                  required: "Valid address is required"
+                })}
+              />
+              <AddressInput
                 placeholder="Street Address"
-                onChange={handleInputChange}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+                value={addressValue || ""}
+                onChange={(address) => setValue("address", address || "")}
+                className="appearance-none block w-full py-2 px-0 border-0 rounded-none border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                error={errors.address?.message}
               />
               <MapPinIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
@@ -219,26 +236,30 @@ function SignupForm() {
             <div className="relative">
               <input
                 id="city"
-                name="city"
                 type="text"
-                required
-                value={formData.city}
                 placeholder="City"
-                onChange={handleInputChange}
+                {...register("city", { required: "City is required" })}
                 className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
+              {errors.city && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.city.message}
+                </p>
+              )}
             </div>
             <div className="relative">
               <input
                 id="state"
-                name="state"
                 type="text"
-                required
-                value={formData.state}
                 placeholder="State"
-                onChange={handleInputChange}
+                {...register("state", { required: "State is required" })}
                 className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
+              {errors.state && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.state.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -247,36 +268,40 @@ function SignupForm() {
             <div className="relative">
               <input
                 id="country"
-                name="country"
                 type="text"
-                required
-                value={formData.country}
                 placeholder="Country"
-                onChange={handleInputChange}
+                {...register("country", { required: "Country is required" })}
                 className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
+              {errors.country && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.country.message}
+                </p>
+              )}
             </div>
             <div className="relative">
               <input
                 id="zipCode"
-                name="zipCode"
                 type="text"
-                required
-                value={formData.zipCode}
                 placeholder="Zip Code"
-                onChange={handleInputChange}
+                {...register("zipCode", { required: "Zip code is required" })}
                 className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
+              {errors.zipCode && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.zipCode.message}
+                </p>
+              )}
             </div>
           </div>
 
           <div className="pt-2">
             <Button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
               className="w-full text-[16px] text-[#FFFFFF] flex justify-center py-2 px-4"
             >
-              {loading ? "Creating Account..." : "Sign Up"}
+              {isSubmitting ? "Creating Account..." : "Sign Up"}
             </Button>
           </div>
         </form>
