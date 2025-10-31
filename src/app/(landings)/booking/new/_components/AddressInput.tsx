@@ -7,6 +7,7 @@ import {
   ComboboxOption,
   ComboboxOptions
 } from "@headlessui/react";
+import { cn } from "@/lib/utils";
 
 interface ApiResType {
   results: AddressDetails[];
@@ -57,6 +58,7 @@ interface AddressInputProps {
   required?: boolean;
   label?: string;
   onSelectedAddress?: (address: AddressDetails | null) => void;
+  className?: string;
 }
 
 export default function AddressInput({
@@ -66,7 +68,8 @@ export default function AddressInput({
   error,
   required,
   label,
-  onSelectedAddress
+  onSelectedAddress,
+  className
 }: AddressInputProps) {
   const [searchTerm, setSearchTerm] = useState(value);
   const [apiResults, setApiResults] = useState<AddressDetails[]>([]);
@@ -155,7 +158,7 @@ export default function AddressInput({
   return (
     <div className="relative w-full">
       <Combobox onChange={handleSelectAddress}>
-        <div className="relative w-full">
+        <div className={"relative w-full"}>
           <ComboboxInput
             as={Input}
             value={searchTerm}
@@ -167,12 +170,12 @@ export default function AddressInput({
             required={required}
             label={label}
             aria-label="Address search"
-            className="w-full"
+            className={cn("w-full", className)}
             displayValue={() => searchTerm}
           />
 
           {isLoading && (
-            <div className="absolute right-3 bottom-3 transform">
+            <div className="absolute right-4 bottom-3 transform">
               <div className="animate-spin h-4 w-4 border-2 border-primary-500 rounded-full border-t-transparent"></div>
             </div>
           )}
@@ -180,7 +183,7 @@ export default function AddressInput({
 
         {error && <p className="text-xs text-error mt-1">{error}</p>}
 
-        <ComboboxOptions className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md border border-gray-200 overflow-auto">
+        <ComboboxOptions className="absolute z-10 mt-1 w-full text-secondary-700 bg-white shadow-lg max-h-60 rounded-md border border-gray-200 overflow-auto">
           {apiResults.length === 0 &&
           searchTerm.trim().length >= 3 &&
           !isLoading ? (
