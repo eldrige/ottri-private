@@ -18,7 +18,9 @@ import Reviewer from "@/assets/reviewer.png";
 import Sparkles from "@/components/icons/Sparkles";
 import Image from "next/image";
 import Link from "next/link";
-import AddressInput from "../(landings)/booking/new/_components/AddressInput";
+import AddressInput, {
+  AddressDetails
+} from "../(landings)/booking/new/_components/AddressInput";
 import axios, { AxiosError } from "axios";
 
 export default function Signup() {
@@ -65,6 +67,16 @@ function SignupForm() {
   const redirectPath = searchParams.get("from") || "/dashboard";
 
   const addressValue = watch("address");
+
+  const handleAddress = (address: string | null, result?: AddressDetails) => {
+    setValue("address", address || "");
+    if (result) {
+      setValue("city", result?.city || "");
+      setValue("state", result?.state || "");
+      setValue("country", result?.country || "");
+      setValue("zipCode", result?.postcode || "");
+    }
+  };
 
   const onSubmit = async (data: FormData) => {
     setError("");
@@ -126,7 +138,7 @@ function SignupForm() {
                 type="text"
                 placeholder="Full Name"
                 {...register("fullName", { required: "Full name is required" })}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 pr-5 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <UserIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
@@ -152,7 +164,7 @@ function SignupForm() {
                     message: "Invalid email address"
                   }
                 })}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 pr-5 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <MailIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
@@ -178,7 +190,7 @@ function SignupForm() {
                     message: "Password must be at least 6 characters"
                   }
                 })}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 pr-5 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <LockIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
@@ -199,7 +211,7 @@ function SignupForm() {
                 {...register("phoneNumber", {
                   required: "Phone number is required"
                 })}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 pr-5 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               <PhoneIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
             </div>
@@ -223,8 +235,8 @@ function SignupForm() {
                 placeholder="Street Address"
                 required
                 value={addressValue || ""}
-                onChange={(address) => setValue("address", address || "")}
-                className="appearance-none block w-full py-2 px-0 border-0 rounded-none border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                onChange={handleAddress}
+                className="appearance-none block w-full py-2 px-0 pr-5 border-0 rounded-none border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 error={errors.address?.message}
               />
               <MapPinIcon className="absolute right-0 top-3 h-4 w-4 text-white/80 md:text-secondary-800" />
@@ -239,7 +251,7 @@ function SignupForm() {
                 type="text"
                 placeholder="City"
                 {...register("city", { required: "City is required" })}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 pr-5 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               {errors.city && (
                 <p className="mt-1 text-sm text-red-500">
@@ -253,7 +265,7 @@ function SignupForm() {
                 type="text"
                 placeholder="State"
                 {...register("state", { required: "State is required" })}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 pr-5 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               {errors.state && (
                 <p className="mt-1 text-sm text-red-500">
@@ -271,7 +283,7 @@ function SignupForm() {
                 type="text"
                 placeholder="Country"
                 {...register("country", { required: "Country is required" })}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 pr-5 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               {errors.country && (
                 <p className="mt-1 text-sm text-red-500">
@@ -285,7 +297,7 @@ function SignupForm() {
                 type="text"
                 placeholder="Zip Code"
                 {...register("zipCode", { required: "Zip code is required" })}
-                className="appearance-none block w-full py-2 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none block w-full py-2 pr-5 border-b md:text-secondary-700 text-white border-white/80 placeholder-white/80 md:border-secondary-800 md:placeholder-secondary-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
               {errors.zipCode && (
                 <p className="mt-1 text-sm text-red-500">
