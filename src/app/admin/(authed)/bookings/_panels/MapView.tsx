@@ -1,6 +1,6 @@
 import Map from "@/app/(landings)/_components/Map";
 import { useClientSearchParams } from "@/hooks/useClientSearchParams";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useMapBookingsQuery } from "../../_services/queries";
 import ErrorComponent from "@/app/_components/ErrorComponent";
 import { Loader2 } from "lucide-react";
@@ -13,6 +13,27 @@ export default function MapView() {
 
   const [showDetails, setShowDetails] = useState<number | null>(null);
 
+  const bookings = bookingsResponse?.data;
+
+  const locations = useMemo(
+    () =>
+      bookings
+        ?.filter((b) => b.location)
+        .map((b) => ({
+          id: b.id,
+          title:
+            b.guest?.fullName ||
+            b.customer?.personalInformation?.fullName ||
+            "",
+          status: b.status,
+          position: {
+            lat: b.location!.coordinates[0],
+            lng: b.location!.coordinates[1]
+          }
+        })),
+    [bookings]
+  );
+
   if (mapBookings.error)
     return (
       <ErrorComponent error={mapBookings.error} reset={mapBookings.refetch} />
@@ -21,20 +42,6 @@ export default function MapView() {
   if (!bookingsResponse)
     return <Loader2 className="animate-spin size-6 mx-auto my-8" />;
 
-  const bookings = bookingsResponse.data;
-
-  const locations = bookings
-    .filter((b) => b.location)
-    .map((b) => ({
-      id: b.id,
-      title:
-        b.guest?.fullName || b.customer?.personalInformation?.fullName || "",
-      status: b.status,
-      position: {
-        lat: b.location!.coordinates[0],
-        lng: b.location!.coordinates[1]
-      }
-    }));
   return (
     <div className="mt-4 lg:mt-8 p-4 lg:p-6 border border-black/10 rounded-lg">
       <h4 className="text-heading-5 text-center lg:text-start">
