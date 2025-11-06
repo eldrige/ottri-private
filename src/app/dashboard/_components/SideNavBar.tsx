@@ -61,8 +61,10 @@ export default function SideNavBar({ user }: { user: User }) {
         <div className="flex items-center border-t border-secondary-800/25 pt-2 pb-2 gap-4">
           <Image
             className="rounded-full size-12"
-            src={userImage}
+            src={user.personalInformation?.imageUrl || userImage}
             alt={"user profile"}
+            width={500}
+            height={500}
           />
           <Link
             href={"/dashboard/profile"}

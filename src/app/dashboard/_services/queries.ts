@@ -17,7 +17,7 @@ export function useGetBookingsQuery(
     queryFn: () =>
       axios
         .get(
-          `/api/bookings?limit=${limit}&status=${statusFilter}&page=${page}${dateFilter}`
+          `/api/bookings?limit=${limit}${statusFilter ? `&status=${statusFilter}` : ""}&page=${page}${dateFilter}`
         )
         .then((i) => i.data) as Promise<{
         limit: number;
