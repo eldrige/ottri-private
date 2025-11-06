@@ -1,3 +1,5 @@
+echo '🥽⚒💻😎 Lets check your code a little bit before pushing'
+
 yarn build || 
     (
         echo '👋😤 Please fix your build errors'

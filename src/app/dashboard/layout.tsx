@@ -26,7 +26,7 @@ export default function RootLayout({
         <section className="hidden md:block fixed flex-15/100 h-full">
           <SideNavBar user={profile || {}} />
         </section>
-        <section className="flex-85/100 ml-[16%] overflow-y-auto pt-0.5 pb-2">
+        <section className="flex-85/100 md:ml-[16%] overflow-y-auto pt-0.5 pb-2">
           {children}
         </section>
       </div>

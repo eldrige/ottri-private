@@ -1,27 +1,36 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { teamMembers } from "@/lib/sampleData";
-import { TeamMember } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import StarIcon from "@/components/icons/StarIcon";
 import ClockIcon from "@/components/icons/ClockIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useCleanersQuery } from "@/app/admin/(authed)/_services/queries";
+import { Cleaner } from "@/app/admin/types";
+import Skeleton from "@/components/ui/Skeleton";
+import Link from "next/link";
 
 export default function OurTeamSection1() {
+  const { data: cleaners, error } = useCleanersQuery({});
+
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // if (!cleaners) return null
+
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % teamMembers.length);
+    if (!cleaners) return;
+    setCurrentSlide((prev) => (prev + 1) % cleaners.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + teamMembers.length) % teamMembers.length
-    );
+    if (!cleaners) return;
+    setCurrentSlide((prev) => (prev - 1 + cleaners.length) % cleaners.length);
   };
+
+  if (error || cleaners?.length === 0) return null;
+
   return (
     <section className="py-8 lg:py-24 flex flex-col gap-8">
       <div className="text-center flex flex-col justify-center items-center space-y-4">
@@ -32,9 +41,12 @@ export default function OurTeamSection1() {
           Our most experienced and highly-rated cleaning professionals
         </p>
       </div>
-
       <div className="hidden lg:grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {teamMembers.map((member) => (
+        {!cleaners &&
+          [1, 2, 3, 4, 5].map((i) => (
+            <Skeleton key={i} className="aspect-[9/11]" />
+          ))}
+        {cleaners?.map((member) => (
           <TeamMemberCard key={member.id} member={member} />
         ))}
       </div>
@@ -45,7 +57,8 @@ export default function OurTeamSection1() {
             className="flex transition-transform duration-300 ease-in-out"
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
-            {teamMembers.map((member, index) => (
+            {!cleaners && <Skeleton className="w-full aspect-[9/16]" />}
+            {cleaners?.map((member, index) => (
               <div key={index} className="w-full flex-shrink-0">
                 <TeamMemberCard key={member.id} member={member} />
               </div>
@@ -53,7 +66,7 @@ export default function OurTeamSection1() {
           </div>
         </div>
         <div className="flex justify-center gap-1">
-          {teamMembers.map((_, index) => (
+          {cleaners?.map((_, index) => (
             <span
               key={index}
               className={cn(
@@ -64,39 +77,41 @@ export default function OurTeamSection1() {
             />
           ))}
         </div>
-        <div className="flex justify-center gap-4">
-          <button
-            disabled={currentSlide === 0}
-            className={cn(
-              "*:h-6 *:w-6 transition-colors",
-              currentSlide === 0
-                ? "text-secondary-700/30"
-                : "text-primary-700 cursor-pointer"
-            )}
-            onClick={prevSlide}
-          >
-            <ArrowLeft />
-          </button>
-          <button
-            disabled={currentSlide === teamMembers.length - 1}
-            className={cn(
-              "*:h-6 *:w-6 transition-colors",
-              currentSlide === teamMembers.length - 1
-                ? "text-secondary-700/30"
-                : "text-primary-700 cursor-pointer"
-            )}
-            onClick={nextSlide}
-          >
-            <ArrowRight />
-          </button>
-        </div>
+        {cleaners && (
+          <div className="flex justify-center gap-4">
+            <button
+              disabled={currentSlide === 0}
+              className={cn(
+                "*:h-6 *:w-6 transition-colors",
+                currentSlide === 0
+                  ? "text-secondary-700/30"
+                  : "text-primary-700 cursor-pointer"
+              )}
+              onClick={prevSlide}
+            >
+              <ArrowLeft />
+            </button>
+            <button
+              disabled={currentSlide === cleaners.length - 1}
+              className={cn(
+                "*:h-6 *:w-6 transition-colors",
+                currentSlide === cleaners.length - 1
+                  ? "text-secondary-700/30"
+                  : "text-primary-700 cursor-pointer"
+              )}
+              onClick={nextSlide}
+            >
+              <ArrowRight />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
 interface TeamMemberCardProps {
-  member: TeamMember;
+  member: Cleaner;
 }
 
 export function TeamMemberCard({ member }: TeamMemberCardProps) {
@@ -104,8 +119,10 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
     <div className="relative rounded-xl overflow-hidden shadow-md group">
       {/* Background Image */}
       <Image
-        src={member.coverSrc}
-        alt={member.name}
+        src={member.profile}
+        width={400}
+        height={500}
+        alt={`${member.fullName}'s profile image`}
         className="w-full aspect-[2/2.5] object-cover transition-transform duration-300 group-hover:scale-105"
       />
 
@@ -135,25 +152,31 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
       >
         <div className="flex flex-col gap-3">
           <h3 className="text-white text-heading-3 md:text-heading-2 font-normal">
-            {member.name}
+            {member.fullName}
           </h3>
-          <p className="text-white text-subtitle">{member.role}</p>
+          <p className="text-white text-subtitle capitalize">
+            {member.user.role.toLowerCase()}
+          </p>
 
           <div className="flex *:flex *:gap-1.25 *:items-center items-center gap-4 mt-2 text-white text-[16px]">
             <div>
               <StarIcon />
-              <span>{`${member.averageRatings} (${member.numberOfRantings})`}</span>
+              <span>{`${member.stats.averageRating} (${member.stats.totalBookings})`}</span>
             </div>
-            <div>
+            <div className="capitalize">
               <ClockIcon className="text-primary-700" />
-              <span>{member.experience} Years</span>
+              <span>{member.experience}</span>
             </div>
           </div>
 
-          <div className="flex gap-1.25 items-center">
-            <LocationIcon className="text-primary-700" />
-            <p className="text-white text-[16px]">{member.location}</p>
-          </div>
+          {member.serviceAreas.length > 0 && (
+            <div className="flex gap-1.25 items-center">
+              <LocationIcon className="text-primary-700" />
+              <p className="text-white text-[16px]">
+                {member.serviceAreas.map((i) => i.name).join(", ")}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">
@@ -175,12 +198,14 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
             )}
           </div>
         </div>
-        <Button
-          size={"sm"}
-          className="w-full text-[16px] font-medium cursor-pointer border-primary-700"
-        >
-          View Profile
-        </Button>
+        <Link href={`/our-team/${member.id}`}>
+          <Button
+            size={"sm"}
+            className="w-full text-[16px] font-medium cursor-pointer border-primary-700"
+          >
+            View Profile
+          </Button>
+        </Link>
       </div>
     </div>
   );
