@@ -11,7 +11,11 @@ import {
   AddCleanerForm
 } from "@/app/admin/types";
 import axios from "axios";
-import { TimeSlot } from "@/app/(landings)/booking/new/types";
+import {
+  ArticleType,
+  NewArticleType,
+  TimeSlot
+} from "@/app/(landings)/booking/new/types";
 import { clientAxios } from "@/lib/axios";
 import { getSlotBody } from "../_utils/timeSlots";
 import { TimeSlotFormDataType } from "@/lib/types";
@@ -325,6 +329,16 @@ export function useDeleteCleanerMutation() {
     },
     onSuccess: (data) => {
       deleteCleanerHelper(queryClient, data);
+    }
+  });
+}
+
+// Articles
+export function useCreateArticleMutation() {
+  return useMutation({
+    mutationFn: async (body: NewArticleType) => {
+      const { data } = await clientAxios.post<ArticleType>("articles", body);
+      return data;
     }
   });
 }

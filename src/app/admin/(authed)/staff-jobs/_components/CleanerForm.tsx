@@ -10,7 +10,7 @@ import { ImageUpload } from "@/app/_components/ImageUpload";
 import { ImageListType } from "react-images-uploading";
 import { TagInput } from "@/components/ui/TagInput";
 
-interface SlotFormProps {
+interface CleanerFormProps {
   formData: AddCleanerForm;
   setField: (field: keyof AddCleanerForm, value: unknown) => void;
   errors: {
@@ -54,7 +54,7 @@ export default function CleanerForm({
   errors,
   image,
   setImage
-}: SlotFormProps) {
+}: CleanerFormProps) {
   const { data: serviceAreas } = useServiceAreasQuery();
 
   // Handle multiple selection items

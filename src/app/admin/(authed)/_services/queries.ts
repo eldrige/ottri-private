@@ -1,4 +1,8 @@
-import { ServiceAddOn, TimeSlot } from "@/app/(landings)/booking/new/types";
+import {
+  ArticleType,
+  ServiceAddOn,
+  TimeSlot
+} from "@/app/(landings)/booking/new/types";
 import {
   Booking,
   BookingsResponse,
@@ -145,5 +149,14 @@ export function useServiceAddOnsQuery() {
     queryKey: ["add-ons"],
     queryFn: () =>
       axiosInstance.get<ServiceAddOn[]>("service-addons").then((i) => i.data)
+  });
+}
+
+// Blogs
+export function useArticlesQuery() {
+  return useQuery({
+    queryKey: ["articles"],
+    queryFn: () =>
+      clientAxios.get<ArticleType[]>("articles").then((i) => i.data)
   });
 }

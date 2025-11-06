@@ -51,3 +51,40 @@ interface SpecificType {
   updatedAt: string;
   deletedAt: null;
 }
+
+export interface ArticleType {
+  id: number;
+  title: string;
+  isFeatured: boolean;
+  excerpt: string;
+  category: string;
+  thumbnail: string;
+  author: string;
+  isPublished: boolean;
+  content: string;
+  tags: string[];
+  publicationDate: string;
+  publisherId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  publisher: {
+    id: number;
+    personalInformation: null;
+  };
+  readingTime: number;
+  status: "PUBLISHED" | "SCHEDULED" | "DRAFT";
+}
+
+export interface NewArticleType {
+  isFeatured: boolean;
+  tags: string[];
+  title: string;
+  excerpt: string;
+  category: string;
+  thumbnail: string;
+  author: string;
+  isPublished: boolean;
+  content: string;
+  publicationDate: string;
+}
