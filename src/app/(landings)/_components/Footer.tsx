@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import XIcon from "@/components/icons/XIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
-import ChatIcon from "@/components/icons/ChatIcon";
+// import ChatIcon from "@/components/icons/ChatIcon";
 import Link from "next/link";
 
 export default function Footer() {
@@ -85,17 +85,17 @@ const CompanySection = () => (
   </div>
 );
 
-const LiveChatButton = () => {
-  return (
-    <Link
-      href={"/"}
-      className="flex items-center justify-center gap-2  text-primary-700 bg-white  px-4 py-2.5 rounded-lg  transition-colors"
-    >
-      <ChatIcon />
-      <span className="text-primary-700 ">Live chat support</span>
-    </Link>
-  );
-};
+// const LiveChatButton = () => {
+//   return (
+//     <Link
+//       href={"/"}
+//       className="flex items-center justify-center gap-2  text-primary-700 bg-white  px-4 py-2.5 rounded-lg  transition-colors"
+//     >
+//       <ChatIcon />
+//       <span className="text-primary-700 ">Live chat support</span>
+//     </Link>
+//   );
+// };
 
 const CTASection = () => (
   <div className="flex-1 flex flex-col gap-4">
@@ -109,7 +109,7 @@ const CTASection = () => (
           Book a cleaning now
         </Button>
       </Link>
-      <LiveChatButton />
+      {/* <LiveChatButton /> */}
     </div>
     <div className="flex flex-col items-center md:items-start gap-1">
       <p className="text-surface-300">Follow us</p>
