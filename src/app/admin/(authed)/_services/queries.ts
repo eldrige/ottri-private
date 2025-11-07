@@ -157,6 +157,8 @@ export function useArticlesQuery() {
   return useQuery({
     queryKey: ["articles"],
     queryFn: () =>
-      clientAxios.get<ArticleType[]>("articles").then((i) => i.data)
+      clientAxios
+        .get<ArticleType[]>("articles?published=false")
+        .then((i) => i.data)
   });
 }

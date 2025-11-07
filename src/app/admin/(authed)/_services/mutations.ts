@@ -347,6 +347,25 @@ export function useCreateArticleMutation() {
   });
 }
 
+export function useUpdateArticleMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      articleId,
+      ...body
+    }: { articleId: number } & Partial<NewArticleType>) => {
+      const { data } = await clientAxios.patch<ArticleType>(
+        `articles/${articleId}`,
+        body
+      );
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    }
+  });
+}
+
 // HELPERS
 
 // Bookings Helpers
