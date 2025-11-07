@@ -335,10 +335,14 @@ export function useDeleteCleanerMutation() {
 
 // Articles
 export function useCreateArticleMutation() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (body: NewArticleType) => {
       const { data } = await clientAxios.post<ArticleType>("articles", body);
       return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
     }
   });
 }

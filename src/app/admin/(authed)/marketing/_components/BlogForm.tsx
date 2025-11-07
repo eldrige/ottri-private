@@ -8,13 +8,15 @@ import { TagInput } from "@/components/ui/TagInput";
 
 interface AddBlogForm {
   title: string;
-  feature: string;
+  category: string;
   excerpt: string;
   author: string;
-  status: string;
-  featuredImage: string;
+  isPublished: boolean;
+  thumbnail: string;
   content: string;
   tags: string[];
+  isFeatured: boolean;
+  publicationDate: string;
 }
 
 interface BlogFormProps {
@@ -27,8 +29,8 @@ interface BlogFormProps {
   setImage: (value: ImageListType) => void;
 }
 
-// Feature options
-const featureOptions = [
+// Category options (updated from feature)
+const categoryOptions = [
   { label: "Home Cleaning", value: "home-cleaning" },
   { label: "Deep Cleaning", value: "deep-cleaning" },
   { label: "Office Cleaning", value: "office-cleaning" },
@@ -36,11 +38,10 @@ const featureOptions = [
   { label: "Move-in/Move-out", value: "move-cleaning" }
 ];
 
-// Status options
+// Publication status options
 const statusOptions = [
-  { label: "Draft", value: "draft" },
-  { label: "Published", value: "published" },
-  { label: "Scheduled", value: "scheduled" }
+  { label: "Draft", value: "" },
+  { label: "Published", value: "true" }
 ];
 
 export default function BlogForm({
@@ -50,9 +51,10 @@ export default function BlogForm({
   image,
   setImage
 }: BlogFormProps) {
+  console.log(formData);
   return (
     <form className="space-y-6">
-      {/* Title and Feature */}
+      {/* Title and Category */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
           <label className="block mb-2 font-medium text-secondary-700">
@@ -68,16 +70,16 @@ export default function BlogForm({
         </div>
         <div>
           <label className="block mb-2 font-medium text-secondary-700">
-            Feature *
+            Category *
           </label>
           <Select
             accent="secondary"
-            placeholder="Select blog feature"
-            options={featureOptions}
-            value={featureOptions.find((i) => i.value === formData.feature)}
-            onChange={(value) => setField("feature", value.value)}
+            placeholder="Select blog category"
+            options={categoryOptions}
+            value={categoryOptions.find((i) => i.value === formData.category)}
+            onChange={(value) => setField("category", value.value)}
             className="w-full"
-            error={errors.feature}
+            error={errors.category}
           />
         </div>
       </div>
@@ -97,7 +99,7 @@ export default function BlogForm({
         />
       </div>
 
-      {/* Author and Status */}
+      {/* Author and Publication Status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
           <label className="block mb-2 font-medium text-secondary-700">
@@ -113,17 +115,33 @@ export default function BlogForm({
         </div>
         <div>
           <label className="block mb-2 font-medium text-secondary-700">
-            Status *
+            Publication Status *
           </label>
           <Select
             accent="secondary"
             placeholder="Draft"
             options={statusOptions}
-            value={statusOptions.find((i) => i.value === formData.status)}
-            onChange={(value) => setField("status", value.value)}
+            value={statusOptions.find(
+              (i) => !!i.value === formData.isPublished
+            )}
+            onChange={(value) => setField("isPublished", !!value.value)}
             className="w-full"
           />
         </div>
+      </div>
+
+      {/* Featured Toggle */}
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          id="isFeatured"
+          checked={formData.isFeatured}
+          onChange={(e) => setField("isFeatured", e.target.checked)}
+          className="w-4 h-4 text-secondary-600 bg-gray-100 border-gray-300 rounded focus:ring-secondary-500"
+        />
+        <label htmlFor="isFeatured" className="font-medium text-secondary-700">
+          Featured Article
+        </label>
       </div>
 
       {/* Featured Image */}
@@ -135,8 +153,8 @@ export default function BlogForm({
           <ImageUpload
             image={image}
             setImage={setImage}
-            placeholderImageUrl={formData.featuredImage}
-            error={errors.featuredImage}
+            placeholderImageUrl={formData.thumbnail}
+            error={errors.thumbnail}
           />
         </div>
       </div>

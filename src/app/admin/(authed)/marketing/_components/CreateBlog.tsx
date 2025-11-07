@@ -6,28 +6,37 @@ import ModalWrapper from "@/components/common/ModalWrapper";
 import BlogForm from "./BlogForm";
 import { ImageListType } from "react-images-uploading";
 import { uploadImage } from "@/utils/uploadImage";
+import { useCreateArticleMutation } from "../../_services/mutations";
+import { NewArticleType } from "@/app/(landings)/booking/new/types";
+import { addDays } from "date-fns";
 
 interface AddBlogForm {
   title: string;
-  feature: string;
+  category: string;
   excerpt: string;
   author: string;
-  status: string;
-  featuredImage: string;
+  isPublished: boolean;
+  thumbnail: string;
   content: string;
   tags: string[];
+  isFeatured: boolean;
+  publicationDate: string;
 }
 
 export default function CreateBlog({ onClose }: { onClose: () => void }) {
+  const { mutateAsync } = useCreateArticleMutation();
+
   const [blogData, setBlogData] = useState<AddBlogForm>({
     title: "",
-    feature: "",
+    category: "",
     excerpt: "",
     author: "",
-    status: "draft",
-    featuredImage: "",
+    isPublished: false,
+    thumbnail: "",
     content: "",
-    tags: []
+    tags: [],
+    isFeatured: false,
+    publicationDate: addDays(new Date(), 2).toISOString()
   });
 
   const [image, setImage] = useState<ImageListType>([]);
@@ -50,7 +59,7 @@ export default function CreateBlog({ onClose }: { onClose: () => void }) {
     setImage(image);
     setErrors((prev) => {
       const updated = { ...prev };
-      delete updated["featuredImage"];
+      delete updated["thumbnail"];
       return updated;
     });
   };
@@ -60,14 +69,14 @@ export default function CreateBlog({ onClose }: { onClose: () => void }) {
 
     // Required fields
     if (!blogData.title) newErrors.title = "Title is required";
-    if (!blogData.feature) newErrors.feature = "Feature is required";
+    if (!blogData.category) newErrors.category = "Category is required";
     if (!blogData.excerpt) newErrors.excerpt = "Excerpt is required";
     if (!blogData.author) newErrors.author = "Author is required";
     if (!blogData.content) newErrors.content = "Content is required";
 
     // Featured image validation
-    if (image.length === 0 && !blogData.featuredImage) {
-      newErrors.featuredImage = "Featured image is required";
+    if (image.length === 0 && !blogData.thumbnail) {
+      newErrors.thumbnail = "Featured image is required";
     }
 
     setErrors(newErrors);
@@ -84,21 +93,27 @@ export default function CreateBlog({ onClose }: { onClose: () => void }) {
 
     try {
       // Upload image
-      let imageUrl = blogData.featuredImage;
+      let imageUrl = blogData.thumbnail;
       if (image[0]?.file && !imageUrl) {
         const imageData = await uploadImage(image[0].file);
-        setField("featuredImage", imageData.data.url);
         imageUrl = imageData.data.url;
       }
 
-      // Format the data according to the expected API structure
-      const formData = {
-        ...blogData,
-        featuredImage: imageUrl
+      // Format the data according to NewArticleType
+      const formData: NewArticleType = {
+        title: blogData.title,
+        category: blogData.category,
+        excerpt: blogData.excerpt,
+        author: blogData.author,
+        isPublished: blogData.isPublished,
+        thumbnail: imageUrl,
+        content: blogData.content,
+        tags: blogData.tags,
+        isFeatured: blogData.isFeatured,
+        publicationDate: blogData.publicationDate
       };
 
-      // Send data to the API (replace with actual blog creation mutation)
-      console.log("Creating blog post:", formData);
+      await mutateAsync(formData);
       onClose();
     } catch (error: any) {
       console.error("Failed to create blog post:", error);
