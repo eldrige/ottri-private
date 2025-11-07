@@ -5,30 +5,18 @@ import { Textarea } from "@/components/ui/Textarea";
 import { ImageUpload } from "@/app/_components/ImageUpload";
 import { ImageListType } from "react-images-uploading";
 import { TagInput } from "@/components/ui/TagInput";
-
-interface AddBlogForm {
-  title: string;
-  category: string;
-  excerpt: string;
-  author: string;
-  isPublished: boolean;
-  thumbnail: string;
-  content: string;
-  tags: string[];
-  isFeatured: boolean;
-  publicationDate: string;
-}
+import { NewArticleType } from "@/app/(landings)/booking/new/types";
+import { DateInput } from "@/components/ui/DateInput";
 
 interface BlogFormProps {
-  formData: AddBlogForm;
-  setField: (field: keyof AddBlogForm, value: unknown) => void;
+  formData: NewArticleType;
+  setField: (field: keyof NewArticleType, value: unknown) => void;
   errors: {
-    [key in keyof AddBlogForm]?: string;
+    [key in keyof NewArticleType]?: string;
   };
   image: ImageListType;
   setImage: (value: ImageListType) => void;
 }
-
 // Category options (updated from feature)
 const categoryOptions = [
   { label: "Home Cleaning", value: "home-cleaning" },
@@ -51,7 +39,6 @@ export default function BlogForm({
   image,
   setImage
 }: BlogFormProps) {
-  console.log(formData);
   return (
     <form className="space-y-6">
       {/* Title and Category */}
@@ -99,7 +86,7 @@ export default function BlogForm({
         />
       </div>
 
-      {/* Author and Publication Status */}
+      {/* Author, Publication Status and Publication Date */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
           <label className="block mb-2 font-medium text-secondary-700">
@@ -126,6 +113,26 @@ export default function BlogForm({
             )}
             onChange={(value) => setField("isPublished", !!value.value)}
             className="w-full"
+          />
+        </div>
+        <div>
+          <label className="block mb-2 font-medium text-secondary-700">
+            Publication Date *
+          </label>
+          <DateInput
+            value={
+              formData.publicationDate
+                ? new Date(formData.publicationDate)
+                : null
+            }
+            onChange={(date) =>
+              setField("publicationDate", date?.toISOString() || "")
+            }
+            placeholder="Select publication date"
+            unavailableDates={new Set()}
+            availableWeekdays={new Set([0, 1, 2, 3, 4, 5, 6])}
+            accent="secondary"
+            error={errors.publicationDate}
           />
         </div>
       </div>

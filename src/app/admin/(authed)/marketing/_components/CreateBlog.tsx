@@ -8,8 +8,7 @@ import { ImageListType } from "react-images-uploading";
 import { uploadImage } from "@/utils/uploadImage";
 import { useCreateArticleMutation } from "../../_services/mutations";
 import { NewArticleType } from "@/app/(landings)/booking/new/types";
-import { addDays } from "date-fns";
-
+// TODO: MAKE DATE MANDATORY
 interface AddBlogForm {
   title: string;
   category: string;
@@ -36,7 +35,7 @@ export default function CreateBlog({ onClose }: { onClose: () => void }) {
     content: "",
     tags: [],
     isFeatured: false,
-    publicationDate: addDays(new Date(), 2).toISOString()
+    publicationDate: ""
   });
 
   const [image, setImage] = useState<ImageListType>([]);
