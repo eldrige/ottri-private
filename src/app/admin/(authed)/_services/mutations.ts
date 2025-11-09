@@ -341,8 +341,8 @@ export function useCreateArticleMutation() {
       const { data } = await clientAxios.post<ArticleType>("articles", body);
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["articles"] });
     }
   });
 }
@@ -360,8 +360,20 @@ export function useUpdateArticleMutation() {
       );
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["articles"] });
+    }
+  });
+}
+
+export function useDeleteArticleMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ articleId }: { articleId: string | number }) => {
+      await clientAxios.delete(`articles/${articleId}`);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["articles"] });
     }
   });
 }

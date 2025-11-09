@@ -9,9 +9,14 @@ import { EyeIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import EditBlog from "./EditBlog";
+import ConfirmModal from "@/components/common/ConfirmModal";
+import { useDeleteArticleMutation } from "../../_services/mutations";
 
 export default function BlogCard({ article }: { article: ArticleType }) {
+  const { mutateAsync, isPending } = useDeleteArticleMutation();
+
   const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   return (
     <div className="flex flex-col p-4 space-y-6 border rounded-lg border-black/10">
       <Image
@@ -88,6 +93,7 @@ export default function BlogCard({ article }: { article: ArticleType }) {
           Edit
         </Button>
         <Button
+          onClick={() => setShowDelete(true)}
           variant={"destructive"}
           size={"2xs"}
           className="flex items-center justify-center gap-1"
@@ -98,6 +104,18 @@ export default function BlogCard({ article }: { article: ArticleType }) {
       </div>
       {showEdit && (
         <EditBlog article={article} onClose={() => setShowEdit(false)} />
+      )}
+      {showDelete && (
+        <ConfirmModal
+          onCancel={() => setShowDelete(false)}
+          onConfirm={() => mutateAsync({ articleId: article.id })}
+          open={showDelete}
+          confirmText="Delete"
+          title="Confirm Deletion"
+          description="Are you sure you want to delete this blog post? This action cannot be undone."
+          accent="destructive"
+          loading={isPending}
+        />
       )}
     </div>
   );
