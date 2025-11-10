@@ -34,13 +34,15 @@ export default function BlogCard({ article }: { article: ArticleType }) {
             <CheckBrokenIcon className="size-4 text-success" />
           )}
           <span
-            className={`px-3 py-1 text-sm rounded-lg ${
+            className={`px-3 py-1 text-sm rounded-lg capitalize ${
               article.status === "PUBLISHED"
                 ? "text-success bg-success/10"
-                : "text-info-text bg-info/15"
+                : article.status === "SCHEDULED"
+                  ? " text-info-text bg-info/15"
+                  : "bg-secondary-700/10"
             }`}
           >
-            {article.status === "PUBLISHED" ? "Published" : "Scheduled"}
+            {article.status.toLowerCase()}
           </span>
         </div>
         <p className="mt-2 text-xs text-secondary-700/70">
