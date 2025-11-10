@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/Input";
-import React from "react";
+import React, { useState } from "react";
 import Select from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { ImageUpload } from "@/app/_components/ImageUpload";
@@ -7,6 +7,8 @@ import { ImageListType } from "react-images-uploading";
 import { TagInput } from "@/components/ui/TagInput";
 import { NewArticleType } from "@/app/(landings)/booking/new/types";
 import { DateInput } from "@/components/ui/DateInput";
+import { Button } from "@/components/ui/Button";
+import PreviewMD from "./PreviewMD";
 
 interface BlogFormProps {
   formData: NewArticleType;
@@ -39,6 +41,8 @@ export default function BlogForm({
   image,
   setImage
 }: BlogFormProps) {
+  const [showPreview, setShowPreview] = useState(false);
+
   return (
     <form className="space-y-6">
       {/* Title and Category */}
@@ -169,16 +173,28 @@ export default function BlogForm({
       {/* Content */}
       <div>
         <label className="block mb-2 font-medium text-secondary-700">
-          Content *
+          Content *{" "}
+          <span className="text-sm text-gray-500">(Markdown supported)</span>
         </label>
         <Textarea
-          placeholder="Write your blog content here"
+          placeholder="Write your blog content here using Markdown syntax..."
           value={formData.content}
           onChange={(e) => setField("content", e.target.value)}
           className="w-full p-4 rounded-lg bg-gray-50"
           rows={8}
           error={errors.content}
         />
+        <div className="flex pt-4">
+          <Button
+            type="button"
+            variant="secondary-outline"
+            onClick={() => setShowPreview(true)}
+            disabled={!formData.title || !formData.content}
+            size={"2xs"}
+          >
+            Preview Content
+          </Button>
+        </div>
       </div>
 
       {/* Tags */}
@@ -193,6 +209,13 @@ export default function BlogForm({
           error={errors.tags}
         />
       </div>
+
+      {showPreview && (
+        <PreviewMD
+          content={formData.content}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </form>
   );
 }

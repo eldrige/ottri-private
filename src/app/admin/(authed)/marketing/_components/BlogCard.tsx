@@ -11,12 +11,14 @@ import React, { useState } from "react";
 import EditBlog from "./EditBlog";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import { useDeleteArticleMutation } from "../../_services/mutations";
+import PreviewBlog from "./PreviewBlog";
 
 export default function BlogCard({ article }: { article: ArticleType }) {
   const { mutateAsync, isPending } = useDeleteArticleMutation();
 
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   return (
     <div className="flex flex-col p-4 space-y-6 border rounded-lg border-black/10">
       <Image
@@ -78,6 +80,7 @@ export default function BlogCard({ article }: { article: ArticleType }) {
 
       <div className="flex *:flex-1 gap-4">
         <Button
+          onClick={() => setShowPreview(true)}
           variant={"secondary-outline"}
           size={"2xs"}
           className="flex items-center justify-center gap-1 border-black/10"
@@ -118,6 +121,9 @@ export default function BlogCard({ article }: { article: ArticleType }) {
           accent="destructive"
           loading={isPending}
         />
+      )}
+      {showPreview && (
+        <PreviewBlog article={article} onClose={() => setShowPreview(false)} />
       )}
     </div>
   );
