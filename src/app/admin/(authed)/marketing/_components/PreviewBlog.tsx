@@ -54,10 +54,14 @@ export default function PreviewBlog({
         {/* Article Content */}
         {/* Header Info */}
         <div className="flex items-center gap-4 text-sm text-secondary-700/70">
-          <span>
-            Published on {format(article.publicationDate, "MMMM d, y")}
-          </span>
-          <span className="w-2 rounded-full aspect-square bg-surface-300" />
+          {article.status === "PUBLISHED" && (
+            <>
+              <span>
+                Published on {format(article.publicationDate, "MMMM d, y")}
+              </span>
+              <span className="w-2 rounded-full aspect-square bg-surface-300" />
+            </>
+          )}
           <span>by {article.author}</span>
           <span className="w-2 rounded-full aspect-square bg-surface-300" />
           <span>{Math.floor(Math.random() * 9999)} views</span>
