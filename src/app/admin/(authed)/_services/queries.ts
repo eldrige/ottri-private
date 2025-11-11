@@ -153,12 +153,12 @@ export function useServiceAddOnsQuery() {
 }
 
 // Blogs
-export function useArticlesQuery() {
+export function useArticlesQuery({ status }: { status?: string } = {}) {
+  const sp = new URLSearchParams();
+  if (status) sp.append("status", status);
   return useQuery({
-    queryKey: ["articles"],
+    queryKey: ["articles", { status }],
     queryFn: () =>
-      clientAxios
-        .get<ArticleType[]>("articles?published=false")
-        .then((i) => i.data)
+      clientAxios.get<ArticleType[]>(`articles?${sp}`).then((i) => i.data)
   });
 }

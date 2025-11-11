@@ -6,17 +6,25 @@ import React, { useState } from "react";
 import BlogCard from "../_components/BlogCard";
 import CreateBlog from "../_components/CreateBlog";
 import { useArticlesQuery } from "../../_services/queries";
+import Skeleton from "@/components/ui/Skeleton";
+import ErrorComponent from "@/app/_components/ErrorComponent";
 
 const filterOptions = [
   { value: "", label: "All Status" },
   { value: "PUBLISHED", label: "Published" },
-  { value: "DRAFT", label: "Draft" },
-  { value: "ARCHIVED", label: "Archived" }
+  { value: "SCHEDULED", label: "Scheduled" },
+  { value: "DRAFT", label: "Draft" }
 ];
 
 export default function BlogsPanel() {
   const [showAdd, setShowAdd] = useState(false);
-  const { data: articles } = useArticlesQuery();
+  const [statusFilter, setStatusFilter] = useState(filterOptions[0]);
+
+  const {
+    data: articles,
+    error,
+    refetch
+  } = useArticlesQuery({ status: statusFilter.value });
   return (
     <div>
       <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8">
@@ -24,7 +32,8 @@ export default function BlogsPanel() {
           <Filter className="size-4" />
           <Select
             options={filterOptions}
-            value={filterOptions[0]}
+            value={statusFilter}
+            onChange={(opt) => setStatusFilter(opt)}
             placeholder="All Status"
             buttonClassName="border-none gap-2 font-medium"
             accent="secondary"
@@ -45,11 +54,18 @@ export default function BlogsPanel() {
           <PlusIcon className="size-4" /> Create Blog Post
         </Button>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
-        {articles?.map((post) => (
-          <BlogCard key={post.id} article={post} />
-        ))}
-      </div>
+      {!error && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+          {!articles
+            ? [1, 2, 3, 4, 5, 6].map((i) => (
+                <Skeleton key={i} className="h-120" />
+              ))
+            : articles?.map((post) => (
+                <BlogCard key={post.id} article={post} />
+              ))}
+        </div>
+      )}
+      {error && <ErrorComponent error={error} reset={refetch} />}
       {showAdd && <CreateBlog onClose={() => setShowAdd(false)} />}
     </div>
   );
