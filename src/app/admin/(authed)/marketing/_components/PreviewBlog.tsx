@@ -23,7 +23,7 @@ export default function PreviewBlog({
 
   return (
     <ModalWrapper onClose={onClose}>
-      <div className="border border-black/10 text-secondary-700 rounded-lg p-8 w-full max-w-4xl bg-white max-h-[90vh] overflow-auto">
+      <div className="border border-black/10 text-secondary-700 rounded-lg p-8 w-full max-w-xl bg-white">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-2xl font-bold text-secondary-700">
@@ -90,7 +90,7 @@ export default function PreviewBlog({
           )}
 
           {/* Content */}
-          <div className="prose max-w-none">
+          <div className="prose">
             <ReactMarkdown>{article.content}</ReactMarkdown>
           </div>
 
@@ -110,22 +110,15 @@ export default function PreviewBlog({
               </div>
             </div>
           )}
-
-          {/* Article Metadata */}
-          <div className="border-t pt-4 text-xs text-secondary-400 space-y-1">
-            <p>Article ID: {article.id}</p>
-            <p>Created: {formatDate(article.createdAt || "")}</p>
-            <p>Last Updated: {formatDate(article.updatedAt || "")}</p>
-            <p>Publisher ID: {article.publisherId}</p>
-          </div>
         </div>
 
         {/* Footer */}
         <div className="mt-8 flex justify-end">
           <Button
             type="button"
+            size={"xs"}
             variant="secondary"
-            className="px-6 py-3 bg-[#2D3648] text-white rounded-lg"
+            className="rounded-lg"
             onClick={onClose}
           >
             Close Preview

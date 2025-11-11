@@ -19,7 +19,7 @@ export default function BlogsPanel() {
   const { data: articles } = useArticlesQuery();
   return (
     <div>
-      <div className="flex items-center gap-8">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8">
         <div className="flex items-center justify-start pl-4 text-sm rounded-lg bg-gray-50">
           <Filter className="size-4" />
           <Select
@@ -39,13 +39,13 @@ export default function BlogsPanel() {
         <Button
           size={"2xs"}
           variant={"secondary"}
-          className="flex items-center justify-center gap-2 text-base ml-auto"
+          className="flex items-center justify-center gap-2 text-base ml-auto w-full lg:w-auto"
           onClick={() => setShowAdd(true)}
         >
           <PlusIcon className="size-4" /> Create Blog Post
         </Button>
       </div>
-      <div className="grid grid-cols-3 gap-4 mt-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
         {articles?.map((post) => (
           <BlogCard key={post.id} article={post} />
         ))}
