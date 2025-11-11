@@ -192,7 +192,7 @@ export default function LandingSection8() {
               neighborhood.
             </p>
             <div className="flex justify-center items-center gap-4 flex-wrap *:w-full *:lg:w-auto">
-              <Button size="xs">Live Chat</Button>
+              {/* <Button size="xs">Live Chat</Button> */}
               <Button variant="default-outline" size="xs">
                 Call (702) 555-0122
               </Button>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { axiosInstance } from "@/lib/axios";
 import Stripe from "stripe";
+import { AxiosError } from "axios";
 
 export async function POST(req: NextRequest) {
   try {
@@ -94,7 +95,12 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Registration error:", error);
     return NextResponse.json(
-      { message: "Invalid credentials" },
+      {
+        message:
+          error instanceof AxiosError
+            ? error.response?.data.message
+            : "Invalid credentials"
+      },
       { status: 401 }
     );
   }

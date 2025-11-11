@@ -8,6 +8,7 @@ import LandingSection7 from "./_components/LandingSection7";
 import LandingSection8 from "./_components/LandingSection8";
 import CommonQuestionsSection from "./_components/CommonQuestionsSection";
 import Newsletter from "./_components/Newsletter";
+import LandingPartners from "./_components/LandingPartners";
 
 export default function Home() {
   return (
@@ -17,6 +18,9 @@ export default function Home() {
         <LandingSection2 />
         <LandingSection3 />
         <LandingSection4 />
+      </div>
+      <LandingPartners />
+      <div className="container mx-auto px-6">
         <LandingSection5 />
         <LandingSection6 />
         <LandingSection7 />
