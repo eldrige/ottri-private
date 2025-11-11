@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
 import ClockIcon from "@/components/icons/ClockIcon";
@@ -12,20 +12,36 @@ import { Booking } from "../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../_utils/helpers";
 import { useCancelBookingMutation } from "../_services/mutations";
+import BookingDetails from "@/app/admin/(authed)/bookings/_components/BookingDetails";
 
 export default function ServiceCard({
   service
 }: {
   service: ServiceCardProps;
 }) {
+  const [showBookingDetailsModal, setShowBookingDetailsModal] = useState(false);
+
   return (
     <>
       <div className="flex flex-col xl:hidden gap-4">
-        <MobileServiceCard {...service} />
+        <MobileServiceCard
+          setShowBookingDetailsModal={setShowBookingDetailsModal}
+          {...service}
+        />
       </div>
       <div className="hidden xl:flex gap-4">
-        <DesktopServiceCard {...service} />
+        <DesktopServiceCard
+          setShowBookingDetailsModal={setShowBookingDetailsModal}
+          {...service}
+        />
       </div>
+      {showBookingDetailsModal && (
+        <BookingDetails
+          bookingId={service.id}
+          onClose={() => setShowBookingDetailsModal(false)}
+          variant={"user"}
+        />
+      )}
     </>
   );
 }
@@ -38,8 +54,11 @@ function DesktopServiceCard({
   timeSlot,
   address,
   status,
-  rating
-}: ServiceCardProps) {
+  rating,
+  setShowBookingDetailsModal
+}: ServiceCardProps & {
+  setShowBookingDetailsModal: (show: boolean) => void;
+}) {
   return (
     <div className="w-full">
       <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
@@ -56,7 +75,10 @@ function DesktopServiceCard({
             height={100}
           />
           <div className="gap-1 flex-col">
-            <h1 className="font-medium text-body text-secondary-700">
+            <h1
+              onClick={() => setShowBookingDetailsModal(true)}
+              className="cursor-pointer hover:text-secondary-900 font-medium text-body text-secondary-700"
+            >
               {formatName(serviceType.name)}
             </h1>
             <div className="flex *:text-surface-500 items-center *:text-caption">
@@ -109,14 +131,20 @@ function MobileServiceCard({
   timeSlot,
   address,
   status,
-  rating
-}: Omit<ServiceCardProps, "cleanerImage">) {
+  rating,
+  setShowBookingDetailsModal
+}: Omit<ServiceCardProps, "cleanerImage"> & {
+  setShowBookingDetailsModal: (show: boolean) => void;
+}) {
   return (
     <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
       <div className="flex gap-4 w-full items-center">
         <div className="flex cursor-pointer gap-2 w-full flex-col">
           <div className="flex items-center justify-between w-full">
-            <h1 className="font-medium text-body text-secondary-700">
+            <h1
+              onClick={() => setShowBookingDetailsModal(true)}
+              className="cursor-pointer hover:text-secondary-900 font-medium text-body text-secondary-700"
+            >
               {formatName(serviceType.name)}
             </h1>
             <div className="flex flex-row-reverse md:flex-row items-center gap-2">
