@@ -19,10 +19,12 @@ import { useGetBookingQuery } from "../../_services/queries";
 
 export default function BookingDetails({
   bookingId,
-  onClose
+  onClose,
+  variant = "admin"
 }: {
   bookingId: number | string;
   onClose: () => void;
+  variant?: "admin" | "user";
 }) {
   const { data: booking, error, isLoading } = useGetBookingQuery(bookingId);
 
@@ -342,60 +344,61 @@ export default function BookingDetails({
             </Button>
           )}
 
-          <Button
-            variant="outline"
-            size="2xs"
-            className="flex items-center gap-2"
-          >
-            <CallIcon className="size-4" />
-            Call
-          </Button>
-
-          {booking.status === "PENDING" && booking.cleaners.length > 0 && (
-            <Button
-              variant="outline"
-              size="2xs"
-              className="flex items-center gap-2 bg-success/15 border-success/30"
-              onClick={() => mutateStart({ bookingId: booking.id })}
-              disabled={isStarting}
-            >
-              {isStarting ? "Starting..." : "Start"}
-            </Button>
-          )}
-
-          {booking.status === "INPROGRESS" && (
-            <Button
-              variant="outline"
-              size="2xs"
-              className="flex items-center gap-2 bg-success/15 border-success/30"
-              onClick={() => mutateComplete({ bookingId: booking.id })}
-              disabled={isCompleting}
-            >
-              {isCompleting ? "Completing..." : "Complete"}
-            </Button>
-          )}
-
-          {!booking.cleaners.length && booking.status === "PENDING" && (
-            <Button
-              variant="secondary"
-              size="2xs"
-              onClick={() => setAssignCleaners(booking)}
-            >
-              Assign Cleaner
-            </Button>
-          )}
-
-          {booking.status !== "CANCELLED" && booking.status !== "COMPLETED" && (
-            <Button
-              variant="destructive"
-              size="2xs"
-              className="flex items-center gap-2"
-              onClick={() => setConfirmCancel(true)}
-              disabled={isCancelling}
-            >
-              <TrashIcon className="size-4" />
-              {isCancelling ? "Cancelling..." : "Cancel"}
-            </Button>
+          {variant === "admin" && (
+            <>
+              <Button
+                variant="outline"
+                size="2xs"
+                className="flex items-center gap-2"
+              >
+                <CallIcon className="size-4" />
+                Call
+              </Button>
+              {booking.status === "PENDING" && booking.cleaners.length > 0 && (
+                <Button
+                  variant="outline"
+                  size="2xs"
+                  className="flex items-center gap-2 bg-success/15 border-success/30"
+                  onClick={() => mutateStart({ bookingId: booking.id })}
+                  disabled={isStarting}
+                >
+                  {isStarting ? "Starting..." : "Start"}
+                </Button>
+              )}
+              {booking.status === "INPROGRESS" && (
+                <Button
+                  variant="outline"
+                  size="2xs"
+                  className="flex items-center gap-2 bg-success/15 border-success/30"
+                  onClick={() => mutateComplete({ bookingId: booking.id })}
+                  disabled={isCompleting}
+                >
+                  {isCompleting ? "Completing..." : "Complete"}
+                </Button>
+              )}
+              {!booking.cleaners.length && booking.status === "PENDING" && (
+                <Button
+                  variant="secondary"
+                  size="2xs"
+                  onClick={() => setAssignCleaners(booking)}
+                >
+                  Assign Cleaner
+                </Button>
+              )}
+              {booking.status !== "CANCELLED" &&
+                booking.status !== "COMPLETED" && (
+                  <Button
+                    variant="destructive"
+                    size="2xs"
+                    className="flex items-center gap-2"
+                    onClick={() => setConfirmCancel(true)}
+                    disabled={isCancelling}
+                  >
+                    <TrashIcon className="size-4" />
+                    {isCancelling ? "Cancelling..." : "Cancel"}
+                  </Button>
+                )}{" "}
+            </>
           )}
         </div>
       </div>
