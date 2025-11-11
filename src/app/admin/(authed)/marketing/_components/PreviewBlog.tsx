@@ -18,11 +18,11 @@ export default function PreviewBlog({
   const [showEdit, setShowEdit] = useState(false);
   return (
     <ModalWrapper onClose={onClose}>
-      <div className="border border-black/10 rounded-lg p-8 w-full max-w-2xl bg-white space-y-4">
-        <div className="flex justify-between items-center">
+      <div className="w-full max-w-2xl p-8 space-y-4 bg-white border rounded-lg border-black/10">
+        <div className="flex items-center justify-between">
           <div>
             <div className="flex gap-8">
-              <h3 className="text-xl font-bold text-secondary-700 flex items-center gap-2">
+              <h3 className="flex items-center gap-2 text-xl font-bold text-secondary-700">
                 <EyeIcon className="size-6" /> Blog Preview
               </h3>
               <span
@@ -37,7 +37,7 @@ export default function PreviewBlog({
                 {article.status.toLowerCase()}
               </span>
             </div>
-            <p className="text-secondary-700/70 mt-4">
+            <p className="mt-4 text-secondary-700/70">
               Preview how this blog post will appear on your website
             </p>
           </div>
@@ -47,19 +47,19 @@ export default function PreviewBlog({
         </div>
 
         {/* Title */}
-        <h1 className="font-poppins text-3xl font-bold text-secondary-900">
+        <h1 className="text-3xl font-bold font-poppins text-secondary-900">
           {article.title}
         </h1>
 
         {/* Article Content */}
         {/* Header Info */}
-        <div className="flex items-center gap-4 text-secondary-700/70">
+        <div className="flex items-center gap-4 text-sm text-secondary-700/70">
           <span>
             Published on {format(article.publicationDate, "MMMM d, y")}
           </span>
-          <span className="w-2 aspect-square rounded-full bg-surface-300" />
+          <span className="w-2 rounded-full aspect-square bg-surface-300" />
           <span>by {article.author}</span>
-          <span className="w-2 aspect-square rounded-full bg-surface-300" />
+          <span className="w-2 rounded-full aspect-square bg-surface-300" />
           <span>{Math.floor(Math.random() * 9999)} views</span>
           {/* TODO: make it use actual views */}
         </div>
@@ -70,13 +70,13 @@ export default function PreviewBlog({
 
         {/* Featured Image */}
         {article.thumbnail && (
-          <div className="rounded-lg overflow-hidden">
+          <div className="overflow-hidden rounded-lg">
             <Image
               src={article.thumbnail}
               width={800}
               height={256}
               alt={article.title || ""}
-              className="w-full h-64 object-cover"
+              className="object-cover w-full h-64"
             />
           </div>
         )}
@@ -91,12 +91,12 @@ export default function PreviewBlog({
         {/* Tags */}
         {article.tags && article.tags.length > 0 && (
           <div>
-            <h3 className="font-medium text-secondary-700 mb-2">Tags:</h3>
+            <h3 className="mb-2 font-medium text-secondary-700">Tags:</h3>
             <div className="flex flex-wrap gap-2">
               {article.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-sm"
+                  className="px-3 py-1 text-sm rounded-full bg-secondary-100 text-secondary-700"
                 >
                   #{tag}
                 </span>
