@@ -63,9 +63,12 @@ export default function PreviewBlog({
             </>
           )}
           <span>by {article.author}</span>
-          <span className="w-2 rounded-full aspect-square bg-surface-300" />
-          <span>{Math.floor(Math.random() * 9999)} views</span>
-          {/* TODO: make it use actual views */}
+          {typeof article.views === "number" && (
+            <>
+              <span className="w-2 rounded-full aspect-square bg-surface-300" />
+              <span>{article.views} views</span>
+            </>
+          )}
         </div>
         {/* Excerpt */}
         <p className="text-secondary-700/70">{article.excerpt}</p>

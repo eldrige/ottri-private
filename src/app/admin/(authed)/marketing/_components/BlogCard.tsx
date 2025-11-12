@@ -67,11 +67,12 @@ export default function BlogCard({ article }: { article: ArticleType }) {
       </div>
 
       <div className="flex items-center justify-between mt-auto text-sm font-medium text-secondary-700/70">
-        <p className="flex items-center">
-          {/* <EyeIcon className="mr-2 size-4" />
-          {article.views} {article.views === 1 ? "view" : "views"} */}
-          {/* FIX: AHHHHHHHHHHHHHHH */}
-        </p>
+        {typeof article.views === "number" && (
+          <p className="flex items-center">
+            <EyeIcon className="mr-2 size-4" />
+            {article.views} {article.views === 1 ? "view" : "views"}
+          </p>
+        )}
         <p className="flex items-center">
           <CalendarIcon className="mr-2 size-4" />
           {format(article.publicationDate, "d MMMM yyyy")}

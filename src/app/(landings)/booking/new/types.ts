@@ -74,6 +74,7 @@ export interface ArticleType {
   };
   readingTime: number;
   status: "PUBLISHED" | "SCHEDULED" | "DRAFT";
+  views?: number;
 }
 
 export interface NewArticleType {
