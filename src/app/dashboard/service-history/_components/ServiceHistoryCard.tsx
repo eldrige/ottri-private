@@ -8,6 +8,8 @@ import { Booking } from "../../_utils/types";
 import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import BookingDetails from "@/app/admin/(authed)/bookings/_components/BookingDetails";
 
 type ServiceHistoryCardProps = Booking;
 
@@ -21,20 +23,31 @@ export default function ServiceHistoryCard({
   const handleBookAgain = () => {
     router.push(`/booking/new?bookagain=${service.id}`);
   };
+  const [showBookingDetailsModal, setShowBookingDetailsModal] = useState(false);
 
   return (
-    <DesktopServiceHistoryCard
-      onBookAgain={handleBookAgain}
-      cleanerName={service.cleaners[0]?.fullName || "No Cleaner"}
-      date={formatDate(service.timeSlot.date)}
-      location={service.address}
-      price={service.price}
-      serviceName={formatName(service.serviceType.name)}
-      time={`${formatHour24To12(service.timeSlot.startTime)} - ${formatHour24To12(service.timeSlot.endTime)}`}
-      cleanerImage={service.cleaners[0]?.profile || cleanerPlacholderImage}
-      rating={service.review?.rating || 0}
-      review={service.review?.comment || "No review provided"}
-    />
+    <>
+      <DesktopServiceHistoryCard
+        setShowBookingDetailsModal={setShowBookingDetailsModal}
+        onBookAgain={handleBookAgain}
+        cleanerName={service.cleaners[0]?.fullName || "No Cleaner"}
+        date={formatDate(service.timeSlot.date)}
+        location={service.address}
+        price={service.price}
+        serviceName={formatName(service.serviceType.name)}
+        time={`${formatHour24To12(service.timeSlot.startTime)} - ${formatHour24To12(service.timeSlot.endTime)}`}
+        cleanerImage={service.cleaners[0]?.profile || cleanerPlacholderImage}
+        rating={service.review?.rating || 0}
+        review={service.review?.comment || "No review provided"}
+      />
+      {showBookingDetailsModal && (
+        <BookingDetails
+          bookingId={service.id}
+          onClose={() => setShowBookingDetailsModal(false)}
+          variant={"user"}
+        />
+      )}
+    </>
   );
 }
 
@@ -48,11 +61,13 @@ function DesktopServiceHistoryCard({
   price,
   rating,
   review,
-  onBookAgain
+  onBookAgain,
+  setShowBookingDetailsModal
 }: {
   serviceName: string;
   cleanerName: string;
   cleanerImage: string | StaticImageData;
+  setShowBookingDetailsModal: (show: boolean) => void;
   date: string;
   time: string;
   location: string;
@@ -74,7 +89,10 @@ function DesktopServiceHistoryCard({
           />
           <div className="flex cursor-pointer w-full gap-2 flex-col">
             <div className="flex justify-between items-center md:items-start md:flex-col">
-              <h1 className="font-medium text-body text-secondary-700">
+              <h1
+                onClick={() => setShowBookingDetailsModal(true)}
+                className="cursor-pointer hover:text-secondary-900 font-medium text-body text-secondary-700"
+              >
                 {serviceName}
               </h1>
               <div className="md:hidden border text-caption flex justify-center border-badge-green text-badge-green  items-center px-4 py-1 rounded-lg gap-2">
