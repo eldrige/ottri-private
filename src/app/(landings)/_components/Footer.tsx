@@ -44,15 +44,15 @@ const FooterBrand = () => (
 
 const ContactInfo = () => (
   <>
-    <div className="*:*:fill-surface-300 flex gap-0.75">
+    <div className="*:*:fill-surface-300 flex gap-0.75 items-center">
       <CallIcon />
-      <p className="text-surface-300">(555) 123-4567</p>
+      <p className="text-surface-300">502-390-7925</p>
     </div>
-    <div className="flex gap-0.75">
+    <a href="mailto:info@ottri.net" className="flex gap-0.75 items-center">
       <EmailIcon />
-      <p className="text-surface-300">hello@ottri.com</p>
-    </div>
-    <div className="flex gap-0.75">
+      <p className="text-surface-300">info@ottri.net</p>
+    </a>
+    <div className="flex gap-0.75 items-center">
       <LocationIcon className="text-surface-300" />
       <p className="text-surface-300">Serving 6 metro areas</p>
     </div>
