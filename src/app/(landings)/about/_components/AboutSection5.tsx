@@ -32,7 +32,7 @@ export default function AboutSection5() {
             </div>
           </li>
           <li className="flex items-start gap-6">
-            <ClockIcon className="*:size-8 text-primary-700" />
+            <ClockIcon className="size-8 text-primary-700" />
             <div className="space-y-2">
               <h4 className="text-subtitle font-semibold text-secondary-700">
                 Time Respect

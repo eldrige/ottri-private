@@ -43,7 +43,7 @@ export default function Navbar() {
           <div className="h-10 hidden xl:flex items-center gap-2.5">
             <span className="whitespace-nowrap flex items-center gap-1 text-surface-500 px-6">
               <CallIcon />
-              (555) 123-4567
+              502-390-7925
             </span>
             <Link href={"/booking/new"}>
               <Button className="whitespace-nowrap mr-2" size="xs">
