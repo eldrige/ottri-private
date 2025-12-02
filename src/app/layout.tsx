@@ -20,7 +20,8 @@ export const metadata: Metadata = {
   description: "Ottri Cleaning Services"
 };
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+// const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+const GA_MEASUREMENT_ID = "G-X57F64E903";
 
 export default function RootLayout({
   children

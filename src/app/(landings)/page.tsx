@@ -10,6 +10,9 @@ import CommonQuestionsSection from "./_components/CommonQuestionsSection";
 import Newsletter from "./_components/Newsletter";
 import LandingPartners from "./_components/LandingPartners";
 
+// Skip static prerendering - LandingSection3 fetches services from backend API
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <main>
