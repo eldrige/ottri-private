@@ -8,6 +8,7 @@ import { useJobPositionQuery } from "@/services/queries";
 import { useForm } from "react-hook-form";
 import PreviewMD from "../../marketing/_components/PreviewMD";
 import { useUpdateJobPositionMutation } from "../../_services/mutations";
+import { AxiosError } from "axios";
 
 interface JobDescriptionForm {
   description: string;
@@ -24,7 +25,11 @@ export default function JobDescriptionPanel() {
     isPending,
     error: updateError
   } = useUpdateJobPositionMutation();
-  const { register, watch } = useForm<JobDescriptionForm>();
+  const {
+    register,
+    watch,
+    formState: { isValid }
+  } = useForm<JobDescriptionForm>();
   const newDescription = watch("description");
 
   const [isPreview, setIspreview] = useState(false);
@@ -57,9 +62,11 @@ export default function JobDescriptionPanel() {
           Failed to load job description
         </p>
         <p className="text-red-600 text-sm">
-          {jobPositionError instanceof Error
-            ? jobPositionError.message
-            : "An error occurred while fetching the job description"}
+          {jobPositionError instanceof AxiosError
+            ? jobPositionError.response?.data.message
+            : jobPositionError instanceof Error
+              ? jobPositionError.message
+              : "An error occurred while fetching the job description"}
         </p>
       </div>
     );
@@ -111,7 +118,7 @@ export default function JobDescriptionPanel() {
                   className="flex items-center"
                   type="submit"
                   onClick={handleSave}
-                  disabled={isPending}
+                  disabled={isPending || !isValid}
                 >
                   {isPending ? (
                     <>
@@ -149,9 +156,11 @@ export default function JobDescriptionPanel() {
                 Update Failed
               </h3>
               <p className="text-sm text-red-700">
-                {updateError instanceof Error
-                  ? updateError.message
-                  : "An error occurred while updating the job description. Please try again."}
+                {updateError instanceof AxiosError
+                  ? updateError.response?.data.message
+                  : updateError instanceof Error
+                    ? updateError.message
+                    : "An error occurred while updating the job description. Please try again."}
               </p>
             </div>
           </div>
@@ -160,7 +169,7 @@ export default function JobDescriptionPanel() {
         {isEditing ? (
           <div>
             <Textarea
-              {...register("description")}
+              {...register("description", { required: true })}
               defaultValue={jobPosition.description}
               rows={20}
               className="w-full font-mono text-sm"
