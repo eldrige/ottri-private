@@ -245,15 +245,9 @@ export interface JobApplicationType {
   phoneNumber: string;
   coverLetter: string;
   cvLink: string;
-  status: JobApplicationStatus;
+  status: "PENDING" | "APPROVED" | "REJECTED";
   jobPositionId: number;
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
-}
-
-enum JobApplicationStatus {
-  PENDING,
-  APPROVED,
-  REJECTED
 }

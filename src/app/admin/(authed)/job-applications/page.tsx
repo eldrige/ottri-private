@@ -3,12 +3,8 @@ import React, { useState } from "react";
 import PanelViewer from "../_components/PanelViewer";
 import ApplicationsListPanel from "./_panels/ApplicationsListPanel";
 import JobDescriptionPanel from "./_panels/JobDescriptionPanel";
-import ApplicationDetailsModal from "./modals/ApplicationDetailModal";
 
 export default function JobApplicationsPage() {
-  const [selectedApplicationId, setSelectedApplicationId] = useState<
-    string | null
-  >(null);
   const [activeView, setActiveView] = useState("applications");
 
   return (
@@ -35,19 +31,9 @@ export default function JobApplicationsPage() {
         setActiveView={setActiveView}
       />
       <div className="mt-4">
-        {activeView === "applications" && (
-          <ApplicationsListPanel
-            onSelectApplication={setSelectedApplicationId}
-          />
-        )}
+        {activeView === "applications" && <ApplicationsListPanel />}
         {activeView === "job-description" && <JobDescriptionPanel />}
       </div>
-      {selectedApplicationId && (
-        <ApplicationDetailsModal
-          applicationId={selectedApplicationId!}
-          onClose={() => setSelectedApplicationId(null)}
-        />
-      )}
     </div>
   );
 }

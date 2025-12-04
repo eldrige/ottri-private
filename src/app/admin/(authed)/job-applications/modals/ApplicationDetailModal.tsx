@@ -3,32 +3,20 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Download, Mail, Phone, X } from "lucide-react";
 import ModalWrapper from "@/components/common/ModalWrapper";
+import { JobApplicationType } from "@/app/admin/types";
 
 interface ApplicationDetailsModalProps {
-  applicationId: string;
+  application: JobApplicationType;
   onClose: () => void;
 }
 
 export default function ApplicationDetailsModal({
-  applicationId,
+  application,
   onClose
 }: ApplicationDetailsModalProps) {
   const [status, setStatus] = useState<
     "pending" | "reviewed" | "accepted" | "rejected"
   >("pending");
-
-  // Mock data - replace with actual API call
-  const application = {
-    id: applicationId,
-    fullName: "John Doe",
-    email: "john@example.com",
-    phone: "+1 234 567 8900",
-    appliedDate: "2024-12-01T10:30:00",
-    coverLetter:
-      "I am writing to express my strong interest in the Cleaner position at OTTRI Cleaning Services. With 3 years of professional cleaning experience...",
-    resumeUrl: "/path/to/resume.pdf",
-    status: "pending"
-  };
 
   const handleStatusUpdate = (
     newStatus: "pending" | "reviewed" | "accepted" | "rejected"
@@ -47,9 +35,8 @@ export default function ApplicationDetailsModal({
               {application.fullName}
             </h2>
             <p className="text-gray-500 mt-1">
-              Applied on{" "}
-              {new Date(application.appliedDate).toLocaleDateString()} at{" "}
-              {new Date(application.appliedDate).toLocaleTimeString()}
+              Applied on {new Date(application.createdAt).toLocaleDateString()}{" "}
+              at {new Date(application.createdAt).toLocaleTimeString()}
             </p>
           </div>
           <div className="flex gap-2">
@@ -79,7 +66,7 @@ export default function ApplicationDetailsModal({
             </div>
             <div>
               <div className="text-sm text-gray-500">Phone</div>
-              <div className="text-gray-900">{application.phone}</div>
+              <div className="text-gray-900">{application.phoneNumber}</div>
             </div>
           </div>
         </div>
