@@ -236,3 +236,24 @@ export interface BookingStats {
   baseRevenue: number;
   totalTips: number;
 }
+
+// Applications
+export interface JobApplicationType {
+  id: number;
+  email: string;
+  fullName: string;
+  phoneNumber: string;
+  coverLetter: string;
+  cvLink: string;
+  status: JobApplicationStatus;
+  jobPositionId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+}
+
+enum JobApplicationStatus {
+  PENDING,
+  APPROVED,
+  REJECTED
+}

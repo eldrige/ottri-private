@@ -5,17 +5,59 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { useForm } from "react-hook-form";
 import { ApplyFormType } from "../types/ApplyFormType";
+import { useSubmitApplication } from "../_hooks/useSubmitApplication";
+import { CheckCircle, Loader2, XCircle } from "lucide-react";
+import { useState } from "react";
+import { AxiosError } from "axios";
 
 export default function ApplyForm() {
   const {
+    mutateAsync: submitApplication,
+    isPending,
+    error
+  } = useSubmitApplication();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<ApplyFormType>();
 
-  const onSubmit = (data: ApplyFormType) => {
-    console.log(data.resume[0]);
+  const onSubmit = async (data: ApplyFormType) => {
+    try {
+      await submitApplication(data);
+      setIsSubmitted(true);
+      reset();
+    } catch (error) {
+      console.error("Failed to submit application:", error);
+      // Error is already handled by react-query error state
+    }
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="border border-green-200 bg-green-50 rounded p-9 flex flex-col items-center gap-6 text-center">
+        <CheckCircle className="w-16 h-16 text-green-600" />
+        <div>
+          <h2 className="text-heading-3 font-bold text-green-800 mb-2">
+            Application Submitted Successfully!
+          </h2>
+          <p className="text-gray-600">
+            Thank you for applying! We have received your application and will
+            review it shortly. You should receive a confirmation email soon.
+          </p>
+        </div>
+        <Button
+          onClick={() => setIsSubmitted(false)}
+          variant="outline"
+          size="sm"
+        >
+          Submit Another Application
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -35,6 +77,7 @@ export default function ApplyForm() {
           })}
           label="Full Name *"
           className="border border-black/10"
+          disabled={isPending}
         />
         {errors.fullName && (
           <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
@@ -53,6 +96,7 @@ export default function ApplyForm() {
           label="Email *"
           type="email"
           className="border border-black/10"
+          disabled={isPending}
         />
         {errors.email && (
           <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -61,7 +105,7 @@ export default function ApplyForm() {
 
       <div className="w-full">
         <Input
-          {...register("phone", {
+          {...register("phoneNumber", {
             required: "Phone number is required",
             pattern: {
               value: /^[\d\s\-\+\(\)]+$/,
@@ -75,9 +119,12 @@ export default function ApplyForm() {
           label="Phone *"
           type="tel"
           className="border border-black/10"
+          disabled={isPending}
         />
-        {errors.phone && (
-          <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+        {errors.phoneNumber && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.phoneNumber.message}
+          </p>
         )}
       </div>
 
@@ -93,6 +140,7 @@ export default function ApplyForm() {
           label="Cover Letter *"
           rows={6}
           className="border border-black/10"
+          disabled={isPending}
         />
         {errors.coverLetter && (
           <p className="text-red-500 text-sm mt-1">
@@ -132,7 +180,8 @@ export default function ApplyForm() {
           id="resume"
           type="file"
           accept=".pdf,.doc,.docx"
-          className="w-full border border-black/10 rounded p-2 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary hover:file:bg-primary/90"
+          className="w-full border border-black/10 rounded p-2 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary hover:file:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={isPending}
         />
         <p className="text-sm text-gray-500 mt-1">
           Allowed Type(s): .pdf, .doc, .docx
@@ -149,6 +198,7 @@ export default function ApplyForm() {
           })}
           label="By using this form you agree with the storage and handling of your data by this website. *"
           className="border border-black/10"
+          disabled={isPending}
         />
         {errors.dataConsent && (
           <p className="text-red-500 text-sm mt-1">
@@ -157,9 +207,45 @@ export default function ApplyForm() {
         )}
       </div>
 
-      <Button size={"sm"} type="submit">
-        SUBMIT
+      {error && (
+        <div className="w-full border border-red-200 bg-red-50 rounded p-4 flex items-start gap-3">
+          <XCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <h3 className="text-sm font-semibold text-red-800 mb-1">
+              Submission Failed
+            </h3>
+            <p className="text-sm text-red-700">
+              {error instanceof AxiosError
+                ? error.response?.data.message
+                : error instanceof Error
+                  ? error.message
+                  : "An error occurred while submitting your application. Please try again."}
+            </p>
+          </div>
+        </div>
+      )}
+
+      <Button
+        size={"sm"}
+        type="submit"
+        disabled={isPending}
+        className="flex items-center"
+      >
+        {isPending ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            Submitting...
+          </>
+        ) : (
+          "SUBMIT"
+        )}
       </Button>
+
+      {isPending && (
+        <p className="text-sm text-gray-600">
+          Please wait while we upload your resume and submit your application...
+        </p>
+      )}
     </form>
   );
 }

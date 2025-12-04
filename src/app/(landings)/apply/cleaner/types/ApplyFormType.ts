@@ -1,7 +1,7 @@
 export interface ApplyFormType {
   fullName: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   coverLetter: string;
   resume: FileList;
   dataConsent: boolean;
