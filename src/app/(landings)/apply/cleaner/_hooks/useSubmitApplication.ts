@@ -15,7 +15,7 @@ export function useSubmitApplication() {
         "careers/applications",
         {
           email: application.email,
-          fullname: application.fullName,
+          fullName: application.fullName,
           coverLetter: application.coverLetter,
           phoneNumber: application.phoneNumber,
           cvLink: url,

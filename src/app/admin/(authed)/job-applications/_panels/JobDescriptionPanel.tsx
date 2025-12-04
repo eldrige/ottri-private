@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea";
 import { Save, Edit, Loader2, AlertCircle, XCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { useJobPositionQuery } from "../../_services/queries";
+import { useJobPositionQuery } from "@/services/queries";
 import { useForm } from "react-hook-form";
 import PreviewMD from "../../marketing/_components/PreviewMD";
 import { useUpdateJobPositionMutation } from "../../_services/mutations";

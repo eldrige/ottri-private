@@ -1,85 +1,62 @@
+"use client";
 import ReactMarkdown from "react-markdown";
 import ApplyForm from "./components/ApplyForm";
+import { useJobPositionQuery } from "@/services/queries";
+import { Loader2, AlertCircle } from "lucide-react";
 
 export default function ApplyCleanerPage() {
-  const jobDescription = `
-# Cleaning Technicians in Louisville, Ky
+  const { data: jobPosition, isLoading, error } = useJobPositionQuery();
 
-OTTRI Cleaning Services is looking for self-motivated Cleaner to work $13.00/hour, up to 20 hours per week.
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <div className="flex flex-col items-center justify-center py-12">
+          <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+          <p className="text-gray-600">Loading job details...</p>
+        </div>
+      </div>
+    );
+  }
 
-**YOU MUST HAVE A RELIABLE TRANSPORTATION** and willing to drive to site in LOUISVILLE, KY (if applicable).
+  if (error) {
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
+          <p className="text-red-800 font-medium mb-2">
+            Failed to load job details
+          </p>
+          <p className="text-red-600 text-sm">
+            {error instanceof Error
+              ? error.message
+              : "An error occurred while fetching the job details. Please try again later."}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
-Duties include general and detail cleaning of houses, warehouses, offices, restrooms and break rooms (dusting, vacuuming, mopping, emptying trash and various other cleaning responsibilities).
-
-We are only interested in dependable, trustworthy, enthusiastic, energetic Cleans WHO WANT TO WORK and have an excellent work ethic. You must be 18yrs or older, MUST PASS background check and drug screen test.
-
-*Hours are available at other locations if future employee wants more hours*
-
-## Setting:
-
-- Office Building
-- Houses
-- Hospitals
-- Warehouses
-- Other locations as required
-
-## This Job:
-
-- Open to applicants who do not have a high school diploma/GED
-- A "Fair Chance" job (you or the employer follow Fair Chance hiring practices when performing background checks)
-- A good fit for applicants with gaps in their resume, or who have been out of the workforce for the past 6 months or more
-- A good job for someone just entering the workforce or returning to the workforce with limited experience and education
-- A job for which all ages, including older job seekers, are encouraged to apply
-- Open to applicants who do not have a college diploma
-
-## Work Remotely:
-
-- No
-
-## Job Details:
-
-**Job Type:** Part-time
-
-**Pay:** From $13.00 per hour
-
-**Expected hours:** 20 per week
-
-## Benefits:
-
-- Flexible schedule
-
-## Physical Setting:
-
-- Office
-- Warehouse
-- Hospitals
-- Houses
-
-## Schedule:
-
-- Monday to Saturday
-
-## Education:
-
-- High school or equivalent (Preferred)
-
-## Experience:
-
-- Custodial Experience: 2 years (Preferred)
-
-## Work Location:
-
-In person
-
----
-
-If you require alternative methods of application or screening, you must approach us by call or email.
-`;
+  if (!jobPosition) {
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
+          <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-800 mb-2">
+            Job Position Not Available
+          </h3>
+          <p className="text-gray-600">
+            This job position is currently not available. Please check back
+            later.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-8 px-4 text-secondary-700">
       <div className="prose max-w-none mb-8 prose-headings:text-secondary-700 prose-strong:text-secondary-700">
-        <ReactMarkdown>{jobDescription}</ReactMarkdown>
+        <ReactMarkdown>{jobPosition.description}</ReactMarkdown>
       </div>
       <ApplyForm />
     </div>

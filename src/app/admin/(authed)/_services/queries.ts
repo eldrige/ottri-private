@@ -9,7 +9,6 @@ import {
   BookingStats,
   Cleaner,
   JobApplicationType,
-  JobPositionType,
   MapBookingsResponse,
   ServiceArea,
   ServiceOption
@@ -173,13 +172,5 @@ export function useJobApplicationsQuery() {
       clientAxios
         .get<JobApplicationType[]>("careers/applications")
         .then((i) => i.data)
-  });
-}
-
-export function useJobPositionQuery() {
-  return useQuery({
-    queryKey: ["job-position"],
-    queryFn: () =>
-      axiosInstance.get<JobPositionType>("careers/1").then((i) => i.data)
   });
 }
