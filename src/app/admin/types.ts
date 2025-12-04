@@ -251,3 +251,13 @@ export interface JobApplicationType {
   updatedAt: string;
   deletedAt: string;
 }
+
+export interface JobPositionType {
+  id: number;
+  title: string;
+  description: string;
+  applicationDeadline: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+}
