@@ -1,11 +1,21 @@
 "use client";
-import ReactMarkdown from "react-markdown";
-import ApplyForm from "./components/ApplyForm";
-import { useJobPositionQuery } from "@/services/queries";
-import { Loader2, AlertCircle } from "lucide-react";
 
-export default function ApplyCleanerPage() {
-  const { data: jobPosition, isLoading, error } = useJobPositionQuery();
+import { useJobPositionQuery } from "@/services/queries";
+import { Loader2, AlertCircle, Calendar, ArrowLeft } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { useParams, useRouter } from "next/navigation";
+import ApplyForm from "./components/ApplyForm";
+
+export default function JobDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const jobId = Number(params.id);
+
+  const {
+    data: jobPosition,
+    isLoading,
+    error
+  } = useJobPositionQuery({ id: jobId });
 
   if (isLoading) {
     return (
@@ -42,11 +52,10 @@ export default function ApplyCleanerPage() {
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
           <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-800 mb-2">
-            Job Position Not Available
+            Job Position Not Found
           </h3>
           <p className="text-gray-600">
-            This job position is currently not available. Please check back
-            later.
+            This job position could not be found. Please check back later.
           </p>
         </div>
       </div>
@@ -55,10 +64,35 @@ export default function ApplyCleanerPage() {
 
   return (
     <div className="container mx-auto py-8 px-4 text-secondary-700">
-      <div className="prose max-w-none mb-8 prose-headings:text-secondary-700 prose-strong:text-secondary-700">
-        <ReactMarkdown>{jobPosition.description}</ReactMarkdown>
+      <button
+        onClick={() => router.back()}
+        className="flex items-center gap-2 text-gray-600 hover:text-primary mb-6 transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back to Job Openings
+      </button>
+
+      <div className="bg-white rounded-lg border border-gray-200 p-8 mb-6">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          {jobPosition.title}
+        </h1>
+
+        <div className="flex items-center gap-2 text-gray-600 mb-6">
+          <Calendar className="w-5 h-5" />
+          <span>
+            Application Deadline:{" "}
+            <span className="font-medium">
+              {new Date(jobPosition.applicationDeadline).toLocaleDateString()}
+            </span>
+          </span>
+        </div>
+
+        <div className="prose max-w-none prose-headings:text-secondary-700 prose-strong:text-secondary-700">
+          <ReactMarkdown>{jobPosition.description}</ReactMarkdown>
+        </div>
       </div>
-      <ApplyForm />
+
+      <ApplyForm jobPositionId={jobPosition.id} />
     </div>
   );
 }

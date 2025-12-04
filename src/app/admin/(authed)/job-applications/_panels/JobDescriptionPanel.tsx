@@ -14,12 +14,12 @@ interface JobDescriptionForm {
   description: string;
 }
 
-export default function JobDescriptionPanel() {
+export default function JobDescriptionPanel({ id = 1 }: { id?: number }) {
   const {
     data: jobPosition,
     isLoading,
     error: jobPositionError
-  } = useJobPositionQuery();
+  } = useJobPositionQuery({ id });
   const {
     mutateAsync: update,
     isPending,

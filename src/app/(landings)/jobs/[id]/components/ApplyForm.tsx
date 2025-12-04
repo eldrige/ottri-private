@@ -10,7 +10,11 @@ import { CheckCircle, Loader2, XCircle } from "lucide-react";
 import { useState } from "react";
 import { AxiosError } from "axios";
 
-export default function ApplyForm() {
+export default function ApplyForm({
+  jobPositionId
+}: {
+  jobPositionId: number;
+}) {
   const {
     mutateAsync: submitApplication,
     isPending,
@@ -26,7 +30,7 @@ export default function ApplyForm() {
 
   const onSubmit = async (data: ApplyFormType) => {
     try {
-      await submitApplication(data);
+      await submitApplication({ ...data, jobPositionId });
       setIsSubmitted(true);
       reset();
     } catch (error) {

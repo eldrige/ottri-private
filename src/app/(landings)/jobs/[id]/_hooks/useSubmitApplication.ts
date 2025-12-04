@@ -6,7 +6,9 @@ import { JobApplicationType } from "@/app/admin/types";
 
 export function useSubmitApplication() {
   return useMutation({
-    mutationFn: async (application: ApplyFormType) => {
+    mutationFn: async (
+      application: ApplyFormType & { jobPositionId: number }
+    ) => {
       const {
         data: { url }
       } = await uploadDocument(application.resume[0]);
@@ -19,7 +21,7 @@ export function useSubmitApplication() {
           coverLetter: application.coverLetter,
           phoneNumber: application.phoneNumber,
           cvLink: url,
-          jobPositionId: 1
+          jobPositionId: application.jobPositionId || 1
         }
       );
 
