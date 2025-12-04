@@ -378,6 +378,19 @@ export function useDeleteArticleMutation() {
   });
 }
 
+// Job Applications
+export function useUpdateJobPositionMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (newJob: { description: string }) => {
+      return clientAxios.patch("careers/1", newJob);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["job-position"] });
+    }
+  });
+}
+
 // HELPERS
 
 // Bookings Helpers

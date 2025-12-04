@@ -2,29 +2,42 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea";
-import { Save, Edit, Loader2, AlertCircle } from "lucide-react";
+import { Save, Edit, Loader2, AlertCircle, XCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useJobPositionQuery } from "../../_services/queries";
 import { useForm } from "react-hook-form";
 import PreviewMD from "../../marketing/_components/PreviewMD";
+import { useUpdateJobPositionMutation } from "../../_services/mutations";
 
 interface JobDescriptionForm {
   description: string;
 }
 
 export default function JobDescriptionPanel() {
-  const { data: jobPosition, isLoading, error } = useJobPositionQuery();
-  const { register, handleSubmit, watch } = useForm<JobDescriptionForm>();
+  const {
+    data: jobPosition,
+    isLoading,
+    error: jobPositionError
+  } = useJobPositionQuery();
+  const {
+    mutateAsync: update,
+    isPending,
+    error: updateError
+  } = useUpdateJobPositionMutation();
+  const { register, watch } = useForm<JobDescriptionForm>();
   const newDescription = watch("description");
 
   const [isPreview, setIspreview] = useState(false);
-
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleSave = (data: JobDescriptionForm) => {
-    console.log(data);
-    // TODO: Save to API
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      await update({ description: newDescription });
+      setIsEditing(false);
+    } catch (error) {
+      // Error is handled by updateError state
+      console.error("Failed to update job description:", error);
+    }
   };
 
   if (isLoading) {
@@ -36,7 +49,7 @@ export default function JobDescriptionPanel() {
     );
   }
 
-  if (error) {
+  if (jobPositionError) {
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
@@ -44,8 +57,8 @@ export default function JobDescriptionPanel() {
           Failed to load job description
         </p>
         <p className="text-red-600 text-sm">
-          {error instanceof Error
-            ? error.message
+          {jobPositionError instanceof Error
+            ? jobPositionError.message
             : "An error occurred while fetching the job description"}
         </p>
       </div>
@@ -68,7 +81,7 @@ export default function JobDescriptionPanel() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(handleSave)} className="space-y-4">
+      <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Job Description Editor</h2>
           <div className="flex gap-2">
@@ -79,6 +92,7 @@ export default function JobDescriptionPanel() {
                   size="xs"
                   onClick={() => setIspreview(true)}
                   type="button"
+                  disabled={isPending}
                 >
                   Preview
                 </Button>
@@ -87,6 +101,7 @@ export default function JobDescriptionPanel() {
                   size="xs"
                   onClick={() => setIsEditing(false)}
                   type="button"
+                  disabled={isPending}
                 >
                   Cancel
                 </Button>
@@ -95,9 +110,20 @@ export default function JobDescriptionPanel() {
                   size="xs"
                   className="flex items-center"
                   type="submit"
+                  onClick={handleSave}
+                  disabled={isPending}
                 >
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Changes
+                  {isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Changes
+                    </>
+                  )}
                 </Button>
               </>
             ) : (
@@ -115,6 +141,22 @@ export default function JobDescriptionPanel() {
           </div>
         </div>
 
+        {updateError && (
+          <div className="border border-red-200 bg-red-50 rounded p-4 flex items-start gap-3">
+            <XCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-red-800 mb-1">
+                Update Failed
+              </h3>
+              <p className="text-sm text-red-700">
+                {updateError instanceof Error
+                  ? updateError.message
+                  : "An error occurred while updating the job description. Please try again."}
+              </p>
+            </div>
+          </div>
+        )}
+
         {isEditing ? (
           <div>
             <Textarea
@@ -123,11 +165,15 @@ export default function JobDescriptionPanel() {
               rows={20}
               className="w-full font-mono text-sm"
               placeholder="Enter job description in Markdown format..."
+              disabled={isPending}
             />
             <p className="text-sm text-gray-500 mt-2">
               Use Markdown syntax to format the job description. This will be
               displayed on the /apply/cleaner page.
             </p>
+            {isPending && (
+              <p className="text-sm text-gray-600 mt-2">Saving changes...</p>
+            )}
           </div>
         ) : (
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -136,7 +182,7 @@ export default function JobDescriptionPanel() {
             </div>
           </div>
         )}
-      </form>
+      </div>
       {isPreview && (
         <PreviewMD
           content={newDescription}
