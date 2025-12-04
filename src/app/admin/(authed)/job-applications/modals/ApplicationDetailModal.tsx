@@ -7,20 +7,23 @@ import {
   X,
   CheckCircle,
   XCircle,
-  AlertCircle
+  AlertCircle,
+  Briefcase
 } from "lucide-react";
 import ModalWrapper from "@/components/common/ModalWrapper";
-import { JobApplicationType } from "@/app/admin/types";
+import { JobApplicationType, JobPositionType } from "@/app/admin/types";
 import { useUpdateJobApplicationStatusMutation } from "../../_services/mutations";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import { AxiosError } from "axios";
 
 interface ApplicationDetailsModalProps {
+  jobPosition: JobPositionType;
   application: JobApplicationType;
   onClose: () => void;
 }
 
 export default function ApplicationDetailsModal({
+  jobPosition,
   application,
   onClose
 }: ApplicationDetailsModalProps) {
@@ -61,6 +64,12 @@ export default function ApplicationDetailsModal({
         <div className="flex justify-between items-center border-b border-black/10 pb-4">
           <div>
             <h2 className="text-2xl font-bold">{application.fullName}</h2>
+            <div className="flex items-center gap-2 mt-1">
+              <Briefcase className="w-4 h-4 text-gray-500" />
+              <span className="text-gray-700 font-medium">
+                {jobPosition?.title || "Unknown Position"}
+              </span>
+            </div>
             <p className="text-gray-500 mt-1">
               Applied on {new Date(application.createdAt).toLocaleDateString()}{" "}
               at {new Date(application.createdAt).toLocaleTimeString()}

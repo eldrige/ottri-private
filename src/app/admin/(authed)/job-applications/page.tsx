@@ -12,7 +12,8 @@ export default function JobApplicationsPage() {
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Job Applications</h1>
         <p className="text-gray-600 mt-2">
-          Manage cleaner job applications and job description
+          Manage applications across all job positions and update job
+          descriptions
         </p>
       </div>
 
