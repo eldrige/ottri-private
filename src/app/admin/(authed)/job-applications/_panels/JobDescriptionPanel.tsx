@@ -31,6 +31,7 @@ export default function JobDescriptionPanel() {
     formState: { isValid }
   } = useForm<JobDescriptionForm>();
   const newDescription = watch("description");
+  const hasDescChanged = newDescription !== jobPosition?.description;
 
   const [isPreview, setIspreview] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -118,7 +119,7 @@ export default function JobDescriptionPanel() {
                   className="flex items-center"
                   type="submit"
                   onClick={handleSave}
-                  disabled={isPending || !isValid}
+                  disabled={isPending || !isValid || !hasDescChanged}
                 >
                   {isPending ? (
                     <>

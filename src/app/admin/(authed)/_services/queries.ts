@@ -167,7 +167,7 @@ export function useArticlesQuery({ status }: { status?: string } = {}) {
 // Job Applications
 export function useJobApplicationsQuery() {
   return useQuery({
-    queryKey: ["job-application"],
+    queryKey: ["job-applications"],
     queryFn: () =>
       clientAxios
         .get<JobApplicationType[]>("careers/applications")

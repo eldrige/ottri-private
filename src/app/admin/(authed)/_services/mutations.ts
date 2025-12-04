@@ -8,7 +8,8 @@ import {
   ServiceArea,
   Cleaner,
   Booking,
-  AddCleanerForm
+  AddCleanerForm,
+  JobApplicationType
 } from "@/app/admin/types";
 import axios from "axios";
 import {
@@ -387,6 +388,24 @@ export function useUpdateJobPositionMutation() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["job-position"] });
+    }
+  });
+}
+
+export function useUpdateJobApplicationStatusMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      status
+    }: {
+      status: JobApplicationType["status"];
+      id: number;
+    }) => {
+      return clientAxios.patch(`careers/applications/${id}/status`, { status });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["job-applications"] });
     }
   });
 }
