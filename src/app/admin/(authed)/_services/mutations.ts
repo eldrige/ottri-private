@@ -383,11 +383,11 @@ export function useDeleteArticleMutation() {
 export function useUpdateJobPositionMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (newJob: { description: string }) => {
-      return clientAxios.patch("careers/1", newJob);
+    mutationFn: ({ id, description }: { description: string; id: number }) => {
+      return clientAxios.patch(`careers/${id}`, { description });
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["job-position"] });
+      await queryClient.invalidateQueries({ queryKey: ["job-positions"] });
     }
   });
 }

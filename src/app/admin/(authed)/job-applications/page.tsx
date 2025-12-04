@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import PanelViewer from "../_components/PanelViewer";
 import ApplicationsListPanel from "./_panels/ApplicationsListPanel";
-import JobDescriptionPanel from "./_panels/JobDescriptionPanel";
+import JobPositionsPanel from "./_panels/JobPositionsPanel";
 
 export default function JobApplicationsPage() {
   const [activeView, setActiveView] = useState("applications");
@@ -24,8 +24,8 @@ export default function JobApplicationsPage() {
             content: "Applications"
           },
           {
-            viewName: "job-description",
-            content: "Job Description"
+            viewName: "job-positions",
+            content: "Job Positions"
           }
         ]}
         activeView={activeView}
@@ -33,7 +33,7 @@ export default function JobApplicationsPage() {
       />
       <div className="mt-4">
         {activeView === "applications" && <ApplicationsListPanel />}
-        {activeView === "job-description" && <JobDescriptionPanel />}
+        {activeView === "job-positions" && <JobPositionsPanel />}
       </div>
     </div>
   );
