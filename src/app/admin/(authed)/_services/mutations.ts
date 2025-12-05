@@ -380,6 +380,23 @@ export function useDeleteArticleMutation() {
 }
 
 // Job Applications
+export interface JobPositionFormType {
+  title: string;
+  description: string;
+  applicationDeadline: string;
+}
+export function useCreateJobPositionMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: JobPositionFormType) => {
+      return clientAxios.post(`careers`, body);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["job-positions"] });
+    }
+  });
+}
+
 export function useUpdateJobPositionMutation() {
   const queryClient = useQueryClient();
   return useMutation({

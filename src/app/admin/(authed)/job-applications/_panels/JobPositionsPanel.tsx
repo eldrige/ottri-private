@@ -8,12 +8,15 @@ import {
   Briefcase,
   Calendar,
   Edit,
-  FileText
+  FileText,
+  Plus
 } from "lucide-react";
 import JobDescriptionModal from "../_modals/JobDescriptionModal";
+import CreateJobPositionModal from "../_modals/CreateJobPositionModal";
 
 export default function JobPositionsPanel() {
   const { data: jobPositions, isLoading, error } = useJobPositionsQuery();
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedJobPositionId, setSelectedJobPositionId] = useState<
     number | null
   >(null);
@@ -49,14 +52,39 @@ export default function JobPositionsPanel() {
 
   if (!jobPositions || jobPositions.length === 0) {
     return (
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
-        <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-800 mb-2">
-          No Job Positions
-        </h3>
-        <p className="text-gray-600">
-          There are no job positions available. Create one to get started.
-        </p>
+      <div className="space-y-4">
+        <div className="flex justify-end">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Create Job Position
+          </Button>
+        </div>
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
+          <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-800 mb-2">
+            No Job Positions
+          </h3>
+          <p className="text-gray-600 mb-4">
+            There are no job positions available. Create one to get started.
+          </p>
+          <Button
+            variant="secondary"
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 mx-auto"
+          >
+            <Plus className="w-4 h-4" />
+            Create Your First Job Position
+          </Button>
+        </div>
+
+        {showCreateModal && (
+          <CreateJobPositionModal onClose={() => setShowCreateModal(false)} />
+        )}
       </div>
     );
   }
@@ -72,6 +100,15 @@ export default function JobPositionsPanel() {
             Click on any position to edit its description and details
           </p>
         </div>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Create Job Position
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -128,6 +165,10 @@ export default function JobPositionsPanel() {
           jobPosition={selectedJobPosition}
           onClose={() => setSelectedJobPositionId(null)}
         />
+      )}
+
+      {showCreateModal && (
+        <CreateJobPositionModal onClose={() => setShowCreateModal(false)} />
       )}
     </div>
   );
