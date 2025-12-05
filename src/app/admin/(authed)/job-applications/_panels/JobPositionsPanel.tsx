@@ -2,28 +2,25 @@
 import { useJobPositionsQuery } from "@/services/queries";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import {
-  Loader2,
-  AlertCircle,
-  Briefcase,
-  Calendar,
-  Edit,
-  FileText,
-  Plus
-} from "lucide-react";
-import JobDescriptionModal from "../_modals/JobDescriptionModal";
+import { Loader2, AlertCircle, Briefcase, Plus } from "lucide-react";
 import CreateJobPositionModal from "../_modals/CreateJobPositionModal";
+import { useDeleteJobPositionMutation } from "../../_services/mutations";
+import { useJobApplicationsQuery } from "../../_services/queries";
+import JobPositionCard from "../_components/JobPositionCard";
 
 export default function JobPositionsPanel() {
   const { data: jobPositions, isLoading, error } = useJobPositionsQuery();
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedJobPositionId, setSelectedJobPositionId] = useState<
-    number | null
-  >(null);
+  const { data: applications } = useJobApplicationsQuery();
+  useDeleteJobPositionMutation();
 
-  const selectedJobPosition = jobPositions?.find(
-    (i) => i.id === selectedJobPositionId
-  );
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const getApplicationCount = (jobPositionId: number) => {
+    return (
+      applications?.filter((app) => app.jobPositionId === jobPositionId)
+        .length || 0
+    );
+  };
 
   if (isLoading) {
     return (
@@ -112,60 +109,17 @@ export default function JobPositionsPanel() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {jobPositions.map((position) => (
-          <div
-            key={position.id}
-            className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {position.title}
-                </h3>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Calendar className="w-4 h-4" />
-                  <span>
-                    Deadline:{" "}
-                    {new Date(
-                      position.applicationDeadline
-                    ).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-              <Briefcase className="w-6 h-6 text-gray-400" />
-            </div>
-
-            <div className="mb-4">
-              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                <FileText className="w-4 h-4" />
-                <span>Description Preview</span>
-              </div>
-              <p className="text-sm text-gray-600 line-clamp-3">
-                {position.description.substring(0, 120)}...
-              </p>
-            </div>
-
-            <div className="flex gap-2 pt-4 border-t border-gray-200">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setSelectedJobPositionId(position.id)}
-                className="flex-1 flex items-center justify-center gap-2"
-              >
-                <Edit className="w-4 h-4" />
-                Edit Description
-              </Button>
-            </div>
-          </div>
-        ))}
+        {jobPositions.map((position) => {
+          const appCount = getApplicationCount(position.id);
+          return (
+            <JobPositionCard
+              key={position.id}
+              position={position}
+              appCount={appCount}
+            />
+          );
+        })}
       </div>
-
-      {selectedJobPosition && (
-        <JobDescriptionModal
-          jobPosition={selectedJobPosition}
-          onClose={() => setSelectedJobPositionId(null)}
-        />
-      )}
 
       {showCreateModal && (
         <CreateJobPositionModal onClose={() => setShowCreateModal(false)} />

@@ -219,6 +219,7 @@ We are looking for a dedicated house cleaner...
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
             <Button
+              size={"xs"}
               type="button"
               variant="outline"
               onClick={onClose}
@@ -227,6 +228,7 @@ We are looking for a dedicated house cleaner...
               Cancel
             </Button>
             <Button
+              size={"xs"}
               type="submit"
               variant="secondary"
               disabled={isPending || !isValid}

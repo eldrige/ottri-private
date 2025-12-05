@@ -427,6 +427,21 @@ export function useUpdateJobApplicationStatusMutation() {
   });
 }
 
+export function useDeleteJobPositionMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id }: { id: number }) => {
+      return clientAxios.delete(`careers/${id}`);
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["job-applications"] }),
+        queryClient.invalidateQueries({ queryKey: ["job-positions"] })
+      ]);
+    }
+  });
+}
+
 // HELPERS
 
 // Bookings Helpers
