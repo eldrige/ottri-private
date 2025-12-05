@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { useJobApplicationsQuery } from "../../_services/queries";
 import { useState, useMemo } from "react";
 import { JobApplicationType } from "@/app/admin/types";
-import ApplicationDetailsModal from "../modals/ApplicationDetailModal";
+import ApplicationDetailsModal from "../_modals/ApplicationDetailModal";
 import { Loader2, FileQuestion, Briefcase, Mail } from "lucide-react";
 import { useJobPositionsQuery } from "@/services/queries";
 

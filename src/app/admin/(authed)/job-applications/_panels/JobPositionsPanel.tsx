@@ -10,7 +10,7 @@ import {
   Edit,
   FileText
 } from "lucide-react";
-import JobDescriptionModal from "../modals/JobDescriptionModal";
+import JobDescriptionModal from "../_modals/JobDescriptionModal";
 
 export default function JobPositionsPanel() {
   const { data: jobPositions, isLoading, error } = useJobPositionsQuery();
