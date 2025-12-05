@@ -4,23 +4,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Loader2, AlertCircle, Briefcase, Plus } from "lucide-react";
 import CreateJobPositionModal from "../_modals/CreateJobPositionModal";
-import { useDeleteJobPositionMutation } from "../../_services/mutations";
-import { useJobApplicationsQuery } from "../../_services/queries";
 import JobPositionCard from "../_components/JobPositionCard";
 
 export default function JobPositionsPanel() {
   const { data: jobPositions, isLoading, error } = useJobPositionsQuery();
-  const { data: applications } = useJobApplicationsQuery();
-  useDeleteJobPositionMutation();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
-
-  const getApplicationCount = (jobPositionId: number) => {
-    return (
-      applications?.filter((app) => app.jobPositionId === jobPositionId)
-        .length || 0
-    );
-  };
 
   if (isLoading) {
     return (
@@ -109,16 +98,9 @@ export default function JobPositionsPanel() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {jobPositions.map((position) => {
-          const appCount = getApplicationCount(position.id);
-          return (
-            <JobPositionCard
-              key={position.id}
-              position={position}
-              appCount={appCount}
-            />
-          );
-        })}
+        {jobPositions.map((position) => (
+          <JobPositionCard key={position.id} position={position} />
+        ))}
       </div>
 
       {showCreateModal && (

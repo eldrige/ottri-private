@@ -80,22 +80,11 @@ const CompanySection = () => (
       <Link href="/how-we-work">How it works</Link>
       <Link href="/careers">Careers</Link>
       <Link href="/blog">Blogs</Link>
+      <Link href="/jobs">Job Openings</Link>
       <Link href="/help-center">Help center</Link>
     </ul>
   </div>
 );
-
-// const LiveChatButton = () => {
-//   return (
-//     <Link
-//       href={"/"}
-//       className="flex items-center justify-center gap-2  text-primary-700 bg-white  px-4 py-2.5 rounded-lg  transition-colors"
-//     >
-//       <ChatIcon />
-//       <span className="text-primary-700 ">Live chat support</span>
-//     </Link>
-//   );
-// };
 
 const CTASection = () => (
   <div className="flex-1 flex flex-col gap-4">
@@ -109,7 +98,6 @@ const CTASection = () => (
           Book a cleaning now
         </Button>
       </Link>
-      {/* <LiveChatButton /> */}
     </div>
     <div className="flex flex-col items-center md:items-start gap-1">
       <p className="text-surface-300">Follow us</p>

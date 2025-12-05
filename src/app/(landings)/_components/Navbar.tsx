@@ -39,6 +39,7 @@ export default function Navbar() {
             <NavLink href="/how-we-work">How we work</NavLink>
             <NavLink href="/our-team">Our Team</NavLink>
             <NavLink href="/blog">Blog</NavLink>
+            <NavLink href="/jobs">Job Openings</NavLink>
           </Nav>
           <div className="h-10 hidden xl:flex items-center gap-2.5">
             <span className="whitespace-nowrap flex items-center gap-1 text-surface-500 px-6">

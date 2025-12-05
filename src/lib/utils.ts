@@ -47,3 +47,11 @@ export const shareLinks = async (
     console.error("Error sharing content:", error);
   }
 };
+
+export const cleanMD = (markdown: string): string => {
+  return markdown
+    .replace(/[#*_~`>\[\]()]/g, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .trim();
+};

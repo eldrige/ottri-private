@@ -1,17 +1,16 @@
 import { JobPositionType } from "@/app/admin/types";
 import { Button } from "@/components/ui/Button";
-import { Briefcase, Calendar, Edit, FileText, Trash2 } from "lucide-react";
+import { Calendar, Edit, FileText, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { useDeleteJobPositionMutation } from "../../_services/mutations";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import JobDescriptionModal from "../_modals/JobDescriptionModal";
+import { cleanMD } from "@/lib/utils";
 
 export default function JobPositionCard({
-  position,
-  appCount
+  position
 }: {
   position: JobPositionType;
-  appCount: number;
 }) {
   const { mutateAsync: deleteJobPosition, isPending: isDeleting } =
     useDeleteJobPositionMutation();
@@ -45,10 +44,7 @@ export default function JobPositionCard({
   };
 
   return (
-    <div
-      key={position.id}
-      className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow flex flex-col"
-    >
+    <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow flex flex-col">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -61,12 +57,6 @@ export default function JobPositionCard({
               {new Date(position.applicationDeadline).toLocaleDateString()}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Briefcase className="w-4 h-4" />
-            <span>
-              {appCount} {appCount === 1 ? "Application" : "Applications"}
-            </span>
-          </div>
         </div>
       </div>
 
@@ -76,7 +66,7 @@ export default function JobPositionCard({
           <span>Description Preview</span>
         </div>
         <p className="text-sm text-gray-600 line-clamp-3">
-          {position.description.substring(0, 120)}...
+          {cleanMD(position.description).substring(0, 120)}...
         </p>
       </div>
 
@@ -109,15 +99,11 @@ export default function JobPositionCard({
         />
       )}
 
-      {showDeleteConfirm && position && (
+      {showDeleteConfirm && (
         <ConfirmModal
           open={showDeleteConfirm}
           title={`Delete "${position.title}"?`}
-          description={
-            appCount > 0
-              ? `This will permanently delete this job position and all ${appCount} associated application${appCount === 1 ? "" : "s"}. This action cannot be undone.`
-              : "This will permanently delete this job position. This action cannot be undone."
-          }
+          description={`This will permanently delete this job position and all associated applications. This action cannot be undone.`}
           confirmText="Yes, Delete"
           cancelText="Cancel"
           onConfirm={handleConfirmDelete}

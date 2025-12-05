@@ -1,5 +1,6 @@
 "use client";
 
+import { cleanMD } from "@/lib/utils";
 import { useJobPositionsQuery } from "@/services/queries";
 import {
   Loader2,
@@ -68,7 +69,7 @@ export default function JobOpeningsPage() {
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-col gap-6">
         {jobPositions.map((position) => (
           <Link
             key={position.id}
@@ -93,7 +94,7 @@ export default function JobOpeningsPage() {
             </div>
 
             <p className="text-gray-600 line-clamp-3 mb-4">
-              {position.description.substring(0, 150)}...
+              {cleanMD(position.description).substring(0, 500)}...
             </p>
 
             <div className="text-primary font-medium group-hover:underline flex items-center gap-1">
