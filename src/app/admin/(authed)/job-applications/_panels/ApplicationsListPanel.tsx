@@ -5,11 +5,8 @@ import { useState, useMemo } from "react";
 import { JobApplicationType } from "@/app/admin/types";
 import ApplicationDetailsModal from "../_modals/ApplicationDetailModal";
 import { Loader2, FileQuestion, Briefcase, Mail } from "lucide-react";
-import { useJobPositionsQuery } from "@/services/queries";
 
 export default function ApplicationsListPanel() {
-  const { data: jobPositions, isLoading: isJobPositionsLoading } =
-    useJobPositionsQuery();
   const {
     data: applications,
     isLoading: isApplicationsLoading,
@@ -21,6 +18,19 @@ export default function ApplicationsListPanel() {
   const [selectedJobPositionId, setSelectedJobPositionId] = useState<
     number | "all"
   >("all");
+
+  const jobPositions = useMemo(() => {
+    if (!applications) return [];
+
+    const positionsMap = new Map();
+    applications.forEach((app) => {
+      if (!positionsMap.has(app.jobPositionId)) {
+        positionsMap.set(app.jobPositionId, app.jobPosition);
+      }
+    });
+
+    return Array.from(positionsMap.values());
+  }, [applications]);
 
   // Group applications by job position
   const groupedApplications = useMemo(() => {
@@ -69,14 +79,7 @@ export default function ApplicationsListPanel() {
     return colors[status];
   };
 
-  const getJobPositionTitle = (jobPositionId: number) => {
-    return (
-      jobPositions?.find((jp) => jp.id === jobPositionId)?.title ||
-      "Unknown Position"
-    );
-  };
-
-  if (isApplicationsLoading || isJobPositionsLoading) {
+  if (isApplicationsLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
@@ -208,7 +211,7 @@ export default function ApplicationsListPanel() {
                   </h3>
                   <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
                     <Briefcase className="w-3 h-3" />
-                    {getJobPositionTitle(application.jobPositionId)}
+                    {application.jobPosition.title}
                   </div>
                 </div>
                 <span

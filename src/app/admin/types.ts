@@ -250,6 +250,7 @@ export interface JobApplicationType {
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
+  jobPosition: JobPositionType;
 }
 
 export interface JobPositionType {

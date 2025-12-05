@@ -103,7 +103,7 @@ export default function JobPositionCard({
         <ConfirmModal
           open={showDeleteConfirm}
           title={`Delete "${position.title}"?`}
-          description={`This will permanently delete this job position and all associated applications. This action cannot be undone.`}
+          description={`This will permanently delete this job position. This action cannot be undone.`}
           confirmText="Yes, Delete"
           cancelText="Cancel"
           onConfirm={handleConfirmDelete}
