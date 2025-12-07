@@ -8,6 +8,7 @@ import {
   BookingsResponse,
   BookingStats,
   Cleaner,
+  JobApplicationType,
   MapBookingsResponse,
   ServiceArea,
   ServiceOption
@@ -160,5 +161,16 @@ export function useArticlesQuery({ status }: { status?: string } = {}) {
     queryKey: ["articles", { status }],
     queryFn: () =>
       clientAxios.get<ArticleType[]>(`articles?${sp}`).then((i) => i.data)
+  });
+}
+
+// Job Applications
+export function useJobApplicationsQuery() {
+  return useQuery({
+    queryKey: ["job-applications"],
+    queryFn: () =>
+      clientAxios
+        .get<JobApplicationType[]>("careers/applications")
+        .then((i) => i.data)
   });
 }

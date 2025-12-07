@@ -236,3 +236,29 @@ export interface BookingStats {
   baseRevenue: number;
   totalTips: number;
 }
+
+// Applications
+export interface JobApplicationType {
+  id: number;
+  email: string;
+  fullName: string;
+  phoneNumber: string;
+  coverLetter: string;
+  cvLink: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  jobPositionId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+  jobPosition: JobPositionType;
+}
+
+export interface JobPositionType {
+  id: number;
+  title: string;
+  description: string;
+  applicationDeadline: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+}

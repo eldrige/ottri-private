@@ -5,7 +5,7 @@ import DollarIcon2 from "@/components/icons/DollarIcon2";
 import GraphIcon from "@/components/icons/GraphIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import MarketingIcon from "@/components/icons/MarketingIcon";
-import { CalendarIcon, UsersIcon } from "lucide-react";
+import { BriefcaseIcon, CalendarIcon, UsersIcon } from "lucide-react";
 
 type NavItem = {
   href: string;
@@ -53,6 +53,11 @@ export default function AdminNavbar({ onNav }: { onNav?: () => void }) {
       href: "/admin/marketing",
       icon: <MarketingIcon className="size-4" />,
       label: "Marketing"
+    },
+    {
+      href: "/admin/job-applications",
+      icon: <BriefcaseIcon className="size-4" />,
+      label: "Job Applications"
     }
   ];
 

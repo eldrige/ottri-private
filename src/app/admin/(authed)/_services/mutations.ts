@@ -8,7 +8,8 @@ import {
   ServiceArea,
   Cleaner,
   Booking,
-  AddCleanerForm
+  AddCleanerForm,
+  JobApplicationType
 } from "@/app/admin/types";
 import axios from "axios";
 import {
@@ -374,6 +375,69 @@ export function useDeleteArticleMutation() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["articles"] });
+    }
+  });
+}
+
+// Job Applications
+export interface JobPositionFormType {
+  title: string;
+  description: string;
+  applicationDeadline: string;
+}
+export function useCreateJobPositionMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: JobPositionFormType) => {
+      return clientAxios.post(`careers`, body);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["job-positions"] });
+    }
+  });
+}
+
+export function useUpdateJobPositionMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, description }: { description: string; id: number }) => {
+      return clientAxios.patch(`careers/${id}`, { description });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["job-positions"] });
+    }
+  });
+}
+
+export function useUpdateJobApplicationStatusMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      status
+    }: {
+      status: JobApplicationType["status"];
+      id: number;
+    }) => {
+      return clientAxios.patch(`careers/applications/${id}/status`, { status });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["job-applications"] });
+    }
+  });
+}
+
+export function useDeleteJobPositionMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id }: { id: number }) => {
+      return clientAxios.delete(`careers/${id}`);
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["job-applications"] }),
+        queryClient.invalidateQueries({ queryKey: ["job-positions"] })
+      ]);
     }
   });
 }
