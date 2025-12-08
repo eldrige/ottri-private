@@ -7,12 +7,15 @@ import { serverRequest } from "@/lib/serverRequest";
  */
 async function handler(req: NextRequest) {
   try {
-    // Get the path from the request URL
-    const url = new URL(
-      "https://example.com" + (req.url.replace(/^.*path=/, "") || "")
-    );
-    // const pathSegments = url.pathname.replace('/api/proxy', '');
+    // Get the path from the request URL and decode it
+    const encodedPath = req.url.replace(/^.*?path=/, "") || "";
+    const decodedPath = decodeURIComponent(encodedPath);
+
+    // Now parse the decoded path
+    const url = new URL("https://example.com" + decodedPath);
     const pathSegments = url.pathname;
+
+    console.log(pathSegments);
 
     // Extract query parameters as a plain object
     const queryParams: Record<string, string> = {};

@@ -36,8 +36,14 @@ export function useGetBookingsQuery({
   const sp = new URLSearchParams();
   if (limit) sp.append("limit", String(limit));
   if (statusFilter) sp.append("status", statusFilter);
-  if (startDate) sp.append("startDate", startDate);
-  if (endDate) sp.append("endDate", endDate);
+  if (startDate) {
+    startDate = startDate.replace(/T.*/, "");
+    sp.append("startDate", startDate);
+  }
+  if (endDate) {
+    endDate = endDate.replace(/T.*/, "");
+    sp.append("endDate", endDate);
+  }
   if (page) sp.append("page", String(page));
 
   return useQuery({

@@ -311,9 +311,9 @@ export default function ClientForm({
     }
 
     // For the payment step, we need to process the payment first
-    let paymentMethodId = formValues.paymentMethodId;
+    let stripeConfirmationTokenId = formValues.paymentMethodId;
 
-    if (currStep === 7 && !paymentMethodId && !data.isAdmin) {
+    if (currStep === 7 && !stripeConfirmationTokenId && !data.isAdmin) {
       // Process the payment
       const result = await processPaymentRef.current();
 
@@ -322,14 +322,15 @@ export default function ClientForm({
         setProcessing(false);
         return;
       }
-      if (typeof result === "string") paymentMethodId = result.toString();
+      if (typeof result === "string")
+        stripeConfirmationTokenId = result.toString();
     }
 
     // Process the final form submission using axios
     try {
       const response = await axios.post("/api/submit-order", {
         ...data,
-        paymentMethodId,
+        stripeConfirmationTokenId,
         isAdminBooking: data.isAdmin
       });
 
