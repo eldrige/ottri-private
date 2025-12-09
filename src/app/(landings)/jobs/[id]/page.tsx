@@ -72,7 +72,7 @@ export default function JobDetailPage() {
         Back to Job Openings
       </button>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-8 mb-6">
+      <div className="bg-white rounded-lg md:border border-gray-200 md:p-8 mb-6">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           {jobPosition.title}
         </h1>

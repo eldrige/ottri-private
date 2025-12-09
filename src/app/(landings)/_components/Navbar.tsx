@@ -126,11 +126,14 @@ function MobileNav({
           <NavLink onNavigate={() => setShow(false)} href="/blog">
             Blog
           </NavLink>
+          <NavLink onNavigate={() => setShow(false)} href="/jobs">
+            Job Openings
+          </NavLink>
         </Nav>
         <div className="space-y-2.5">
-          <p className="whitespace-nowrap flex justify-center text-surface-500 px-6">
+          <p className="whitespace-nowrap flex justify-center items-center gap-1 text-surface-500 px-6">
             <CallIcon />
-            (555) 123-4567
+            502-390-7925
           </p>
           <Link href={"/booking/new"}>
             <Button className="whitespace-nowrap w-full mt-2.5" size="xs">
