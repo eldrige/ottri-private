@@ -39,7 +39,7 @@ export const orderFormSchema = z
       .refine((data) => !!data, {
         message: "Specific cleaning type is required"
       }),
-    frequency: z.string().nullable(),
+    frequency: z.string().optional(),
     // Step 2
     serviceAddress: z.string().min(1, "Service address is required"),
     lng: z.number().nullable(),

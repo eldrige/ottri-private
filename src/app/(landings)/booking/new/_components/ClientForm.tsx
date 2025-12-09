@@ -72,7 +72,7 @@ export default function ClientForm({
       // Pre-fill from bookingData if available
       serviceType: matchedService || null,
       specificServiceType: matchedServiceType || null,
-      frequency: bookingData?.cleaningFrequency?.toString() || null,
+      frequency: bookingData?.cleaningFrequency?.toString(),
       bedrooms: bookingData?.bedrooms || "",
       bathrooms: bookingData?.bathrooms || "",
       squareFootage: bookingData?.approximateSquareFootage?.toString() || "",
@@ -173,11 +173,32 @@ export default function ClientForm({
 
     switch (currStep) {
       case 0:
-        isValid = await trigger([
+        const fieldsToValidate: (keyof OrderFormValues)[] = [
           "serviceType",
           "specificServiceType",
           "frequency"
-        ]);
+        ];
+        isValid = await trigger(fieldsToValidate);
+
+        if (
+          formValues.specificServiceType?.name
+            .toLowerCase()
+            .includes("recurring")
+        ) {
+          if (!formValues.frequency) {
+            setError("frequency", {
+              type: "manual",
+              message: "Cleaning frequency is required for recurring services"
+            });
+            isValid = false;
+          } else {
+            // Clear error if frequency is now provided
+            clearErrors("frequency");
+          }
+        } else {
+          // Clear frequency error for non-recurring services
+          clearErrors("frequency");
+        }
         break;
       case 1:
         isValid = await trigger([
@@ -220,7 +241,16 @@ export default function ClientForm({
     }
 
     return isValid;
-  }, [trigger, setError, currStep, formValues.addOns, formValues.otherService]);
+  }, [
+    currStep,
+    trigger,
+    formValues.specificServiceType?.name,
+    formValues.addOns,
+    formValues.frequency,
+    formValues.otherService,
+    setError,
+    clearErrors
+  ]);
 
   // Run validation when form values change
   useEffect(() => {
@@ -248,7 +278,8 @@ export default function ClientForm({
     formValues.state,
     formValues.city,
     formValues.zipCode,
-    validateCurrentStep
+    validateCurrentStep,
+    clearErrors
   ]);
 
   // Calculate price based on form values
@@ -259,7 +290,9 @@ export default function ClientForm({
   // Calculate the discount amount
   const calculateDiscount = () => {
     const basePrice = calculatePrice();
-    const discountPercentage = getDiscountPercentage(formValues.frequency);
+    const discountPercentage = getDiscountPercentage(
+      formValues.frequency || null
+    );
     return basePrice * discountPercentage;
   };
 
