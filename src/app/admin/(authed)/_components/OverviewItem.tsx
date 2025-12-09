@@ -43,14 +43,15 @@ export default function OverviewItem({ booking }: { booking: Booking }) {
         <p>
           <span className="font-medium">
             {booking.guest?.fullName ||
-              booking.customer?.personalInformation.fullName}
+              booking.user?.personalInformation.fullName}
           </span>
           <span
             className={cn(
               `text-sm py-1 px-4 ml-3 rounded-lg`,
               booking.status === "INPROGRESS" && "bg-info/20 text-info-text",
               booking.status === "COMPLETED" && "bg-success/20 text-success",
-              booking.status === "PENDING" && "bg-warning/20 text-warning-text",
+              (booking.status === "PENDING" || booking.status === "UNPAID") &&
+                "bg-warning/20 text-warning-text",
               booking.status === "CANCELLED" && "bg-error/20 text-error"
             )}
           >
@@ -70,7 +71,7 @@ export default function OverviewItem({ booking }: { booking: Booking }) {
         </p>
       </div>
       <div className="flex items-end ml-auto justify-end gap-3">
-        {booking.customer?.role === "ADMIN" && (
+        {booking.user?.role === "ADMIN" && (
           <Button
             size="2xs"
             variant={"secondary-outline"}
@@ -123,15 +124,16 @@ export default function OverviewItem({ booking }: { booking: Booking }) {
             {isCancelling ? "Cancelling" : "Cancel"}
           </Button>
         )}
-        {!booking.cleaners.length && booking.status === "PENDING" && (
-          <Button
-            size={"2xs"}
-            variant={"secondary"}
-            onClick={() => setAssignCleaners(booking)}
-          >
-            Assign Cleaner
-          </Button>
-        )}
+        {!booking.cleaners.length &&
+          (booking.status === "PENDING" || booking.status === "UNPAID") && (
+            <Button
+              size={"2xs"}
+              variant={"secondary"}
+              onClick={() => setAssignCleaners(booking)}
+            >
+              Assign Cleaner
+            </Button>
+          )}
         <Button
           size={"2xs"}
           variant={"secondary"}

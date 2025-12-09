@@ -44,7 +44,7 @@ export default function ListItem({
 
   const bookingName =
     booking.guest?.fullName ||
-    booking.customer?.personalInformation?.fullName ||
+    booking.user?.personalInformation?.fullName ||
     "";
   const bookingNumber = booking.id;
   const service = booking.serviceType.name;
@@ -56,7 +56,7 @@ export default function ListItem({
   const address = booking.address;
   const phone =
     booking.guest?.phoneNumber ||
-    booking.customer?.personalInformation?.phoneNumber ||
+    booking.user?.personalInformation?.phoneNumber ||
     "";
   const price = booking.price || 0;
   const notes = [
@@ -76,7 +76,7 @@ export default function ListItem({
             <div
               className={cn(
                 "py-1.5 px-3 text-sm rounded-md inline-flex items-center",
-                status.value === "PENDING"
+                status.value === "PENDING" || booking.status === "UNPAID"
                   ? "bg-warning/20 text-warning-text"
                   : status.value === "INPROGRESS"
                     ? "bg-info/20 text-info-text"
@@ -138,7 +138,7 @@ export default function ListItem({
 
         <div className="w-full lg:w-auto">
           <div className="flex items-start justify-end gap-3 *:flex-1 lg:*:flex-0 flex-wrap">
-            {booking.customer?.role === "ADMIN" && (
+            {booking.user?.role === "ADMIN" && (
               <Button
                 size="2xs"
                 variant={"secondary-outline"}
@@ -193,15 +193,16 @@ export default function ListItem({
             )}
           </div>
           <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0 gap-3">
-            {!cleaners.length && status.value === "PENDING" && (
-              <Button
-                size={"2xs"}
-                variant={"secondary"}
-                onClick={() => setAssignCleaners(booking)}
-              >
-                Assign Cleaner
-              </Button>
-            )}
+            {!cleaners.length &&
+              (status.value === "PENDING" || booking.status === "UNPAID") && (
+                <Button
+                  size={"2xs"}
+                  variant={"secondary"}
+                  onClick={() => setAssignCleaners(booking)}
+                >
+                  Assign Cleaner
+                </Button>
+              )}
             <Button
               size={"2xs"}
               variant={"secondary"}

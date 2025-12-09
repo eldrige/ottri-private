@@ -54,6 +54,7 @@ export default function Map({
           // Add markers for each location
           locations.forEach((location) => {
             const markerColors: Record<string, string> = {
+              UNPAID: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
               PENDING:
                 "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
               INPROGRESS:

@@ -95,6 +95,8 @@ export default function BookingDetails({
         return "bg-info/10 text-info-text";
       case "PENDING":
         return "bg-warning/10 text-warning-text";
+      case "UNPAID":
+        return "bg-warning/10 text-warning-text";
       case "CANCELLED":
         return "bg-error/10 text-error";
       default:
@@ -151,22 +153,22 @@ export default function BookingDetails({
                 <span className="font-medium ">Name:</span>
                 <span className="ml-2 ">
                   {booking.guest?.fullName ||
-                    booking.customer?.personalInformation?.fullName}
+                    booking.user?.personalInformation?.fullName}
                 </span>
               </div>
               <div className="truncate">
                 <span className="font-medium">Email:</span>
                 <span className="ml-2 w-full">
-                  {booking.guest?.email || booking.customer?.email}
+                  {booking.guest?.email || booking.user?.email}
                 </span>
               </div>
               {(booking.guest?.phoneNumber ||
-                booking.customer?.personalInformation?.phoneNumber) && (
+                booking.user?.personalInformation?.phoneNumber) && (
                 <div>
                   <span className="font-medium ">Phone:</span>
                   <span className="ml-2 ">
                     {booking.guest?.phoneNumber ||
-                      booking.customer?.personalInformation?.phoneNumber}
+                      booking.user?.personalInformation?.phoneNumber}
                   </span>
                 </div>
               )}
@@ -332,7 +334,7 @@ export default function BookingDetails({
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3">
-          {booking.customer?.role === "ADMIN" && (
+          {booking.user?.role === "ADMIN" && (
             <Button
               variant="outline"
               size="2xs"
@@ -376,15 +378,17 @@ export default function BookingDetails({
                   {isCompleting ? "Completing..." : "Complete"}
                 </Button>
               )}
-              {!booking.cleaners.length && booking.status === "PENDING" && (
-                <Button
-                  variant="secondary"
-                  size="2xs"
-                  onClick={() => setAssignCleaners(booking)}
-                >
-                  Assign Cleaner
-                </Button>
-              )}
+              {!booking.cleaners.length &&
+                (booking.status === "PENDING" ||
+                  booking.status === "UNPAID") && (
+                  <Button
+                    variant="secondary"
+                    size="2xs"
+                    onClick={() => setAssignCleaners(booking)}
+                  >
+                    Assign Cleaner
+                  </Button>
+                )}
               {booking.status !== "CANCELLED" &&
                 booking.status !== "COMPLETED" && (
                   <Button
