@@ -460,6 +460,10 @@ function updateBookingHelper(queryClient: QueryClient, newBooking: Booking) {
       return queryData;
     }
   );
+  queryClient.setQueriesData(
+    { queryKey: ["booking", `${newBooking.id}`] },
+    newBooking
+  );
 }
 
 // ServiceAreas helpers
