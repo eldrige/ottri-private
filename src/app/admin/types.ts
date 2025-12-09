@@ -20,13 +20,14 @@ export enum BookingStatusLabels {
   COMPLETED = "Completed",
   CANCELLED = "Cancelled",
   PENDING = "Pending",
-  INPROGRESS = "In Progress"
+  INPROGRESS = "In Progress",
+  UNPAID = "Unpaid"
 }
 
 export interface Booking {
   id: number;
   displayId: string;
-  status: "PENDING" | "COMPLETED" | "CANCELLED" | "INPROGRESS";
+  status: "PENDING" | "COMPLETED" | "CANCELLED" | "INPROGRESS" | "UNPAID";
   servicesPrice: number;
   addOnsPrice: number;
   tip: number;
@@ -230,6 +231,7 @@ export interface BookingStats {
     COMPLETED: number;
     CANCELLED: number;
     PENDING: number;
+    UNPAID: number;
     INPROGRESS: number;
   };
   totalRevenue: number;

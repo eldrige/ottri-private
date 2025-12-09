@@ -48,7 +48,7 @@ export default function CalendarView() {
     end: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.endTime}:00:00`,
     extendedProps: {
       status:
-        booking.status === "PENDING"
+        booking.status === "PENDING" || booking.status === "UNPAID"
           ? "warning"
           : booking.status === "COMPLETED"
             ? "success"

@@ -76,7 +76,7 @@ export default function ListItem({
             <div
               className={cn(
                 "py-1.5 px-3 text-sm rounded-md inline-flex items-center",
-                status.value === "PENDING"
+                status.value === "PENDING" || booking.status === "UNPAID"
                   ? "bg-warning/20 text-warning-text"
                   : status.value === "INPROGRESS"
                     ? "bg-info/20 text-info-text"
@@ -193,15 +193,16 @@ export default function ListItem({
             )}
           </div>
           <div className="mt-4 lg:mt-6 flex justify-end *:flex-1 lg:*:flex-0 gap-3">
-            {!cleaners.length && status.value === "PENDING" && (
-              <Button
-                size={"2xs"}
-                variant={"secondary"}
-                onClick={() => setAssignCleaners(booking)}
-              >
-                Assign Cleaner
-              </Button>
-            )}
+            {!cleaners.length &&
+              (status.value === "PENDING" || booking.status === "UNPAID") && (
+                <Button
+                  size={"2xs"}
+                  variant={"secondary"}
+                  onClick={() => setAssignCleaners(booking)}
+                >
+                  Assign Cleaner
+                </Button>
+              )}
             <Button
               size={"2xs"}
               variant={"secondary"}

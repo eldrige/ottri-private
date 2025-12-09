@@ -1,9 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import Select from "@/components/ui/Select";
-import { Filter, PlusIcon } from "lucide-react";
-import Link from "next/link";
-import React, { useState } from "react";
+import { PlusIcon } from "lucide-react";
+import { useState } from "react";
 import PanelViewer from "../_components/PanelViewer";
 import ServiceZonesPanel from "./_panels/ServiceZonesPanel";
 import MapEditorPanel from "./_panels/MapEditorPanel";
@@ -11,14 +9,6 @@ import { useServiceAreasQuery } from "../_services/queries";
 import Loading from "../loading";
 import RestrictedPanel from "./_panels/RestrictedPanel";
 import ZoneSettingsPanel from "./_panels/ZoneSettingsPanel";
-
-const filterOptions = [
-  { label: "All Zones", value: "all-zones" },
-  { label: "Pending", value: "PENDING" },
-  { label: "In Progress", value: "INPROGRESS" },
-  { label: "Completed", value: "COMPLETED" },
-  { label: "Cancelled", value: "CANCELLED" }
-];
 
 export default function ServiceZonesPage() {
   const [activeView, setActiveView] = useState<string>("service-zones");
@@ -35,27 +25,16 @@ export default function ServiceZonesPage() {
       </div>
       <hr className="my-4 text-black/10" />
 
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-6">
-        <div className="flex items-center text-sm bg-gray-50 rounded-lg pl-4">
-          <Filter className="size-4" />
-          <Select
-            options={filterOptions}
-            value={filterOptions[0]}
-            placeholder="All Zones"
-            buttonClassName="border-none gap-2 font-medium"
-            accent="secondary"
-          />
-        </div>
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-end gap-4 lg:gap-6">
         <div className="flex flex-col w-full lg:w-auto lg:flex-row gap-4 lg:gap-8">
-          <Link className="w-full" href={"#"}>
-            <Button
-              size={"2xs"}
-              variant={"secondary"}
-              className="w-full flex gap-2 items-center text-base justify-center"
-            >
-              <PlusIcon className="size-5" /> Create Zone
-            </Button>
-          </Link>
+          <Button
+            size={"2xs"}
+            variant={"secondary"}
+            className="w-full flex gap-2 items-center text-base justify-center"
+            onClick={() => setActiveView("map-editor")}
+          >
+            <PlusIcon className="size-5" /> Create Zone
+          </Button>
         </div>
       </div>
       <div className="*:mt-4">

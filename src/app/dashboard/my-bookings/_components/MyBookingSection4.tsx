@@ -46,6 +46,7 @@ export default function MyBookingSection4() {
   const filterOptions = [
     { label: "All Bookings", value: "all-bookings" },
     { label: "Pending", value: "PENDING" },
+    { label: "Unpaid", value: "UNPAID" },
     { label: "In Progress", value: "INPROGRESS" },
     { label: "Completed", value: "COMPLETED" },
     { label: "Cancelled", value: "CANCELLED" }

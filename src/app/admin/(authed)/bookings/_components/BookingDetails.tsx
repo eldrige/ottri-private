@@ -95,6 +95,8 @@ export default function BookingDetails({
         return "bg-info/10 text-info-text";
       case "PENDING":
         return "bg-warning/10 text-warning-text";
+      case "UNPAID":
+        return "bg-warning/10 text-warning-text";
       case "CANCELLED":
         return "bg-error/10 text-error";
       default:
@@ -376,15 +378,17 @@ export default function BookingDetails({
                   {isCompleting ? "Completing..." : "Complete"}
                 </Button>
               )}
-              {!booking.cleaners.length && booking.status === "PENDING" && (
-                <Button
-                  variant="secondary"
-                  size="2xs"
-                  onClick={() => setAssignCleaners(booking)}
-                >
-                  Assign Cleaner
-                </Button>
-              )}
+              {!booking.cleaners.length &&
+                (booking.status === "PENDING" ||
+                  booking.status === "UNPAID") && (
+                  <Button
+                    variant="secondary"
+                    size="2xs"
+                    onClick={() => setAssignCleaners(booking)}
+                  >
+                    Assign Cleaner
+                  </Button>
+                )}
               {booking.status !== "CANCELLED" &&
                 booking.status !== "COMPLETED" && (
                   <Button

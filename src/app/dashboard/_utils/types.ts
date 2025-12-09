@@ -81,7 +81,7 @@ export interface Cleaner {
 export interface Booking {
   id: number;
   displayId: string;
-  status: "PENDING" | "INPROGRESS" | "COMPLETED" | "CANCELLED";
+  status: "PENDING" | "INPROGRESS" | "COMPLETED" | "CANCELLED" | "UNPAID";
   servicesPrice: number;
   addOnsPrice: number;
   tip: number;
