@@ -2,11 +2,15 @@ import { JobPositionType } from "@/app/admin/types";
 import { axiosInstance } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
+export async function getJobPositions() {
+  const { data } = await axiosInstance.get<JobPositionType[]>("careers");
+  return data;
+}
+
 export function useJobPositionsQuery() {
   return useQuery({
     queryKey: ["job-positions"],
-    queryFn: () =>
-      axiosInstance.get<JobPositionType[]>("careers").then((i) => i.data)
+    queryFn: getJobPositions
   });
 }
 export function useJobPositionQuery({ id = 1 }: { id: number }) {

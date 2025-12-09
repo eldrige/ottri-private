@@ -7,6 +7,7 @@ import {
   QueryClient
 } from "@tanstack/react-query";
 import { getServices } from "./services/_utils/queries";
+import { getJobPositions } from "@/services/queries";
 
 export default async function LandingLayout({
   children
@@ -14,10 +15,16 @@ export default async function LandingLayout({
   children: React.ReactNode;
 }) {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["services"],
-    queryFn: () => getServices()
-  });
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ["services"],
+      queryFn: () => getServices()
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ["job-positions"],
+      queryFn: getJobPositions
+    })
+  ]);
   const dehydratedState = dehydrate(queryClient);
 
   return (
