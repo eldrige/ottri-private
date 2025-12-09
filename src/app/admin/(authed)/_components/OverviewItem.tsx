@@ -43,7 +43,7 @@ export default function OverviewItem({ booking }: { booking: Booking }) {
         <p>
           <span className="font-medium">
             {booking.guest?.fullName ||
-              booking.customer?.personalInformation.fullName}
+              booking.user?.personalInformation.fullName}
           </span>
           <span
             className={cn(
@@ -71,7 +71,7 @@ export default function OverviewItem({ booking }: { booking: Booking }) {
         </p>
       </div>
       <div className="flex items-end ml-auto justify-end gap-3">
-        {booking.customer?.role === "ADMIN" && (
+        {booking.user?.role === "ADMIN" && (
           <Button
             size="2xs"
             variant={"secondary-outline"}

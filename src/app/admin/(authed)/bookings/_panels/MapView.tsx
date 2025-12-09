@@ -22,9 +22,7 @@ export default function MapView() {
         .map((b) => ({
           id: b.id,
           title:
-            b.guest?.fullName ||
-            b.customer?.personalInformation?.fullName ||
-            "",
+            b.guest?.fullName || b.user?.personalInformation?.fullName || "",
           status: b.status,
           position: {
             lat: b.location!.coordinates[0],

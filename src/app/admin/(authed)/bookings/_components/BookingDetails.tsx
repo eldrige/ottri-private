@@ -153,22 +153,22 @@ export default function BookingDetails({
                 <span className="font-medium ">Name:</span>
                 <span className="ml-2 ">
                   {booking.guest?.fullName ||
-                    booking.customer?.personalInformation?.fullName}
+                    booking.user?.personalInformation?.fullName}
                 </span>
               </div>
               <div className="truncate">
                 <span className="font-medium">Email:</span>
                 <span className="ml-2 w-full">
-                  {booking.guest?.email || booking.customer?.email}
+                  {booking.guest?.email || booking.user?.email}
                 </span>
               </div>
               {(booking.guest?.phoneNumber ||
-                booking.customer?.personalInformation?.phoneNumber) && (
+                booking.user?.personalInformation?.phoneNumber) && (
                 <div>
                   <span className="font-medium ">Phone:</span>
                   <span className="ml-2 ">
                     {booking.guest?.phoneNumber ||
-                      booking.customer?.personalInformation?.phoneNumber}
+                      booking.user?.personalInformation?.phoneNumber}
                   </span>
                 </div>
               )}
@@ -334,7 +334,7 @@ export default function BookingDetails({
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3">
-          {booking.customer?.role === "ADMIN" && (
+          {booking.user?.role === "ADMIN" && (
             <Button
               variant="outline"
               size="2xs"

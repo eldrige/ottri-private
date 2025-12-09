@@ -81,7 +81,7 @@ export default function AssignCleaner({
               <span className="font-medium mr-2">Client:</span>
               <span className="capitalize">
                 {booking.guest?.fullName ||
-                  booking.customer?.personalInformation?.fullName}
+                  booking.user?.personalInformation?.fullName}
               </span>
             </p>
             <p>
