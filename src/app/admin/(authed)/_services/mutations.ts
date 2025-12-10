@@ -47,8 +47,16 @@ export function useAssignCleanerMutation() {
 }
 
 // Bookings
-export async function cancelBooking({ bookingId }: { bookingId: number }) {
-  const booking = await clientAxios.delete(`bookings/${bookingId}`);
+export async function cancelBooking({
+  bookingId,
+  unsubscribe = false
+}: {
+  bookingId: number;
+  unsubscribe?: boolean;
+}) {
+  const booking = await clientAxios.delete(
+    `bookings/${bookingId}?unsubscribe=${unsubscribe}`
+  );
   return booking.data;
 }
 export function useCancelBookingMutation() {

@@ -17,6 +17,7 @@ import EditBooking from "./EditBooking";
 import AssignCleaner from "./AssignCleaner";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import BookingDetails from "./BookingDetails";
+import Checkbox from "@/components/ui/Checkbox";
 
 interface StatusType {
   label: string;
@@ -40,6 +41,7 @@ export default function ListItem({
   const [editBooking, setEditBooking] = useState(false);
   const [assignCleaners, setAssignCleaners] = useState<Booking | null>(null);
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [unsubscribe, setUnsubscribe] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
   const bookingName =
@@ -229,12 +231,26 @@ export default function ListItem({
           description={`Are you sure you want to cancel booking #${bookingNumber.toString().padStart(3, "0")}? This action cannot be undone.`}
           onCancel={() => setConfirmCancel(false)}
           onConfirm={async () => {
-            await mutateCancel({ bookingId: booking.id });
+            await mutateCancel({
+              bookingId: booking.id,
+              unsubscribe: unsubscribe
+            });
             setConfirmCancel(false);
           }}
           loading={isCancelling}
           open={confirmCancel}
-        />
+        >
+          <div className="mb-6 flex items-center gap-2">
+            <Checkbox
+              id="unsubscribe"
+              checked={unsubscribe}
+              onChange={(e) => setUnsubscribe(e.target.checked)}
+              disabled={isCancelling}
+              label="Unsubscribe from cleaning service"
+              accent="secondary"
+            />
+          </div>
+        </ConfirmModal>
       )}
       {showDetails && (
         <BookingDetails
