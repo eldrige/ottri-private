@@ -2,9 +2,8 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 
-interface Location {
+export interface Location {
   id: number;
-  title: string;
   status: string;
   position: {
     lat: number;
@@ -67,7 +66,6 @@ export default function Map({
             const marker = new google.maps.Marker({
               position: location.position,
               map: map,
-              title: location.title,
               icon: location.status ? markerColors[location.status] : undefined
             });
             marker.addListener("click", () => {

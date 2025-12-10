@@ -10,10 +10,7 @@ export interface BookingsResponse {
 
 export interface MapBookingsResponse {
   total: number;
-  data: Pick<
-    Booking,
-    "id" | "displayId" | "status" | "user" | "guest" | "location"
-  >[];
+  data: Pick<Booking, "id" | "status" | "location">[];
 }
 
 export enum BookingStatusLabels {
