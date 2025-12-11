@@ -31,7 +31,7 @@ async function assignCleaner({
   cleanerIds: string[];
 }) {
   const booking = await clientAxios.post(`bookings/${bookingId}/assign`, {
-    cleanerIds: cleanerIds
+    cleanerIds
   });
   return booking.data as Booking;
 }

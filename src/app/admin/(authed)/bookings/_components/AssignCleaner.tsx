@@ -2,14 +2,13 @@ import { Booking } from "@/app/admin/types";
 import ClockIcon2 from "@/components/icons/ClockIcon2";
 import StarIcon from "@/components/icons/StarIcon";
 import { Button } from "@/components/ui/Button";
-import { cn } from "@/lib/utils";
+import { cn, displayError, getErrorData } from "@/lib/utils";
 import { format } from "date-fns";
 import { X, Check } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useAssignCleanerMutation } from "../../_services/mutations";
 import { useCleanersQuery } from "../../_services/queries";
 import ModalWrapper from "@/components/common/ModalWrapper";
-import axios from "axios";
 
 export default function AssignCleaner({
   booking,
@@ -24,7 +23,25 @@ export default function AssignCleaner({
     isPending,
     error
   } = useAssignCleanerMutation();
-  const [selectedCleanerIds, setSelectedCleanerIds] = useState<string[]>([]);
+
+  // Pre-select currently assigned cleaners
+  const [selectedCleanerIds, setSelectedCleanerIds] = useState<string[]>(
+    booking.cleaners?.map((c) => c.id.toString()) || []
+  );
+
+  // Get original cleaner IDs for comparison
+  const originalCleanerIds = useMemo(
+    () => booking.cleaners?.map((c) => c.id.toString()) || [],
+    [booking.cleaners]
+  );
+
+  // Check if selection has changed
+  const hasChanged = useMemo(() => {
+    if (selectedCleanerIds.length !== originalCleanerIds.length) {
+      return true;
+    }
+    return !selectedCleanerIds.every((id) => originalCleanerIds.includes(id));
+  }, [selectedCleanerIds, originalCleanerIds]);
 
   if (!cleaners) return null;
 
@@ -32,6 +49,8 @@ export default function AssignCleaner({
     new Date(booking.timeSlot.date),
     "dd-MM-yyyy 'at' h:mm a"
   );
+
+  const isReassigning = booking.cleaners?.length > 0;
 
   const handleCleanerToggle = (cleanerId: string) => {
     setSelectedCleanerIds((prev) =>
@@ -64,15 +83,18 @@ export default function AssignCleaner({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center">
-          <p className="text-heading-5 font-bold">Assign Cleaners</p>
+          <p className="text-heading-5 font-bold">
+            {isReassigning ? "Reassign Cleaners" : "Assign Cleaners"}
+          </p>
           <button onClick={onClose}>
             <X className="size-8 text-secondary-700/70" />
           </button>
         </div>
 
         <p>
-          Select cleaners for this booking. The system will recommend the best
-          matches based on availability and specialty.
+          {isReassigning
+            ? "Update the cleaner assignment for this booking. Currently assigned cleaners are pre-selected."
+            : "Select cleaners for this booking. The system will recommend the best matches based on availability and specialty."}
         </p>
 
         <div className="p-4 bg-secondary-700/5 text-xs rounded-lg">
@@ -88,12 +110,10 @@ export default function AssignCleaner({
               <span className="font-medium mr-2">Service:</span>
               <span className="capitalize">{booking.serviceType.name}</span>
             </p>
-            <p>
+            <p className="flex items-center gap-x-2 flex-wrap">
               <span className="font-medium mr-2">Cleaners:</span>
               {booking.cleaners?.length ? (
-                booking.cleaners.map((cleaner) => (
-                  <span key={cleaner.id}>{cleaner.fullName}</span>
-                ))
+                booking.cleaners.map((cleaner) => cleaner.fullName).join(", ")
               ) : (
                 <span className="text-error">Unassigned</span>
               )}
@@ -132,15 +152,25 @@ export default function AssignCleaner({
               );
               const isDisabled = cleaner.status === "UNAVAILABLE";
 
+              let isConflictError = false;
+              if (error) {
+                const errorData = getErrorData(error).data;
+                if (Array.isArray(errorData)) {
+                  isConflictError = errorData.some((i) => i === cleaner.id);
+                }
+              }
+
               return (
                 <button
                   key={cleaner.id}
                   disabled={isDisabled}
                   className={cn(
                     "p-4 border rounded-lg cursor-pointer transition-colors disabled:opacity-50 relative",
-                    isSelected
-                      ? "border-secondary-700 bg-secondary-700/5"
-                      : "border-black/10 hover:border-secondary-700/50"
+                    isConflictError
+                      ? "border-error bg-error/5"
+                      : isSelected
+                        ? "border-secondary-700 bg-secondary-700/5"
+                        : "border-black/10 hover:border-secondary-700/50"
                   )}
                   onClick={() => handleCleanerToggle(cleaner.id.toString())}
                 >
@@ -200,8 +230,7 @@ export default function AssignCleaner({
         </div>
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-md text-red-600">
-            {axios.isAxiosError(error) &&
-              error.response?.data?.message?.join(", ")}
+            {displayError(error)}
           </div>
         )}
         <div className="mt-4 space-y-4">
@@ -213,11 +242,18 @@ export default function AssignCleaner({
               variant={"secondary"}
               size={"xs"}
               onClick={handleAssignCleaner}
-              disabled={selectedCleanerIds.length === 0 || isPending}
+              disabled={
+                selectedCleanerIds.length === 0 || isPending || !hasChanged
+              }
+              title={
+                !hasChanged ? "No changes to cleaner assignment" : undefined
+              }
             >
               {isPending
-                ? "Assigning..."
-                : `Assign ${selectedCleanerIds.length} Cleaner${
+                ? isReassigning
+                  ? "Reassigning..."
+                  : "Assigning..."
+                : `${isReassigning ? "Reassign" : "Assign"} ${selectedCleanerIds.length} Cleaner${
                     selectedCleanerIds.length !== 1 ? "s" : ""
                   }`}
             </Button>

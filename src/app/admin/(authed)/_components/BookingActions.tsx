@@ -8,7 +8,8 @@ import {
   CheckIcon,
   TrashIcon,
   UserPlusIcon,
-  EyeIcon
+  EyeIcon,
+  UsersIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -46,6 +47,8 @@ export default function BookingActions({ booking }: BookingActionsProps) {
   const isAdmin = booking.user?.role === "ADMIN";
   const hasCleaners = booking.cleaners.length > 0;
   const bookingNumber = booking.id;
+  const canAssignOrReassign =
+    status === "PENDING" || status === "UNPAID" || status === "INPROGRESS";
 
   return (
     <>
@@ -105,8 +108,8 @@ export default function BookingActions({ booking }: BookingActionsProps) {
               )}
             </MenuItem>
 
-            {/* Assign Cleaner */}
-            {!hasCleaners && (status === "PENDING" || status === "UNPAID") && (
+            {/* Assign / Reassign Cleaner */}
+            {canAssignOrReassign && (
               <MenuItem>
                 {({ focus }) => (
                   <button
@@ -116,8 +119,17 @@ export default function BookingActions({ booking }: BookingActionsProps) {
                       focus ? "bg-gray-100" : ""
                     )}
                   >
-                    <UserPlusIcon className="size-4" />
-                    Assign Cleaner
+                    {hasCleaners ? (
+                      <>
+                        <UsersIcon className="size-4" />
+                        Reassign Cleaners
+                      </>
+                    ) : (
+                      <>
+                        <UserPlusIcon className="size-4" />
+                        Assign Cleaner
+                      </>
+                    )}
                   </button>
                 )}
               </MenuItem>

@@ -67,3 +67,12 @@ export function displayError(error: Error) {
   }
   return error.message;
 }
+
+export function getErrorData(error: Error) {
+  if (error instanceof AxiosError) {
+    const data = error.response?.data;
+
+    return data;
+  }
+  return error;
+}
