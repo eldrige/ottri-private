@@ -5,6 +5,7 @@ import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { displayError } from "@/lib/utils";
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
@@ -70,7 +71,7 @@ export default function ErrorComponent({ error, reset }: ErrorPageProps) {
             {showDetails && (
               <div className="mt-4 p-4 bg-muted rounded-md text-left overflow-auto max-h-64 text-error">
                 <p className="font-medium mb-2">Error message:</p>
-                <p className="text-sm font-mono mb-4">{error.message}</p>
+                <p className="text-sm font-mono mb-4">{displayError(error)}</p>
 
                 {error.digest && (
                   <>

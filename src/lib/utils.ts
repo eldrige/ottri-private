@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "react-hot-toast";
+import { AxiosError } from "axios";
 
 /**
  * Combines multiple class names using clsx and tailwind-merge
@@ -55,3 +56,14 @@ export const cleanMD = (markdown: string): string => {
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .trim();
 };
+
+export function displayError(error: Error) {
+  if (error instanceof AxiosError) {
+    const message = error.response?.data.message;
+
+    if (Array.isArray(message)) {
+      return message.join(", ");
+    } else return message;
+  }
+  return error.message;
+}
