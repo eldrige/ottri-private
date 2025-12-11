@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export function getMaxAge(jwt: string) {
   const decoded: DecodedJWT = jwtDecode(jwt);
 
-  return decoded.exp - decoded.iat - 1000 * 60 * 5;
+  return decoded.exp - decoded.iat - 60 * 5;
 }
 export function getRole(jwt: string) {
   const decoded: DecodedJWT = jwtDecode(jwt);

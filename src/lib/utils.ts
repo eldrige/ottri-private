@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "react-hot-toast";
 import { AxiosError } from "axios";
+import { format } from "date-fns";
 
 /**
  * Combines multiple class names using clsx and tailwind-merge
@@ -75,4 +76,9 @@ export function getErrorData(error: Error) {
     return data;
   }
   return error;
+}
+export function formatBookingTime(date: string, time: number) {
+  const dateObj = new Date(date);
+  dateObj.setUTCHours(time, 0, 0, 0);
+  return format(dateObj, "dd-MM-yyyy 'at' h:mm a");
 }

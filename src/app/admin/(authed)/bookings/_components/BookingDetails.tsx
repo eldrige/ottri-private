@@ -16,6 +16,7 @@ import EditBooking from "./EditBooking";
 import AssignCleaner from "./AssignCleaner";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import { useGetBookingQuery } from "../../_services/queries";
+import { formatBookingTime } from "@/lib/utils";
 
 export default function BookingDetails({
   bookingId,
@@ -82,9 +83,9 @@ export default function BookingDetails({
     );
   }
 
-  const dateTime = format(
-    new Date(booking.timeSlot.date),
-    "dd-MM-yyyy 'at' h:mm a"
+  const dateTime = formatBookingTime(
+    booking.timeSlot.date,
+    booking.timeSlot.startTime
   );
 
   const getStatusColor = (status: Booking["status"]) => {

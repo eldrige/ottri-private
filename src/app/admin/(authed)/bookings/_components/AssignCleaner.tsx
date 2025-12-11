@@ -2,8 +2,7 @@ import { Booking } from "@/app/admin/types";
 import ClockIcon2 from "@/components/icons/ClockIcon2";
 import StarIcon from "@/components/icons/StarIcon";
 import { Button } from "@/components/ui/Button";
-import { cn, displayError, getErrorData } from "@/lib/utils";
-import { format } from "date-fns";
+import { cn, displayError, formatBookingTime, getErrorData } from "@/lib/utils";
 import { X, Check } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import { useAssignCleanerMutation } from "../../_services/mutations";
@@ -45,9 +44,9 @@ export default function AssignCleaner({
 
   if (!cleaners) return null;
 
-  const dateTime = format(
-    new Date(booking.timeSlot.date),
-    "dd-MM-yyyy 'at' h:mm a"
+  const dateTime = formatBookingTime(
+    booking.timeSlot.date,
+    booking.timeSlot.startTime
   );
 
   const isReassigning = booking.cleaners?.length > 0;

@@ -1,7 +1,6 @@
 "use client";
 import { Booking } from "@/app/admin/types";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { cn, formatBookingTime } from "@/lib/utils";
 import BookingActions from "../../_components/BookingActions";
 
 interface StatusType {
@@ -22,9 +21,9 @@ export default function ListItem({
     "";
   const bookingNumber = booking.id;
   const service = booking.serviceType.name;
-  const dateTime = format(
-    new Date(booking.timeSlot.date),
-    "dd-MM-yyyy 'at' h:mm a"
+  const dateTime = formatBookingTime(
+    booking.timeSlot.date,
+    booking.timeSlot.startTime
   );
   const cleaners = booking.cleaners;
   const address = booking.address;
