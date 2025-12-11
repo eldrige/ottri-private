@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { X } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, MouseEventHandler } from "react";
 import {
   useServiceAddOnsQuery,
   useServicesQuery,
@@ -142,11 +142,11 @@ export default function EditBooking({
     details?: AddressDetails
   ) => {
     setField("serviceAddress", address || undefined);
-    setField("lat", details?.lat);
-    setField("lng", details?.lon);
-    setField("city", details?.city);
-    setField("state", details?.state);
-    setField("zipCode", details?.postcode);
+    if (details?.lat) setField("lat", details.lat);
+    if (details?.lon) setField("lng", details.lon);
+    if (details?.city) setField("city", details.city);
+    if (details?.state) setField("state", details.state);
+    if (details?.postcode) setField("zipCode", details.postcode);
   };
 
   const handleSelectedDate = (date: Date | null) => {
@@ -396,6 +396,13 @@ export default function EditBooking({
     return newBookingData.addOns.some((item) => item.id === addonId);
   };
 
+  const resetDate: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+
+    setField("preferredDate", initialBookingData.preferredDate);
+    setField("timeWindow", initialBookingData.timeWindow);
+  };
+
   return (
     <ModalWrapper onClose={onClose}>
       <div className="border border-black/10 text-secondary-700 rounded-lg p-8 w-full max-w-2xl bg-white max-h-[90vh] overflow-auto">
@@ -611,15 +618,23 @@ export default function EditBooking({
           <div className="mb-6">
             <h3 className="text-xl font-semibold mb-4">Scheduling</h3>
             {timeSlots && (
-              <DateTimeSlotsFields
-                accent="secondary"
-                timeSlots={timeSlots}
-                selectedDate={newBookingData.preferredDate}
-                selectedTimeWindow={newBookingData.timeWindow}
-                handleSelectedDate={handleSelectedDate}
-                handleSelectedTimeWindow={handleSelectedTimeWindow}
-                initialTimeWindow={newBookingData.timeWindow}
-              />
+              <>
+                <DateTimeSlotsFields
+                  accent="secondary"
+                  timeSlots={timeSlots}
+                  selectedDate={newBookingData.preferredDate}
+                  selectedTimeWindow={newBookingData.timeWindow}
+                  handleSelectedDate={handleSelectedDate}
+                  handleSelectedTimeWindow={handleSelectedTimeWindow}
+                  initialTimeWindow={newBookingData.timeWindow}
+                />
+                <button
+                  onClick={resetDate}
+                  className="block ml-auto mt-1 text-sm text-error hover:underline"
+                >
+                  Reset date & time
+                </button>
+              </>
             )}
           </div>
 
