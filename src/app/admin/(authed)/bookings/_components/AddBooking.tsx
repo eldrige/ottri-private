@@ -100,6 +100,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
   });
 
   const serviceType = watch("serviceType");
+  const specificServiceType = watch("specificServiceType");
   const petType = watch("petType");
   const accessMethod = watch("accessMethod");
   const addOnsValue = watch("addOns");
@@ -128,6 +129,24 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       setValue("specificServiceType", "");
     }
   }, [servicesOptions, serviceType, setValue]);
+
+  // Check if the selected specific service type is recurring
+  const isRecurringService = React.useMemo(() => {
+    if (!servicesOptions || !serviceType || !specificServiceType) return false;
+
+    const selectedService = servicesOptions.find(
+      (service) => service.id.toString() === serviceType
+    );
+
+    const selectedSpecificService = selectedService?.serviceTypes?.find(
+      (type) => type.id.toString() === specificServiceType
+    );
+
+    return (
+      selectedSpecificService?.name?.toLowerCase().includes("recurring") ||
+      false
+    );
+  }, [servicesOptions, serviceType, specificServiceType]);
 
   if (!servicesOptions) return null;
 
@@ -331,25 +350,27 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                 </div>
               )}
 
-              <div>
-                <label className="block mb-2 font-medium">Frequency *</label>
-                <Controller
-                  name="frequency"
-                  control={control}
-                  rules={{ required: "Frequency is required" }}
-                  render={({ field }) => (
-                    <Select
-                      accent="secondary"
-                      placeholder="Select frequency"
-                      options={frequencies}
-                      value={frequencies.find((i) => i.value === field.value)}
-                      onChange={(value) => field.onChange(value.value)}
-                      className={`w-full`}
-                      error={errors.frequency?.message}
-                    />
-                  )}
-                />
-              </div>
+              {isRecurringService && (
+                <div>
+                  <label className="block mb-2 font-medium">Frequency *</label>
+                  <Controller
+                    name="frequency"
+                    control={control}
+                    rules={{ required: "Frequency is required" }}
+                    render={({ field }) => (
+                      <Select
+                        accent="secondary"
+                        placeholder="Select frequency"
+                        options={frequencies}
+                        value={frequencies.find((i) => i.value === field.value)}
+                        onChange={(value) => field.onChange(value.value)}
+                        className={`w-full`}
+                        error={errors.frequency?.message}
+                      />
+                    )}
+                  />
+                </div>
+              )}
 
               <div>
                 <label className="block mb-2 font-medium">Bedrooms *</label>
