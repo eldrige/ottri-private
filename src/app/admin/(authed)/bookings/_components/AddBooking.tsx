@@ -168,7 +168,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       setValue("lng", details.lon);
       setValue("city", details.city);
       setValue("state", details.state);
-      setValue("zipCode", details.postcode);
+      if (details.postcode) setValue("zipCode", details.postcode);
     }
   };
 
