@@ -22,8 +22,6 @@ import AddressInput, {
   AddressDetails
 } from "@/app/(landings)/booking/new/_components/AddressInput";
 import { Textarea } from "@/components/ui/Textarea";
-import axios from "axios";
-import { toast } from "react-hot-toast";
 import DateTimeSlotsFields from "@/components/common/DateTimeSlotsFIelds";
 import { useAddBookingMutation } from "../../_services/mutations";
 import ModalWrapper from "@/components/common/ModalWrapper";
@@ -175,55 +173,43 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
   };
 
   const onSubmit = async (data: BookingFormData) => {
-    try {
-      const selectedService = servicesOptions.find(
-        (service) => service.id.toString() === data.serviceType
-      );
+    const selectedService = servicesOptions.find(
+      (service) => service.id.toString() === data.serviceType
+    );
 
-      const selectedSpecificService = selectedService?.serviceTypes?.find(
-        (type) => type.id.toString() === data.specificServiceType
-      );
+    const selectedSpecificService = selectedService?.serviceTypes?.find(
+      (type) => type.id.toString() === data.specificServiceType
+    );
 
-      const formData = {
-        fullName: data.clientName,
-        phoneNumber: data.clientPhone,
-        email: data.clientEmail,
-        serviceType: selectedService,
-        specificServiceType: selectedSpecificService,
-        frequency: data.frequency,
-        bedrooms: data.bedrooms,
-        bathrooms: data.bathrooms,
-        squareFootage: data.squareFootage,
-        serviceAddress: data.serviceAddress,
-        lat: data.lat,
-        lng: data.lng,
-        country: "US",
-        state: data.state,
-        city: data.city,
-        zipCode: data.zipCode,
-        petType: data.petType,
-        petInstructions: data.petInstructions,
-        accessMethod: data.accessMethod,
-        accessInstructions: data.accessInstructions,
-        preferredDate: data.preferredDate,
-        timeWindow: data.timeWindow,
-        addOns: data.addOns,
-        isAdminBooking: true
-      };
+    const formData = {
+      fullName: data.clientName,
+      phoneNumber: data.clientPhone,
+      email: data.clientEmail,
+      serviceType: selectedService,
+      specificServiceType: selectedSpecificService,
+      frequency: data.frequency,
+      bedrooms: data.bedrooms,
+      bathrooms: data.bathrooms,
+      squareFootage: data.squareFootage,
+      serviceAddress: data.serviceAddress,
+      lat: data.lat,
+      lng: data.lng,
+      country: "US",
+      state: data.state,
+      city: data.city,
+      zipCode: data.zipCode,
+      petType: data.petType,
+      petInstructions: data.petInstructions,
+      accessMethod: data.accessMethod,
+      accessInstructions: data.accessInstructions,
+      preferredDate: data.preferredDate,
+      timeWindow: data.timeWindow,
+      addOns: data.addOns,
+      isAdminBooking: true
+    };
 
-      await mutateAsync({ formData });
-      onClose();
-    } catch (error) {
-      console.error("Failed to add booking:", error);
-
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(
-          error.response?.data?.error?.message || "Failed to create booking"
-        );
-      } else {
-        toast.error("Network error. Please try again.");
-      }
-    }
+    await mutateAsync({ formData });
+    onClose();
   };
 
   return (

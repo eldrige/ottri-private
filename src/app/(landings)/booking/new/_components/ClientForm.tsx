@@ -25,7 +25,7 @@ import {
   TAX_RATE
 } from "@/utils/priceCalculation";
 import { PreflightType } from "../types";
-import { cn } from "@/lib/utils";
+import { cn, displayError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { UserData } from "@/lib/types";
 import AlertLineIcon from "@/components/icons/AlertLineIcon";
@@ -378,9 +378,7 @@ export default function ClientForm({
 
       // With axios, we can directly access the error response data
       if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.error.message ||
-          "An unexpected error occurred during booking";
+        const errorMessage = displayError(error);
 
         // Handle specific error cases based on status code
         if (error.response.status === 409) {

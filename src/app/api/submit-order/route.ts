@@ -159,7 +159,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        error: { message: errorMessage }
+        message: errorMessage
       },
       { status: errorCode }
     );

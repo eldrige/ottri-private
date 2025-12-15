@@ -21,6 +21,8 @@ import { clientAxios } from "@/lib/axios";
 import { getSlotBody } from "../_utils/timeSlots";
 import { TimeSlotFormDataType } from "@/lib/types";
 import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
+import { toast } from "react-toastify";
+import { displayError } from "@/lib/utils";
 
 // Assign cleaner
 async function assignCleaner({
@@ -135,6 +137,9 @@ export function useAddBookingMutation() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["bookings"] });
       queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
+    },
+    onError: (error) => {
+      toast.error(displayError(error));
     }
   });
 }
