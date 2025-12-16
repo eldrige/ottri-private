@@ -61,6 +61,7 @@ type BookingFormData = {
   preferredDate: Date | null;
   timeWindow: string;
   addOns: ServiceAddOn[];
+  otherService: string;
 };
 
 export default function EditBooking({
@@ -106,7 +107,8 @@ export default function EditBooking({
       accessInstructions: booking.entryInstructions,
       preferredDate: new Date(booking.timeSlot.date),
       timeWindow: booking.timeSlot.templateId.toString(),
-      addOns: booking.addOns || []
+      addOns: booking.addOns || [],
+      otherService: booking.otherAddOns || ""
     }
   });
 
@@ -193,6 +195,11 @@ export default function EditBooking({
       const updatedAddOns = [...addOnsValue];
       updatedAddOns.splice(existingAddOnIndex, 1);
       setValue("addOns", updatedAddOns, { shouldDirty: true });
+
+      // Clear otherService if "others" is unchecked
+      if (addon.name === "others") {
+        setValue("otherService", "", { shouldDirty: true });
+      }
     } else {
       setValue("addOns", [...addOnsValue, addon], { shouldDirty: true });
     }
@@ -201,6 +208,8 @@ export default function EditBooking({
   const isAddOnSelected = (addonId: number) => {
     return addOnsValue.some((item) => item.id === addonId);
   };
+
+  const isOthersSelected = addOnsValue.some((item) => item.name === "others");
 
   const hasChanges = () => {
     return Object.keys(dirtyFields).length > 0;
@@ -254,6 +263,9 @@ export default function EditBooking({
 
     // Add addOnIds only if the add-ons have changed
     if (dirtyFields.addOns) formData.addOnIds = data.addOns.map((i) => i.id);
+
+    // Add otherService if it has changed
+    if (dirtyFields.otherService) formData.otherService = data.otherService;
 
     // Only update if there are changes to the booking details
     let updatePromise = null as null | Promise<any>;
@@ -557,6 +569,24 @@ export default function EditBooking({
                   </div>
                 ))}
               </div>
+
+              {isOthersSelected && (
+                <div className="mt-4">
+                  <label className="block mb-2 font-medium">
+                    Specify Other Service *
+                  </label>
+                  <Input
+                    {...register("otherService", {
+                      required: isOthersSelected
+                        ? "Please specify the other service"
+                        : false
+                    })}
+                    placeholder="Enter text..."
+                    className="w-full p-4 rounded-lg bg-gray-50"
+                    error={errors.otherService?.message}
+                  />
+                </div>
+              )}
             </div>
           )}
 

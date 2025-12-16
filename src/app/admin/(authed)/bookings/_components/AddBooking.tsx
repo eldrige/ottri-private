@@ -57,6 +57,7 @@ type BookingFormData = {
   preferredDate: Date | null;
   timeWindow: string;
   addOns: ServiceAddOn[];
+  otherService: string;
 };
 
 export default function AddBooking({ onClose }: { onClose: () => void }) {
@@ -95,7 +96,8 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       accessInstructions: "",
       preferredDate: null,
       timeWindow: "",
-      addOns: []
+      addOns: [],
+      otherService: ""
     }
   });
 
@@ -182,6 +184,11 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       const updatedAddOns = [...addOnsValue];
       updatedAddOns.splice(existingAddOnIndex, 1);
       setValue("addOns", updatedAddOns);
+
+      // Clear otherService if "others" is unchecked
+      if (addon.name === "others") {
+        setValue("otherService", "");
+      }
     } else {
       setValue("addOns", [...addOnsValue, addon]);
     }
@@ -190,6 +197,8 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
   const isAddOnSelected = (addonId: number) => {
     return addOnsValue.some((item) => item.id === addonId);
   };
+
+  const isOthersSelected = addOnsValue.some((item) => item.name === "others");
 
   const onSubmit = async (data: BookingFormData) => {
     const selectedService = servicesOptions.find(
@@ -224,6 +233,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       preferredDate: data.preferredDate,
       timeWindow: data.timeWindow,
       addOns: data.addOns,
+      otherService: data.otherService,
       isAdminBooking: true
     };
 
@@ -494,6 +504,24 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   </div>
                 ))}
               </div>
+
+              {isOthersSelected && (
+                <div className="mt-4">
+                  <label className="block mb-2 font-medium">
+                    Specify Other Service *
+                  </label>
+                  <Input
+                    {...register("otherService", {
+                      required: isOthersSelected
+                        ? "Please specify the other service"
+                        : false
+                    })}
+                    placeholder="Enter text..."
+                    className="w-full p-4 rounded-lg bg-gray-50"
+                    error={errors.otherService?.message}
+                  />
+                </div>
+              )}
             </div>
           )}
 

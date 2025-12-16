@@ -295,6 +295,7 @@ export default function BookingDetails({
 
         {/* Additional Information */}
         {(booking.addOns?.length > 0 ||
+          booking.otherAddOns ||
           booking.pets ||
           booking.entryMethod ||
           booking.entryInstructions) && (
@@ -307,6 +308,12 @@ export default function BookingDetails({
                   <span className="ml-2 ">
                     {booking.addOns.map((addOn) => addOn.name).join(", ")}
                   </span>
+                </div>
+              )}
+              {booking.otherAddOns && (
+                <div>
+                  <span className="font-medium ">Other Add-on:</span>
+                  <span className="ml-2 ">{booking.otherAddOns}</span>
                 </div>
               )}
               {booking.pets && (
