@@ -66,9 +66,11 @@ export default function ApplyForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="border border-black/25 rounded p-9 flex flex-col items-start gap-6"
+      className="border border-black/25 rounded p-4 md:p-9 flex flex-col items-start gap-6"
     >
-      <h1 className="text-heading-3 font-bold">Apply For This Position</h1>
+      <h1 className="text-heading-4 md:text-heading-3 font-bold">
+        Apply For This Position
+      </h1>
 
       <div className="w-full">
         <Input
