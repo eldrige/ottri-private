@@ -6,23 +6,25 @@ import Stripe from "stripe";
 import {
   calculateAddOnsPrice,
   calculateServicesPrice,
-  calculateTax,
-  calculateTotal
+  calculateTax
 } from "../../../utils/priceCalculation";
 import { serverRequest } from "@/lib/serverRequest";
 import { User } from "@/app/dashboard/_utils/types";
 import { setAuthCookies } from "@/lib/auth";
 
-// Extend the type to include the paymentMethodId and admin booking flag
+// Extend the type to include the stripeConfirmationTokenId and admin booking flag
 interface OrderRequest extends OrderFormValues {
-  paymentMethodId?: string;
+  stripeConfirmationTokenId?: string;
   isAdminBooking?: boolean;
 }
 
 export async function POST(request: Request) {
   try {
-    const { paymentMethodId, isAdminBooking, ...orderData }: OrderRequest =
-      await request.json();
+    const {
+      stripeConfirmationTokenId,
+      isAdminBooking,
+      ...orderData
+    }: OrderRequest = await request.json();
 
     // Get user profile info
     const userRes = await serverRequest("auth/profile").catch(() => undefined);
@@ -30,11 +32,9 @@ export async function POST(request: Request) {
     const user = userRes?.data as User | undefined;
 
     // Calculate the total amount using the same logic as the form
-    const totalAmount = calculateTotal(orderData);
     const servicesPrice = calculateServicesPrice(orderData);
     const addOnsPrice = calculateAddOnsPrice(orderData);
 
-    let paymentIntent = null;
     let customerId =
       user?.role === "USER"
         ? user.personalInformation?.stripeCustomerId
@@ -60,19 +60,19 @@ export async function POST(request: Request) {
       customerId = customer.id;
     }
 
-    if (!isAdminBooking) {
-      // Process the payment with Stripe
-      paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(totalAmount * 100), // Amount in cents
-        currency: "usd",
-        payment_method: paymentMethodId,
-        confirm: true, // This attempts to charge the card immediately
-        automatic_payment_methods: { enabled: true, allow_redirects: "never" },
-        customer: customerId
-      });
+    // if (!isAdminBooking) {
+    //   // Process the payment with Stripe
+    //   paymentIntent = await stripe.paymentIntents.create({
+    //     amount: Math.round(totalAmount * 100), // Amount in cents
+    //     currency: "usd",
+    //     payment_method: stripeConfirmationTokenId,
+    //     confirm: true, // This attempts to charge the card immediately
+    //     automatic_payment_methods: { enabled: true, allow_redirects: "never" },
+    //     customer: customerId
+    //   });
 
-      console.log(paymentIntent);
-    }
+    //   console.log(paymentIntent);
+    // }
 
     const bodyObj = {
       cleaningFrequency: orderData.frequency || null,
@@ -90,13 +90,12 @@ export async function POST(request: Request) {
       email: orderData.email,
       petsInstructions: orderData.petInstructions || "",
       date: orderData.preferredDate,
-      // timeSlot: orderData.timeWindow,
       serviceId: orderData.serviceType?.id,
       serviceTypeId: orderData.specificServiceType?.id,
       bedrooms: orderData.bedrooms,
       bathrooms: orderData.bathrooms,
       approximateSquareFootage: orderData.squareFootage,
-      stripePaymentIntentId: paymentIntent?.id || null,
+      stripeConfirmationTokenId,
       stripeCustomerId: customerId,
       entryMethod: orderData.accessMethod,
       entryInstructions: orderData.accessInstructions || "",
@@ -160,7 +159,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        error: { message: errorMessage }
+        message: errorMessage
       },
       { status: errorCode }
     );

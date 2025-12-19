@@ -12,6 +12,7 @@ import { formatDate } from "@/lib/utils";
 import { formatHour24To12, formatName } from "../../_utils/helpers";
 import { useCancelBookingMutation } from "../../_services/mutations";
 import BookingDetails from "@/app/admin/(authed)/bookings/_components/BookingDetails";
+import { BookingStatusLabels } from "@/app/admin/types";
 
 type BookingCardProps = Pick<
   Booking,
@@ -162,20 +163,20 @@ function DesktopBookingCard({
             </div>
             {status === "INPROGRESS" ? (
               <Badge className="bg-badge-blue-opac text-badge-blue items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                {formatName(status)}
+                {BookingStatusLabels[status]}
               </Badge>
-            ) : status === "PENDING" ? (
+            ) : status === "PENDING" || status === "UNPAID" ? (
               <Badge className="bg-badge-orange-opac text-badge-orange items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                {formatName(status)}
+                {BookingStatusLabels[status]}
               </Badge>
             ) : status === "COMPLETED" ? (
               <Badge className="bg-badge-green-opac text-caption items-center px-4 py-1 text-badge-green rounded-lg flex border-0 gap-2">
-                {formatName(status)}
+                {BookingStatusLabels[status]}
               </Badge>
             ) : (
               status === "CANCELLED" && (
                 <Badge className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                  Cancelled
+                  {BookingStatusLabels[status]}
                 </Badge>
               )
             )}
@@ -272,20 +273,20 @@ function MobileBookingCard({
               </h1>
               {status === "INPROGRESS" ? (
                 <Badge className="bg-badge-blue-opac text-badge-blue items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                  {formatName(status)}
+                  {BookingStatusLabels[status]}
                 </Badge>
-              ) : status === "PENDING" ? (
+              ) : status === "PENDING" || status === "UNPAID" ? (
                 <Badge className="bg-badge-orange-opac text-badge-orange items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                  {formatName(status)}
+                  {BookingStatusLabels[status]}
                 </Badge>
               ) : status === "COMPLETED" ? (
                 <Badge className="bg-badge-green-opac text-caption items-center px-4 py-1 text-badge-green rounded-lg flex border-0 gap-2">
-                  {formatName(status)}
+                  {BookingStatusLabels[status]}
                 </Badge>
               ) : (
                 status === "CANCELLED" && (
                   <Badge className="bg-badge-red-opac text-badge-red items-center px-4 py-1 rounded-lg flex border-0 gap-2">
-                    Cancelled
+                    {BookingStatusLabels[status]}
                   </Badge>
                 )
               )}

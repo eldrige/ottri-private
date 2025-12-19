@@ -21,6 +21,8 @@ import { clientAxios } from "@/lib/axios";
 import { getSlotBody } from "../_utils/timeSlots";
 import { TimeSlotFormDataType } from "@/lib/types";
 import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
+import { toast } from "react-toastify";
+import { displayError } from "@/lib/utils";
 
 // Assign cleaner
 async function assignCleaner({
@@ -31,7 +33,7 @@ async function assignCleaner({
   cleanerIds: string[];
 }) {
   const booking = await clientAxios.post(`bookings/${bookingId}/assign`, {
-    cleanerIds: cleanerIds
+    cleanerIds
   });
   return booking.data as Booking;
 }
@@ -47,8 +49,16 @@ export function useAssignCleanerMutation() {
 }
 
 // Bookings
-export async function cancelBooking({ bookingId }: { bookingId: number }) {
-  const booking = await clientAxios.delete(`bookings/${bookingId}`);
+export async function cancelBooking({
+  bookingId,
+  unsubscribe = false
+}: {
+  bookingId: number;
+  unsubscribe?: boolean;
+}) {
+  const booking = await clientAxios.delete(
+    `bookings/${bookingId}?unsubscribe=${unsubscribe}`
+  );
   return booking.data;
 }
 export function useCancelBookingMutation() {
@@ -127,6 +137,9 @@ export function useAddBookingMutation() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["bookings"] });
       queryClient.invalidateQueries({ queryKey: ["bookings-stats"] });
+    },
+    onError: (error) => {
+      toast.error(displayError(error));
     }
   });
 }

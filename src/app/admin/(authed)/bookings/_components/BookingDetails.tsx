@@ -16,6 +16,7 @@ import EditBooking from "./EditBooking";
 import AssignCleaner from "./AssignCleaner";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import { useGetBookingQuery } from "../../_services/queries";
+import { formatBookingTime } from "@/lib/utils";
 
 export default function BookingDetails({
   bookingId,
@@ -82,9 +83,9 @@ export default function BookingDetails({
     );
   }
 
-  const dateTime = format(
-    new Date(booking.timeSlot.date),
-    "dd-MM-yyyy 'at' h:mm a"
+  const dateTime = formatBookingTime(
+    booking.timeSlot.date,
+    booking.timeSlot.startTime
   );
 
   const getStatusColor = (status: Booking["status"]) => {
@@ -94,6 +95,8 @@ export default function BookingDetails({
       case "INPROGRESS":
         return "bg-info/10 text-info-text";
       case "PENDING":
+        return "bg-warning/10 text-warning-text";
+      case "UNPAID":
         return "bg-warning/10 text-warning-text";
       case "CANCELLED":
         return "bg-error/10 text-error";
@@ -151,22 +154,22 @@ export default function BookingDetails({
                 <span className="font-medium ">Name:</span>
                 <span className="ml-2 ">
                   {booking.guest?.fullName ||
-                    booking.customer?.personalInformation?.fullName}
+                    booking.user?.personalInformation?.fullName}
                 </span>
               </div>
               <div className="truncate">
                 <span className="font-medium">Email:</span>
                 <span className="ml-2 w-full">
-                  {booking.guest?.email || booking.customer?.email}
+                  {booking.guest?.email || booking.user?.email}
                 </span>
               </div>
               {(booking.guest?.phoneNumber ||
-                booking.customer?.personalInformation?.phoneNumber) && (
+                booking.user?.personalInformation?.phoneNumber) && (
                 <div>
                   <span className="font-medium ">Phone:</span>
                   <span className="ml-2 ">
                     {booking.guest?.phoneNumber ||
-                      booking.customer?.personalInformation?.phoneNumber}
+                      booking.user?.personalInformation?.phoneNumber}
                   </span>
                 </div>
               )}
@@ -292,6 +295,7 @@ export default function BookingDetails({
 
         {/* Additional Information */}
         {(booking.addOns?.length > 0 ||
+          booking.otherAddOns ||
           booking.pets ||
           booking.entryMethod ||
           booking.entryInstructions) && (
@@ -304,6 +308,12 @@ export default function BookingDetails({
                   <span className="ml-2 ">
                     {booking.addOns.map((addOn) => addOn.name).join(", ")}
                   </span>
+                </div>
+              )}
+              {booking.otherAddOns && (
+                <div>
+                  <span className="font-medium ">Other Add-on:</span>
+                  <span className="ml-2 ">{booking.otherAddOns}</span>
                 </div>
               )}
               {booking.pets && (
@@ -332,7 +342,7 @@ export default function BookingDetails({
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3">
-          {booking.customer?.role === "ADMIN" && (
+          {booking.user?.role === "ADMIN" && (
             <Button
               variant="outline"
               size="2xs"
@@ -376,15 +386,17 @@ export default function BookingDetails({
                   {isCompleting ? "Completing..." : "Complete"}
                 </Button>
               )}
-              {!booking.cleaners.length && booking.status === "PENDING" && (
-                <Button
-                  variant="secondary"
-                  size="2xs"
-                  onClick={() => setAssignCleaners(booking)}
-                >
-                  Assign Cleaner
-                </Button>
-              )}
+              {!booking.cleaners.length &&
+                (booking.status === "PENDING" ||
+                  booking.status === "UNPAID") && (
+                  <Button
+                    variant="secondary"
+                    size="2xs"
+                    onClick={() => setAssignCleaners(booking)}
+                  >
+                    Assign Cleaner
+                  </Button>
+                )}
               {booking.status !== "CANCELLED" &&
                 booking.status !== "COMPLETED" && (
                   <Button

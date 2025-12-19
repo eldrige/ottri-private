@@ -2,9 +2,8 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 
-interface Location {
+export interface Location {
   id: number;
-  title: string;
   status: string;
   position: {
     lat: number;
@@ -54,6 +53,7 @@ export default function Map({
           // Add markers for each location
           locations.forEach((location) => {
             const markerColors: Record<string, string> = {
+              UNPAID: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
               PENDING:
                 "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
               INPROGRESS:
@@ -66,7 +66,6 @@ export default function Map({
             const marker = new google.maps.Marker({
               position: location.position,
               map: map,
-              title: location.title,
               icon: location.status ? markerColors[location.status] : undefined
             });
             marker.addListener("click", () => {

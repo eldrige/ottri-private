@@ -118,7 +118,7 @@ export default function PropertyDetailsStep() {
               setValue("country", address.country);
               setValue("state", address.state);
               setValue("city", address.city);
-              setValue("zipCode", address.postcode);
+              if (address.postcode) setValue("zipCode", address.postcode);
             } else {
               setValue("country", "");
               setValue("state", "");

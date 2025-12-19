@@ -297,7 +297,8 @@ export default function AdminDashboardPage() {
         </div>
         <div className="flex flex-col items-center gap-4 px-4 py-3 border border-black/10 rounded-lg">
           <p className="text-2xl text-primary-700">
-            {stats.statusBreakdown.PENDING || 0}
+            {stats.statusBreakdown.PENDING +
+              (stats.statusBreakdown.UNPAID || 0) || 0}
           </p>
           <p>Pending</p>
         </div>

@@ -47,6 +47,7 @@ export default function ListView() {
   };
 
   const statuses = [
+    { label: "Unpaid", value: "UNPAID" },
     { label: "Pending", value: "PENDING" },
     { label: "In Progress", value: "INPROGRESS" },
     { label: "Completed", value: "COMPLETED" },

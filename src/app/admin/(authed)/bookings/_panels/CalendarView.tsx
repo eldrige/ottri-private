@@ -42,13 +42,13 @@ export default function CalendarView() {
   const myEvents: EventSourceInput | undefined = bookings?.map((booking) => ({
     id: booking.id.toString(),
     title: (
-      booking.guest?.fullName || booking.customer?.personalInformation?.fullName
+      booking.guest?.fullName || booking.user?.personalInformation?.fullName
     )?.slice(0, 10),
     start: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.startTime}:00:00`,
     end: `${booking.timeSlot.date.split("T")[0]}T${booking.timeSlot.endTime}:00:00`,
     extendedProps: {
       status:
-        booking.status === "PENDING"
+        booking.status === "PENDING" || booking.status === "UNPAID"
           ? "warning"
           : booking.status === "COMPLETED"
             ? "success"

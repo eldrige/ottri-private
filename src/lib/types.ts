@@ -34,7 +34,6 @@ export interface UserData {
   email: string;
   role: string;
   signUpMethod: string;
-  settingsData: unknown;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

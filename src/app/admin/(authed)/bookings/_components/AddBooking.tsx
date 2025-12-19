@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useForm, Controller } from "react-hook-form";
 import {
   accessOptions,
   bathroomOptions,
@@ -21,8 +22,6 @@ import AddressInput, {
   AddressDetails
 } from "@/app/(landings)/booking/new/_components/AddressInput";
 import { Textarea } from "@/components/ui/Textarea";
-import axios from "axios";
-import { toast } from "react-hot-toast";
 import DateTimeSlotsFields from "@/components/common/DateTimeSlotsFIelds";
 import { useAddBookingMutation } from "../../_services/mutations";
 import ModalWrapper from "@/components/common/ModalWrapper";
@@ -35,56 +34,86 @@ const accessMethodOptions = accessOptions.map((i) => ({
 }));
 const petOptions = petTypeOptions.map((i) => ({ label: i.name, value: i.id }));
 
+type BookingFormData = {
+  clientName: string;
+  clientPhone: string;
+  clientEmail: string;
+  serviceType: string;
+  specificServiceType: string;
+  frequency: string;
+  bedrooms: string;
+  bathrooms: string;
+  squareFootage: string;
+  serviceAddress: string;
+  lng: number | null;
+  lat: number | null;
+  state: string;
+  city: string;
+  zipCode: string;
+  petType: string;
+  petInstructions: string;
+  accessMethod: string;
+  accessInstructions: string;
+  preferredDate: Date | null;
+  timeWindow: string;
+  addOns: ServiceAddOn[];
+  otherService: string;
+};
+
 export default function AddBooking({ onClose }: { onClose: () => void }) {
   const { data: servicesOptions } = useServicesQuery();
   const { data: timeSlots } = useTimeSlotsQuery();
   const { data: addOns } = useServiceAddOnsQuery();
   const { mutateAsync } = useAddBookingMutation();
 
-  const [newBookingData, setNewBookingData] = useState({
-    // Client Info
-    clientName: "",
-    clientPhone: "",
-    clientEmail: "",
-
-    // Service Details
-    serviceType: "",
-    specificServiceType: "",
-    frequency: "", // Default to one-time service
-    bedrooms: "",
-    bathrooms: "",
-    squareFootage: "",
-    serviceAddress: "",
-
-    // Location coordinates
-    lng: null as number | null,
-    lat: null as number | null,
-    state: "",
-    city: "",
-    zipCode: "",
-
-    // Additional Details
-    petType: "no-pets",
-    petInstructions: "",
-    accessMethod: accessOptions[0].id,
-    accessInstructions: "",
-
-    // Scheduling
-    preferredDate: null as Date | null,
-    timeWindow: "",
-
-    // Other
-    addOns: [] as ServiceAddOn[]
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    register,
+    formState: { errors, isSubmitting }
+  } = useForm<BookingFormData>({
+    defaultValues: {
+      clientName: "",
+      clientPhone: "",
+      clientEmail: "",
+      serviceType: "",
+      specificServiceType: "",
+      frequency: "",
+      bedrooms: "",
+      bathrooms: "",
+      squareFootage: "",
+      serviceAddress: "",
+      lng: null,
+      lat: null,
+      state: "",
+      city: "",
+      zipCode: "",
+      petType: "no-pets",
+      petInstructions: "",
+      accessMethod: accessOptions[0].id,
+      accessInstructions: "",
+      preferredDate: null,
+      timeWindow: "",
+      addOns: [],
+      otherService: ""
+    }
   });
-  const [isPending, setIsPending] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const serviceType = watch("serviceType");
+  const specificServiceType = watch("specificServiceType");
+  const petType = watch("petType");
+  const accessMethod = watch("accessMethod");
+  const addOnsValue = watch("addOns");
+
   const [specificServices, setSpecificServices] = useState<any[]>([]);
 
   // Update specific service types when a service type is selected
   useEffect(() => {
-    if (servicesOptions && newBookingData.serviceType) {
+    if (servicesOptions && serviceType) {
       const selectedService = servicesOptions.find(
-        (service) => service.id.toString() === newBookingData.serviceType
+        (service) => service.id.toString() === serviceType
       );
 
       if (selectedService && selectedService.serviceTypes) {
@@ -99,8 +128,27 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
       } else {
         setSpecificServices([]);
       }
+      setValue("specificServiceType", "");
     }
-  }, [servicesOptions, newBookingData.serviceType]);
+  }, [servicesOptions, serviceType, setValue]);
+
+  // Check if the selected specific service type is recurring
+  const isRecurringService = React.useMemo(() => {
+    if (!servicesOptions || !serviceType || !specificServiceType) return false;
+
+    const selectedService = servicesOptions.find(
+      (service) => service.id.toString() === serviceType
+    );
+
+    const selectedSpecificService = selectedService?.serviceTypes?.find(
+      (type) => type.id.toString() === specificServiceType
+    );
+
+    return (
+      selectedSpecificService?.name?.toLowerCase().includes("recurring") ||
+      false
+    );
+  }, [servicesOptions, serviceType, specificServiceType]);
 
   if (!servicesOptions) return null;
 
@@ -109,210 +157,88 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
     value: i.id.toString()
   }));
 
-  const setField = (key: keyof typeof newBookingData, value: any) => {
-    setNewBookingData((prev) => ({ ...prev, [key]: value }));
-    // Clear error when field is updated
-    if (errors[key]) {
-      setErrors((prev) => {
-        const updated = { ...prev };
-        delete updated[key];
-        return updated;
-      });
-    }
-  };
-
   // Handle address selection with coordinates
   const handleAddressSelected = (
     address: string | null,
     details?: AddressDetails
   ) => {
     if (address) {
-      setField("serviceAddress", address);
-    } else {
-      setField("serviceAddress", undefined);
+      setValue("serviceAddress", address);
     }
-    console.log(details);
     if (details) {
-      setField("lat", details.lat);
-      setField("lng", details.lon);
-      setField("city", details.city);
-      setField("state", details.state);
-      setField("zipCode", details.postcode);
-    } else {
-      setField("lat", undefined);
-      setField("lng", undefined);
-      setField("city", undefined);
-      setField("state", undefined);
-      setField("zipCode", undefined);
-    }
-  };
-
-  const handleSelectedDate = (date: Date | null) => {
-    setField("preferredDate", date);
-
-    setField("timeWindow", null);
-  };
-
-  const handleSelectedTimeWindow = (value: string | null) => {
-    setField("timeWindow", value);
-  };
-
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-
-    // Required fields
-    if (!newBookingData.clientName)
-      newErrors.clientName = "Client name is required";
-    if (!newBookingData.clientEmail)
-      newErrors.clientEmail = "Client email is required";
-    if (!newBookingData.clientPhone)
-      newErrors.clientPhone = "Client phone is required";
-    if (!newBookingData.serviceType)
-      newErrors.serviceType = "Service type is required";
-    if (!newBookingData.specificServiceType)
-      newErrors.specificServiceType = "Specific service type is required";
-    if (!newBookingData.serviceAddress)
-      newErrors.serviceAddress = "Service address is required";
-    if (!newBookingData.preferredDate)
-      newErrors.preferredDate = "Preferred date is required";
-    if (!newBookingData.timeWindow)
-      newErrors.timeWindow = "Time window is required";
-    if (!newBookingData.bedrooms) newErrors.bedrooms = "Bedrooms is required";
-    if (!newBookingData.bathrooms)
-      newErrors.bathrooms = "Bathrooms is required";
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (
-      newBookingData.clientEmail &&
-      !emailRegex.test(newBookingData.clientEmail)
-    ) {
-      newErrors.clientEmail = "Please enter a valid email address";
-    }
-
-    // Phone validation (basic)
-    const phoneRegex = /^\+?[0-9]{10,15}$/;
-    if (
-      newBookingData.clientPhone &&
-      !phoneRegex.test(newBookingData.clientPhone.replace(/\D/g, ""))
-    ) {
-      newErrors.clientPhone = "Please enter a valid phone number";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validate the form
-    if (!validateForm()) return;
-
-    setIsPending(true);
-
-    try {
-      const selectedService = servicesOptions.find(
-        (service) => service.id.toString() === newBookingData.serviceType
-      );
-
-      const selectedSpecificService = selectedService?.serviceTypes?.find(
-        (type) => type.id.toString() === newBookingData.specificServiceType
-      );
-
-      // Format the data according to the structure expected by the API
-      const formData = {
-        // Format to match schema.ts and route.ts
-        fullName: newBookingData.clientName,
-        phoneNumber: newBookingData.clientPhone,
-        email: newBookingData.clientEmail,
-
-        serviceType: selectedService,
-        specificServiceType: selectedSpecificService,
-        frequency: newBookingData.frequency,
-        bedrooms: newBookingData.bedrooms,
-        bathrooms: newBookingData.bathrooms,
-        squareFootage: newBookingData.squareFootage,
-        serviceAddress: newBookingData.serviceAddress,
-
-        lat: newBookingData.lat,
-        lng: newBookingData.lng,
-
-        // Make the API happy with the required fields
-        country: "US",
-        state: newBookingData.state,
-        city: newBookingData.city,
-        zipCode: newBookingData.zipCode,
-
-        petType: newBookingData.petType,
-        petInstructions: newBookingData.petInstructions,
-        accessMethod: newBookingData.accessMethod,
-        accessInstructions: newBookingData.accessInstructions,
-
-        preferredDate: newBookingData.preferredDate,
-        timeWindow: newBookingData.timeWindow,
-
-        addOns: newBookingData.addOns,
-
-        // Flag to identify this is an admin booking
-        isAdminBooking: true
-      };
-
-      // Send data to the API
-      await mutateAsync({ formData });
-
-      onClose();
-    } catch (error) {
-      console.error("Failed to add booking:", error);
-
-      if (axios.isAxiosError(error) && error.response) {
-        setErrors((prev) => ({
-          ...prev,
-          form:
-            error.response?.data?.error?.message || "Failed to create booking",
-          serviceAddress:
-            error.response?.data?.error?.message?.includes("area") &&
-            error.response.data.error.message
-        }));
-        toast.error(
-          error.response?.data?.error?.message || "Failed to create booking"
-        );
-      } else {
-        setErrors((prev) => ({
-          ...prev,
-          form: "Network error. Please try again."
-        }));
-        toast.error("Network error. Please try again.");
-      }
-    } finally {
-      setIsPending(false);
+      setValue("lat", details.lat);
+      setValue("lng", details.lon);
+      setValue("city", details.city);
+      setValue("state", details.state);
+      if (details.postcode) setValue("zipCode", details.postcode);
     }
   };
 
   // Add-on selection handling
   const handleAddOnToggle = (addon: ServiceAddOn) => {
-    setNewBookingData((prev) => {
-      const existingAddOnIndex = prev.addOns.findIndex(
-        (item) => item.id === addon.id
-      );
+    const existingAddOnIndex = addOnsValue.findIndex(
+      (item) => item.id === addon.id
+    );
 
-      if (existingAddOnIndex >= 0) {
-        // Remove the add-on if it's already selected
-        const updatedAddOns = [...prev.addOns];
-        updatedAddOns.splice(existingAddOnIndex, 1);
-        return { ...prev, addOns: updatedAddOns };
-      } else {
-        // Add the add-on
-        return {
-          ...prev,
-          addOns: [...prev.addOns, addon]
-        };
+    if (existingAddOnIndex >= 0) {
+      const updatedAddOns = [...addOnsValue];
+      updatedAddOns.splice(existingAddOnIndex, 1);
+      setValue("addOns", updatedAddOns);
+
+      // Clear otherService if "others" is unchecked
+      if (addon.name === "others") {
+        setValue("otherService", "");
       }
-    });
+    } else {
+      setValue("addOns", [...addOnsValue, addon]);
+    }
   };
 
   const isAddOnSelected = (addonId: number) => {
-    return newBookingData.addOns.some((item) => item.id === addonId);
+    return addOnsValue.some((item) => item.id === addonId);
+  };
+
+  const isOthersSelected = addOnsValue.some((item) => item.name === "others");
+
+  const onSubmit = async (data: BookingFormData) => {
+    const selectedService = servicesOptions.find(
+      (service) => service.id.toString() === data.serviceType
+    );
+
+    const selectedSpecificService = selectedService?.serviceTypes?.find(
+      (type) => type.id.toString() === data.specificServiceType
+    );
+
+    const formData = {
+      fullName: data.clientName,
+      phoneNumber: data.clientPhone,
+      email: data.clientEmail,
+      serviceType: selectedService,
+      specificServiceType: selectedSpecificService,
+      frequency: data.frequency,
+      bedrooms: data.bedrooms,
+      bathrooms: data.bathrooms,
+      squareFootage: data.squareFootage,
+      serviceAddress: data.serviceAddress,
+      lat: data.lat,
+      lng: data.lng,
+      country: "US",
+      state: data.state,
+      city: data.city,
+      zipCode: data.zipCode,
+      petType: data.petType,
+      petInstructions: data.petInstructions,
+      accessMethod: data.accessMethod,
+      accessInstructions: data.accessInstructions,
+      preferredDate: data.preferredDate,
+      timeWindow: data.timeWindow,
+      addOns: data.addOns,
+      otherService: data.otherService,
+      isAdminBooking: true
+    };
+
+    await mutateAsync({ formData });
+    onClose();
   };
 
   return (
@@ -325,7 +251,7 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           {/* Client Information Section */}
           <div className="mb-6">
             <h3 className="text-xl font-semibold mb-4">Client Information</h3>
@@ -335,11 +261,12 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   Client&apos;s Name *
                 </label>
                 <Input
+                  {...register("clientName", {
+                    required: "Client name is required"
+                  })}
                   placeholder="Enter Name.."
-                  value={newBookingData.clientName}
-                  onChange={(e) => setField("clientName", e.target.value)}
                   className={`w-full p-4 rounded-lg ${errors.clientName ? "border-red-500" : "bg-gray-50"}`}
-                  error={errors.clientName}
+                  error={errors.clientName?.message}
                 />
               </div>
               <div>
@@ -347,12 +274,17 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   Client&apos;s Email *
                 </label>
                 <Input
+                  {...register("clientEmail", {
+                    required: "Client email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Please enter a valid email address"
+                    }
+                  })}
                   type="email"
                   placeholder="Email address"
-                  value={newBookingData.clientEmail}
-                  onChange={(e) => setField("clientEmail", e.target.value)}
                   className={`w-full p-4 rounded-lg ${errors.clientEmail ? "border-red-500" : "bg-gray-50"}`}
-                  error={errors.clientEmail}
+                  error={errors.clientEmail?.message}
                 />
               </div>
               <div>
@@ -360,12 +292,17 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   Client&apos;s Phone *
                 </label>
                 <Input
+                  {...register("clientPhone", {
+                    required: "Client phone is required",
+                    pattern: {
+                      value: /^\+?[0-9]{10,15}$/,
+                      message: "Please enter a valid phone number"
+                    }
+                  })}
                   type="tel"
                   placeholder="Phone number"
-                  value={newBookingData.clientPhone}
-                  onChange={(e) => setField("clientPhone", e.target.value)}
                   className={`w-full p-4 rounded-lg ${errors.clientPhone ? "border-red-500" : "bg-gray-50"}`}
-                  error={errors.clientPhone}
+                  error={errors.clientPhone?.message}
                 />
               </div>
             </div>
@@ -377,19 +314,23 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
               <div>
                 <label className="block mb-2 font-medium">Service Type *</label>
-                <Select
-                  accent="secondary"
-                  placeholder="Service Type"
-                  options={serviceTypeOptions}
-                  value={serviceTypeOptions.find(
-                    (i) => i.value === newBookingData.serviceType
+                <Controller
+                  name="serviceType"
+                  control={control}
+                  rules={{ required: "Service type is required" }}
+                  render={({ field }) => (
+                    <Select
+                      accent="secondary"
+                      placeholder="Service Type"
+                      options={serviceTypeOptions}
+                      value={serviceTypeOptions.find(
+                        (i) => i.value === field.value
+                      )}
+                      onChange={(value) => field.onChange(value.value)}
+                      className={`w-full`}
+                      error={errors.serviceType?.message}
+                    />
                   )}
-                  onChange={(value) => {
-                    setField("serviceType", value.value);
-                    setField("specificServiceType", ""); // Reset specific type when main type changes
-                  }}
-                  className={`w-full`}
-                  error={errors.serviceType}
                 />
               </div>
 
@@ -398,78 +339,110 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   <label className="block mb-2 font-medium">
                     Specific Service Type *
                   </label>
-                  <Select
-                    accent="secondary"
-                    placeholder="Select specific type"
-                    options={specificServices}
-                    value={specificServices.find(
-                      (i) => i.value === newBookingData.specificServiceType
+                  <Controller
+                    name="specificServiceType"
+                    control={control}
+                    rules={{ required: "Specific service type is required" }}
+                    render={({ field }) => (
+                      <Select
+                        accent="secondary"
+                        placeholder="Select specific type"
+                        options={specificServices}
+                        value={specificServices.find(
+                          (i) => i.value === field.value
+                        )}
+                        onChange={(value) => field.onChange(value.value)}
+                        className={`w-full`}
+                        error={errors.specificServiceType?.message}
+                      />
                     )}
-                    onChange={(value) =>
-                      setField("specificServiceType", value.value)
-                    }
-                    className={`w-full`}
-                    error={errors.specificServiceType}
+                  />
+                </div>
+              )}
+
+              {isRecurringService && (
+                <div>
+                  <label className="block mb-2 font-medium">Frequency *</label>
+                  <Controller
+                    name="frequency"
+                    control={control}
+                    rules={{ required: "Frequency is required" }}
+                    render={({ field }) => (
+                      <Select
+                        accent="secondary"
+                        placeholder="Select frequency"
+                        options={frequencies}
+                        value={frequencies.find((i) => i.value === field.value)}
+                        onChange={(value) => field.onChange(value.value)}
+                        className={`w-full`}
+                        error={errors.frequency?.message}
+                      />
+                    )}
                   />
                 </div>
               )}
 
               <div>
-                <label className="block mb-2 font-medium">Frequency *</label>
-                <Select
-                  accent="secondary"
-                  placeholder="Select frequency"
-                  options={frequencies}
-                  value={frequencies.find(
-                    (i) => i.value === newBookingData.frequency
-                  )}
-                  onChange={(value) => setField("frequency", value.value)}
-                  className={`w-full`}
-                  error={errors.frequency}
-                />
-              </div>
-
-              <div>
                 <label className="block mb-2 font-medium">Bedrooms *</label>
-                <Select
-                  accent="secondary"
-                  placeholder="Select bedrooms"
-                  options={bedroomOptions}
-                  value={bedroomOptions.find(
-                    (i) => i.value === newBookingData.bedrooms
+                <Controller
+                  name="bedrooms"
+                  control={control}
+                  rules={{ required: "Bedrooms is required" }}
+                  render={({ field }) => (
+                    <Select
+                      accent="secondary"
+                      placeholder="Select bedrooms"
+                      options={bedroomOptions}
+                      value={bedroomOptions.find(
+                        (i) => i.value === field.value
+                      )}
+                      onChange={(value) => field.onChange(value.value)}
+                      className={`w-full`}
+                      error={errors.bedrooms?.message}
+                    />
                   )}
-                  onChange={(value) => setField("bedrooms", value.value)}
-                  className={`w-full`}
-                  error={errors.bedrooms}
                 />
               </div>
 
               <div>
                 <label className="block mb-2 font-medium">Bathrooms *</label>
-                <Select
-                  accent="secondary"
-                  placeholder="Select bathrooms"
-                  options={bathroomOptions}
-                  value={bathroomOptions.find(
-                    (i) => i.value === newBookingData.bathrooms
+                <Controller
+                  name="bathrooms"
+                  control={control}
+                  rules={{ required: "Bathrooms is required" }}
+                  render={({ field }) => (
+                    <Select
+                      accent="secondary"
+                      placeholder="Select bathrooms"
+                      options={bathroomOptions}
+                      value={bathroomOptions.find(
+                        (i) => i.value === field.value
+                      )}
+                      onChange={(value) => field.onChange(value.value)}
+                      className={`w-full`}
+                      error={errors.bathrooms?.message}
+                    />
                   )}
-                  onChange={(value) => setField("bathrooms", value.value)}
-                  className={`w-full`}
-                  error={errors.bathrooms}
                 />
               </div>
 
               <div>
                 <label className="block mb-2 font-medium">Square Footage</label>
-                <Select
-                  accent="secondary"
-                  placeholder="Select square footage"
-                  options={squareFootageOptions}
-                  value={squareFootageOptions.find(
-                    (i) => i.value === newBookingData.squareFootage
+                <Controller
+                  name="squareFootage"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      accent="secondary"
+                      placeholder="Select square footage"
+                      options={squareFootageOptions}
+                      value={squareFootageOptions.find(
+                        (i) => i.value === field.value
+                      )}
+                      onChange={(value) => field.onChange(value.value)}
+                      className="w-full"
+                    />
                   )}
-                  onChange={(value) => setField("squareFootage", value.value)}
-                  className="w-full"
                 />
               </div>
             </div>
@@ -478,13 +451,21 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               <label className="block mb-2 font-medium">
                 Service Address *
               </label>
-              <AddressInput
-                placeholder="123, main street, City, State 1234"
-                value={newBookingData.serviceAddress}
-                onChange={(address, coordinates) =>
-                  handleAddressSelected(address, coordinates)
-                }
-                error={errors.serviceAddress}
+              <Controller
+                name="serviceAddress"
+                control={control}
+                rules={{ required: "Service address is required" }}
+                render={({ field }) => (
+                  <AddressInput
+                    placeholder="123, main street, City, State 1234"
+                    value={field.value}
+                    onChange={(address, coordinates) => {
+                      field.onChange(address);
+                      handleAddressSelected(address, coordinates);
+                    }}
+                    error={errors.serviceAddress?.message}
+                  />
+                )}
               />
             </div>
           </div>
@@ -523,6 +504,24 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                   </div>
                 ))}
               </div>
+
+              {isOthersSelected && (
+                <div className="mt-4">
+                  <label className="block mb-2 font-medium">
+                    Specify Other Service *
+                  </label>
+                  <Input
+                    {...register("otherService", {
+                      required: isOthersSelected
+                        ? "Please specify the other service"
+                        : false
+                    })}
+                    placeholder="Enter text..."
+                    className="w-full p-4 rounded-lg bg-gray-50"
+                    error={errors.otherService?.message}
+                  />
+                </div>
+              )}
             </div>
           )}
 
@@ -530,13 +529,32 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
           <div className="mb-6">
             <h3 className="text-xl font-semibold mb-4">Scheduling</h3>
             {timeSlots && (
-              <DateTimeSlotsFields
-                accent="secondary"
-                timeSlots={timeSlots}
-                selectedDate={newBookingData.preferredDate}
-                selectedTimeWindow={newBookingData.timeWindow}
-                handleSelectedDate={handleSelectedDate}
-                handleSelectedTimeWindow={handleSelectedTimeWindow}
+              <Controller
+                name="preferredDate"
+                control={control}
+                rules={{ required: "Preferred date is required" }}
+                render={({ field: dateField }) => (
+                  <Controller
+                    name="timeWindow"
+                    control={control}
+                    rules={{ required: "Time window is required" }}
+                    render={({ field: timeField }) => (
+                      <DateTimeSlotsFields
+                        accent="secondary"
+                        timeSlots={timeSlots}
+                        selectedDate={dateField.value || null}
+                        selectedTimeWindow={timeField.value || null}
+                        handleSelectedDate={(date) => {
+                          dateField.onChange(date);
+                          timeField.onChange(null);
+                        }}
+                        handleSelectedTimeWindow={(value) =>
+                          timeField.onChange(value)
+                        }
+                      />
+                    )}
+                  />
+                )}
               />
             )}
           </div>
@@ -549,29 +567,30 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
                 <label className="block mb-2 font-medium">
                   Pets at Property
                 </label>
-                <Select
-                  accent="secondary"
-                  placeholder="Select pet type"
-                  options={petOptions}
-                  value={petOptions.find(
-                    (i) => i.value === newBookingData.petType
+                <Controller
+                  name="petType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      accent="secondary"
+                      placeholder="Select pet type"
+                      options={petOptions}
+                      value={petOptions.find((i) => i.value === field.value)}
+                      onChange={(value) => field.onChange(value.value)}
+                      className="w-full"
+                    />
                   )}
-                  onChange={(value) => setField("petType", value.value)}
-                  className="w-full"
                 />
               </div>
 
-              {newBookingData.petType !== "no-pets" && (
+              {petType !== "no-pets" && (
                 <div className="md:col-span-2">
                   <label className="block mb-2 font-medium">
                     Pet Instructions
                   </label>
                   <Textarea
+                    {...register("petInstructions")}
                     placeholder="Provide any specific instructions regarding pets..."
-                    value={newBookingData.petInstructions}
-                    onChange={(e) =>
-                      setField("petInstructions", e.target.value)
-                    }
                     className="w-full p-4 rounded-lg bg-gray-50"
                     rows={3}
                   />
@@ -586,28 +605,31 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <div>
                 <label className="block mb-2 font-medium">Access Method</label>
-                <Select
-                  accent="secondary"
-                  placeholder="How will cleaners access the property?"
-                  options={accessMethodOptions}
-                  value={accessMethodOptions.find(
-                    (i) => i.value === newBookingData.accessMethod
+                <Controller
+                  name="accessMethod"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      accent="secondary"
+                      placeholder="How will cleaners access the property?"
+                      options={accessMethodOptions}
+                      value={accessMethodOptions.find(
+                        (i) => i.value === field.value
+                      )}
+                      onChange={(value) => field.onChange(value.value)}
+                      className="w-full"
+                    />
                   )}
-                  onChange={(value) => setField("accessMethod", value.value)}
-                  className="w-full"
                 />
               </div>
-              {newBookingData.accessMethod !== "home" && (
+              {accessMethod !== "home" && (
                 <div className="md:col-span-2">
                   <label className="block mb-2 font-medium">
                     Access Instructions
                   </label>
                   <Textarea
+                    {...register("accessInstructions")}
                     placeholder="Provide specific instructions for accessing the property..."
-                    value={newBookingData.accessInstructions}
-                    onChange={(e) =>
-                      setField("accessInstructions", e.target.value)
-                    }
                     className="w-full p-4 rounded-lg bg-gray-50"
                     rows={3}
                   />
@@ -616,11 +638,6 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          {errors.form && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-md text-red-600">
-              {errors.form}
-            </div>
-          )}
           <div className="mt-10 grid grid-cols-2 gap-6">
             <Button
               type="button"
@@ -634,9 +651,9 @@ export default function AddBooking({ onClose }: { onClose: () => void }) {
               type="submit"
               variant="secondary"
               className="w-full py-3 bg-[#2D3648] text-white rounded-lg"
-              disabled={isPending}
+              disabled={isSubmitting}
             >
-              {isPending ? "Creating..." : "Add Booking"}
+              {isSubmitting ? "Creating..." : "Add Booking"}
             </Button>
           </div>
         </form>

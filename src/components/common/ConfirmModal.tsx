@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import ModalWrapper from "./ModalWrapper";
+import { ReactNode } from "react";
 
 type ConfirmModalProps = {
   open: boolean;
@@ -11,6 +12,7 @@ type ConfirmModalProps = {
   onCancel: () => void;
   loading?: boolean;
   accent?: "primary" | "secondary" | "destructive";
+  children?: ReactNode;
 };
 
 export default function ConfirmModal({
@@ -22,7 +24,8 @@ export default function ConfirmModal({
   onConfirm,
   onCancel,
   loading = false,
-  accent = "primary"
+  accent = "primary",
+  children
 }: ConfirmModalProps) {
   if (!open) return null;
 
@@ -33,6 +36,7 @@ export default function ConfirmModal({
         {description && (
           <p className="text-secondary-700/70 mb-6">{description}</p>
         )}
+        {children}
         <div className="flex justify-end gap-3">
           <button
             className="px-4 py-2 rounded font-medium bg-gray-100 text-secondary-700/70 hover:bg-gray-200 transition"

@@ -21,10 +21,6 @@ export default function MapView() {
         ?.filter((b) => b.location)
         .map((b) => ({
           id: b.id,
-          title:
-            b.guest?.fullName ||
-            b.customer?.personalInformation?.fullName ||
-            "",
           status: b.status,
           position: {
             lat: b.location!.coordinates[0],

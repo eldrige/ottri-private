@@ -10,46 +10,49 @@ export interface BookingsResponse {
 
 export interface MapBookingsResponse {
   total: number;
-  data: Pick<
-    Booking,
-    "id" | "displayId" | "status" | "customer" | "guest" | "location"
-  >[];
+  data: Pick<Booking, "id" | "status" | "location">[];
 }
 
 export enum BookingStatusLabels {
   COMPLETED = "Completed",
   CANCELLED = "Cancelled",
   PENDING = "Pending",
-  INPROGRESS = "In Progress"
+  INPROGRESS = "In Progress",
+  UNPAID = "Unpaid"
 }
 
 export interface Booking {
   id: number;
   displayId: string;
-  status: "PENDING" | "COMPLETED" | "CANCELLED" | "INPROGRESS";
+  status: "PENDING" | "COMPLETED" | "CANCELLED" | "INPROGRESS" | "UNPAID";
   servicesPrice: number;
   addOnsPrice: number;
   tip: number;
   tax: number;
   currency: string;
   otherAddOns: string;
-  cleaningFrequency: null;
+  cleaningFrequency: null | "WEEKLY" | "MONTHLY" | "BIWEEKLY";
   bedrooms: string;
   bathrooms: string;
   approximateSquareFootage: string;
   address: string;
   stripePaymentIntentId: string;
+  paymentAttempts: number;
+  paidAt: null | string;
   pets: string;
   petsInstructions: string;
   entryInstructions: string;
-  customerEmail: null | string;
-  customerId: null | number;
+  nextOccurrenceDate: null | string;
+  canceledAt: null | string;
+  userId: null | number;
+  guestId: number;
   serviceTypeId: number;
   timeSlotId: number;
+  parentId: null | number;
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
-  customer: Customer | null;
+  user: UserData | null;
   serviceType: ServiceType;
   cleaners: Cleaner[];
   review: null;
@@ -91,22 +94,6 @@ export interface ServiceType {
   deletedAt: null;
 }
 
-interface Customer {
-  id: number;
-  email: string;
-  password: string;
-  refreshToken: string;
-  passwordResetToken: null;
-  role: string;
-  signUpMethod: string;
-  settingsData: SettingsData;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: null;
-  personalInformation: PersonalInformation;
-}
-
 interface PersonalInformation {
   id: number;
   fullName: string;
@@ -121,10 +108,6 @@ interface PersonalInformation {
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
-}
-
-interface SettingsData {
-  unknown: unknown;
 }
 
 export interface ServiceOption {
@@ -230,6 +213,7 @@ export interface BookingStats {
     COMPLETED: number;
     CANCELLED: number;
     PENDING: number;
+    UNPAID: number;
     INPROGRESS: number;
   };
   totalRevenue: number;

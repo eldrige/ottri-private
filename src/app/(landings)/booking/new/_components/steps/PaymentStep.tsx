@@ -9,8 +9,8 @@ import { useFormContext } from "react-hook-form";
 import { OrderFormValues } from "@/app/(landings)/booking/new/schema";
 import { loadStripe } from "@stripe/stripe-js";
 import {
-  CardElement,
   Elements,
+  PaymentElement,
   useElements,
   useStripe
 } from "@stripe/react-stripe-js";
@@ -23,7 +23,7 @@ const stripePromise = loadStripe(
 );
 
 interface PaymentStepProps {
-  processPaymentRef: React.MutableRefObject<() => Promise<boolean | string>>;
+  processPaymentRef: React.RefObject<() => Promise<boolean | string>>;
   isUser: boolean;
 }
 
@@ -113,18 +113,27 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
       setPaymentError(null);
 
       try {
-        const cardElement = elements.getElement(CardElement);
+        const cardElement = elements.getElement(PaymentElement);
         if (!cardElement) {
           setPaymentError("Card information not found.");
           setProcessing(false);
           return false;
         }
 
+        const { error: submitError } = await elements.submit();
+        if (submitError) {
+          setPaymentError(
+            submitError.message || "An error occurred processing your card."
+          );
+          setProcessing(false);
+          return false;
+        }
+
         // Create a payment method
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-          type: "card",
-          card: cardElement
-        });
+        const { error, confirmationToken } =
+          await stripe.createConfirmationToken({
+            elements
+          });
 
         if (error) {
           setPaymentError(
@@ -137,7 +146,7 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
         // Add the payment method ID to the form data
         // We're not calling the API here, just saving the ID for the parent component
         setProcessing(false);
-        return paymentMethod.id;
+        return confirmationToken.id;
       } catch (err) {
         console.error("Payment processing error:", err);
         setPaymentError("An unexpected error occurred. Please try again.");
@@ -214,7 +223,8 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
               <label className="block mb-3 text-sm">
                 Card Details<span className="text-red-500">*</span>
               </label>
-              <CardElement
+              <PaymentElement onChange={(e) => setCardComplete(e.complete)} />
+              {/* <CardElement
                 options={{
                   hidePostalCode: true,
                   style: {
@@ -232,7 +242,7 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
                   }
                 }}
                 onChange={(e) => setCardComplete(e.complete)}
-              />
+              /> */}
               {!cardComplete && (
                 <p className="text-xs text-red-500 mt-1">
                   Card information is required
@@ -347,8 +357,14 @@ function CheckoutForm({ processPaymentRef, isUser }: PaymentStepProps) {
 
 // Wrapper component that provides Stripe Elements
 export default function PaymentStep(props: PaymentStepProps) {
+  const options = {
+    mode: "setup",
+    currency: "usd",
+    paymentMethodCreation: "manual",
+    setup_future_usage: "on_session"
+  } as const;
   return (
-    <Elements stripe={stripePromise}>
+    <Elements stripe={stripePromise} options={options}>
       <CheckoutForm {...props} />
     </Elements>
   );

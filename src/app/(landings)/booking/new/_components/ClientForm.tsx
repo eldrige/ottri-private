@@ -25,7 +25,7 @@ import {
   TAX_RATE
 } from "@/utils/priceCalculation";
 import { PreflightType } from "../types";
-import { cn } from "@/lib/utils";
+import { cn, displayError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { UserData } from "@/lib/types";
 import AlertLineIcon from "@/components/icons/AlertLineIcon";
@@ -72,7 +72,7 @@ export default function ClientForm({
       // Pre-fill from bookingData if available
       serviceType: matchedService || null,
       specificServiceType: matchedServiceType || null,
-      frequency: bookingData?.cleaningFrequency?.toString() || null,
+      frequency: bookingData?.cleaningFrequency?.toString(),
       bedrooms: bookingData?.bedrooms || "",
       bathrooms: bookingData?.bathrooms || "",
       squareFootage: bookingData?.approximateSquareFootage?.toString() || "",
@@ -173,11 +173,32 @@ export default function ClientForm({
 
     switch (currStep) {
       case 0:
-        isValid = await trigger([
+        const fieldsToValidate: (keyof OrderFormValues)[] = [
           "serviceType",
           "specificServiceType",
           "frequency"
-        ]);
+        ];
+        isValid = await trigger(fieldsToValidate);
+
+        if (
+          formValues.specificServiceType?.name
+            .toLowerCase()
+            .includes("recurring")
+        ) {
+          if (!formValues.frequency) {
+            setError("frequency", {
+              type: "manual",
+              message: "Cleaning frequency is required for recurring services"
+            });
+            isValid = false;
+          } else {
+            // Clear error if frequency is now provided
+            clearErrors("frequency");
+          }
+        } else {
+          // Clear frequency error for non-recurring services
+          clearErrors("frequency");
+        }
         break;
       case 1:
         isValid = await trigger([
@@ -220,7 +241,16 @@ export default function ClientForm({
     }
 
     return isValid;
-  }, [trigger, setError, currStep, formValues.addOns, formValues.otherService]);
+  }, [
+    currStep,
+    trigger,
+    formValues.specificServiceType?.name,
+    formValues.addOns,
+    formValues.frequency,
+    formValues.otherService,
+    setError,
+    clearErrors
+  ]);
 
   // Run validation when form values change
   useEffect(() => {
@@ -248,7 +278,8 @@ export default function ClientForm({
     formValues.state,
     formValues.city,
     formValues.zipCode,
-    validateCurrentStep
+    validateCurrentStep,
+    clearErrors
   ]);
 
   // Calculate price based on form values
@@ -259,7 +290,9 @@ export default function ClientForm({
   // Calculate the discount amount
   const calculateDiscount = () => {
     const basePrice = calculatePrice();
-    const discountPercentage = getDiscountPercentage(formValues.frequency);
+    const discountPercentage = getDiscountPercentage(
+      formValues.frequency || null
+    );
     return basePrice * discountPercentage;
   };
 
@@ -311,9 +344,9 @@ export default function ClientForm({
     }
 
     // For the payment step, we need to process the payment first
-    let paymentMethodId = formValues.paymentMethodId;
+    let stripeConfirmationTokenId = formValues.paymentMethodId;
 
-    if (currStep === 7 && !paymentMethodId && !data.isAdmin) {
+    if (currStep === 7 && !stripeConfirmationTokenId && !data.isAdmin) {
       // Process the payment
       const result = await processPaymentRef.current();
 
@@ -322,14 +355,15 @@ export default function ClientForm({
         setProcessing(false);
         return;
       }
-      if (typeof result === "string") paymentMethodId = result.toString();
+      if (typeof result === "string")
+        stripeConfirmationTokenId = result.toString();
     }
 
     // Process the final form submission using axios
     try {
       const response = await axios.post("/api/submit-order", {
         ...data,
-        paymentMethodId,
+        stripeConfirmationTokenId,
         isAdminBooking: data.isAdmin
       });
 
@@ -344,9 +378,7 @@ export default function ClientForm({
 
       // With axios, we can directly access the error response data
       if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.error.message ||
-          "An unexpected error occurred during booking";
+        const errorMessage = displayError(error);
 
         // Handle specific error cases based on status code
         if (error.response.status === 409) {
