@@ -15,7 +15,6 @@ import {
 } from "@/app/admin/types";
 import { axiosInstance, clientAxios } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 type GBQParamsType = {
   statusFilter?: string;
@@ -89,8 +88,8 @@ export function useStatsQuery({
   return useQuery({
     queryKey: ["bookings-stats", { statusFilter, startDate, endDate }],
     queryFn: () => {
-      return axios
-        .get(`/api/proxy?path=/bookings/stats?${sp}`)
+      return clientAxios
+        .get(`bookings/stats?${sp}`)
         .then((i) => i.data) as Promise<BookingStats>;
     }
   });

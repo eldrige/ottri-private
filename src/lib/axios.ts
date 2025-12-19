@@ -14,5 +14,5 @@ export const axiosInstance = Axios.create({
 });
 
 export const clientAxios = Axios.create({
-  baseURL: "/api/proxy?path=/"
+  baseURL: "/api/proxy"
 });
