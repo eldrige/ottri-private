@@ -95,7 +95,7 @@ export async function POST(request: Request) {
       bedrooms: orderData.bedrooms,
       bathrooms: orderData.bathrooms,
       approximateSquareFootage: orderData.squareFootage,
-      stripeConfirmationTokenId,
+      stripeConfirmationTokenId: stripeConfirmationTokenId || undefined,
       stripeCustomerId: customerId,
       entryMethod: orderData.accessMethod,
       entryInstructions: orderData.accessInstructions || "",

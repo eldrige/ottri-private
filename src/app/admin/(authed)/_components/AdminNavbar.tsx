@@ -26,23 +26,23 @@ export default function AdminNavbar({ onNav }: { onNav?: () => void }) {
     {
       href: "/admin/bookings",
       icon: <CalendarIcon className="size-4" />,
-      label: "Bookings",
-      badge: 2
+      label: "Bookings"
+      // badge: 2
     },
     {
       href: "/admin/staff-jobs",
       icon: <UsersIcon className="size-4" />,
-      label: "Staffs & Jobs"
+      label: "Staffs & Jobs (WIP)"
     },
     {
       href: "/admin/financials",
       icon: <DollarIcon2 className="size-4" />,
-      label: "Financials"
+      label: "Financials (WIP)"
     },
     {
       href: "/admin/inventory",
       icon: <BoxIcon2 className="size-4" />,
-      label: "Inventory"
+      label: "Inventory (WIP)"
     },
     {
       href: "/admin/service-zones",
@@ -52,7 +52,7 @@ export default function AdminNavbar({ onNav }: { onNav?: () => void }) {
     {
       href: "/admin/marketing",
       icon: <MarketingIcon className="size-4" />,
-      label: "Marketing"
+      label: "Marketing (WIP)"
     },
     {
       href: "/admin/job-applications",
