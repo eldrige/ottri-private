@@ -1,0 +1,208 @@
+"use client";
+import React, { useState } from "react";
+import { MailIcon, Phone } from "lucide-react";
+import LocationIcon from "@/components/icons/LocationIcon";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { User } from "../../_utils/types";
+import { useUpdateProfileMutation } from "../../_services/mutations";
+import { ImageUpload } from "@/app/_components/ImageUpload";
+import { ImageListType } from "react-images-uploading";
+import { uploadImage } from "@/utils/uploadImage";
+import { useGetUserProfile } from "../../_services/queries";
+import ConfirmModal from "@/components/common/ConfirmModal";
+
+export default function ProfileSection2() {
+  const { data: user } = useGetUserProfile();
+  const [image, setImage] = useState<ImageListType>([]);
+  const {
+    mutateAsync: updateProfile,
+    isPending: isUpdating,
+    error: updateProfileError
+  } = useUpdateProfileMutation();
+
+  if (!user) return null;
+  const handleUpdatePicture = async () => {
+    if (image.length < 1) return;
+    const imageData = await uploadImage(image[0].file!);
+    await updateProfile({
+      userId: String(user.id),
+      imageUrl: imageData.data.url
+    });
+  };
+  return (
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="p-6 border border-surface-500/30 rounded-lg flex flex-col gap-16">
+        <div className="w-full items-center flex flex-col">
+          <ImageUpload
+            image={image}
+            placeholderImageUrl={user.personalInformation?.imageUrl}
+            setImage={setImage}
+            rounded
+          />
+          <div className="flex items-center flex-col pt-5">
+            <h1 className="font-medium text-2xl text-secondary-700">
+              {user.personalInformation?.fullName}
+            </h1>
+            <p className="text-surface-500 text-body text-xs">
+              Joined since {new Date(user.createdAt).getFullYear()}
+            </p>
+          </div>
+          {updateProfileError && (
+            <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+              {(updateProfileError as Error).message ||
+                "Failed to update profile picture"}
+            </div>
+          )}
+
+          <Button
+            onClick={handleUpdatePicture}
+            disabled={isUpdating || image.length === 0}
+            variant={"secondary"}
+            className="my-4 text-sm"
+            size={"sm"}
+          >
+            Update Picture
+          </Button>
+        </div>
+        <div className="flex gap-4 text-surface-500 *:items-center *:flex *:gap-2 flex-col">
+          <div>
+            <MailIcon className="size-5" />
+            <p>{user.email}</p>
+          </div>
+          <div>
+            <Phone className="size-5" />
+            <p>{user.personalInformation?.phoneNumber || "N/A"}</p>
+          </div>
+          <div>
+            <LocationIcon className="size-5" />
+            <p>{user.personalInformation?.address || "N/A"}</p>
+          </div>
+        </div>
+      </div>
+      <PersonalInfoForm user={user} />
+    </section>
+  );
+}
+
+function PersonalInfoForm({ user }: { user: User }) {
+  const [formData, setFormData] = useState({
+    fullName: user.personalInformation?.fullName || "",
+    email: user.email,
+    phone: user.personalInformation?.phoneNumber || "",
+    address: user.personalInformation?.address || "",
+    yearJoined: new Date(user.createdAt).getFullYear()
+  });
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const {
+    mutateAsync: updateProfile,
+    isPending: isUpdating,
+    error
+  } = useUpdateProfileMutation();
+
+  function handleOnchange(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value
+      };
+    });
+  }
+
+  async function handleSaveChanges() {
+    await updateProfile({
+      userId: String(user.id),
+      fullName: formData.fullName,
+      phoneNumber: formData.phone,
+      address: formData.address
+    });
+    setShowConfirmModal(false);
+  }
+
+  return (
+    <>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="p-6 border border-surface-500/30 rounded-lg flex flex-col justify-between gap-8"
+      >
+        <div>
+          <h1 className="font-medium text-2xl text-secondary-700">
+            Personal Information
+          </h1>
+          <p className="text-surface-500 text-body">
+            update your personal details
+          </p>
+        </div>
+        <form className="flex *:flex *:flex-col *:gap-2 text-secondary-700 flex-col gap-3">
+          <label>
+            Fullname
+            <Input
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleOnchange}
+            />
+          </label>
+          <label>
+            Email
+            <Input
+              name="email"
+              value={formData.email}
+              onChange={handleOnchange}
+              disabled
+            />
+          </label>
+          <label>
+            Phone
+            <Input
+              name="phone"
+              value={formData.phone}
+              onChange={handleOnchange}
+            />
+          </label>
+          <label>
+            Address
+            <Input
+              name="address"
+              value={formData.address}
+              onChange={handleOnchange}
+            />
+          </label>
+          {error && (
+            <div
+              className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+              role="alert"
+            >
+              {"Error: " + (error as Error).message || "An error occurred"}
+            </div>
+          )}
+          <Button
+            disabled={isUpdating}
+            onClick={(e) => {
+              e.preventDefault();
+              setShowConfirmModal(true);
+            }}
+            size={"xs"}
+            className="hover:border-secondary-700 my-3 hover:text-secondary-700 w-full text-caption flex justify-center gap-3 bg-secondary-700 text-white"
+          >
+            Save Changes
+          </Button>
+        </form>
+      </div>
+      {showConfirmModal && (
+        <ConfirmModal
+          open={showConfirmModal}
+          title="Confirm Change"
+          description="Are you sure you want to save these changes to your profile?"
+          onCancel={() => setShowConfirmModal(false)}
+          onConfirm={handleSaveChanges}
+          loading={isUpdating}
+          confirmText="Save Changes"
+          accent="destructive"
+        />
+      )}
+    </>
+  );
+}

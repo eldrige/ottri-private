@@ -1,0 +1,9 @@
+echo '🥽⚒💻😎 Lets check your code a little bit before pushing'
+
+yarn build || 
+    (
+        echo '👋😤 Please fix your build errors'
+        false
+    )
+
+echo '✅✅ You did good... I am pushing this now.✅✅ '

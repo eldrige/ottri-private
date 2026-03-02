@@ -1,13 +1,24 @@
-import React from 'react';
+import * as React from "react";
 
-export default function ClockIcon({className = ""}: {className?: string}) {
+function ClockIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <span className={className}>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentcolor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M11 8V13H16" stroke="currentcolor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
-
+    <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" {...props}>
+      <path
+        d="M12 21a9 9 0 100-18 9 9 0 000 18z"
+        stroke="currentcolor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11 8v5h5"
+        stroke="currentcolor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
+
+export default ClockIcon;

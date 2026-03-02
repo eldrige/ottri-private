@@ -1,0 +1,16 @@
+echo '🥽⚒💻😎 Lets check your code a little bit before committing'
+
+yarn lint-staged ||
+    (
+        echo '👋😤 Please fix your code syntax and semantics, type errors and build errors. 👋😤 
+                ESLint Check Failed. Make the required changes listed above, and try to commit again.'
+        false
+    )
+
+yarn type-check || 
+    (
+        echo '👋😤 Please fix your type errors'
+        false
+    )
+
+echo '✅✅ You did good... I am committing this now. ✅✅'

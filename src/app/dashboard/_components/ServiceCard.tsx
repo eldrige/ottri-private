@@ -1,0 +1,359 @@
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import cleanerPlacholderImage from "@/assets/cleaner-placeholder.png";
+import ClockIcon from "@/components/icons/ClockIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
+import { Badge } from "@/components/ui/Badge";
+import { CircleAlert } from "lucide-react";
+import StarIcon from "@/components/icons/StarIcon";
+import { Button } from "@/components/ui/Button";
+import { Booking } from "../_utils/types";
+import { formatDate } from "@/lib/utils";
+import { formatHour24To12, formatName } from "../_utils/helpers";
+import { useCancelBookingMutation } from "../_services/mutations";
+import BookingDetails from "@/app/admin/(authed)/bookings/_components/BookingDetails";
+
+export default function ServiceCard({
+  service
+}: {
+  service: ServiceCardProps;
+}) {
+  const [showBookingDetailsModal, setShowBookingDetailsModal] = useState(false);
+
+  return (
+    <>
+      <div className="flex flex-col xl:hidden gap-4">
+        <MobileServiceCard
+          setShowBookingDetailsModal={setShowBookingDetailsModal}
+          {...service}
+        />
+      </div>
+      <div className="hidden xl:flex gap-4">
+        <DesktopServiceCard
+          setShowBookingDetailsModal={setShowBookingDetailsModal}
+          {...service}
+        />
+      </div>
+      {showBookingDetailsModal && (
+        <BookingDetails
+          bookingId={service.id}
+          onClose={() => setShowBookingDetailsModal(false)}
+          variant={"user"}
+        />
+      )}
+    </>
+  );
+}
+
+type ServiceCardProps = Booking & { rating?: number };
+
+function DesktopServiceCard({
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status,
+  rating,
+  setShowBookingDetailsModal
+}: ServiceCardProps & {
+  setShowBookingDetailsModal: (show: boolean) => void;
+}) {
+  return (
+    <div className="w-full">
+      <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
+        <div className="flex gap-4 items-center">
+          <Image
+            className="object-cover rounded-full w-13.5 aspect-square"
+            src={
+              cleaners[0]?.profile
+                ? cleaners[0].profile
+                : cleanerPlacholderImage
+            }
+            alt={"cleaner profile"}
+            width={100}
+            height={100}
+          />
+          <div className="gap-1 flex-col">
+            <h1
+              onClick={() => setShowBookingDetailsModal(true)}
+              className="cursor-pointer hover:text-secondary-900 font-medium text-body text-secondary-700"
+            >
+              {formatName(serviceType.name)}
+            </h1>
+            <div className="flex *:text-surface-500 items-center *:text-caption">
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
+              <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
+              <p>{formatDate(timeSlot.date)}</p>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
+                <ClockIcon className="text-surface-500/50 size-4" />
+                <p className="text-nowrap">
+                  {formatHour24To12(timeSlot.startTime)} -{" "}
+                  {formatHour24To12(timeSlot.endTime)}
+                </p>
+              </div>
+              <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
+                <LocationIcon className="text-surface-500/50 size-4" />
+                <p className="text-nowrap">{address}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          {status === "COMPLETED" ? (
+            <Badge className="bg-badge-green-opac text-[14px] items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
+              <CircleAlert className="w-4.25" />
+              Completed
+            </Badge>
+          ) : (
+            <Badge className="bg-surface-500/15 text-[14px] items-center px-3 text-secondary-700 rounded-xl flex border-0 gap-2">
+              <CircleAlert className="w-4.25" />
+              Scheduled
+            </Badge>
+          )}
+          {rating && (
+            <div className="flex items-center gap-0.25">
+              <StarIcon />
+              <p>{rating}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileServiceCard({
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status,
+  rating,
+  setShowBookingDetailsModal
+}: Omit<ServiceCardProps, "cleanerImage"> & {
+  setShowBookingDetailsModal: (show: boolean) => void;
+}) {
+  return (
+    <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
+      <div className="flex gap-4 w-full items-center">
+        <div className="flex cursor-pointer gap-2 w-full flex-col">
+          <div className="flex items-center justify-between w-full">
+            <h1
+              onClick={() => setShowBookingDetailsModal(true)}
+              className="cursor-pointer hover:text-secondary-900 font-medium text-body text-secondary-700"
+            >
+              {formatName(serviceType.name)}
+            </h1>
+            <div className="flex flex-row-reverse md:flex-row items-center gap-2">
+              <Badge className="bg-badge-green-opac text-caption items-center px-3 text-badge-green rounded-lg flex border-0 gap-2">
+                <CircleAlert className="w-4.25" />
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </Badge>
+              <div className="flex items-center gap-0.25">
+                <StarIcon />
+                <p>{rating}</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex *:text-surface-500 items-center *:text-caption">
+            <p>{cleaners[0]?.fullName || "No Cleaner"} </p>
+            <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
+            <p>{formatDate(timeSlot.date)}</p>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
+              <ClockIcon className="text-surface-500/50 size-4" />
+              <p className="text-nowrap">
+                {formatHour24To12(timeSlot.startTime)} -{" "}
+                {formatHour24To12(timeSlot.endTime)}
+              </p>
+            </div>
+            <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
+              <LocationIcon className="text-surface-500/50 size-4" />
+              <p className="text-nowrap">{address}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function AppointmentCard({
+  service
+}: Readonly<{
+  service: ServiceCardProps;
+}>) {
+  const { mutateAsync: handleCancel, isPending } = useCancelBookingMutation();
+
+  const handleCancelClick = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleCancel({ bookingId: service.id });
+  };
+
+  return (
+    <>
+      <div className="flex flex-col xl:hidden gap-4">
+        <AppointmentCardMobile
+          {...service}
+          handleCancel={handleCancelClick}
+          isPendingCancel={isPending}
+        />
+      </div>
+      <div className="hidden xl:flex gap-4">
+        <AppointmentCardDesktop
+          {...service}
+          handleCancel={handleCancelClick}
+          isPendingCancel={isPending}
+        />
+      </div>
+    </>
+  );
+}
+
+function AppointmentCardDesktop({
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status,
+  handleCancel,
+  isPendingCancel
+}: ServiceCardProps & {
+  handleCancel?: (e: React.FormEvent) => void;
+  isPendingCancel?: boolean;
+}) {
+  return (
+    <div className="w-full">
+      <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
+        <div className="flex gap-4 items-center">
+          <Image
+            className="object-cover rounded-full w-13.5 aspect-square"
+            src={
+              cleaners[0]?.profile
+                ? cleaners[0].profile
+                : cleanerPlacholderImage
+            }
+            alt={"cleaner profile"}
+            width={100}
+            height={100}
+          />
+          <div className="flex gap-1 flex-col">
+            <h1 className="font-medium text-body text-secondary-700">
+              {formatName(serviceType.name)}
+            </h1>
+            <div className="flex *:text-surface-500 items-center *:text-caption">
+              <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
+              <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
+              <p>{formatDate(timeSlot.date)}</p>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
+                <ClockIcon className="text-surface-500/50 size-4" />
+                <p className="text-nowrap">
+                  {formatHour24To12(timeSlot.startTime)} -{" "}
+                  {formatHour24To12(timeSlot.endTime)}
+                </p>
+              </div>
+              <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
+                <LocationIcon className="text-surface-500/50 size-4" />
+                <p className="text-nowrap">{address}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            onClick={handleCancel}
+            disabled={
+              isPendingCancel ||
+              status === "COMPLETED" ||
+              status === "CANCELLED" ||
+              status === "INPROGRESS"
+            }
+            size={"xs"}
+            className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
+            variant={"outline"}
+          >
+            {isPendingCancel ? "Cancelling..." : "Cancel"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AppointmentCardMobile({
+  serviceType,
+  cleaners,
+  timeSlot,
+  address,
+  status,
+  handleCancel,
+  isPendingCancel
+}: ServiceCardProps & {
+  handleCancel?: (e: React.FormEvent) => void;
+  isPendingCancel?: boolean;
+}) {
+  return (
+    <div className="flex px-4 py-2 rounded-lg justify-between items-center border w-full border-secondary-800/25 gap-4">
+      <div className="flex gap-4 w-full items-center">
+        <div className="flex gap-2 w-full flex-col">
+          <div className="flex items-center gap-4 mb-2 w-full">
+            <Image
+              className="object-cover rounded-full w-13.5 aspect-square"
+              src={
+                cleaners[0]?.profile
+                  ? cleaners[0].profile
+                  : cleanerPlacholderImage
+              }
+              alt={"cleaner profile"}
+              width={100}
+              height={100}
+            />
+            <h1 className="font-medium text-body text-secondary-700">
+              {formatName(serviceType.name)}
+            </h1>
+          </div>
+          <div className="flex *:text-surface-500 items-center *:text-caption">
+            <p>{cleaners[0]?.fullName || "No Cleaner"}</p>
+            <div className="p-1 h-fit rounded-full mx-2 bg-surface-500/50" />
+            <p>{formatDate(timeSlot.date)}</p>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
+              <ClockIcon className="text-surface-500/50 size-4" />
+              <p className="text-nowrap">
+                {formatHour24To12(timeSlot.startTime)} -{" "}
+                {formatHour24To12(timeSlot.endTime)}
+              </p>
+            </div>
+            <div className="flex gap-1.5 text-surface-500 items-center *:text-caption">
+              <LocationIcon className="text-surface-500/50 size-4" />
+              <p className="text-nowrap">{address}</p>
+            </div>
+          </div>
+          <div className="flex flex-row-reverse md:flex-row items-center gap-2">
+            <Button
+              onClick={handleCancel}
+              disabled={
+                isPendingCancel ||
+                status === "COMPLETED" ||
+                status === "CANCELLED" ||
+                status === "INPROGRESS"
+              }
+              size={"xs"}
+              className="w-full text-caption disabled:text-gray-300 disabled:bg-transparent disabled:border-gray-300 flex justify-center gap-3 "
+              variant={"outline"}
+            >
+              {isPendingCancel ? "Cancelling..." : "Cancel"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

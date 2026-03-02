@@ -1,0 +1,40 @@
+"use client";
+import React, { useState } from "react";
+import PanelViewer from "../_components/PanelViewer";
+import ApplicationsListPanel from "./_panels/ApplicationsListPanel";
+import JobPositionsPanel from "./_panels/JobPositionsPanel";
+
+export default function JobApplicationsPage() {
+  const [activeView, setActiveView] = useState("applications");
+
+  return (
+    <div className="p-6">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Job Applications</h1>
+        <p className="text-gray-600 mt-2">
+          Manage applications across all job positions and update job
+          descriptions
+        </p>
+      </div>
+
+      <PanelViewer
+        views={[
+          {
+            viewName: "applications",
+            content: "Applications"
+          },
+          {
+            viewName: "job-positions",
+            content: "Job Positions"
+          }
+        ]}
+        activeView={activeView}
+        setActiveView={setActiveView}
+      />
+      <div className="mt-4">
+        {activeView === "applications" && <ApplicationsListPanel />}
+        {activeView === "job-positions" && <JobPositionsPanel />}
+      </div>
+    </div>
+  );
+}
