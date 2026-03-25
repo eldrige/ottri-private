@@ -16,6 +16,8 @@ export default function Navbar() {
     profileData && (profileData?.role === "ADMIN" ? "/admin" : "/dashboard");
   const [showMobile, setShowMobile] = useState(false);
 
+  console.log(profileData, "profileData");
+
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white px-6 py-5 shadow-lg">

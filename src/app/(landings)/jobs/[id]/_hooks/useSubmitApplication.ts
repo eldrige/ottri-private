@@ -1,7 +1,7 @@
 import { uploadDocument } from "@/utils/uploadDocument";
 import { useMutation } from "@tanstack/react-query";
 import { ApplyFormType } from "../types/ApplyFormType";
-import { axiosInstance } from "@/lib/axios";
+import { clientAxios } from "@/lib/axios";
 import { JobApplicationType } from "@/app/admin/types";
 
 export function useSubmitApplication() {
@@ -13,7 +13,7 @@ export function useSubmitApplication() {
         data: { url }
       } = await uploadDocument(application.resume[0]);
 
-      const { data } = await axiosInstance.post<JobApplicationType>(
+      const { data } = await clientAxios.post<JobApplicationType>(
         "careers/applications",
         {
           email: application.email,

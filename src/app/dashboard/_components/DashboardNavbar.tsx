@@ -14,9 +14,15 @@ import userImage from "@/assets/user-profile-figure.png";
 import Link from "next/link";
 import { SideNavLink } from "./SideNavBar";
 import Menu2 from "@/components/icons/Menu2";
+import { useGetUserProfile } from "../_services/queries";
 
 export default function Navbar() {
   const [showMobile, setShowMobile] = useState(false);
+
+  const { data: profileData } = useGetUserProfile();
+
+  console.log(profileData, "profileData");
+
   return (
     <>
       <nav className="md:hidden fixed px-2 w-full top-1 z-50">
@@ -120,7 +126,7 @@ function MobileNav({
                       Jenny Murphy
                     </h1>
                     <p className="text-surface-500 text-xs">
-                      jennymurphy@gmail.com
+                      jennymurphy@gmail.com mf
                     </p>
                   </Link>
                 </div>

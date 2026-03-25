@@ -46,7 +46,7 @@ const ContactInfo = () => (
   <>
     <div className="*:*:fill-surface-300 flex gap-0.75 items-center">
       <CallIcon />
-      <p className="text-surface-300">502-390-7925</p>
+      <p className="text-surface-300">502 579 6185</p>
     </div>
     <a href="mailto:info@ottri.net" className="flex gap-0.75 items-center">
       <EmailIcon />

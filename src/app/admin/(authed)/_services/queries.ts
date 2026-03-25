@@ -13,7 +13,7 @@ import {
   ServiceArea,
   ServiceOption
 } from "@/app/admin/types";
-import { axiosInstance, clientAxios } from "@/lib/axios";
+import { clientAxios } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
 type GBQParamsType = {
@@ -106,7 +106,7 @@ export function useServicesQuery() {
   return useQuery({
     queryKey: ["services"],
     queryFn: () =>
-      axiosInstance.get(`services`).then((i) => i.data) as Promise<
+      clientAxios.get(`services`).then((i) => i.data) as Promise<
         ServiceOption[]
       >
   });
@@ -136,7 +136,7 @@ export function useServiceAreasQuery() {
   return useQuery({
     queryKey: ["service-areas"],
     queryFn: () =>
-      axiosInstance.get("service-areas").then((i) => i.data as ServiceArea[])
+      clientAxios.get("service-areas").then((i) => i.data as ServiceArea[])
   });
 }
 
@@ -144,8 +144,7 @@ export function useServiceAreasQuery() {
 export function useTimeSlotsQuery() {
   return useQuery({
     queryKey: ["timeslots"],
-    queryFn: () =>
-      axiosInstance.get<TimeSlot[]>("timeslots").then((i) => i.data)
+    queryFn: () => clientAxios.get<TimeSlot[]>("timeslots").then((i) => i.data)
   });
 }
 
@@ -154,7 +153,7 @@ export function useServiceAddOnsQuery() {
   return useQuery({
     queryKey: ["add-ons"],
     queryFn: () =>
-      axiosInstance.get<ServiceAddOn[]>("service-addons").then((i) => i.data)
+      clientAxios.get<ServiceAddOn[]>("service-addons").then((i) => i.data)
   });
 }
 

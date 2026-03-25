@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import PanelViewer from "../_components/PanelViewer";
 import ServiceZonesPanel from "./_panels/ServiceZonesPanel";
 import MapEditorPanel from "./_panels/MapEditorPanel";
@@ -13,9 +13,19 @@ import ZoneSettingsPanel from "./_panels/ZoneSettingsPanel";
 export default function ServiceZonesPage() {
   const [activeView, setActiveView] = useState<string>("service-zones");
 
-  const { data: serviceAreas } = useServiceAreasQuery();
+  const { data: serviceAreas, isLoading: isServiceAreasLoading } =
+    useServiceAreasQuery();
 
-  if (!serviceAreas) return <Loading />;
+  console.log(serviceAreas, "From this pa");
+
+  if (isServiceAreasLoading) return <Loading />;
+
+  const activeViewPanels: Record<string, ReactNode> = {
+    "service-zones": <ServiceZonesPanel serviceAreas={serviceAreas || []} />,
+    "map-editor": <MapEditorPanel serviceAreas={serviceAreas || []} />,
+    "restricted-log": <RestrictedPanel />,
+    "zone-settings": <ZoneSettingsPanel />
+  };
 
   return (
     <main className="w-full h-full py-4 px-4 lg:px-6">
@@ -61,14 +71,7 @@ export default function ServiceZonesPage() {
           setActiveView={setActiveView}
         />
       </div>
-      {activeView === "service-zones" && (
-        <ServiceZonesPanel serviceAreas={serviceAreas} />
-      )}
-      {activeView === "map-editor" && (
-        <MapEditorPanel serviceAreas={serviceAreas} />
-      )}
-      {activeView === "restricted-log" && <RestrictedPanel />}
-      {activeView === "zone-settings" && <ZoneSettingsPanel />}
+      {activeViewPanels[activeView]}
     </main>
   );
 }

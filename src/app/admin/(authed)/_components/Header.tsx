@@ -9,9 +9,11 @@ import { cn } from "@/lib/utils";
 import { useLogoutMutation } from "@/app/dashboard/_services/mutations";
 import { Button } from "@/components/ui/Button";
 import { LogOut, Loader2 } from "lucide-react";
+import { useGetUserProfile } from "@/app/dashboard/_services/queries";
 
 export default function Header() {
   const { mutateAsync: logout, isPending: isLoggingOut } = useLogoutMutation();
+  const { data: profileData } = useGetUserProfile();
 
   const handleLogout = async () => {
     try {
@@ -61,9 +63,9 @@ export default function Header() {
             <div className="flex gap-2 py-2">
               <div className="h-10 aspect-square rounded-full bg-gray-900" />
               <div>
-                <p className="text-sm font-medium">Jenny Murphy</p>
+                <p className="text-sm font-medium">{profileData?.email}</p>
                 <p className="text-xs text-secondary-700/50">
-                  jennymurphy@gmail.com
+                  {profileData?.email}
                 </p>
               </div>
             </div>
@@ -134,9 +136,9 @@ export default function Header() {
             <div className="flex gap-2 py-2">
               <div className="h-10 aspect-square rounded-full bg-gray-500" />
               <div>
-                <p className="text-sm font-medium">Jenny Murphy</p>
+                <p className="text-sm font-medium">{profileData?.email}</p>
                 <p className="text-xs text-secondary-700/50">
-                  jennymurphy@gmail.com
+                  {profileData?.email}
                 </p>
               </div>
             </div>

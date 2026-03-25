@@ -227,7 +227,10 @@ async function updateServiceAreas({
   serviceAreasData: serviceAreaData
 }: {
   serviceAreasData: Partial<
-    Pick<ServiceArea, "id" | "location" | "name" | "popular" | "nickName">
+    Pick<
+      ServiceArea,
+      "id" | "location" | "name" | "popular" | "nickName" | "basePrice"
+    >
   >[];
 }) {
   const res = await Promise.all(
