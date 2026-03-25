@@ -253,7 +253,8 @@ function MapEditorFull({ serviceAreas }: { serviceAreas: ServiceArea[] }) {
         location: feat.geometry,
         name: feat.name!,
         nickName: feat.name!,
-        popular: false
+        popular: false,
+        currency: "USD"
       }))
     });
 

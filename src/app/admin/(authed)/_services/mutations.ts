@@ -201,10 +201,10 @@ export function useDeleteServiceAreaMutation() {
 async function createServiceAreas({
   newServiceAreas
 }: {
-  newServiceAreas: Pick<
+  newServiceAreas: (Pick<
     ServiceArea,
     "location" | "name" | "popular" | "nickName"
-  >[];
+  > & { currency?: string; basePrice?: number })[];
 }) {
   const res = await Promise.all(
     newServiceAreas.map((newSA) =>

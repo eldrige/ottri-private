@@ -19,7 +19,7 @@ export default function ServiceZonesPage() {
   console.log(serviceAreas, "From this pa");
 
   if (isServiceAreasLoading) return <Loading />;
-
+  //kentucky indiana ohio
   const activeViewPanels: Record<string, ReactNode> = {
     "service-zones": <ServiceZonesPanel serviceAreas={serviceAreas || []} />,
     "map-editor": <MapEditorPanel serviceAreas={serviceAreas || []} />,
