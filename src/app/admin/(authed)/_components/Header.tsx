@@ -60,7 +60,10 @@ export default function Header() {
 
           <hr className="text-black/10 mt-auto mb-6" />
           <div className="flex flex-col gap-2">
-            <div className="flex gap-2 py-2">
+            <Link
+              href="/admin/profile"
+              className="flex gap-2 py-2 px-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer text-left"
+            >
               <div className="h-10 aspect-square rounded-full bg-gray-900" />
               <div>
                 <p className="text-sm font-medium">{profileData?.email}</p>
@@ -68,7 +71,7 @@ export default function Header() {
                   {profileData?.email}
                 </p>
               </div>
-            </div>
+            </Link>
             <Button
               onClick={handleLogout}
               variant="ghost"
@@ -133,7 +136,11 @@ export default function Header() {
         >
           <AdminNavbar onNav={() => setShowMobile(false)} />
           <div className="flex flex-col gap-2 mb-6 mt-auto">
-            <div className="flex gap-2 py-2">
+            <Link
+              href="/admin/profile"
+              onClick={() => setShowMobile(false)}
+              className="flex gap-2 py-2 px-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer text-left"
+            >
               <div className="h-10 aspect-square rounded-full bg-gray-500" />
               <div>
                 <p className="text-sm font-medium">{profileData?.email}</p>
@@ -141,7 +148,7 @@ export default function Header() {
                   {profileData?.email}
                 </p>
               </div>
-            </div>
+            </Link>
             <Button
               onClick={handleLogout}
               variant="ghost"

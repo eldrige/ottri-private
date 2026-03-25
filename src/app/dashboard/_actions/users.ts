@@ -64,3 +64,24 @@ export async function updateUserSettings({
     throw error;
   }
 }
+
+export async function updatePassword({
+  userId,
+  oldPassword,
+  newPassword
+}: {
+  userId: string;
+  oldPassword?: string;
+  newPassword?: string;
+}) {
+  try {
+    const response = await clientAxios.patch(`/users/${userId}/password`, {
+      oldPassword,
+      newPassword
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating password", error);
+    throw error;
+  }
+}

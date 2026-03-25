@@ -1,6 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cancelBooking, rateBooking } from "../_actions/bookings";
-import { updateProfile, updateUserSettings } from "../_actions/users";
+import {
+  updateProfile,
+  updateUserSettings,
+  updatePassword
+} from "../_actions/users";
 import axios from "axios";
 
 export function useCancelBookingMutation() {
@@ -64,5 +68,11 @@ export function useUpdateSettingMutation() {
         queryKey: ["user-profile"]
       });
     }
+  });
+}
+
+export function useUpdatePasswordMutation() {
+  return useMutation({
+    mutationFn: updatePassword
   });
 }
